@@ -10,11 +10,11 @@
 
 # カテゴリーテーブル
 Category.create!([
-    {category_name: 'カフェ'},
-    {category_name: 'レストラン'},
-    {category_name: 'アクティビティ'},
-    {category_name: '観光地'},
-    {category_name: 'ショッピング'},
-    {category_name: 'イベント'},
-    {category_name: 'その他'}
+    {name: 'カフェ'},
+    {name: 'レストラン'},
+    {name: 'アクティビティ'},
+    {name: '観光地'},
+    {name: 'ショッピング'},
+    {name: 'イベント'},
+    {name: 'その他'}
 ])
