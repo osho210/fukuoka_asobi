@@ -9,12 +9,5 @@
 #   end
 
 # カテゴリーテーブル
-Category.create!([
-    {name: 'カフェ'},
-    {name: 'レストラン'},
-    {name: 'アクティビティ'},
-    {name: '観光地'},
-    {name: 'ショッピング'},
-    {name: 'イベント'},
-    {name: 'その他'}
-])
+['カフェ', 'レストラン', 'アクティビティ', '観光地', 'ショッピング', 'イベント', 'その他'].each do |category_name|
+Category.find_or_create_by!(name: category_name)
