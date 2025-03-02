@@ -61,3 +61,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# graphqlの導入
+gem 'graphql'
+
+group :development do
+  gem "graphiql-rails"
+end
