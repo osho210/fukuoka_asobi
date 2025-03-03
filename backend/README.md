@@ -1,24 +1,48 @@
-# README
+# 📖 README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+このREADMEには、アプリケーションを動作させるために必要な手順を記載しています。
 
-Things you may want to cover:
+---
 
-* Ruby version
+## 🛠 必要な内容
 
-* System dependencies
+### 🔹 Rubyのバージョン
+-  `Ruby 3.2.0`
 
-* Configuration
+---
 
-* Database creation
+### 🔹 システム依存関係
+- graphqlを採用
 
-* Database initialization
+---
 
-* How to run the test suite
+### 🔹 設定方法
 
-* Services (job queues, cache servers, search engines, etc.)
+---
 
-* Deployment instructions
+## 🗃 データベース関連
 
-* ...
+### 🔹 データベースの作成
+
+### データベースの初期化コマンド
+```sh
+rails db:migrate
+```
+
+GraphQLオブジェクトの生成コマンド
+```sh
+rails generate graphql:object モデル名
+```
+
+インストールコマンド
+```sh
+bundle install
+```
+
+サーバーの起動
+```sh
+rails server
+```
+
+
+
