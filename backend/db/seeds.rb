@@ -10,4 +10,5 @@
 
 # カテゴリーテーブル
 ['カフェ', 'レストラン', 'アクティビティ', '観光地', 'ショッピング', 'イベント', 'その他'].each do |category_name|
-Category.find_or_create_by!(name: category_name)
+    Category.find_or_create_by!(name: category_name)
+end

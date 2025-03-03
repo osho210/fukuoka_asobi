@@ -1,4 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  # TODO: 現在はブラウザの機能を利用した制限は行っていないため制限は不要、指定する場合はコメントアウトを削除
+  # allow_browser versions: { safari: 16.4, firefox: 121, ie: false, chrome: 119 }
 end
