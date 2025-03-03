@@ -44,5 +44,7 @@ bundle install
 rails server
 ```
 
-
-
+テスト実行コマンド
+```sh
+bundle exec rspec spec/models
+```
