@@ -34,7 +34,7 @@ GraphQLオブジェクトの生成コマンド
 rails generate graphql:object モデル名
 ```
 
-GraphQLオブジェクトの生成コマンド
+インストールコマンド
 ```sh
 bundle install
 ```
