@@ -6,6 +6,9 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
 
+  # GraphQL専用のコントローラで、CSRFチェックをスキップ
+  skip_before_action :verify_authenticity_token, only: :execute
+
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
