@@ -30,3 +30,8 @@ export type Query = {
   __typename?: 'Query';
   categories: Array<Category>;
 };
+
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string }> };

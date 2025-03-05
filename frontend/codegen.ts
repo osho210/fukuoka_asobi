@@ -12,7 +12,7 @@ const config: CodegenConfig = {
             },
         },
     ],
-    documents: ["src/**/*.tsx"],
+    documents: ["src/**/*.tsx","src/**/*.ts"],
     generates: {
         "./src/__generated__/": {
             preset: "client",

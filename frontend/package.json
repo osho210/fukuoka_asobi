@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "generate": "graphql-codegen"
-
   },
   "dependencies": {
+    "@apollo/client": "^3.13.1",
     "graphql": "^16.10.0",
     "next": "15.2.0",
     "react": "^19.0.0",
