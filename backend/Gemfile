@@ -65,6 +65,9 @@ end
 # graphqlの導入
 gem 'graphql'
 
+# CORSの設定
+gem 'rack-cors'
+
 group :development do
   gem "graphiql-rails"
 end
