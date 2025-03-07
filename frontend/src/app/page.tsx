@@ -1,10 +1,11 @@
-import Categories from '@/components/Categories';
+'use client';
+
+import StoreList from '@/components/StoreList';
 
 export default function Home() {
   return (
     <div>
-      <h1>カテゴリー</h1>
-      <Categories />
+      <StoreList />
     </div>
   );
 }

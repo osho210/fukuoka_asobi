@@ -17,10 +17,68 @@ module Types
     def nodes(ids:)
       ids.map { |id| context.schema.object_from_id(id, context) }
     end
-    field :categories, [Types::CategoryType], null: false
 
+    # カテゴリー
+    field :categories, [Types::CategoryType], null: false
     def categories
       Category.all
+    end
+
+    # 地区
+    field :districts, [Types::DistrictType], null: false
+    def districts
+      District.all
+    end
+
+    field :district, Types::DistrictType, null: true do
+      argument :id, ID, required: true
+    end
+    def district(id:)
+      District.find_by(id: id)
+    end
+
+    # 地域
+    field :areas, [Types::AreaType], null: false
+    def areas
+      Area.all
+    end
+
+    field :area, Types::AreaType, null: true do
+      argument :id, ID, required: true
+    end
+    def area(id:)
+      Area.find_by(id: id)
+    end
+
+    # 店舗
+    field :stores, [Types::StoreType], null: false
+    def stores
+      Store.all
+    end
+
+    field :store, Types::StoreType, null: true do
+      argument :id, ID, required: true
+    end
+    def store(id:)
+      Store.find_by(id: id)
+    end
+
+    # ハッシュタグ
+    field :hashtags, [Types::HashtagType], null: false
+    def hashtags
+      Hashtag.all
+    end
+
+    # 目的
+    field :purposes, [Types::PurposeType], null: false
+    def purposes
+      Purpose.all
+    end
+
+    # お店の雰囲気
+    field :store_ambiances, [Types::StoreAmbianceType], null: false
+    def store_ambiances
+      StoreAmbiance.all
     end
   end
 end

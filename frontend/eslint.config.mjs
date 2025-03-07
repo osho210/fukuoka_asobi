@@ -11,6 +11,11 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: [
+      "src/__generated__/**" // 自動生成ディレクトリをESLint対象外にする
+    ],
+  },
 ];
 
 export default eslintConfig;
