@@ -1,6 +1,6 @@
 'use client';
 
-import StoreDetail from '../../../components/StoreDetail';
+import StoreDetail from './store.container';
 import { useParams } from 'next/navigation';
 
 export default function StorePage() {
