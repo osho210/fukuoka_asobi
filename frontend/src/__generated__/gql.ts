@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n": typeof types.GetPlayPlansDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n    }\n  }\n": typeof types.GetAreasDocument,
     "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.CategoriesDocument,
     "\n  query GetDistricts {\n    districts {\n      id\n      districtName\n    }\n  }\n": typeof types.GetDistrictsDocument,
@@ -24,6 +25,7 @@ type Documents = {
     "\n  query GetStores {\n    stores {\n      id\n      storeName\n      address\n      catchphrase\n      parkingAvailable\n      reviewRating\n      reviewCount\n      budgetRange\n      theme\n      district {\n        id\n        districtName\n      }\n      areas {\n        id\n        areaName\n      }\n      categories {\n        id\n        name\n      }\n      hashtags {\n        id\n        hashtagName\n      }\n    }\n  }\n": typeof types.GetStoresDocument,
 };
 const documents: Documents = {
+    "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n": types.GetPlayPlansDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n    }\n  }\n": types.GetAreasDocument,
     "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": types.CategoriesDocument,
     "\n  query GetDistricts {\n    districts {\n      id\n      districtName\n    }\n  }\n": types.GetDistrictsDocument,
@@ -48,6 +50,10 @@ const documents: Documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

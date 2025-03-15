@@ -18,9 +18,34 @@ class BackendSchema < GraphQL::Schema
 
   # Union and Interface Resolution
   def self.resolve_type(abstract_type, obj, ctx)
-    # TODO: Implement this method
-    # to return the correct GraphQL object type for `obj`
-    raise(GraphQL::RequiredImplementationMissingError)
+    case obj
+    when PlayPlan
+      Types::PlayPlanType
+    when PlanDetail
+      Types::PlanDetailType
+    when Store
+      Types::StoreType
+    when District
+      Types::DistrictType
+    when Area
+      Types::AreaType
+    when Category
+      Types::CategoryType
+    when Hashtag
+      Types::HashtagType
+    when InstagramEmbed
+      Types::InstagramEmbedType
+    when Menu
+      Types::MenuType
+    when OpeningHour
+      Types::OpeningHourType
+    when Purpose
+      Types::PurposeType
+    when StoreAmbiance
+      Types::StoreAmbianceType
+    else
+      raise "Unexpected object: #{obj}"
+    end
   end
 
   # Limit the size of incoming queries:

@@ -12,6 +12,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  ISO8601Date: { input: any; output: any; }
   ISO8601DateTime: { input: any; output: any; }
 };
 
@@ -81,6 +82,12 @@ export type Mutation = {
   testField: Scalars['String']['output'];
 };
 
+/** An object with an ID. */
+export type Node = {
+  /** ID of the object. */
+  id: Scalars['ID']['output'];
+};
+
 export type OpeningHour = {
   __typename?: 'OpeningHour';
   closeTime: Scalars['ISO8601DateTime']['output'];
@@ -92,6 +99,58 @@ export type OpeningHour = {
   storeId: Scalars['Int']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+export type PlanDetail = Node & {
+  __typename?: 'PlanDetail';
+  budget?: Maybe<Scalars['Float']['output']>;
+  comment?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  endDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  planId: Scalars['Int']['output'];
+  playPlan: PlayPlan;
+  startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  stepDescription?: Maybe<Scalars['String']['output']>;
+  stepName: Scalars['String']['output'];
+  stepNumber: Scalars['Int']['output'];
+  store?: Maybe<Store>;
+  storeId?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type PlayPlan = Node & {
+  __typename?: 'PlayPlan';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  endDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  favoriteCount: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  planDetails?: Maybe<Array<PlanDetail>>;
+  planName: Scalars['String']['output'];
+  publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  rating: Scalars['Float']['output'];
+  recommendedFor?: Maybe<Scalars['String']['output']>;
+  reviewCount: Scalars['Int']['output'];
+  startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  status: PlayPlanStatusEnum;
+  tags?: Maybe<Scalars['String']['output']>;
+  totalBudget?: Maybe<Scalars['Float']['output']>;
+  tripType: TripTypeEnum;
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['Int']['output']>;
+};
+
+/** プランのステータス */
+export enum PlayPlanStatusEnum {
+  /** 下書き */
+  Draft = 'DRAFT',
+  /** 公開 */
+  Published = 'PUBLISHED'
+}
 
 export type Purpose = {
   __typename?: 'Purpose';
@@ -110,6 +169,8 @@ export type Query = {
   district?: Maybe<District>;
   districts: Array<District>;
   hashtags: Array<Hashtag>;
+  playPlan?: Maybe<PlayPlan>;
+  playPlans: Array<PlayPlan>;
   purposes: Array<Purpose>;
   store?: Maybe<Store>;
   storeAmbiances: Array<StoreAmbiance>;
@@ -124,6 +185,17 @@ export type QueryAreaArgs = {
 
 export type QueryDistrictArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryPlayPlanArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryPlayPlansArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<PlayPlanStatusEnum>;
 };
 
 
@@ -174,6 +246,38 @@ export type StoreAmbiance = {
   stores: Array<Store>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+/** 旅行タイプ */
+export enum TripTypeEnum {
+  /** 日帰り */
+  DayTrip = 'DAY_TRIP',
+  /** 泊まり */
+  Overnight = 'OVERNIGHT'
+}
+
+export type User = {
+  __typename?: 'User';
+  bio?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  instagramUrl?: Maybe<Scalars['String']['output']>;
+  isPaidMember?: Maybe<Scalars['Boolean']['output']>;
+  paidEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  paidStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  passwordHash?: Maybe<Scalars['String']['output']>;
+  profileImageUrl?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type GetPlayPlansQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: string, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 

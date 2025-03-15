@@ -80,5 +80,9 @@ module Types
     def store_ambiances
       StoreAmbiance.all
     end
+
+    # 遊びのプラン
+    field :play_plans, resolver: Resolvers::PlayPlansResolver
+    field :play_plan, resolver: Resolvers::PlayPlanResolver
   end
 end

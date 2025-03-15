@@ -215,4 +215,10 @@ wine_menu = Menu.find_or_create_by!(
 StoreMenu.find_or_create_by!(store: tenjin_restaurant, menu: pasta_menu)
 StoreMenu.find_or_create_by!(store: tenjin_restaurant, menu: wine_menu)
 
+# ユーザーのシードデータを読み込む
+require_relative 'seeds/users'
+
+# 遊びのプランのシードデータを読み込む
+require_relative 'seeds/play_plans'
+
 puts "シードデータの作成が完了しました！"

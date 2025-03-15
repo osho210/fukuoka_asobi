@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_174847) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -68,6 +68,42 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_174847) do
     t.datetime "updated_at", null: false
     t.index ["store_id", "day_of_week"], name: "index_opening_hours_on_store_id_and_day_of_week", unique: true
     t.index ["store_id"], name: "index_opening_hours_on_store_id"
+  end
+
+  create_table "plan_details", force: :cascade do |t|
+    t.integer "plan_id", null: false
+    t.integer "step_number", null: false
+    t.string "step_name", null: false
+    t.text "step_description"
+    t.integer "store_id"
+    t.text "comment"
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
+    t.decimal "budget", precision: 10, scale: 2
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "play_plans", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "plan_name", null: false
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
+    t.text "description"
+    t.integer "status", default: 0, null: false
+    t.integer "favorite_count", default: 0
+    t.decimal "rating", precision: 3, scale: 2, default: "0.0"
+    t.integer "review_count", default: 0
+    t.string "image_url"
+    t.string "tags"
+    t.string "location"
+    t.datetime "published_at"
+    t.integer "trip_type", default: 0, null: false
+    t.decimal "total_budget", precision: 10, scale: 2
+    t.string "recommended_for"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "purposes", force: :cascade do |t|
@@ -180,6 +216,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_174847) do
     t.index ["district_id"], name: "index_stores_on_district_id"
     t.index ["store_name"], name: "index_stores_on_store_name"
     t.index ["theme"], name: "index_stores_on_theme"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username", null: false
+    t.string "profile_image_url"
+    t.text "bio"
+    t.string "role", default: "ユーザー"
+    t.string "email", null: false
+    t.string "password_hash"
+    t.string "instagram_url"
+    t.boolean "is_paid_member", default: false
+    t.date "paid_start_date"
+    t.date "paid_end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "areas", "districts"

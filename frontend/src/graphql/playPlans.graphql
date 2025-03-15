@@ -1,0 +1,52 @@
+query GetPlayPlans($limit: Int) {
+  playPlans(limit: $limit) {
+    id
+    planName
+    description
+    imageUrl
+    location
+    tripType
+    totalBudget
+    rating
+    reviewCount
+    favoriteCount
+    status
+  }
+}
+
+query GetPlayPlan($id: ID!) {
+  playPlan(id: $id) {
+    id
+    planName
+    description
+    imageUrl
+    location
+    tripType
+    totalBudget
+    rating
+    reviewCount
+    favoriteCount
+    status
+    startDatetime
+    endDatetime
+    tags
+    recommendedFor
+    planDetails {
+      id
+      stepNumber
+      stepName
+      stepDescription
+      comment
+      startDatetime
+      endDatetime
+      budget
+      notes
+      store {
+        id
+        storeName
+        address
+        catchphrase
+      }
+    }
+  }
+}
