@@ -76,6 +76,11 @@ const PlayPlanList = () => {
         delay: 2500,
         disableOnInteraction: false,
       }}
+      breakpoints={{
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      }}
       className="play-plan-slider"
     >
       {data.playPlans.map((plan: PlayPlan) => (
@@ -127,9 +132,9 @@ const PlayPlanList = () => {
                     width={30}
                     height={30}
                   />
-                  <p>
+                  <p className="play-plan-user">
                     {plan.user && (
-                      <div className="play-plan-user">
+                      <>
                         <span className="plan-user-name">{plan.user.username}</span>
                         {plan.user.role === 'editor' && (
                           <span className="plan-user-role editor">編集部</span>
@@ -137,7 +142,7 @@ const PlayPlanList = () => {
                         {plan.user.role === 'admin' && (
                           <span className="plan-user-role admin">管理者</span>
                         )}
-                      </div>
+                      </>
                     )}
                   </p>
                 </div>

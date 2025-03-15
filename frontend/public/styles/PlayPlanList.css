@@ -17,11 +17,15 @@
 }
 
 .play-plan-card {
+  width: 320px;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ddd;
+  text-align: center;
 }
 
 .play-plan-image {
@@ -201,42 +205,4 @@
 .play-plan-slider .swiper-pagination-bullet {
   background: #cb6b52;
   bottom: -10px;
-}
-
-.play-plan-card {
-  width: 320px;
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 2px solid #ddd;
-  text-align: center;
-}
-
-/* PCで横レイアウトにする */
-@media (min-width: 1024px) {
-  .play-plan-card {
-    flex-direction: row;
-    width: 90%;
-    max-width: 800px;
-    height: 250px;
-    text-align: left;
-  }
-
-  .play-plan-image {
-    width: 40%;
-    height: 100%;
-    flex-shrink: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 16px;
-  }
-
-  .play-plan-content {
-    flex: 1;
-    padding: 20px;
-  }
-
-  .play-plan-user-info {
-    justify-content: flex-start;
-  }
 }
