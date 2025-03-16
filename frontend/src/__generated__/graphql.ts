@@ -27,7 +27,7 @@ export type Area = {
   district: District;
   districtId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -45,7 +45,7 @@ export type District = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   districtName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -54,7 +54,7 @@ export type Hashtag = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   hashtagName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -65,7 +65,7 @@ export type InstagramEmbed = {
   embedUrl: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   instagramEmbedName: Scalars['String']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -76,7 +76,7 @@ export type Menu = {
   id: Scalars['ID']['output'];
   menuName: Scalars['String']['output'];
   price?: Maybe<Scalars['Float']['output']>;
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -99,8 +99,8 @@ export type OpeningHour = {
   dayOfWeek: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   openTime: Scalars['ISO8601DateTime']['output'];
-  store: Store;
-  storeId: Scalars['Int']['output'];
+  spot: Spot;
+  spotId: Scalars['Int']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -114,12 +114,12 @@ export type PlanDetail = Node & {
   notes?: Maybe<Scalars['String']['output']>;
   planId: Scalars['Int']['output'];
   playPlan: PlayPlan;
+  spot?: Maybe<Spot>;
+  spotId?: Maybe<Scalars['Int']['output']>;
   startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
   stepDescription?: Maybe<Scalars['String']['output']>;
   stepName: Scalars['String']['output'];
   stepNumber: Scalars['Int']['output'];
-  store?: Maybe<Store>;
-  storeId?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -161,7 +161,7 @@ export type Purpose = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   purposeName: Scalars['String']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
@@ -176,9 +176,9 @@ export type Query = {
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
   purposes: Array<Purpose>;
-  store?: Maybe<Store>;
-  storeAmbiances: Array<StoreAmbiance>;
-  stores: Array<Store>;
+  spot?: Maybe<Spot>;
+  spotAmbiances: Array<SpotAmbiance>;
+  spots: Array<Spot>;
 };
 
 
@@ -203,12 +203,12 @@ export type QueryPlayPlansArgs = {
 };
 
 
-export type QueryStoreArgs = {
+export type QuerySpotArgs = {
   id: Scalars['ID']['input'];
 };
 
-export type Store = {
-  __typename?: 'Store';
+export type Spot = {
+  __typename?: 'Spot';
   address?: Maybe<Scalars['String']['output']>;
   areas: Array<Area>;
   budgetRange?: Maybe<Scalars['String']['output']>;
@@ -219,6 +219,7 @@ export type Store = {
   districtId: Scalars['Int']['output'];
   hashtags: Array<Hashtag>;
   id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
   instagramEmbeds: Array<InstagramEmbed>;
   instagramUrl?: Maybe<Scalars['String']['output']>;
   isClosed?: Maybe<Scalars['Boolean']['output']>;
@@ -235,21 +236,32 @@ export type Store = {
   recommendedFor2?: Maybe<Scalars['String']['output']>;
   reviewCount?: Maybe<Scalars['Int']['output']>;
   reviewRating?: Maybe<Scalars['Float']['output']>;
-  storeAmbiances: Array<StoreAmbiance>;
-  storeName: Scalars['String']['output'];
+  spotAmbiances: Array<SpotAmbiance>;
+  spotName: Scalars['String']['output'];
+  spotType: SpotTypeEnum;
   theme?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
   website?: Maybe<Scalars['String']['output']>;
 };
 
-export type StoreAmbiance = {
-  __typename?: 'StoreAmbiance';
+export type SpotAmbiance = {
+  __typename?: 'SpotAmbiance';
   ambianceName: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
-  stores: Array<Store>;
+  spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+/** スポットの種類を表す列挙型 */
+export enum SpotTypeEnum {
+  /** アクティビティ */
+  Activity = 'ACTIVITY',
+  /** 店舗 */
+  Store = 'STORE',
+  /** 観光スポット */
+  TouristSpot = 'TOURIST_SPOT'
+}
 
 /** 旅行タイプ */
 export enum TripTypeEnum {
@@ -283,6 +295,11 @@ export type GetPlayPlansQueryVariables = Exact<{
 
 export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: string, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
 
+export type GetRecommendedSpotsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRecommendedSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, spotType: SpotTypeEnum, address?: string | null, reviewRating?: number | null, reviewCount?: number | null, imageUrl?: string | null, district: { __typename?: 'District', districtName: string }, categories: Array<{ __typename?: 'Category', name: string }> }> };
+
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -308,30 +325,31 @@ export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPurposesQuery = { __typename?: 'Query', purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> };
 
-export type GetStoreQueryVariables = Exact<{
+export type GetSpotQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetStoreQuery = { __typename?: 'Query', store?: { __typename?: 'Store', id: string, storeName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, recommendedFor1?: string | null, recommendedFor2?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, storeAmbiances: Array<{ __typename?: 'StoreAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
+export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, recommendedFor1?: string | null, recommendedFor2?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, spotType: SpotTypeEnum, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
 
-export type GetStoreAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetStoreAmbiancesQuery = { __typename?: 'Query', storeAmbiances: Array<{ __typename?: 'StoreAmbiance', id: string, ambianceName: string }> };
-
-export type GetStoresQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetSpotAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStoresQuery = { __typename?: 'Query', stores: Array<{ __typename?: 'Store', id: string, storeName: string, address?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, reviewRating?: number | null, reviewCount?: number | null, budgetRange?: string | null, theme?: string | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }> };
+export type GetSpotAmbiancesQuery = { __typename?: 'Query', spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }> };
+
+export type GetSpotsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, reviewRating?: number | null, reviewCount?: number | null, budgetRange?: string | null, theme?: string | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }> };
 
 
 export const GetPlayPlansDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlayPlans"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"playPlans"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"planName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"tripType"}},{"kind":"Field","name":{"kind":"Name","value":"totalBudget"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"favoriteCount"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profileImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<GetPlayPlansQuery, GetPlayPlansQueryVariables>;
+export const GetRecommendedSpotsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRecommendedSpots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"spotName"}},{"kind":"Field","name":{"kind":"Name","value":"spotType"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetRecommendedSpotsQuery, GetRecommendedSpotsQueryVariables>;
 export const GetAreasDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAreas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"areas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"areaName"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}}]}}]}}]} as unknown as DocumentNode<GetAreasQuery, GetAreasQueryVariables>;
 export const CategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CategoriesQuery, CategoriesQueryVariables>;
 export const GetDistrictsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDistricts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"districts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}}]}}]} as unknown as DocumentNode<GetDistrictsQuery, GetDistrictsQueryVariables>;
 export const GetHashtagsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"hashtagName"}}]}}]}}]} as unknown as DocumentNode<GetHashtagsQuery, GetHashtagsQueryVariables>;
 export const GetPurposesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPurposes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"purposes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"purposeName"}}]}}]}}]} as unknown as DocumentNode<GetPurposesQuery, GetPurposesQueryVariables>;
-export const GetStoreDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStore"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"store"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"storeName"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"catchphrase"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedFor1"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedFor2"}},{"kind":"Field","name":{"kind":"Name","value":"parkingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"nearestStation"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"instagramUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isClosed"}},{"kind":"Field","name":{"kind":"Name","value":"budgetRange"}},{"kind":"Field","name":{"kind":"Name","value":"maxPeople"}},{"kind":"Field","name":{"kind":"Name","value":"minPeople"}},{"kind":"Field","name":{"kind":"Name","value":"isRainyOk"}},{"kind":"Field","name":{"kind":"Name","value":"theme"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"areas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"areaName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"hashtagName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"openingHours"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"dayOfWeek"}},{"kind":"Field","name":{"kind":"Name","value":"openTime"}},{"kind":"Field","name":{"kind":"Name","value":"closeTime"}}]}},{"kind":"Field","name":{"kind":"Name","value":"instagramEmbeds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"instagramEmbedName"}},{"kind":"Field","name":{"kind":"Name","value":"embedCode"}},{"kind":"Field","name":{"kind":"Name","value":"embedUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"menus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"menuName"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"storeAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ambianceName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"purposes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"purposeName"}}]}}]}}]}}]} as unknown as DocumentNode<GetStoreQuery, GetStoreQueryVariables>;
-export const GetStoreAmbiancesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStoreAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"storeAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ambianceName"}}]}}]}}]} as unknown as DocumentNode<GetStoreAmbiancesQuery, GetStoreAmbiancesQueryVariables>;
-export const GetStoresDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStores"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stores"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"storeName"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"catchphrase"}},{"kind":"Field","name":{"kind":"Name","value":"parkingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"budgetRange"}},{"kind":"Field","name":{"kind":"Name","value":"theme"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"areas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"areaName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"hashtagName"}}]}}]}}]}}]} as unknown as DocumentNode<GetStoresQuery, GetStoresQueryVariables>;
+export const GetSpotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spot"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"spotName"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}},{"kind":"Field","name":{"kind":"Name","value":"website"}},{"kind":"Field","name":{"kind":"Name","value":"catchphrase"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedFor1"}},{"kind":"Field","name":{"kind":"Name","value":"recommendedFor2"}},{"kind":"Field","name":{"kind":"Name","value":"parkingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"nearestStation"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"instagramUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isClosed"}},{"kind":"Field","name":{"kind":"Name","value":"budgetRange"}},{"kind":"Field","name":{"kind":"Name","value":"maxPeople"}},{"kind":"Field","name":{"kind":"Name","value":"minPeople"}},{"kind":"Field","name":{"kind":"Name","value":"isRainyOk"}},{"kind":"Field","name":{"kind":"Name","value":"theme"}},{"kind":"Field","name":{"kind":"Name","value":"spotType"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"areas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"areaName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"hashtagName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"openingHours"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"dayOfWeek"}},{"kind":"Field","name":{"kind":"Name","value":"openTime"}},{"kind":"Field","name":{"kind":"Name","value":"closeTime"}}]}},{"kind":"Field","name":{"kind":"Name","value":"instagramEmbeds"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"instagramEmbedName"}},{"kind":"Field","name":{"kind":"Name","value":"embedCode"}},{"kind":"Field","name":{"kind":"Name","value":"embedUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"menus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"menuName"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"spotAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ambianceName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"purposes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"purposeName"}}]}}]}}]}}]} as unknown as DocumentNode<GetSpotQuery, GetSpotQueryVariables>;
+export const GetSpotAmbiancesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpotAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spotAmbiances"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"ambianceName"}}]}}]}}]} as unknown as DocumentNode<GetSpotAmbiancesQuery, GetSpotAmbiancesQueryVariables>;
+export const GetSpotsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"spotName"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"catchphrase"}},{"kind":"Field","name":{"kind":"Name","value":"parkingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"budgetRange"}},{"kind":"Field","name":{"kind":"Name","value":"theme"}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"areas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"areaName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hashtags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"hashtagName"}}]}}]}}]}}]} as unknown as DocumentNode<GetSpotsQuery, GetSpotsQueryVariables>;

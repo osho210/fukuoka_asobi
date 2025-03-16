@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 
-export const GET_STORE = gql`
-  query GetStore($id: ID!) {
-    store(id: $id) {
+export const GET_SPOT = gql`
+  query GetSpot($id: ID!) {
+    spot(id: $id) {
       id
-      storeName
+      spotName
       address
       phoneNumber
       website
@@ -22,6 +22,7 @@ export const GET_STORE = gql`
       minPeople
       isRainyOk
       theme
+      spotType
       district {
         id
         districtName
@@ -56,7 +57,7 @@ export const GET_STORE = gql`
         price
         description
       }
-      storeAmbiances {
+      spotAmbiances {
         id
         ambianceName
       }

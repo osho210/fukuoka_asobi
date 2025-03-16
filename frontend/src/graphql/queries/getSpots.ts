@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 
-export const GET_STORES = gql`
-  query GetStores {
-    stores {
+export const GET_SPOTS = gql`
+  query GetSpots {
+    spots {
       id
-      storeName
+      spotName
       address
       catchphrase
       parkingAvailable

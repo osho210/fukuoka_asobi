@@ -41,7 +41,7 @@ query GetPlayPlan($id: ID!) {
       endDatetime
       budget
       notes
-      store {
+      spot {
         id
         storeName
         address

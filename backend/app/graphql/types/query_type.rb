@@ -50,17 +50,17 @@ module Types
       Area.find_by(id: id)
     end
 
-    # 店舗
-    field :stores, [Types::StoreType], null: false
-    def stores
-      Store.all
+    # スポット
+    field :spots, [Types::SpotType], null: false
+    def spots
+      Spot.all
     end
 
-    field :store, Types::StoreType, null: true do
+    field :spot, Types::SpotType, null: true do
       argument :id, ID, required: true
     end
-    def store(id:)
-      Store.find_by(id: id)
+    def spot(id:)
+      Spot.find_by(id: id)
     end
 
     # ハッシュタグ
@@ -76,9 +76,9 @@ module Types
     end
 
     # お店の雰囲気
-    field :store_ambiances, [Types::StoreAmbianceType], null: false
-    def store_ambiances
-      StoreAmbiance.all
+    field :spot_ambiances, [Types::SpotAmbianceType], null: false
+    def spot_ambiances
+      SpotAmbiance.all
     end
 
     # 遊びのプラン

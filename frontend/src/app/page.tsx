@@ -4,6 +4,7 @@ import Link from "next/link";
 import HamburgerMenu from '@/components/HamburgerMenu'
 import Footer from '@/components/Footer'
 import PlayPlanList from '@/components/PlayPlanList'
+import RecommendedSpot from '@/components/RecommendedSpot'
 import '../../public/styles/common.css';
 import '../../public/styles/PlayPlanList.css';
 
@@ -44,6 +45,11 @@ export default function Home() {
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
         <p className="section-subtitle">編集部イチオシプラン</p>
         <PlayPlanList />
+      </div>
+      <div className="section">
+        <h2 className="section-title">Editor&apos;s Pick Up Spot</h2>
+        <p className="section-subtitle">編集部イチオシスポット</p>
+        <RecommendedSpot />
       </div>
       <Footer />
     </div >

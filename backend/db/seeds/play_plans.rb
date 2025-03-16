@@ -1,9 +1,9 @@
 # 遊びのプランのシードデータ
 puts "遊びのプランデータを作成中..."
 
-# 既存の店舗を取得
-hakata_cafe = Store.find_by(store_name: '博多スタイルカフェ')
-tenjin_restaurant = Store.find_by(store_name: '天神イタリアン')
+# 既存のスポットを取得
+hakata_cafe = Spot.find_by(spot_name: '博多スタイルカフェ')
+tenjin_restaurant = Spot.find_by(spot_name: '天神イタリアン')
 
 # ユーザーを取得
 editor_user = User.find_by(email: 'editor@example.com')
@@ -45,7 +45,7 @@ if hakata_date_plan.plan_details.empty?
     step_number: 2,
     step_name: '博多スタイルカフェでランチ',
     step_description: '博多駅直結のおしゃれカフェでランチを楽しむ',
-    store: hakata_cafe,
+    spot: hakata_cafe,
     comment: 'ランチセットがおすすめ。窓側の席だと景色も楽しめます。',
     start_datetime: Time.now.beginning_of_day + 13.hours + 15.minutes,
     end_datetime: Time.now.beginning_of_day + 14.hours + 30.minutes,
@@ -99,7 +99,7 @@ if tenjin_gourmet_plan.plan_details.empty?
     step_number: 2,
     step_name: '天神イタリアンでディナー',
     step_description: '隠れ家的な本格イタリアンレストランでディナー',
-    store: tenjin_restaurant,
+    spot: tenjin_restaurant,
     comment: 'コースメニューがおすすめ。予約必須です。',
     start_datetime: Time.now.beginning_of_day + 18.hours + 15.minutes,
     end_datetime: Time.now.beginning_of_day + 20.hours,

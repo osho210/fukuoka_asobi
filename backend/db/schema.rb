@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_15_233440) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -60,14 +60,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
   end
 
   create_table "opening_hours", force: :cascade do |t|
-    t.integer "store_id", null: false
+    t.integer "spot_id", null: false
     t.string "day_of_week", null: false
     t.time "open_time", null: false
     t.time "close_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["store_id", "day_of_week"], name: "index_opening_hours_on_store_id_and_day_of_week", unique: true
-    t.index ["store_id"], name: "index_opening_hours_on_store_id"
+    t.index ["spot_id", "day_of_week"], name: "index_opening_hours_on_spot_id_and_day_of_week", unique: true
+    t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
   end
 
   create_table "plan_details", force: :cascade do |t|
@@ -75,7 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
     t.integer "step_number", null: false
     t.string "step_name", null: false
     t.text "step_description"
-    t.integer "store_id"
+    t.integer "spot_id"
     t.text "comment"
     t.datetime "start_datetime"
     t.datetime "end_datetime"
@@ -113,86 +113,86 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
     t.index ["purpose_name"], name: "index_purposes_on_purpose_name", unique: true
   end
 
-  create_table "store_ambiance_relations", force: :cascade do |t|
-    t.integer "store_id", null: false
-    t.integer "store_ambiance_id", null: false
+  create_table "spot_ambiance_relations", force: :cascade do |t|
+    t.integer "spot_id", null: false
+    t.integer "spot_ambiance_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["store_ambiance_id"], name: "index_store_ambiance_relations_on_store_ambiance_id"
-    t.index ["store_id", "store_ambiance_id"], name: "index_store_ambiance_relations_on_store_and_ambiance", unique: true
-    t.index ["store_id"], name: "index_store_ambiance_relations_on_store_id"
+    t.index ["spot_ambiance_id"], name: "index_spot_ambiance_relations_on_spot_ambiance_id"
+    t.index ["spot_id", "spot_ambiance_id"], name: "index_store_ambiance_relations_on_store_and_ambiance", unique: true
+    t.index ["spot_id"], name: "index_spot_ambiance_relations_on_spot_id"
   end
 
-  create_table "store_ambiances", force: :cascade do |t|
+  create_table "spot_ambiances", force: :cascade do |t|
     t.string "ambiance_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ambiance_name"], name: "index_store_ambiances_on_ambiance_name", unique: true
+    t.index ["ambiance_name"], name: "index_spot_ambiances_on_ambiance_name", unique: true
   end
 
-  create_table "store_areas", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_areas", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "area_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["area_id"], name: "index_store_areas_on_area_id"
-    t.index ["store_id", "area_id"], name: "index_store_areas_on_store_id_and_area_id", unique: true
-    t.index ["store_id"], name: "index_store_areas_on_store_id"
+    t.index ["area_id"], name: "index_spot_areas_on_area_id"
+    t.index ["spot_id", "area_id"], name: "index_spot_areas_on_spot_id_and_area_id", unique: true
+    t.index ["spot_id"], name: "index_spot_areas_on_spot_id"
   end
 
-  create_table "store_categories", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_categories", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_store_categories_on_category_id"
-    t.index ["store_id", "category_id"], name: "index_store_categories_on_store_id_and_category_id", unique: true
-    t.index ["store_id"], name: "index_store_categories_on_store_id"
+    t.index ["category_id"], name: "index_spot_categories_on_category_id"
+    t.index ["spot_id", "category_id"], name: "index_spot_categories_on_spot_id_and_category_id", unique: true
+    t.index ["spot_id"], name: "index_spot_categories_on_spot_id"
   end
 
-  create_table "store_hashtags", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_hashtags", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "hashtag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["hashtag_id"], name: "index_store_hashtags_on_hashtag_id"
-    t.index ["store_id", "hashtag_id"], name: "index_store_hashtags_on_store_id_and_hashtag_id", unique: true
-    t.index ["store_id"], name: "index_store_hashtags_on_store_id"
+    t.index ["hashtag_id"], name: "index_spot_hashtags_on_hashtag_id"
+    t.index ["spot_id", "hashtag_id"], name: "index_spot_hashtags_on_spot_id_and_hashtag_id", unique: true
+    t.index ["spot_id"], name: "index_spot_hashtags_on_spot_id"
   end
 
-  create_table "store_instagram_embeds", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_instagram_embeds", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "instagram_embed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["instagram_embed_id"], name: "index_store_instagram_embeds_on_instagram_embed_id"
-    t.index ["store_id", "instagram_embed_id"], name: "index_store_instagram_embeds_on_store_and_instagram_embed", unique: true
-    t.index ["store_id"], name: "index_store_instagram_embeds_on_store_id"
+    t.index ["instagram_embed_id"], name: "index_spot_instagram_embeds_on_instagram_embed_id"
+    t.index ["spot_id", "instagram_embed_id"], name: "index_store_instagram_embeds_on_store_and_instagram_embed", unique: true
+    t.index ["spot_id"], name: "index_spot_instagram_embeds_on_spot_id"
   end
 
-  create_table "store_menus", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_menus", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "menu_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["menu_id"], name: "index_store_menus_on_menu_id"
-    t.index ["store_id", "menu_id"], name: "index_store_menus_on_store_id_and_menu_id", unique: true
-    t.index ["store_id"], name: "index_store_menus_on_store_id"
+    t.index ["menu_id"], name: "index_spot_menus_on_menu_id"
+    t.index ["spot_id", "menu_id"], name: "index_spot_menus_on_spot_id_and_menu_id", unique: true
+    t.index ["spot_id"], name: "index_spot_menus_on_spot_id"
   end
 
-  create_table "store_purposes", force: :cascade do |t|
-    t.integer "store_id", null: false
+  create_table "spot_purposes", force: :cascade do |t|
+    t.integer "spot_id", null: false
     t.integer "purpose_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["purpose_id"], name: "index_store_purposes_on_purpose_id"
-    t.index ["store_id", "purpose_id"], name: "index_store_purposes_on_store_id_and_purpose_id", unique: true
-    t.index ["store_id"], name: "index_store_purposes_on_store_id"
+    t.index ["purpose_id"], name: "index_spot_purposes_on_purpose_id"
+    t.index ["spot_id", "purpose_id"], name: "index_spot_purposes_on_spot_id_and_purpose_id", unique: true
+    t.index ["spot_id"], name: "index_spot_purposes_on_spot_id"
   end
 
-  create_table "stores", force: :cascade do |t|
+  create_table "spots", force: :cascade do |t|
     t.integer "district_id", null: false
-    t.string "store_name", null: false
+    t.string "spot_name", null: false
     t.string "address"
     t.string "phone_number"
     t.string "website"
@@ -212,10 +212,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
     t.string "theme"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["budget_range"], name: "index_stores_on_budget_range"
-    t.index ["district_id"], name: "index_stores_on_district_id"
-    t.index ["store_name"], name: "index_stores_on_store_name"
-    t.index ["theme"], name: "index_stores_on_theme"
+    t.string "spot_type", default: "STORE", null: false
+    t.string "image_url"
+    t.index ["budget_range"], name: "index_spots_on_budget_range"
+    t.index ["district_id"], name: "index_spots_on_district_id"
+    t.index ["spot_name"], name: "index_spots_on_spot_name"
+    t.index ["spot_type"], name: "index_spots_on_spot_type"
+    t.index ["theme"], name: "index_spots_on_theme"
   end
 
   create_table "users", force: :cascade do |t|
@@ -234,20 +237,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_113843) do
   end
 
   add_foreign_key "areas", "districts"
-  add_foreign_key "opening_hours", "stores"
-  add_foreign_key "store_ambiance_relations", "store_ambiances"
-  add_foreign_key "store_ambiance_relations", "stores"
-  add_foreign_key "store_areas", "areas"
-  add_foreign_key "store_areas", "stores"
-  add_foreign_key "store_categories", "categories"
-  add_foreign_key "store_categories", "stores"
-  add_foreign_key "store_hashtags", "hashtags"
-  add_foreign_key "store_hashtags", "stores"
-  add_foreign_key "store_instagram_embeds", "instagram_embeds"
-  add_foreign_key "store_instagram_embeds", "stores"
-  add_foreign_key "store_menus", "menus"
-  add_foreign_key "store_menus", "stores"
-  add_foreign_key "store_purposes", "purposes"
-  add_foreign_key "store_purposes", "stores"
-  add_foreign_key "stores", "districts"
+  add_foreign_key "opening_hours", "spots"
+  add_foreign_key "spot_ambiance_relations", "spot_ambiances"
+  add_foreign_key "spot_ambiance_relations", "spots"
+  add_foreign_key "spot_areas", "areas"
+  add_foreign_key "spot_areas", "spots"
+  add_foreign_key "spot_categories", "categories"
+  add_foreign_key "spot_categories", "spots"
+  add_foreign_key "spot_hashtags", "hashtags"
+  add_foreign_key "spot_hashtags", "spots"
+  add_foreign_key "spot_instagram_embeds", "instagram_embeds"
+  add_foreign_key "spot_instagram_embeds", "spots"
+  add_foreign_key "spot_menus", "menus"
+  add_foreign_key "spot_menus", "spots"
+  add_foreign_key "spot_purposes", "purposes"
+  add_foreign_key "spot_purposes", "spots"
+  add_foreign_key "spots", "districts"
 end

@@ -1,6 +1,6 @@
 class Menu < ApplicationRecord
-  has_many :store_menus, dependent: :destroy
-  has_many :stores, through: :store_menus
+  has_many :spot_menus, dependent: :destroy
+  has_many :spots, through: :spot_menus
 
   validates :menu_name, presence: true
 end

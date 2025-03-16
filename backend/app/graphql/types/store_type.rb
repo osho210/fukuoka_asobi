@@ -30,7 +30,7 @@ module Types
     field :hashtags, [Types::HashtagType], null: false
     field :instagram_embeds, [Types::InstagramEmbedType], null: false
     field :menus, [Types::MenuType], null: false
-    field :store_ambiances, [Types::StoreAmbianceType], null: false
+    field :spot_ambiances, [Types::SpotAmbianceType], null: false
     field :purposes, [Types::PurposeType], null: false
   end
 end

@@ -51,82 +51,10 @@ puts "目的データを作成中..."
   Purpose.find_or_create_by!(purpose_name: purpose_name)
 end
 
-# お店の雰囲気テーブル
-puts "お店の雰囲気データを作成中..."
+# スポットの雰囲気テーブル
+puts "スポットの雰囲気データを作成中..."
 ['おしゃれ', 'カジュアル', '高級', '落ち着いた', '賑やか', 'アットホーム', 'モダン', 'レトロ', '和風', '洋風', 'アジアン', '隠れ家', '眺めがいい', '静か', '広々', '個室あり'].each do |ambiance_name|
-  StoreAmbiance.find_or_create_by!(ambiance_name: ambiance_name)
-end
-
-# サンプル店舗データ
-puts "サンプル店舗データを作成中..."
-# 博多区の店舗
-hakata_district = District.find_by(district_name: '博多区')
-hakata_station_area = Area.find_by(area_name: '博多駅周辺')
-cafe_category = Category.find_by(name: 'カフェ')
-restaurant_category = Category.find_by(name: 'レストラン')
-date_purpose = Purpose.find_by(purpose_name: 'デート')
-friends_purpose = Purpose.find_by(purpose_name: '友達と')
-stylish_ambiance = StoreAmbiance.find_by(ambiance_name: 'おしゃれ')
-casual_ambiance = StoreAmbiance.find_by(ambiance_name: 'カジュアル')
-fukuoka_cafe_hashtag = Hashtag.find_by(hashtag_name: '#福岡カフェ')
-fukuoka_gourmet_hashtag = Hashtag.find_by(hashtag_name: '#福岡グルメ')
-
-# 博多駅周辺のカフェ
-hakata_cafe = Store.find_or_create_by!(
-  district: hakata_district,
-  store_name: '博多スタイルカフェ',
-  address: '福岡県福岡市博多区博多駅前X-X-X',
-  phone_number: '092-XXX-XXXX',
-  website: 'https://example.com/hakata-cafe',
-  catchphrase: '博多駅直結！おしゃれな空間で過ごすくつろぎのカフェタイム',
-  recommended_for_1: 'こだわりの自家焙煎コーヒー',
-  recommended_for_2: '博多産食材を使ったスイーツ',
-  parking_available: false,
-  nearest_station: '博多駅',
-  review_rating: 4.5,
-  review_count: 120,
-  instagram_url: 'https://instagram.com/example',
-  is_closed: false,
-  budget_range: '普通',
-  max_people: 40,
-  min_people: 1,
-  is_rainy_ok: true,
-  theme: 'コスパ'
-)
-
-# 店舗-地域の関連付け
-StoreArea.find_or_create_by!(store: hakata_cafe, area: hakata_station_area)
-
-# 店舗-カテゴリの関連付け
-StoreCategory.find_or_create_by!(store: hakata_cafe, category: cafe_category)
-
-# 店舗-ハッシュタグの関連付け
-StoreHashtag.find_or_create_by!(store: hakata_cafe, hashtag: fukuoka_cafe_hashtag)
-
-# 店舗-目的の関連付け
-StorePurpose.find_or_create_by!(store: hakata_cafe, purpose: date_purpose)
-StorePurpose.find_or_create_by!(store: hakata_cafe, purpose: friends_purpose)
-
-# 店舗-雰囲気の関連付け
-StoreAmbianceRelation.find_or_create_by!(store: hakata_cafe, store_ambiance: stylish_ambiance)
-
-# 営業時間の設定
-['月', '火', '水', '木', '金'].each do |day|
-  OpeningHour.find_or_create_by!(
-    store: hakata_cafe,
-    day_of_week: day,
-    open_time: '10:00',
-    close_time: '21:00'
-  )
-end
-
-['土', '日'].each do |day|
-  OpeningHour.find_or_create_by!(
-    store: hakata_cafe,
-    day_of_week: day,
-    open_time: '11:00',
-    close_time: '20:00'
-  )
+  SpotAmbiance.find_or_create_by!(ambiance_name: ambiance_name)
 end
 
 # メニューの作成
@@ -142,63 +70,6 @@ cake_menu = Menu.find_or_create_by!(
   description: '地元の苺をたっぷり使用した自家製ケーキ'
 )
 
-# 店舗-メニューの関連付け
-StoreMenu.find_or_create_by!(store: hakata_cafe, menu: coffee_menu)
-StoreMenu.find_or_create_by!(store: hakata_cafe, menu: cake_menu)
-
-# 中央区の店舗
-chuo_district = District.find_by(district_name: '中央区')
-tenjin_area = Area.find_by(area_name: '天神')
-
-# 天神のレストラン
-tenjin_restaurant = Store.find_or_create_by!(
-  district: chuo_district,
-  store_name: '天神イタリアン',
-  address: '福岡県福岡市中央区天神X-X-X',
-  phone_number: '092-XXX-XXXX',
-  website: 'https://example.com/tenjin-italian',
-  catchphrase: '天神の隠れ家イタリアン。本場の味を福岡で。',
-  recommended_for_1: '自家製生パスタ',
-  recommended_for_2: '厳選ワイン',
-  parking_available: true,
-  nearest_station: '天神駅',
-  review_rating: 4.7,
-  review_count: 85,
-  instagram_url: 'https://instagram.com/example2',
-  is_closed: false,
-  budget_range: '高い',
-  max_people: 30,
-  min_people: 2,
-  is_rainy_ok: true,
-  theme: '文化と歴史'
-)
-
-# 店舗-地域の関連付け
-StoreArea.find_or_create_by!(store: tenjin_restaurant, area: tenjin_area)
-
-# 店舗-カテゴリの関連付け
-StoreCategory.find_or_create_by!(store: tenjin_restaurant, category: restaurant_category)
-
-# 店舗-ハッシュタグの関連付け
-StoreHashtag.find_or_create_by!(store: tenjin_restaurant, hashtag: fukuoka_gourmet_hashtag)
-
-# 店舗-目的の関連付け
-StorePurpose.find_or_create_by!(store: tenjin_restaurant, purpose: date_purpose)
-
-# 店舗-雰囲気の関連付け
-StoreAmbianceRelation.find_or_create_by!(store: tenjin_restaurant, store_ambiance: stylish_ambiance)
-
-# 営業時間の設定
-['月', '火', '水', '木', '金', '土', '日'].each do |day|
-  OpeningHour.find_or_create_by!(
-    store: tenjin_restaurant,
-    day_of_week: day,
-    open_time: '17:00',
-    close_time: '23:00'
-  )
-end
-
-# メニューの作成
 pasta_menu = Menu.find_or_create_by!(
   menu_name: '自家製カルボナーラ',
   price: 1500,
@@ -211,9 +82,8 @@ wine_menu = Menu.find_or_create_by!(
   description: 'ソムリエ厳選のイタリア産赤ワイン'
 )
 
-# 店舗-メニューの関連付け
-StoreMenu.find_or_create_by!(store: tenjin_restaurant, menu: pasta_menu)
-StoreMenu.find_or_create_by!(store: tenjin_restaurant, menu: wine_menu)
+# スポットのシードデータを読み込む
+require_relative 'seeds/spots'
 
 # ユーザーのシードデータを読み込む
 require_relative 'seeds/users'

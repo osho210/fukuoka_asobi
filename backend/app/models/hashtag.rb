@@ -1,6 +1,6 @@
 class Hashtag < ApplicationRecord
-  has_many :store_hashtags, dependent: :destroy
-  has_many :stores, through: :store_hashtags
+  has_many :spot_hashtags, dependent: :destroy
+  has_many :spots, through: :spot_hashtags
 
   validates :hashtag_name, presence: true, uniqueness: true
 end

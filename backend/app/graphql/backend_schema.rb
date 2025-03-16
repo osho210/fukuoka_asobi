@@ -23,6 +23,8 @@ class BackendSchema < GraphQL::Schema
       Types::PlayPlanType
     when PlanDetail
       Types::PlanDetailType
+    when Spot
+      Types::SpotType
     when Store
       Types::StoreType
     when District
@@ -41,8 +43,8 @@ class BackendSchema < GraphQL::Schema
       Types::OpeningHourType
     when Purpose
       Types::PurposeType
-    when StoreAmbiance
-      Types::StoreAmbianceType
+    when SpotAmbiance
+      Types::SpotAmbianceType
     else
       raise "Unexpected object: #{obj}"
     end
