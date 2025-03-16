@@ -37,9 +37,9 @@ const RecommendedSpot = () => {
 
   return (
     <div className="recommended-spots">
-      <h2 className="section-title">おすすめスポット</h2>
       <div className="spots-grid">
-        {data.spots.slice(0, 5).map((spot) => (
+        {/* TODO: 暫定的に2~5を表示、リリース時は変更すること */}
+        {data.spots.slice(2, 5).map((spot) => (
           <Link href={`/spots/${spot.id}`} key={spot.id} className="spot-card">
             <div className="spot-image">
               {spot.imageUrl ? (

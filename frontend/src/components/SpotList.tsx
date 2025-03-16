@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { GET_SPOTS } from '../graphql/queries/getStores';
+import { GET_SPOTS } from '../graphql/queries/getSpots';
 import Link from 'next/link';
 import { Spot, Category, Area, Hashtag } from '../types/spot';
 
-interface StoresData {
-  stores: Spot[];
+interface SpotsData {
+  spots: Spot[];
 }
 
-export default function StoreList() {
-  const { loading, error, data } = useQuery<StoresData>(GET_SPOTS);
+export default function SpotList() {
+  const { loading, error, data } = useQuery<SpotsData>(GET_SPOTS);
 
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました: {error.message}</p>;
@@ -18,7 +18,7 @@ export default function StoreList() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">店舗一覧</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.stores.map((spot) => (
+        {data.spots.map((spot) => (
           <div key={spot.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6">
               <h2 className="text-xl font-semibold mb-2">{spot.spotName}</h2>
@@ -52,7 +52,7 @@ export default function StoreList() {
                 ))}
               </div>
               <div className="mt-4">
-                <Link href={`/stores/${spot.id}`} className="text-blue-600 hover:text-blue-800">
+                <Link href={`/spots/${spot.id}`} className="text-blue-600 hover:text-blue-800">
                   詳細を見る &rarr;
                 </Link>
               </div>
