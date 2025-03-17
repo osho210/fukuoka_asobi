@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_15_233440) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_16_145752) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -32,6 +32,37 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_233440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["district_name"], name: "index_districts_on_district_name", unique: true
+  end
+
+  create_table "event_categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.string "location"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
+    t.string "recurring_rule"
+    t.integer "event_category_id", null: false
+    t.string "price"
+    t.string "organizer"
+    t.string "contact_email"
+    t.string "contact_phone"
+    t.integer "capacity"
+    t.integer "status", default: 0
+    t.boolean "is_online", default: false
+    t.string "source_url"
+    t.string "banner_image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_category_id"], name: "index_events_on_event_category_id"
   end
 
   create_table "hashtags", force: :cascade do |t|
@@ -237,6 +268,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_15_233440) do
   end
 
   add_foreign_key "areas", "districts"
+  add_foreign_key "events", "event_categories"
   add_foreign_key "opening_hours", "spots"
   add_foreign_key "spot_ambiance_relations", "spot_ambiances"
   add_foreign_key "spot_ambiance_relations", "spots"

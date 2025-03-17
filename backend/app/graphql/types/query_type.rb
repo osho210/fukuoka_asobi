@@ -84,5 +84,22 @@ module Types
     # 遊びのプラン
     field :play_plans, resolver: Resolvers::PlayPlansResolver
     field :play_plan, resolver: Resolvers::PlayPlanResolver
+
+    # イベントカテゴリ
+    field :event_categories, [Types::EventCategoryType], null: false
+    def event_categories
+      EventCategory.all
+    end
+
+    field :event_category, Types::EventCategoryType, null: true do
+      argument :id, ID, required: true
+    end
+    def event_category(id:)
+      EventCategory.find_by(id: id)
+    end
+
+    # イベント
+    field :events, resolver: Resolvers::EventsResolver
+    field :event, resolver: Resolvers::EventResolver
   end
 end

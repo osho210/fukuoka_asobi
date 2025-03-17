@@ -91,4 +91,10 @@ require_relative 'seeds/users'
 # 遊びのプランのシードデータを読み込む
 require_relative 'seeds/play_plans'
 
+# イベントカテゴリのシードデータを読み込む
+require_relative 'seeds/event_categories'
+
+# イベントのシードデータを読み込む
+require_relative 'seeds/events'
+
 puts "シードデータの作成が完了しました！"

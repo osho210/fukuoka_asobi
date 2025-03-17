@@ -1,0 +1,176 @@
+/* メインコンテナ */
+.recommended-events {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* グリッドレイアウト */
+.events-grid {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    /* 最大幅を設定 */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* イベントカード（横レイアウトに統一） */
+.event-card {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    /* 横レイアウトを強制 */
+    align-items: center;
+    /* 縦の位置を中央揃え */
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #ddd;
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 画像部分 */
+.event-image {
+    position: relative;
+    width: 40%;
+    /* 画像を40%のサイズに調整 */
+    height: 150px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.event-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 画像がない場合のプレースホルダー */
+.image-placeholder {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    color: #999;
+}
+
+/* タグ（イベントカテゴリ） */
+.event-category-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #4a6baf;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+/* オンラインバッジ */
+.event-online-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #2ecc71;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+/* コンテンツ部分 */
+.event-content {
+    width: 60%;
+    /* 画像の横に配置するため60% */
+    padding: 15px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* イベント名 */
+.event-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* メタ情報（日時・場所） */
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 12px;
+    color: #777;
+}
+
+/* アイコン */
+.event-icon {
+    display: inline-block;
+    margin-right: 5px;
+    font-style: normal;
+}
+
+/* 日付 */
+.event-date {
+    display: flex;
+    align-items: center;
+    color: #4a6baf;
+}
+
+/* 場所 */
+.event-location {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* レスポンシブ対応 */
+/* モバイル（1列配置） */
+@media (max-width: 768px) {
+    .events-grid {
+        grid-template-columns: 1fr;
+        /* 1列レイアウトにする */
+    }
+
+    .event-card {
+        flex-direction: row;
+        /* モバイルでも横レイアウトを維持 */
+    }
+
+    .event-image {
+        width: 40%;
+        height: auto;
+    }
+
+    .event-content {
+        width: 60%;
+    }
+}
+
+@media (min-width: 768px) {
+    .image-placeholder {
+        height: 150px;
+    }
+}

@@ -45,6 +45,42 @@ export type District = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
+export type Event = {
+  __typename?: 'Event';
+  bannerImage?: Maybe<Scalars['String']['output']>;
+  capacity?: Maybe<Scalars['Int']['output']>;
+  contactEmail?: Maybe<Scalars['String']['output']>;
+  contactPhone?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  description: Scalars['String']['output'];
+  endDatetime: Scalars['ISO8601DateTime']['output'];
+  eventCategory: EventCategory;
+  eventCategoryId: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  isOnline: Scalars['Boolean']['output'];
+  latitude?: Maybe<Scalars['Float']['output']>;
+  location: Scalars['String']['output'];
+  longitude?: Maybe<Scalars['Float']['output']>;
+  organizer?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['String']['output']>;
+  recurringRule?: Maybe<Scalars['String']['output']>;
+  sourceUrl?: Maybe<Scalars['String']['output']>;
+  startDatetime: Scalars['ISO8601DateTime']['output'];
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type EventCategory = {
+  __typename?: 'EventCategory';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  events?: Maybe<Array<Event>>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
 export type Hashtag = {
   __typename?: 'Hashtag';
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -168,6 +204,10 @@ export type Query = {
   categories: Array<Category>;
   district?: Maybe<District>;
   districts: Array<District>;
+  event?: Maybe<Event>;
+  eventCategories: Array<EventCategory>;
+  eventCategory?: Maybe<EventCategory>;
+  events: Array<Event>;
   hashtags: Array<Hashtag>;
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
@@ -185,6 +225,25 @@ export type QueryAreaArgs = {
 
 export type QueryDistrictArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryEventArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEventCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEventsArgs = {
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  isOnline?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  upcoming?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 

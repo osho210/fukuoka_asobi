@@ -5,9 +5,11 @@ import HamburgerMenu from '@/components/HamburgerMenu'
 import Footer from '@/components/Footer'
 import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
+import RecommendedEvent from '@/components/RecommendedEvent'
 import '../../public/styles/common.css';
 import '../../public/styles/PlayPlanList.css';
 import '../../public/styles/RecommendedSpot.css';
+import '../../public/styles/RecommendedEvent.css';
 
 export default function Home() {
   return (
@@ -57,7 +59,7 @@ export default function Home() {
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Event</h2>
         <p className="section-subtitle">編集部イチオシイベント</p>
-        {/* <RecommendedEvent /> */}
+        <RecommendedEvent />
         <Link href={''} className="section-link">開催中のイベントを見る</Link>
       </div>
       <div className="section">
@@ -67,7 +69,7 @@ export default function Home() {
         <p className="section-title">公式SNSでも福岡の情報を発信中！</p>
       </div>
       <div className="section">
-        
+
       </div>
       <Footer />
     </div >
