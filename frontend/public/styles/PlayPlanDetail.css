@@ -1,11 +1,18 @@
 .play-plan-detail {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .plan-header {
   margin-bottom: 30px;
+}
+
+.plan-header-tag{
+  background: #cb6b52;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 .plan-title {
@@ -113,7 +120,7 @@
 
 .plan-stats {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 20px;
   padding: 15px;
   background-color: #f9f9f9;
@@ -141,7 +148,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -247,6 +254,28 @@
 .plan-step-description {
   margin-bottom: 15px;
   line-height: 1.5;
+}
+
+.plan-step-planner-title {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.plan-step-planner-title h4 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #cb6b52;
+  padding-left: 10px;
+  border-left: 3px solid #cb6b52;
+}
+
+.plan-step-planner-description {
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: #fff8f6;
+  border-radius: 6px;
+  line-height: 1.5;
+  color: #333;
 }
 
 .plan-step-spot {
@@ -372,15 +401,6 @@
 @media (max-width: 768px) {
   .plan-image-container {
     height: 200px;
-  }
-
-  .plan-stats {
-    flex-wrap: wrap;
-  }
-
-  .plan-stat-item {
-    width: 50%;
-    margin-bottom: 10px;
   }
 
   .plan-step {

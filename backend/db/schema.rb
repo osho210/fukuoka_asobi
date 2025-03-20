@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_20_063208) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -128,6 +128,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_063208) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "planner_title"
+    t.text "planner_description"
   end
 
   create_table "play_plan_recommended_fors", force: :cascade do |t|

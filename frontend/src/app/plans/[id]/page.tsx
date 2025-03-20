@@ -27,7 +27,8 @@ const GET_PLAY_PLAN = gql`
       startDatetime
       endDatetime
       tags
-      recommendedForString
+      createdAt
+      updatedAt
       recommendedFors {
         id
         name
@@ -50,6 +51,8 @@ const GET_PLAY_PLAN = gql`
         endDatetime
         budget
         notes
+        plannerTitle
+        plannerDescription
         spot {
           id
           spotName

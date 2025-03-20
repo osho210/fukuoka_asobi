@@ -47,10 +47,13 @@ interface PlanDetail {
   stepName: string;
   stepDescription?: string;
   comment?: string;
-  startDatetime?: string;
+  createdAt?: string;
+  updatedAt?: string;
   endDatetime?: string;
   budget?: number;
   notes?: string;
+  plannerTitle?: string;
+  plannerDescription?: string;
   spot?: Spot;
 }
 
@@ -80,6 +83,8 @@ interface PlayPlan {
   status: string;
   startDatetime?: string;
   endDatetime?: string;
+  createdAt?: string;
+  updatedAt?: string;
   tags?: string;
   recommendedFors?: RecommendedFor[];
   recommendedForString?: string;
@@ -98,7 +103,7 @@ const formatDate = (dateString?: string) => {
   if (!dateString) return '';
   try {
     const date = new Date(dateString);
-    return format(date, 'yyyy年MM月dd日(E) HH:mm', { locale: ja });
+    return format(date, 'yyyy年MM月dd日', { locale: ja });
   } catch (error) {
     console.error('日付のフォーマットエラー:', error);
     return dateString;
@@ -133,7 +138,7 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
   return (
     <div className="play-plan-detail">
       <div className="plan-header">
-        <span>{getTripTypeText(plan.tripType)}</span>
+        <span className='plan-header-tag'>{getTripTypeText(plan.tripType)}</span>
         <h1 className="plan-title">{plan.planName}</h1>
 
         <div className="plan-meta">
@@ -149,10 +154,10 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
               <span>予算: ¥{plan.totalBudget.toLocaleString()}</span>
             </div>
           )}
-          {plan.startDatetime && (
+          {plan.createdAt && (
             <div className="plan-meta-item">
               <span className="plan-meta-icon">📅</span>
-              <span>{formatDate(plan.startDatetime)}</span>
+              <span>作成日: {formatDate(plan.createdAt)}</span>
             </div>
           )}
         </div>
@@ -206,15 +211,9 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
           </div>
         )}
 
-        {plan.description && (
-          <div className="plan-description">
-            {plan.description}
-          </div>
-        )}
-
         {(plan.recommendedFors && plan.recommendedFors.length > 0) || plan.recommendedForString ? (
           <div className="plan-recommended-for">
-            <h3>おすすめ対象</h3>
+            <h3>こんな方におすすめのプラン</h3>
             <div className="plan-recommended-for-tags">
               {plan.recommendedFors ? (
                 plan.recommendedFors.map(item => (
@@ -242,6 +241,11 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
             <span className="plan-stat-value">♡ {plan.favoriteCount}</span>
             <span className="plan-stat-label">お気に入り</span>
           </div>
+          {/* ここに閲覧数を表示しても面白そう */}
+          {/* <div className="plan-stat-item">
+            <span className="plan-stat-value">♡ {plan.favoriteCount}</span>
+            <span className="plan-stat-label">お気に入り</span>
+          </div> */}
         </div>
       </div>
 
@@ -260,9 +264,9 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
                 <div className="plan-step-content">
                   <div className="plan-step-header">
                     <h3 className="plan-step-name">{detail.stepName}</h3>
-                    {detail.startDatetime && (
+                    {detail.createdAt && (
                       <div className="plan-step-time">
-                        {formatTime(detail.startDatetime)}
+                        {formatTime(detail.createdAt)}
                         {detail.endDatetime && ` 〜 ${formatTime(detail.endDatetime)}`}
                       </div>
                     )}
@@ -271,6 +275,18 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
                   {detail.stepDescription && (
                     <div className="plan-step-description">
                       {detail.stepDescription}
+                    </div>
+                  )}
+
+                  {detail.plannerTitle && (
+                    <div className="plan-step-planner-title">
+                      <h4>{detail.plannerTitle}</h4>
+                    </div>
+                  )}
+
+                  {detail.plannerDescription && (
+                    <div className="plan-step-planner-description">
+                      <p>{detail.plannerDescription}</p>
                     </div>
                   )}
 

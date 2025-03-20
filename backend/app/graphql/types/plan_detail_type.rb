@@ -13,6 +13,8 @@ module Types
     field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
     field :budget, Float, null: true
     field :notes, String, null: true
+    field :planner_title, String, null: true
+    field :planner_description, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
