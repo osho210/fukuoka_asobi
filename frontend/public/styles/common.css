@@ -1,6 +1,7 @@
 body {
     background: #fff;
     color: #000;
+    max-width: 1200px;
 }
 
 li {
@@ -49,6 +50,10 @@ li {
     justify-content: center;
     display: flex;
     max-width: 200px;
+}
+
+.official-sns {
+    text-align: center;
 }
 
 .section-content {

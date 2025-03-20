@@ -64,15 +64,14 @@ export default function Home() {
         <RecommendedEvent />
         <Link href={''} className="section-link">開催中のイベントを見る</Link>
       </div>
-      <div className="section">
+      <div className="section official-sns">
         <Link href={'https://www.instagram.com/fukuoka___cafe/'}>
           <Image src={'/official-banner.png'} width={392} height={263} alt="official-banner" />
         </Link>
         <p className="section-title">公式SNSでも福岡の情報を発信中！</p>
       </div>
-      <div className="section">
-        <h2 className="section-title">Latest News</h2>
-        <p className="section-subtitle">最新ニュース</p>
+      <div className="section news">
+        <h2 className="section-title">News</h2>
         <RecommendedNews />
         <Link href={'/news'} className="section-link">ニュース一覧を見る</Link>
       </div>

@@ -36,24 +36,25 @@ export default function RecommendedNews() {
             <div className="news-grid">
                 {newsData.map((news) => (
                     <Link key={news.id} href={`/news/${news.id}`} className="news-card">
-                        <div className="news-image-container">
-
+                        <div className="news-container">
                             <Image
                                 src={news.imageUrl.startsWith('http') ? news.imageUrl : `/${news.imageUrl}`}
                                 alt={news.title}
-                                width={400}
-                                height={300}
+                                width={50}
+                                height={50}
                                 className="news-image"
                             />
-                            {news.category && (
-                                <span className="news-category">{news.category.name}</span>
-                            )}
-                        </div>
-                        <div className="news-content">
-                            <h3 className="news-title">{news.title}</h3>
-                            <time className="news-date">
-                                {format(new Date(news.publishedAt), 'yyyy年MM月dd日', { locale: ja })}
-                            </time>
+                            <div className="news-content">
+                                <h3 className="news-title">{news.title}</h3>
+                                <div className='news-category-container'>
+                                    {news.category && (
+                                        <p className="news-category">{news.category.name}</p>
+                                    )}
+                                    <time className="news-date">
+                                        {format(new Date(news.publishedAt), 'yyyy年MM月dd日', { locale: ja })}
+                                    </time>
+                                </div>
+                            </div>
                         </div>
                     </Link>
                 ))}
