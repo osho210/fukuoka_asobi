@@ -17,6 +17,7 @@ export const GET_SPOT = gql`
         dayOfWeek
         businessHour
       }
+      closedDays
       reviewRating
       reviewCount
       instagramUrl

@@ -3,8 +3,9 @@ module Types
     field :id, ID, null: false
     field :spot_id, Integer, null: false
     field :day_of_week, String, null: false
-    field :open_time, GraphQL::Types::ISO8601DateTime, null: false
-    field :close_time, GraphQL::Types::ISO8601DateTime, null: false
+    field :open_time, GraphQL::Types::ISO8601DateTime, null: true
+    field :close_time, GraphQL::Types::ISO8601DateTime, null: true
+    field :is_closed_day, Boolean, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

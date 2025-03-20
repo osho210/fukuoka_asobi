@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_124752) do
   create_table "areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "area_name", null: false
     t.bigint "district_id", null: false
@@ -111,6 +111,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.time "close_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_closed_day", default: false, null: false
     t.index ["spot_id", "day_of_week"], name: "index_opening_hours_on_spot_id_and_day_of_week", unique: true
     t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
   end

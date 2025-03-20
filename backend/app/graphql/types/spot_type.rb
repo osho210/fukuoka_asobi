@@ -30,6 +30,7 @@ module Types
     field :district, Types::DistrictType, null: false
     field :opening_hours, [Types::OpeningHourType], null: false
     field :opening_hour_list, [Types::OpeningHourListType], null: false, description: "営業時間のリスト（曜日と営業時間）"
+    field :closed_days, [String], null: false, description: "定休日の曜日リスト"
     field :areas, [Types::AreaType], null: false
     field :categories, [Types::CategoryType], null: false
     field :hashtags, [Types::HashtagType], null: false
@@ -40,6 +41,10 @@ module Types
 
     def opening_hour_list
       object.opening_hour_list
+    end
+
+    def closed_days
+      object.closed_days
     end
   end
 end

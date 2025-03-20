@@ -3,6 +3,7 @@
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Image from 'next/image';
+import BusinessHours from './BusinessHours';
 
 // 型定義
 interface OpeningHour {
@@ -38,7 +39,12 @@ interface Spot {
   isRainyOk?: boolean;
   district: District;
   categories: Category[];
-  openingHours: OpeningHour[];
+  openingHours?: OpeningHour[];
+  openingHourList?: Array<{
+    dayOfWeek: string;
+    businessHour: string;
+  }>;
+  closedDays?: string[];
 }
 
 interface PlanDetail {
@@ -352,6 +358,12 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
                               {category.name}
                             </span>
                           ))}
+                        </div>
+                      )}
+
+                      {detail.spot.openingHourList && detail.spot.openingHourList.length > 0 && (
+                        <div className="plan-step-spot-business-hours">
+                          <BusinessHours spot={detail.spot} />
                         </div>
                       )}
                     </div>

@@ -13,6 +13,7 @@ export interface Spot {
     dayOfWeek: string;
     businessHour: string;
   }> | null;
+  closedDays?: string[] | null;
   reviewRating?: number | null;
   reviewCount?: number | null;
   instagramUrl?: string | null;

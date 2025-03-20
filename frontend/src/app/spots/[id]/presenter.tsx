@@ -1,5 +1,6 @@
 import { Spot } from '../../../types/spot';
 import Image from 'next/image';
+import BusinessHours from '../../../components/BusinessHours';
 
 interface SpotPresenterProps {
   spot: Spot;
@@ -76,20 +77,7 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
               </ul>
             </div>
 
-            <div className="opening-hours">
-              <h3>営業時間</h3>
-              {spot.openingHourList && spot.openingHourList.length > 0 ? (
-                <ul>
-                  {spot.openingHourList.map(hour => (
-                    <li key={hour.dayOfWeek}>
-                      {hour.dayOfWeek}: {hour.businessHour}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>営業時間の情報がありません。</p>
-              )}
-            </div>
+            <BusinessHours spot={spot} />
 
             {spot.menus.length > 0 && (
               <div className="menus">

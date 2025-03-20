@@ -140,11 +140,12 @@ export type Node = {
 
 export type OpeningHour = {
   __typename?: 'OpeningHour';
-  closeTime: Scalars['ISO8601DateTime']['output'];
+  closeTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
   dayOfWeek: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  openTime: Scalars['ISO8601DateTime']['output'];
+  isClosedDay: Scalars['Boolean']['output'];
+  openTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
   spot: Spot;
   spotId: Scalars['Int']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
@@ -315,6 +316,8 @@ export type Spot = {
   budgetRange?: Maybe<Scalars['String']['output']>;
   catchphrase?: Maybe<Scalars['String']['output']>;
   categories: Array<Category>;
+  /** 定休日の曜日リスト */
+  closedDays: Array<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
   district: District;
   districtId: Scalars['Int']['output'];
@@ -396,7 +399,7 @@ export type GetPlayPlanQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, createdAt: any, updatedAt: any, plannerTitle?: string | null, plannerDescription?: string | null, recommendedFors?: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, plannerTitle?: string | null, plannerDescription?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, budgetRange?: string | null, imageUrl?: string | null, theme?: string | null, isRainyOk?: boolean | null, district: { __typename?: 'District', id: string, districtName: string }, categories: Array<{ __typename?: 'Category', id: string, name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any }>, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string, businessHour: string }> } | null }> | null } | null };
+export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, createdAt: any, updatedAt: any, plannerTitle?: string | null, plannerDescription?: string | null, recommendedFors?: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, plannerTitle?: string | null, plannerDescription?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, budgetRange?: string | null, imageUrl?: string | null, theme?: string | null, isRainyOk?: boolean | null, district: { __typename?: 'District', id: string, districtName: string }, categories: Array<{ __typename?: 'Category', id: string, name: string }>, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string, businessHour: string }> } | null }> | null } | null };
 
 export type GetPlayPlansQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -445,7 +448,7 @@ export type GetSpotQueryVariables = Exact<{
 }>;
 
 
-export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, recommendedFor1?: string | null, recommendedFor2?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, spotType: SpotTypeEnum, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string, businessHour: string }>, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
+export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, recommendedFor1?: string | null, recommendedFor2?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, closedDays: Array<string>, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, spotType: SpotTypeEnum, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string, businessHour: string }>, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
 
 export type GetSpotAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
 

@@ -30,13 +30,71 @@ class Spot < ApplicationRecord
   # スポットタイプのバリデーション
   validates :spot_type, inclusion: { in: %w(STORE TOURIST_SPOT ACTIVITY) }
 
-  # spotに紐づく営業時間を取得
+  # 定休日一覧を取得
+  def closed_days
+    opening_hours.where(is_closed_day: true).pluck(:day_of_week)
+  end
+
+  # 営業時間を最適化して取得（同じ時間帯の曜日をまとめる）
   def opening_hour_list
-    opening_hours.map do |opening_hour|
+    # 営業時間ごとにグループ化
+    hours_by_time = {}
+
+    opening_hours.where(is_closed_day: false).each do |hour|
+      business_hour = hour.open_time.strftime('%H:%M') + ' ~ ' + hour.close_time.strftime('%H:%M')
+      hours_by_time[business_hour] ||= []
+      hours_by_time[business_hour] << hour.day_of_week
+    end
+
+    # 定休日を追加
+    closed = closed_days
+    if closed.present?
+      hours_by_time['定休日'] = closed
+    end
+
+    # 結果を整形
+    hours_by_time.map do |time, days|
       {
-        day_of_week: opening_hour.day_of_week,
-        business_hour: opening_hour.open_time.strftime('%H:%M') + ' ~ ' + opening_hour.close_time.strftime('%H:%M')
+        day_of_week: format_day_range(days),
+        business_hour: time
       }
     end
+  end
+
+  private
+
+  # 曜日の範囲を整形する（例: 月,火,水,木 → 月 - 木）
+  def format_day_range(days)
+    return days.first if days.size == 1
+
+    # 曜日の順序を定義
+    day_order = %w(月 火 水 木 金 土 日)
+    sorted_days = days.sort_by { |day| day_order.index(day) }
+
+    # 連続した曜日をグループ化
+    ranges = []
+    current_range = [sorted_days.first]
+
+    (1...sorted_days.size).each do |i|
+      prev_idx = day_order.index(sorted_days[i-1])
+      curr_idx = day_order.index(sorted_days[i])
+
+      if curr_idx == prev_idx + 1
+        current_range << sorted_days[i]
+      else
+        ranges << current_range
+        current_range = [sorted_days[i]]
+      end
+    end
+    ranges << current_range
+
+    # 範囲を文字列に変換
+    ranges.map do |range|
+      if range.size >= 3
+        "#{range.first} - #{range.last}"
+      else
+        range.join('・')
+      end
+    end.join('、')
   end
 end
