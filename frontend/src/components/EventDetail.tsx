@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatDateRange } from '../lib/dateUtils';
 
 type Event = {
@@ -92,11 +93,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
       <div className="relative">
         <div className="h-64 bg-gray-200">
           {event.bannerImage ? (
-            <img
-              src={event.bannerImage}
-              alt={event.title}
-              className="w-full h-full object-cover"
-            />
+            <Image src={event.bannerImage} alt={event.title} width={300} height={200} layout="responsive" />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gray-200">
               <span className="text-gray-400 text-xl">No Image</span>

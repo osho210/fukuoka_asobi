@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_16_145752) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_17_144322) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -88,6 +88,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_145752) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["menu_name"], name: "index_menus_on_menu_name"
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.datetime "published_at"
+    t.integer "status", default: 0, null: false
+    t.string "image_url"
+    t.integer "author_id"
+    t.integer "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_news_on_author_id"
+    t.index ["category_id"], name: "index_news_on_category_id"
   end
 
   create_table "opening_hours", force: :cascade do |t|
@@ -269,6 +283,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_145752) do
 
   add_foreign_key "areas", "districts"
   add_foreign_key "events", "event_categories"
+  add_foreign_key "news", "categories"
+  add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"
   add_foreign_key "spot_ambiance_relations", "spot_ambiances"
   add_foreign_key "spot_ambiance_relations", "spots"

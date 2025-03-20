@@ -97,4 +97,7 @@ require_relative 'seeds/event_categories'
 # イベントのシードデータを読み込む
 require_relative 'seeds/events'
 
+# ニュースのシードデータを読み込む
+require_relative 'seeds/news'
+
 puts "シードデータの作成が完了しました！"

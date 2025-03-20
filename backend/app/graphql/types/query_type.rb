@@ -101,5 +101,9 @@ module Types
     # イベント
     field :events, resolver: Resolvers::EventsResolver
     field :event, resolver: Resolvers::EventResolver
+
+    # ニュース
+    field :news, resolver: Resolvers::NewsResolver
+    field :news_detail, resolver: Resolvers::NewsDetailResolver
   end
 end

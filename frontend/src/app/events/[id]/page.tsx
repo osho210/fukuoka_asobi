@@ -3,9 +3,7 @@ import EventList from '../../../components/EventList';
 import Link from 'next/link';
 
 type EventPageProps = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>
 };
 
 export const metadata = {
@@ -13,8 +11,8 @@ export const metadata = {
   description: '福岡市内で開催されるイベントの詳細情報です。開催日時、場所、料金などの情報を確認できます。',
 };
 
-export default function EventPage({ params }: EventPageProps) {
-  const { id } = params;
+export default async function EventPage({ params }: EventPageProps) {
+  const { id } = await params;
 
   return (
     <div className="container mx-auto px-4 py-8">

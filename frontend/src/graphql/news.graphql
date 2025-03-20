@@ -1,0 +1,43 @@
+query GetNews($categoryId: ID, $limit: Int) {
+  news(categoryId: $categoryId, limit: $limit) {
+    id
+    title
+    body
+    publishedAt
+    status
+    imageUrl
+    author {
+      id
+      username
+      profileImageUrl
+    }
+    category {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+query GetNewsDetail($id: ID!) {
+  newsDetail(id: $id) {
+    id
+    title
+    body
+    publishedAt
+    status
+    imageUrl
+    author {
+      id
+      username
+      profileImageUrl
+    }
+    category {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}

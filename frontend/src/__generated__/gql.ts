@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n": typeof types.GetPlayPlansDocument,
+    "\n  query GetRecommendedEvents {\n    events(limit: 5, upcoming: true) {\n      id\n      title\n      location\n      startDatetime\n      endDatetime\n      bannerImage\n      isOnline\n      eventCategory {\n        id\n        name\n      }\n    }\n  }\n": typeof types.GetRecommendedEventsDocument,
     "\n  query GetRecommendedSpots {\n    spots {\n      id\n      spotName\n      spotType\n      address\n      reviewRating\n      reviewCount\n      imageUrl\n      district {\n        districtName\n      }\n      categories {\n        name\n      }\n    }\n  }\n": typeof types.GetRecommendedSpotsDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n    }\n  }\n": typeof types.GetAreasDocument,
     "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.CategoriesDocument,
@@ -27,6 +28,7 @@ type Documents = {
 };
 const documents: Documents = {
     "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n": types.GetPlayPlansDocument,
+    "\n  query GetRecommendedEvents {\n    events(limit: 5, upcoming: true) {\n      id\n      title\n      location\n      startDatetime\n      endDatetime\n      bannerImage\n      isOnline\n      eventCategory {\n        id\n        name\n      }\n    }\n  }\n": types.GetRecommendedEventsDocument,
     "\n  query GetRecommendedSpots {\n    spots {\n      id\n      spotName\n      spotType\n      address\n      reviewRating\n      reviewCount\n      imageUrl\n      district {\n        districtName\n      }\n      categories {\n        name\n      }\n    }\n  }\n": types.GetRecommendedSpotsDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n    }\n  }\n": types.GetAreasDocument,
     "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": types.CategoriesDocument,
@@ -56,6 +58,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPlayPlans($limit: Int) {\n    playPlans(limit: $limit) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      tripType\n      totalBudget\n      rating\n      reviewCount\n      favoriteCount\n      status\n      user {\n        id\n        username\n        profileImageUrl\n        role\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetRecommendedEvents {\n    events(limit: 5, upcoming: true) {\n      id\n      title\n      location\n      startDatetime\n      endDatetime\n      bannerImage\n      isOnline\n      eventCategory {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetRecommendedEvents {\n    events(limit: 5, upcoming: true) {\n      id\n      title\n      location\n      startDatetime\n      endDatetime\n      bannerImage\n      isOnline\n      eventCategory {\n        id\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

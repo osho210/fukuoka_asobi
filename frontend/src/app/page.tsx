@@ -6,10 +6,12 @@ import Footer from '@/components/Footer'
 import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
 import RecommendedEvent from '@/components/RecommendedEvent'
+import RecommendedNews from '@/components/RecommendedNews'
 import '../../public/styles/common.css';
 import '../../public/styles/PlayPlanList.css';
 import '../../public/styles/RecommendedSpot.css';
 import '../../public/styles/RecommendedEvent.css';
+import '../../public/styles/RecommendedNews.css';
 
 export default function Home() {
   return (
@@ -69,7 +71,10 @@ export default function Home() {
         <p className="section-title">公式SNSでも福岡の情報を発信中！</p>
       </div>
       <div className="section">
-
+        <h2 className="section-title">Latest News</h2>
+        <p className="section-subtitle">最新ニュース</p>
+        <RecommendedNews />
+        <Link href={'/news'} className="section-link">ニュース一覧を見る</Link>
       </div>
       <Footer />
     </div >

@@ -118,6 +118,20 @@ export type Mutation = {
   testField: Scalars['String']['output'];
 };
 
+export type News = {
+  __typename?: 'News';
+  author?: Maybe<User>;
+  body: Scalars['String']['output'];
+  category?: Maybe<Category>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  status: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
 /** An object with an ID. */
 export type Node = {
   /** ID of the object. */
@@ -209,6 +223,8 @@ export type Query = {
   eventCategory?: Maybe<EventCategory>;
   events: Array<Event>;
   hashtags: Array<Hashtag>;
+  news: Array<News>;
+  newsDetail?: Maybe<News>;
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
   purposes: Array<Purpose>;
@@ -244,6 +260,17 @@ export type QueryEventsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   upcoming?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryNewsArgs = {
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryNewsDetailArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -349,6 +376,11 @@ export type GetPlayPlansQueryVariables = Exact<{
 
 
 export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: string, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
+
+export type GetRecommendedEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRecommendedEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, title: string, location: string, startDatetime: any, endDatetime: any, bannerImage?: string | null, isOnline: boolean, eventCategory: { __typename?: 'EventCategory', id: string, name: string } }> };
 
 export type GetRecommendedSpotsQueryVariables = Exact<{ [key: string]: never; }>;
 

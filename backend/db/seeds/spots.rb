@@ -36,7 +36,7 @@ hakata_cafe = Spot.find_or_create_by!(
   min_people: 1,
   is_rainy_ok: true,
   theme: 'コスパ',
-  image_url: '/itoshima.png',
+  image_url: 'itoshima.png',
   spot_type: 'STORE'
 )
 
@@ -96,7 +96,7 @@ tenjin_restaurant = Spot.find_or_create_by!(
   min_people: 2,
   is_rainy_ok: true,
   theme: '文化と歴史',
-  image_url: '/itoshima.png',
+  image_url: 'itoshima.png',
   spot_type: 'STORE'
 )
 
@@ -146,7 +146,7 @@ fukuoka_tower = Spot.find_or_create_by!(
   min_people: 1,
   is_rainy_ok: true,
   theme: '文化と歴史',
-  image_url: '/itoshima.png',
+  image_url: 'itoshima.png',
   spot_type: 'TOURIST_SPOT'
 )
 
@@ -171,7 +171,7 @@ marine_activity = Spot.find_or_create_by!(
   min_people: 2,
   is_rainy_ok: false,
   theme: 'アクティブ',
-  image_url: '/itoshima.png',
+  image_url: 'itoshima.png',
   spot_type: 'ACTIVITY'
 )
 
@@ -196,7 +196,7 @@ ohori_park = Spot.find_or_create_by!(
   min_people: 1,
   is_rainy_ok: false,
   theme: '自然',
-  image_url: '/itoshima.png',
+  image_url: 'itoshima.png',
   spot_type: 'TOURIST_SPOT'
 )
 

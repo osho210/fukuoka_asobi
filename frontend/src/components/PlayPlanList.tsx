@@ -126,7 +126,7 @@ const PlayPlanList = () => {
                   {/* 一旦画像のurlを静的に指定している */}
                   <Image
                     className='plan-user-image'
-                    // src={plan.user?.profileImageUrl ?? `/itoshima.png`}
+                    // src={plan.user?.profileImageUrl ?? `itoshima.png`}
                     src={`/itoshima.png`}
                     alt={`${plan.user?.username ?? "ユーザー"}アイコン`}
                     width={30}

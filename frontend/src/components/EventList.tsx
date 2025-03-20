@@ -1,6 +1,8 @@
+'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
+import Image from 'next/image';
 
 type Event = {
   id: string;
@@ -139,11 +141,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             <Link href={`/events/${event.id}`}>
               <div className="relative h-48 bg-gray-200">
                 {event.bannerImage ? (
-                  <img
-                    src={event.bannerImage}
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <Image src={event.bannerImage} alt={event.title} width={300} height={200} layout="responsive" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-200">
                     <span className="text-gray-400">No Image</span>
