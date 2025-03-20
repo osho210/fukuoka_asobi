@@ -29,4 +29,14 @@ class Spot < ApplicationRecord
 
   # スポットタイプのバリデーション
   validates :spot_type, inclusion: { in: %w(STORE TOURIST_SPOT ACTIVITY) }
+
+  # spotに紐づく営業時間を取得
+  def opening_hour_list
+    opening_hours.map do |opening_hour|
+      {
+        day_of_week: opening_hour.day_of_week,
+        business_hour: opening_hour.open_time.strftime('%H:%M') + ' ~ ' + opening_hour.close_time.strftime('%H:%M')
+      }
+    end
+  end
 end

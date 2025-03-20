@@ -9,6 +9,10 @@ export interface Spot {
   recommendedFor2?: string | null;
   parkingAvailable?: boolean | null;
   nearestStation?: string | null;
+  openingHourList?: Array<{
+    dayOfWeek: string;
+    businessHour: string;
+  }> | null;
   reviewRating?: number | null;
   reviewCount?: number | null;
   instagramUrl?: string | null;
@@ -35,12 +39,6 @@ export interface Spot {
   hashtags: Array<{
     id: string;
     hashtagName: string;
-  }>;
-  openingHours: Array<{
-    id: string;
-    dayOfWeek: string;
-    openTime: string;
-    closeTime: string;
   }>;
   instagramEmbeds: Array<{
     id: string;

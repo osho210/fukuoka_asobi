@@ -75,11 +75,9 @@ const GET_PLAY_PLAN = gql`
             id
             name
           }
-          openingHours {
-            id
+          openingHourList {
             dayOfWeek
-            openTime
-            closeTime
+            businessHour
           }
         }
       }

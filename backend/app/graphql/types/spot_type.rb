@@ -29,6 +29,7 @@ module Types
 
     field :district, Types::DistrictType, null: false
     field :opening_hours, [Types::OpeningHourType], null: false
+    field :opening_hour_list, [Types::OpeningHourListType], null: false, description: "営業時間のリスト（曜日と営業時間）"
     field :areas, [Types::AreaType], null: false
     field :categories, [Types::CategoryType], null: false
     field :hashtags, [Types::HashtagType], null: false
@@ -36,5 +37,9 @@ module Types
     field :menus, [Types::MenuType], null: false
     field :spot_ambiances, [Types::SpotAmbianceType], null: false
     field :purposes, [Types::PurposeType], null: false
+
+    def opening_hour_list
+      object.opening_hour_list
+    end
   end
 end

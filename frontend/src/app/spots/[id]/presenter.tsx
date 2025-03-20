@@ -76,18 +76,20 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
               </ul>
             </div>
 
-            {spot.openingHours.length > 0 && (
-              <div className="opening-hours">
-                <h3>営業時間</h3>
+            <div className="opening-hours">
+              <h3>営業時間</h3>
+              {spot.openingHourList && spot.openingHourList.length > 0 ? (
                 <ul>
-                  {spot.openingHours.map(hour => (
-                    <li key={hour.id}>
-                      {hour.dayOfWeek}: {hour.openTime} - {hour.closeTime}
+                  {spot.openingHourList.map(hour => (
+                    <li key={hour.dayOfWeek}>
+                      {hour.dayOfWeek}: {hour.businessHour}
                     </li>
                   ))}
                 </ul>
-              </div>
-            )}
+              ) : (
+                <p>営業時間の情報がありません。</p>
+              )}
+            </div>
 
             {spot.menus.length > 0 && (
               <div className="menus">

@@ -13,6 +13,10 @@ export const GET_SPOT = gql`
       recommendedFor2
       parkingAvailable
       nearestStation
+      openingHourList {
+        dayOfWeek
+        businessHour
+      }
       reviewRating
       reviewCount
       instagramUrl
@@ -38,12 +42,6 @@ export const GET_SPOT = gql`
       hashtags {
         id
         hashtagName
-      }
-      openingHours {
-        id
-        dayOfWeek
-        openTime
-        closeTime
       }
       instagramEmbeds {
         id
