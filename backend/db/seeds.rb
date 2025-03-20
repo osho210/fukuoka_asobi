@@ -91,6 +91,9 @@ require_relative 'seeds/users'
 # 遊びのプランのシードデータを読み込む
 require_relative 'seeds/play_plans'
 
+# おすすめ対象のシードデータを読み込む
+require_relative 'seeds/recommended_fors'
+
 # イベントカテゴリのシードデータを読み込む
 require_relative 'seeds/event_categories'
 

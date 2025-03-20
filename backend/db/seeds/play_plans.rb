@@ -10,6 +10,12 @@ editor_user = User.find_by(email: 'editor@example.com')
 user1 = User.find_by(email: 'user1@example.com')
 user2 = User.find_by(email: 'user2@example.com')
 
+# おすすめ対象のデータを作成
+puts "おすすめ対象データを作成中..."
+recommended_fors = %w[カップル 友人 家族 一人 女子会 男子会 デート 記念日 誕生日].map do |name|
+  RecommendedFor.find_or_create_by!(name: name)
+end
+
 # プラン1: 博多駅周辺デートプラン
 hakata_date_plan = PlayPlan.find_or_create_by!(
   plan_name: '博多駅周辺半日デートプラン',
@@ -23,9 +29,13 @@ hakata_date_plan = PlayPlan.find_or_create_by!(
   location: '博多駅周辺',
   trip_type: :day_trip,
   total_budget: 5000,
-  recommended_for: 'カップル',
+  planner_title: 'プランナーおすすめ！博多駅周辺デートコース',
+  planner_description: 'プランナーの私がおすすめする、博多駅周辺で楽しめる半日デートプランです。カフェでゆっくりランチを楽しんだ後は、駅周辺のショッピングモールで買い物を楽しめます。',
   user: editor_user
 )
+
+# おすすめ対象を設定
+hakata_date_plan.recommended_for_string = 'カップル, デート'
 
 # プラン1の詳細
 if hakata_date_plan.plan_details.empty?
@@ -77,9 +87,13 @@ tenjin_gourmet_plan = PlayPlan.find_or_create_by!(
   location: '天神',
   trip_type: :day_trip,
   total_budget: 8000,
-  recommended_for: 'カップル,友人',
+  planner_title: '大人の夜を楽しむ天神グルメ＆夜景プラン',
+  planner_description: '天神の隠れ家イタリアンで本格的なディナーを楽しんだ後は、福岡タワーから美しい夜景を一望できる大人のプランです。特別な日のデートにもおすすめです。',
   user: user1
 )
+
+# おすすめ対象を設定
+tenjin_gourmet_plan.recommended_for_string = 'カップル, 友人, デート, 記念日'
 
 # プラン2の詳細
 if tenjin_gourmet_plan.plan_details.empty?
@@ -130,8 +144,12 @@ draft_plan = PlayPlan.find_or_create_by!(
   location: '糸島',
   trip_type: :day_trip,
   total_budget: 10000,
-  recommended_for: '友人,家族',
+  planner_title: '自然を満喫！糸島の魅力発見プラン',
+  planner_description: '糸島の美しい自然と美味しいグルメを楽しむ日帰り旅行プランです。海岸線のドライブや地元の新鮮な食材を使ったカフェめぐりがおすすめです。',
   user: user2
 )
+
+# おすすめ対象を設定
+draft_plan.recommended_for_string = '友人, 家族'
 
 puts "遊びのプランデータの作成が完了しました！"

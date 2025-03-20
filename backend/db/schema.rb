@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_17_144322) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_063208) do
   create_table "areas", force: :cascade do |t|
     t.string "area_name", null: false
     t.integer "district_id", null: false
@@ -130,6 +130,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_144322) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "play_plan_recommended_fors", force: :cascade do |t|
+    t.integer "play_plan_id"
+    t.integer "recommended_for_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["play_plan_id", "recommended_for_id"], name: "index_play_plan_recommended_fors_unique", unique: true
+    t.index ["play_plan_id"], name: "index_play_plan_recommended_fors_on_play_plan_id"
+    t.index ["recommended_for_id"], name: "index_play_plan_recommended_fors_on_recommended_for_id"
+  end
+
   create_table "play_plans", force: :cascade do |t|
     t.integer "user_id"
     t.string "plan_name", null: false
@@ -146,9 +156,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_144322) do
     t.datetime "published_at"
     t.integer "trip_type", default: 0, null: false
     t.decimal "total_budget", precision: 10, scale: 2
-    t.string "recommended_for"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "planner_title"
+    t.text "planner_description"
   end
 
   create_table "purposes", force: :cascade do |t|
@@ -156,6 +167,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_144322) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["purpose_name"], name: "index_purposes_on_purpose_name", unique: true
+  end
+
+  create_table "recommended_fors", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "spot_ambiance_relations", force: :cascade do |t|

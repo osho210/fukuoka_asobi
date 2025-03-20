@@ -1,7 +1,6 @@
 module Types
   class PlayPlanType < Types::BaseObject
-    implements GraphQL::Types::Relay::Node
-    global_id_field :id
+    field :id, ID, null: false
 
     field :user_id, Integer, null: true
     field :user, Types::UserType, null: true
@@ -24,12 +23,19 @@ module Types
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     field :trip_type, Types::TripTypeEnum, null: false
     field :total_budget, Float, null: true
-    field :recommended_for, String, null: true
+    field :planner_title, String, null: true
+    field :planner_description, String, null: true
 
     # 関連するプラン詳細を取得
     field :plan_details, [Types::PlanDetailType], null: true
     def plan_details
       object.plan_details.ordered
     end
+
+    # おすすめ対象を取得
+    field :recommended_fors, [Types::RecommendedForType], null: true
+
+    # おすすめ対象の文字列表現を取得
+    field :recommended_for_string, String, null: true
   end
 end

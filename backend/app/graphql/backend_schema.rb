@@ -45,6 +45,8 @@ class BackendSchema < GraphQL::Schema
       Types::PurposeType
     when SpotAmbiance
       Types::SpotAmbianceType
+    when RecommendedFor
+      Types::RecommendedForType
     else
       raise "Unexpected object: #{obj}"
     end

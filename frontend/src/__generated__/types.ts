@@ -169,7 +169,7 @@ export type PlanDetail = Node & {
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
-export type PlayPlan = Node & {
+export type PlayPlan = {
   __typename?: 'PlayPlan';
   createdAt: Scalars['ISO8601DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -180,9 +180,12 @@ export type PlayPlan = Node & {
   location?: Maybe<Scalars['String']['output']>;
   planDetails?: Maybe<Array<PlanDetail>>;
   planName: Scalars['String']['output'];
+  plannerDescription?: Maybe<Scalars['String']['output']>;
+  plannerTitle?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   rating: Scalars['Float']['output'];
-  recommendedFor?: Maybe<Scalars['String']['output']>;
+  recommendedForString?: Maybe<Scalars['String']['output']>;
+  recommendedFors?: Maybe<Array<RecommendedFor>>;
   reviewCount: Scalars['Int']['output'];
   startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
   status: PlayPlanStatusEnum;
@@ -289,6 +292,14 @@ export type QuerySpotArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type RecommendedFor = {
+  __typename?: 'RecommendedFor';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
 export type Spot = {
   __typename?: 'Spot';
   address?: Maybe<Scalars['String']['output']>;
@@ -369,6 +380,13 @@ export type User = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
   username: Scalars['String']['output'];
 };
+
+export type GetPlayPlanQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: string, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: PlayPlanStatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, recommendedForString?: string | null, plannerTitle?: string | null, plannerDescription?: string | null, recommendedFors?: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, budgetRange?: string | null, imageUrl?: string | null, theme?: string | null, isRainyOk?: boolean | null, district: { __typename?: 'District', id: string, districtName: string }, categories: Array<{ __typename?: 'Category', id: string, name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any }> } | null }> | null } | null };
 
 export type GetPlayPlansQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
