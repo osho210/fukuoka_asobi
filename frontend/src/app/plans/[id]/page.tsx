@@ -11,7 +11,7 @@ import '../../../../public/styles/PlayPlanDetail.css';
 
 // GraphQLクエリの定義
 const GET_PLAY_PLAN = gql`
-  query GetPlayPlan($id: ID!) {
+  query GetPlayPlan($id: Int!) {
     playPlan(id: $id) {
       id
       planName
@@ -89,7 +89,7 @@ const GET_PLAY_PLAN = gql`
 
 export default function PlanDetailPage() {
   const params = useParams();
-  const id = params.id as string;
+  const id = parseInt(params.id as string, 10);
 
   const { loading, error, data } = useQuery(GET_PLAY_PLAN, {
     variables: { id },

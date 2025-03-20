@@ -11,37 +11,37 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
-  create_table "areas", force: :cascade do |t|
+  create_table "areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "area_name", null: false
-    t.integer "district_id", null: false
+    t.bigint "district_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["area_name", "district_id"], name: "index_areas_on_area_name_and_district_id", unique: true
     t.index ["district_id"], name: "index_areas_on_district_id"
   end
 
-  create_table "categories", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
-  create_table "districts", force: :cascade do |t|
+  create_table "districts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "district_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["district_name"], name: "index_districts_on_district_name", unique: true
   end
 
-  create_table "event_categories", force: :cascade do |t|
+  create_table "event_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.string "location"
@@ -50,7 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.datetime "start_datetime"
     t.datetime "end_datetime"
     t.string "recurring_rule"
-    t.integer "event_category_id", null: false
+    t.bigint "event_category_id", null: false
     t.string "price"
     t.string "organizer"
     t.string "contact_email"
@@ -65,14 +65,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
   end
 
-  create_table "hashtags", force: :cascade do |t|
+  create_table "hashtags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "hashtag_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hashtag_name"], name: "index_hashtags_on_hashtag_name", unique: true
   end
 
-  create_table "instagram_embeds", force: :cascade do |t|
+  create_table "instagram_embeds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "instagram_embed_name", null: false
     t.string "embed_code", null: false
     t.string "embed_url", null: false
@@ -81,7 +81,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["instagram_embed_name"], name: "index_instagram_embeds_on_instagram_embed_name", unique: true
   end
 
-  create_table "menus", force: :cascade do |t|
+  create_table "menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "menu_name", null: false
     t.decimal "price", precision: 10, scale: 2
     t.text "description"
@@ -90,22 +90,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["menu_name"], name: "index_menus_on_menu_name"
   end
 
-  create_table "news", force: :cascade do |t|
+  create_table "news", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.text "body", null: false
     t.datetime "published_at"
     t.integer "status", default: 0, null: false
     t.string "image_url"
-    t.integer "author_id"
-    t.integer "category_id"
+    t.bigint "author_id"
+    t.bigint "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_news_on_author_id"
     t.index ["category_id"], name: "index_news_on_category_id"
   end
 
-  create_table "opening_hours", force: :cascade do |t|
-    t.integer "spot_id", null: false
+  create_table "opening_hours", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
     t.string "day_of_week", null: false
     t.time "open_time", null: false
     t.time "close_time", null: false
@@ -115,7 +115,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
   end
 
-  create_table "plan_details", force: :cascade do |t|
+  create_table "plan_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "plan_id", null: false
     t.integer "step_number", null: false
     t.string "step_name", null: false
@@ -132,7 +132,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.text "planner_description"
   end
 
-  create_table "play_plan_recommended_fors", force: :cascade do |t|
+  create_table "play_plan_recommended_fors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "play_plan_id"
     t.integer "recommended_for_id"
     t.datetime "created_at", null: false
@@ -142,7 +142,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["recommended_for_id"], name: "index_play_plan_recommended_fors_on_recommended_for_id"
   end
 
-  create_table "play_plans", force: :cascade do |t|
+  create_table "play_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "plan_name", null: false
     t.datetime "start_datetime"
@@ -164,22 +164,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.text "planner_description"
   end
 
-  create_table "purposes", force: :cascade do |t|
+  create_table "purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "purpose_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["purpose_name"], name: "index_purposes_on_purpose_name", unique: true
   end
 
-  create_table "recommended_fors", force: :cascade do |t|
+  create_table "recommended_fors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "spot_ambiance_relations", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "spot_ambiance_id", null: false
+  create_table "spot_ambiance_relations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "spot_ambiance_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["spot_ambiance_id"], name: "index_spot_ambiance_relations_on_spot_ambiance_id"
@@ -187,16 +187,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_ambiance_relations_on_spot_id"
   end
 
-  create_table "spot_ambiances", force: :cascade do |t|
+  create_table "spot_ambiances", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "ambiance_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ambiance_name"], name: "index_spot_ambiances_on_ambiance_name", unique: true
   end
 
-  create_table "spot_areas", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "area_id", null: false
+  create_table "spot_areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "area_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["area_id"], name: "index_spot_areas_on_area_id"
@@ -204,9 +204,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_areas_on_spot_id"
   end
 
-  create_table "spot_categories", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "category_id", null: false
+  create_table "spot_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_spot_categories_on_category_id"
@@ -214,9 +214,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_categories_on_spot_id"
   end
 
-  create_table "spot_hashtags", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "hashtag_id", null: false
+  create_table "spot_hashtags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "hashtag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hashtag_id"], name: "index_spot_hashtags_on_hashtag_id"
@@ -224,9 +224,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_hashtags_on_spot_id"
   end
 
-  create_table "spot_instagram_embeds", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "instagram_embed_id", null: false
+  create_table "spot_instagram_embeds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "instagram_embed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["instagram_embed_id"], name: "index_spot_instagram_embeds_on_instagram_embed_id"
@@ -234,9 +234,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_instagram_embeds_on_spot_id"
   end
 
-  create_table "spot_menus", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "menu_id", null: false
+  create_table "spot_menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "menu_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["menu_id"], name: "index_spot_menus_on_menu_id"
@@ -244,9 +244,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_menus_on_spot_id"
   end
 
-  create_table "spot_purposes", force: :cascade do |t|
-    t.integer "spot_id", null: false
-    t.integer "purpose_id", null: false
+  create_table "spot_purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "purpose_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["purpose_id"], name: "index_spot_purposes_on_purpose_id"
@@ -254,8 +254,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["spot_id"], name: "index_spot_purposes_on_spot_id"
   end
 
-  create_table "spots", force: :cascade do |t|
-    t.integer "district_id", null: false
+  create_table "spots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "district_id", null: false
     t.string "spot_name", null: false
     t.string "address"
     t.string "phone_number"
@@ -285,7 +285,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_071354) do
     t.index ["theme"], name: "index_spots_on_theme"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "profile_image_url"
     t.text "bio"

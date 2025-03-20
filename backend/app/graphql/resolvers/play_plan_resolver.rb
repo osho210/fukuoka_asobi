@@ -2,11 +2,11 @@ module Resolvers
   class PlayPlanResolver < Resolvers::BaseResolver
     type Types::PlayPlanType, null: true
 
-    argument :id, ID, required: true
+    argument :id, Integer, required: true
 
     def resolve(id:)
-      # IDを整数に変換して検索
-      PlayPlan.find_by(id: id.to_i)
+      # IDはすでに整数なので変換不要
+      PlayPlan.find_by(id: id)
     rescue StandardError => e
       Rails.logger.error("PlayPlanResolver error: #{e.message}")
       nil
