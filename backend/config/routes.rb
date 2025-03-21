@@ -1,18 +1,23 @@
 Rails.application.routes.draw do
+  # Deviseのルーティング（APIモード用に設定）
+  devise_for :users, skip: :all
+
+  # GraphQLエンドポイント
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
   post "/graphql", to: "graphql#execute"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # API用のルーティング
+  namespace :api do
+    namespace :v1 do
+      # 認証関連
+      post 'login', to: 'auth#login'
+      post 'signup', to: 'auth#signup'
+      delete 'logout', to: 'auth#logout'
+    end
+  end
+
+  # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
