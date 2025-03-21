@@ -1,4 +1,5 @@
 'use client';
+import '../../public/styles/BusinessHour.css';
 
 interface OpeningHourList {
   dayOfWeek: string;
@@ -23,7 +24,7 @@ export default function BusinessHours({ spot }: BusinessHoursProps) {
 
   return (
     <div className="business-hours">
-      <h3>営業時間</h3>
+      <p>営業時間</p>
       <ul className="business-hours-list">
         {spot.openingHourList.map((hour, index) => (
           <li key={index} className="business-hour-item">

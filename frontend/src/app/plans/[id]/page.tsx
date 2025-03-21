@@ -67,6 +67,8 @@ const GET_PLAY_PLAN = gql`
           imageUrl
           theme
           isRainyOk
+          parkingAvailable
+          closedDays
           district {
             id
             districtName
