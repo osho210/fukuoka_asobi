@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: fukuoka_asobi_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fukuoka_asobi_development
+      MYSQL_USER: rails
+      MYSQL_PASSWORD: rails
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+      args:
+        RUBY_VERSION: 3.3.1
+    container_name: fukuoka_asobi_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      DB_USERNAME: rails
+      DB_PASSWORD: rails
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: fukuoka_asobi_development
+    volumes:
+      - ./backend:/rails
+      - rails_cache:/rails/tmp/cache
+      - rails_storage:/rails/storage
+      - bundle_cache:/usr/local/bundle
+    working_dir: /rails
+    command: bin/rails server -b 0.0.0.0 -p 3000
+    tty: true
+    stdin_open: true
+
+volumes:
+  mysql_data:
+  rails_cache:
+  rails_storage:
+  bundle_cache:
