@@ -13,7 +13,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - fukuoka_asobi_mysql_data:/var/lib/mysql   # 外部ボリュームに変更
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
@@ -51,7 +51,11 @@ services:
     stdin_open: true
 
 volumes:
-  mysql_data:
+  # MySQLの外部ボリューム（Composeからは削除されない）
+  fukuoka_asobi_mysql_data:
+    name: fukuoka_asobi_mysql_data
+    external: true
+
   rails_cache:
   rails_storage:
   bundle_cache:

@@ -17,6 +17,12 @@ ENV RAILS_ENV=development \
     BUNDLE_PATH=/usr/local/bundle \
     BUNDLE_WITHOUT=""
 
+# entrypoint.sh をコピー
+COPY entrypoint.sh /usr/bin/entrypoint.sh
+RUN chmod +x /usr/bin/entrypoint.sh
+
+ENTRYPOINT ["entrypoint.sh"]
+
 # Gemfileとロックファイルをコピー
 COPY Gemfile Gemfile.lock ./
 
