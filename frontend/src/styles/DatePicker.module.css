@@ -1,0 +1,118 @@
+.datePickerContainer {
+    width: 100%;
+    position: relative;
+}
+
+.datePickerInput {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.datePickerInput:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 1px #4a6cf7;
+}
+
+.datePickerCalendar {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.monthYearLabel {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.navButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: #6b7280;
+}
+
+.navButton:hover {
+    color: #4a6cf7;
+}
+
+.navButton:focus {
+    outline: none;
+}
+
+.weekdaysRow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+}
+
+.dayCell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.dayCell:hover {
+    background-color: #f3f4f6;
+}
+
+.selectedDay {
+    background-color: #4a6cf7;
+    color: white;
+}
+
+.selectedDay:hover {
+    background-color: #4a6cf7;
+}
+
+.todayDay {
+    border: 1px solid #4a6cf7;
+}
+
+.outsideDay {
+    color: #d1d5db;
+}
+
+.disabledDay {
+    color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.disabledDay:hover {
+    background-color: transparent;
+}

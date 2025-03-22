@@ -1,0 +1,19 @@
+input GenderInput {
+  male: Int!
+  female: Int!
+}
+
+input BudgetInput {
+  min: Int!
+  max: Int!
+}
+
+input CustomOptionsInput {
+  transportationMethod: String
+  theme: String
+  rainyDayOption: Boolean
+  includeEvents: Boolean
+  startingPoint: String
+  spotCount: Int
+  categories: [String!]
+}

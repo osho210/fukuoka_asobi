@@ -18,9 +18,12 @@ export default function Home() {
     <div className="container">
       {/* <SpotList /> */}
       <header className="header">
-        <h1>
-          <Image className="logo" src={'/logo.png'} width={190} height={45} alt="kv" />
-        </h1>
+        <Link href={'/'}>
+          <h1>
+            <Image className="logo" src={'/logo.png'} width={190} height={45} alt="kv" />
+          </h1>
+        </Link>
+
         <HamburgerMenu />
       </header>
       <div className="image-container">

@@ -1,0 +1,57 @@
+.timePickerContainer {
+    width: 100%;
+    position: relative;
+}
+
+.timePickerInput {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.timePickerInput:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 1px #4a6cf7;
+}
+
+.timePickerDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-top: 0.5rem;
+}
+
+.timeOption {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+}
+
+.timeOption:hover {
+    background-color: #f3f4f6;
+}
+
+.selectedTime {
+    background-color: #4a6cf7;
+    color: white;
+}
+
+.selectedTime:hover {
+    background-color: #4a6cf7;
+}
+
+.timePickerLabel {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}

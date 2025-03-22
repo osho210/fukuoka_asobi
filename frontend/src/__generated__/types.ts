@@ -27,12 +27,38 @@ export type Area = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
+/** 予算範囲の入力 */
+export type BudgetInput = {
+  /** 最大予算 */
+  max: Scalars['Int']['input'];
+  /** 最小予算 */
+  min: Scalars['Int']['input'];
+};
+
 export type Category = {
   __typename?: 'Category';
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+/** カスタム検索オプションの入力 */
+export type CustomOptionsInput = {
+  /** カテゴリー */
+  categories?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** イベント含む */
+  includeEvents?: InputMaybe<Scalars['Boolean']['input']>;
+  /** 雨天対応 */
+  rainyDayOption?: InputMaybe<Scalars['Boolean']['input']>;
+  /** スポット数 */
+  spotCount?: InputMaybe<Scalars['Int']['input']>;
+  /** 出発地点 */
+  startingPoint?: InputMaybe<Scalars['String']['input']>;
+  /** テーマ */
+  theme?: InputMaybe<Scalars['String']['input']>;
+  /** 移動手段 */
+  transportationMethod?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type District = {
@@ -79,6 +105,14 @@ export type EventCategory = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+/** 性別と人数の入力 */
+export type GenderInput = {
+  /** 女性の人数 */
+  female: Scalars['Int']['input'];
+  /** 男性の人数 */
+  male: Scalars['Int']['input'];
 };
 
 export type Hashtag = {
@@ -273,6 +307,8 @@ export type Query = {
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
   purposes: Array<Purpose>;
+  /** 検索条件に基づいてプランを検索 */
+  searchPlans: Array<PlayPlan>;
   spot?: Maybe<Spot>;
   spotAmbiances: Array<SpotAmbiance>;
   spots: Array<Spot>;
@@ -327,6 +363,15 @@ export type QueryPlayPlanArgs = {
 export type QueryPlayPlansArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<PlayPlanStatusEnum>;
+};
+
+
+export type QuerySearchPlansArgs = {
+  areas?: InputMaybe<Array<Scalars['ID']['input']>>;
+  budget?: InputMaybe<BudgetInput>;
+  customOptions?: InputMaybe<CustomOptionsInput>;
+  date?: InputMaybe<Scalars['String']['input']>;
+  genderInfo?: InputMaybe<GenderInput>;
 };
 
 

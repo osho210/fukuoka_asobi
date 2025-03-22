@@ -1,0 +1,30 @@
+query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $budget: BudgetInput!, $customOptions: CustomOptionsInput) {
+  searchPlans(
+    areas: $areas
+    date: $date
+    genderInfo: $genderInfo
+    budget: $budget
+    customOptions: $customOptions
+  ) {
+    id
+    planName
+    description
+    imageUrl
+    location
+    totalBudget
+    rating
+    reviewCount
+    tripType
+    planDetails {
+      id
+      stepName
+      stepDescription
+      spot {
+        id
+        name
+        address
+        catchphrase
+      }
+    }
+  }
+}

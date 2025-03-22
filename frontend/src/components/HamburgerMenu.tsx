@@ -22,7 +22,7 @@ const HamburgerMenu = () => {
                         </div>
                         <ul className='modal-content__links'>
                             <li className='modal-content__link'>
-                                <a href='#'>ログイン</a>
+                                <a href='login'>ログイン</a>
                             </li>
                             <li className='modal-content__link'>
                                 <a href='#'>遊びを計画する</a>

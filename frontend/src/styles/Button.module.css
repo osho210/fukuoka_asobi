@@ -1,0 +1,66 @@
+.button {
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.button:focus {
+    outline: none;
+}
+
+/* バリアント */
+.primaryButton {
+    background-color: #4a6cf7;
+    color: white;
+}
+
+.primaryButton:hover {
+    background-color: #3a5bd9;
+}
+
+.secondaryButton {
+    background-color: #6c757d;
+    color: white;
+}
+
+.secondaryButton:hover {
+    background-color: #5a6268;
+}
+
+.outlineButton {
+    background-color: transparent;
+    border: 1px solid #4a6cf7;
+    color: #4a6cf7;
+}
+
+.outlineButton:hover {
+    background-color: rgba(74, 108, 247, 0.1);
+}
+
+/* サイズ */
+.smallButton {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.mediumButton {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.largeButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+}
+
+/* 幅 */
+.fullWidth {
+    width: 100%;
+}
+
+/* 無効状態 */
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

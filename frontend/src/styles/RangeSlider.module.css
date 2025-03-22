@@ -1,0 +1,51 @@
+.sliderContainer {
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.sliderTrack {
+    height: 4px;
+    width: 100%;
+    background-color: #e5e7eb;
+    position: relative;
+    border-radius: 2px;
+}
+
+.sliderRange {
+    position: absolute;
+    height: 4px;
+    background-color: #4a6cf7;
+    border-radius: 2px;
+}
+
+.sliderThumb {
+    width: 16px;
+    height: 16px;
+    background-color: #4a6cf7;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sliderThumb:hover {
+    transform: scale(1.1);
+}
+
+.sliderThumb:active {
+    transform: scale(1.2);
+}
+
+.sliderValues {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.sliderLabel {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}

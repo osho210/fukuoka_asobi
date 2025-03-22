@@ -1,0 +1,100 @@
+.searchFormContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.formSection {
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.formLabel {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.formControl {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.formControl:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 1px #4a6cf7;
+}
+
+.formRow {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.formColumn {
+    flex: 1;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.nextButton {
+    min-width: 200px;
+}
+
+.genderGroup {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.genderInput {
+    width: 80px;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkboxInput {
+    margin-right: 0.5rem;
+}
+
+.radioGroup {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+}
+
+.radioInput {
+    margin-right: 0.5rem;
+}

@@ -1,0 +1,85 @@
+.mapContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.mapSvg {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+}
+
+.areaPath {
+    fill: #e5e7eb;
+    stroke: #9ca3af;
+    stroke-width: 1;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.areaPath:hover {
+    fill: #d1d5db;
+}
+
+.selectedArea {
+    fill: #4a6cf7;
+    stroke: #3a5bd9;
+}
+
+.selectedArea:hover {
+    fill: #3a5bd9;
+}
+
+.areaLabel {
+    font-size: 12px;
+    fill: #1f2937;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.selectedAreaLabel {
+    fill: white;
+}
+
+.areasList {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.areaTag {
+    display: flex;
+    align-items: center;
+    background-color: #4a6cf7;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.removeButton {
+    margin-left: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+}
+
+.mapTitle {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.mapDescription {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
