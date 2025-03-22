@@ -13,6 +13,7 @@
 .primaryButton {
     background-color: #CB6B52;
     color: white;
+    border: none;
 }
 
 .primaryButton:hover {

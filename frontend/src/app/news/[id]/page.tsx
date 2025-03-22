@@ -95,10 +95,10 @@ export default async function NewsDetailPage(props: PageProps) {
     // 記事が見つからない場合
     if (!news) {
         return (
-            <div className="container mx-auto p-4">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="news-detail-container">
+                <div className="news-not-found-alert">
                     <p>記事が見つかりませんでした。</p>
-                    <Link href="/news" className="text-blue-600 hover:underline mt-2 inline-block">
+                    <Link href="/news" className="news-back-link">
                         ニュース一覧に戻る
                     </Link>
                 </div>
@@ -117,76 +117,76 @@ export default async function NewsDetailPage(props: PageProps) {
     ));
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="mb-4">
-                <Link href="/news" className="text-blue-600 hover:underline">
+        <div className="news-detail-container">
+            <div className="news-detail-back-link-container">
+                <Link href="/news" className="news-back-link">
                     ← ニュース一覧に戻る
                 </Link>
             </div>
 
-            <article className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="relative h-64 w-full">
+            <article className="news-detail-article">
+                <div className="news-detail-image-container">
                     {news.imageUrl ? (
                         <Image
                             src={`/${news.imageUrl}`}
                             alt={news.title}
                             fill
-                            className="object-cover"
+                            className="news-detail-image"
                         />
                     ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-400">No Image</span>
+                        <div className="news-detail-no-image">
+                            <span className="news-detail-no-image-text">No Image</span>
                         </div>
                     )}
                     {news.category && (
-                        <span className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded">
+                        <span className="news-detail-category">
                             {news.category.name}
                         </span>
                     )}
                 </div>
 
-                <div className="p-6">
-                    <h1 className="text-2xl md:text-3xl font-bold mb-4">{news.title}</h1>
+                <div className="news-detail-content">
+                    <h1 className="news-detail-title">{news.title}</h1>
 
-                    <div className="flex items-center text-gray-500 mb-6">
+                    <div className="news-detail-meta">
                         <time dateTime={news.publishedAt}>{formattedDate}</time>
                         {news.author && (
                             <span className="ml-4">投稿者: {news.author.username}</span>
                         )}
                     </div>
 
-                    <div className="prose max-w-none">
+                    <div className="news-detail-body">
                         {formattedBody}
                     </div>
                 </div>
             </article>
 
-            <div className="mt-8">
-                <h2 className="text-xl font-bold mb-4">関連ニュース</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="news-related-section">
+                <h2 className="news-related-heading">関連ニュース</h2>
+                <div className="news-related-grid">
                     {Object.values(newsData)
                         .filter(item => item.id !== id)
                         .slice(0, 3)
                         .map(item => (
-                            <Link key={item.id} href={`/news/${item.id}`} className="block">
-                                <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                    <div className="relative h-40 w-full">
+                            <Link key={item.id} href={`/news/${item.id}`} className="news-related-link">
+                                <div className="news-related-card">
+                                    <div className="news-related-image-container">
                                         {item.imageUrl ? (
                                             <Image
                                                 src={`/${item.imageUrl}`}
                                                 alt={item.title}
                                                 fill
-                                                className="object-cover"
+                                                className="news-related-image"
                                             />
                                         ) : (
-                                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                <span className="text-gray-400">No Image</span>
+                                            <div className="news-related-no-image">
+                                                <span className="news-related-no-image-text">No Image</span>
                                             </div>
                                         )}
                                     </div>
-                                    <div className="p-4">
-                                        <h3 className="font-bold mb-2 line-clamp-2">{item.title}</h3>
-                                        <time className="text-sm text-gray-500" dateTime={item.publishedAt}>
+                                    <div className="news-related-card-content">
+                                        <h3 className="news-related-card-title">{item.title}</h3>
+                                        <time className="news-related-card-date" dateTime={item.publishedAt}>
                                             {format(new Date(item.publishedAt), 'yyyy年MM月dd日', { locale: ja })}
                                         </time>
                                     </div>

@@ -31,31 +31,31 @@ export default function NewsCard({
     : '';
 
   return (
-    <Link href={`/news/${id}`} className="block">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-        <div className="relative h-48 w-full">
+    <Link href={`/news/${id}`} className="news-card-link">
+      <div className="news-card">
+        <div className="news-card-image-container">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={title}
               fill
-              className="object-cover"
+              className="news-card-image"
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400">No Image</span>
+            <div className="news-card-no-image">
+              <span className="news-card-no-image-text">No Image</span>
             </div>
           )}
           {categoryName && (
-            <span className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 text-xs rounded">
+            <span className="news-card-category">
               {categoryName}
             </span>
           )}
         </div>
-        <div className="p-4">
-          <h3 className="text-lg font-bold mb-2 line-clamp-2">{title}</h3>
-          <p className="text-sm text-gray-600 mb-3 line-clamp-3">{shortBody}</p>
-          <div className="flex justify-between items-center text-xs text-gray-500">
+        <div className="news-card-content">
+          <h3 className="news-card-title">{title}</h3>
+          <p className="news-card-body">{shortBody}</p>
+          <div className="news-card-footer">
             <span>{formattedDate}</span>
             {authorName && <span>投稿者: {authorName}</span>}
           </div>

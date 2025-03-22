@@ -129,46 +129,46 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
     fetchEvents();
   }, [categoryId, limit, upcoming, showAll]);
 
-  if (loading) return <div className="text-center py-8">読み込み中...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (events.length === 0) return <div className="text-center py-8">イベントが見つかりませんでした</div>;
+  if (loading) return <div className="event-loading-message">読み込み中...</div>;
+  if (error) return <div className="event-error-message">{error}</div>;
+  if (events.length === 0) return <div className="event-empty-message">イベントが見つかりませんでした</div>;
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="event-list-container">
+      <div className="event-list-grid">
         {events.map((event) => (
-          <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div key={event.id} className="event-card">
             <Link href={`/events/${event.id}`}>
-              <div className="relative h-48 bg-gray-200">
+              <div className="event-card-image-container">
                 {event.bannerImage ? (
                   <Image src={event.bannerImage} alt={event.title} width={300} height={200} layout="responsive" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                    <span className="text-gray-400">No Image</span>
+                  <div className="event-card-no-image">
+                    <span className="event-card-no-image-text">No Image</span>
                   </div>
                 )}
-                <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                <div className="event-card-category-badge">
                   {event.eventCategory.name}
                 </div>
                 {event.isOnline && (
-                  <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                  <div className="event-card-online-badge">
                     オンライン
                   </div>
                 )}
               </div>
-              <div className="p-4">
-                <h3 className="text-lg font-bold mb-2 line-clamp-2">{event.title}</h3>
-                <p className="text-sm text-gray-600 mb-2">
-                  <span className="inline-block mr-1">📅</span>
+              <div className="event-card-content">
+                <h3 className="event-card-title">{event.title}</h3>
+                <p className="event-card-date">
+                  <span className="event-card-icon">📅</span>
                   {formatDate(new Date(event.startDatetime))}
                 </p>
-                <p className="text-sm text-gray-600 mb-2">
-                  <span className="inline-block mr-1">📍</span>
+                <p className="event-card-location">
+                  <span className="event-card-icon">📍</span>
                   {event.location}
                 </p>
                 {event.price && (
-                  <p className="text-sm text-gray-600">
-                    <span className="inline-block mr-1">💰</span>
+                  <p className="event-card-price">
+                    <span className="event-card-icon">💰</span>
                     {event.price}
                   </p>
                 )}
@@ -179,8 +179,8 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
       </div>
 
       {!showAll && events.length >= limit && (
-        <div className="text-center mt-8">
-          <Link href="/events" className="inline-block px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+        <div className="event-list-more-link-container">
+          <Link href="/events" className="event-list-more-link">
             すべてのイベントを見る
           </Link>
         </div>

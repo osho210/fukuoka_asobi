@@ -22,7 +22,7 @@ const SearchContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     areas: [],
     date: '',
-    genderInfo: { male: 0, female: 0 },
+    memberInfo: { recommendedForIds: [] },
     budget: { min: 0, max: 20000 },
   });
 
@@ -33,14 +33,14 @@ const SearchContainer: React.FC = () => {
 
   // 検索を実行
   const handleSearch = async () => {
-    console.log('検索条件:', searchParams);
+    console.log('作成条件:', searchParams);
 
     try {
       // GraphQLクエリのパラメータを準備
       const variables = {
         areas: searchParams.areas,
         date: searchParams.date,
-        genderInfo: searchParams.genderInfo,
+        memberInfo: searchParams.memberInfo,
         budget: searchParams.budget,
         customOptions: searchParams.customOptions
       };
@@ -69,7 +69,7 @@ const SearchContainer: React.FC = () => {
 
   // タブの定義
   const tabs = [
-    { id: SearchTab.Normal, label: '通常検索' },
+    { id: SearchTab.Normal, label: '通常作成' },
     { id: SearchTab.Custom, label: 'カスタム条件' },
   ];
 
@@ -98,7 +98,7 @@ const SearchContainer: React.FC = () => {
           onClick={handleSearch}
           className={styles.nextButton}
         >
-          検索する
+          プランを作成する
         </Button>
       </div>
     </div>

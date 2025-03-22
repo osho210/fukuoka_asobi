@@ -1,6 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_RECOMMENDED_FORS } from '@/graphql/queries/getRecommendedFors';
+import { RecommendedFor } from '@/types/recommendedFor';
 import { SearchParams } from '@/types/search';
 import RangeSlider from '@/components/common/RangeSlider';
 import AreaMap from '@/components/common/AreaMap';
@@ -23,12 +26,22 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
   const [isDateTimeModalOpen, setIsDateTimeModalOpen] = useState(false);
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
 
-  // 性別と人数の更新
-  const updateGenderInfo = (gender: 'male' | 'female', value: number) => {
+  // おすすめ対象の取得
+  const { loading, error, data } = useQuery(GET_RECOMMENDED_FORS);
+  const [recommendedFors, setRecommendedFors] = useState<RecommendedFor[]>([]);
+
+  // データが取得できたらステートを更新
+  useEffect(() => {
+    if (data && data.recommendedFors) {
+      setRecommendedFors(data.recommendedFors);
+    }
+  }, [data]);
+
+  // 利用メンバー情報の更新
+  const updateMemberInfo = (selectedIds: string[]) => {
     updateSearchParams({
-      genderInfo: {
-        ...searchParams.genderInfo,
-        [gender]: value,
+      memberInfo: {
+        recommendedForIds: selectedIds,
       },
     });
   };
@@ -126,30 +139,13 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
           <Image src="/calendar_icon.svg" width={'30'} height={'30'} alt='日付' />
           <span className={styles.selectionText}>{getSelectedDateTimeText()}</span>
         </div>
-        <div className={styles.genderGroup} onClick={() => setIsMemberModalOpen(true)}>
+        <div className={styles.memberGroup} onClick={() => setIsMemberModalOpen(true)}>
           <Image src="/member_icon.svg" width={'30'} height={'30'} alt='利用メンバー' />
-          <div>
-            <label>男性</label>
-            <input
-              type="number"
-              min="0"
-              value={searchParams.genderInfo.male}
-              onChange={(e) => updateGenderInfo('male', parseInt(e.target.value) || 0)}
-              className={`${styles.formControl} ${styles.genderInput}`}
-            />
-            <span>人</span>
-          </div>
-          <div>
-            <label>女性</label>
-            <input
-              type="number"
-              min="0"
-              value={searchParams.genderInfo.female}
-              onChange={(e) => updateGenderInfo('female', parseInt(e.target.value) || 0)}
-              className={`${styles.formControl} ${styles.genderInput}`}
-            />
-            <span>人</span>
-          </div>
+          <span className={styles.selectionText}>
+            {searchParams.memberInfo.recommendedForIds.length > 0
+              ? `${searchParams.memberInfo.recommendedForIds.length}件選択中`
+              : '利用メンバーを選択'}
+          </span>
         </div>
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>予算</label>
@@ -272,14 +268,47 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
               </button>
             </div>
             <div className={styles.modalBody}>
-              <div className={styles.genderGroup}>
-                <div>
-                  <label>男性</label>
+              {loading ? (
+                <p>読み込み中...</p>
+              ) : error ? (
+                <p>エラーが発生しました: {error.message}</p>
+              ) : (
+                <div className={styles.recommendedForList}>
+                  <p className={styles.modalDescription}>
+                    利用メンバーを選択してください（複数選択可）
+                  </p>
+                  {recommendedFors.map((item) => (
+                    <div key={item.id} className={styles.recommendedForItem}>
+                      <label className={styles.checkboxLabel}>
+                        <input
+                          type="checkbox"
+                          checked={searchParams.memberInfo.recommendedForIds.includes(item.id)}
+                          onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            const currentIds = [...searchParams.memberInfo.recommendedForIds];
+
+                            if (isChecked && !currentIds.includes(item.id)) {
+                              updateMemberInfo([...currentIds, item.id]);
+                            } else if (!isChecked && currentIds.includes(item.id)) {
+                              updateMemberInfo(currentIds.filter(id => id !== item.id));
+                            }
+                          }}
+                          className={styles.checkbox}
+                        />
+                        {item.name}
+                      </label>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <label>女性</label>
-                </div>
-              </div>
+              )}
+            </div>
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.modalButton}
+                onClick={() => setIsMemberModalOpen(false)}
+              >
+                選択完了
+              </button>
             </div>
           </div>
         </div>

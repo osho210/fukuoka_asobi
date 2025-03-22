@@ -32,35 +32,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryName = getCategoryName(id);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-4">
-        <Link href="/events" className="text-blue-500 hover:underline">
+    <div className="event-category-page-container">
+      <div className="event-category-back-link-container">
+        <Link href="/events" className="event-category-back-link">
           ← イベント一覧に戻る
         </Link>
       </div>
 
-      <h1 className="text-3xl font-bold mb-8">{categoryName}のイベント</h1>
+      <h1 className="event-category-page-heading">{categoryName}のイベント</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="event-category-page-layout">
         {/* サイドバー */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-            <h2 className="text-xl font-bold mb-4">カテゴリから探す</h2>
+        <div className="event-category-sidebar">
+          <div className="event-category-sidebar-box">
+            <h2 className="event-category-sidebar-heading">カテゴリから探す</h2>
             <EventCategoryList />
           </div>
         </div>
 
         {/* メインコンテンツ */}
-        <div className="lg:col-span-3">
+        <div className="event-category-main-content">
           {/* 今後のイベント */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">今後の{categoryName}イベント</h2>
+          <section className="event-category-upcoming-section">
+            <h2 className="event-category-section-heading">今後の{categoryName}イベント</h2>
             <EventList categoryId={id} upcoming={true} limit={8} showAll={true} />
           </section>
 
           {/* 過去のイベント */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">過去の{categoryName}イベント</h2>
+          <section className="event-category-past-section">
+            <h2 className="event-category-section-heading">過去の{categoryName}イベント</h2>
             <EventList categoryId={id} upcoming={false} limit={4} showAll={false} />
           </section>
         </div>

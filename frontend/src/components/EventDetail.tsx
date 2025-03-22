@@ -83,29 +83,29 @@ export default function EventDetail({ eventId }: EventDetailProps) {
     }
   }, [eventId]);
 
-  if (loading) return <div className="text-center py-8">読み込み中...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (!event) return <div className="text-center py-8">イベントが見つかりませんでした</div>;
+  if (loading) return <div className="event-detail-loading">読み込み中...</div>;
+  if (error) return <div className="event-detail-error">{error}</div>;
+  if (!event) return <div className="event-detail-not-found">イベントが見つかりませんでした</div>;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="event-detail-container">
       {/* イベントヘッダー */}
-      <div className="relative">
-        <div className="h-64 bg-gray-200">
+      <div className="event-detail-header">
+        <div className="event-detail-banner">
           {event.bannerImage ? (
             <Image src={event.bannerImage} alt={event.title} width={300} height={200} layout="responsive" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200">
-              <span className="text-gray-400 text-xl">No Image</span>
+            <div className="event-detail-no-image">
+              <span className="event-detail-no-image-text">No Image</span>
             </div>
           )}
         </div>
-        <div className="absolute top-4 right-4">
-          <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+        <div className="event-detail-badges">
+          <span className="event-detail-category-badge">
             {event.eventCategory.name}
           </span>
           {event.isOnline && (
-            <span className="ml-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+            <span className="event-detail-online-badge">
               オンライン
             </span>
           )}
@@ -113,41 +113,41 @@ export default function EventDetail({ eventId }: EventDetailProps) {
       </div>
 
       {/* イベント情報 */}
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-4">{event.title}</h1>
+      <div className="event-detail-content">
+        <h1 className="event-detail-title">{event.title}</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="event-detail-grid">
           {/* 左カラム: 基本情報 */}
-          <div className="md:col-span-2 space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold mb-2">イベント詳細</h2>
-              <p className="whitespace-pre-line">{event.description}</p>
+          <div className="event-detail-main">
+            <div className="event-detail-section">
+              <h2 className="event-detail-section-title">イベント詳細</h2>
+              <p className="event-detail-description">{event.description}</p>
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">開催日時</h2>
-              <p className="flex items-center">
-                <span className="inline-block mr-2">📅</span>
+            <div className="event-detail-section">
+              <h2 className="event-detail-section-title">開催日時</h2>
+              <p className="event-detail-datetime">
+                <span className="event-detail-icon">📅</span>
                 {formatDateRange(new Date(event.startDatetime), new Date(event.endDatetime))}
               </p>
               {event.recurringRule && (
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="event-detail-recurring">
                   繰り返し: {event.recurringRule}
                 </p>
               )}
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">開催場所</h2>
-              <p className="flex items-center">
-                <span className="inline-block mr-2">📍</span>
+            <div className="event-detail-section">
+              <h2 className="event-detail-section-title">開催場所</h2>
+              <p className="event-detail-location">
+                <span className="event-detail-icon">📍</span>
                 {event.location}
               </p>
               {(event.latitude && event.longitude) && (
-                <div className="mt-2 h-48 bg-gray-200 rounded">
+                <div className="event-detail-map-container">
                   {/* ここに地図を表示 */}
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-gray-500">地図が表示されます</span>
+                  <div className="event-detail-map-placeholder">
+                    <span className="event-detail-map-text">地図が表示されます</span>
                   </div>
                 </div>
               )}
@@ -155,43 +155,43 @@ export default function EventDetail({ eventId }: EventDetailProps) {
           </div>
 
           {/* 右カラム: サイドバー情報 */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="space-y-4">
+          <div className="event-detail-sidebar">
+            <div className="event-detail-sidebar-content">
               {event.price && (
-                <div>
-                  <h3 className="font-semibold text-gray-700">料金</h3>
+                <div className="event-detail-sidebar-item">
+                  <h3 className="event-detail-sidebar-label">料金</h3>
                   <p>{event.price}</p>
                 </div>
               )}
 
               {event.capacity && (
-                <div>
-                  <h3 className="font-semibold text-gray-700">定員</h3>
+                <div className="event-detail-sidebar-item">
+                  <h3 className="event-detail-sidebar-label">定員</h3>
                   <p>{event.capacity}人</p>
                 </div>
               )}
 
               {event.organizer && (
-                <div>
-                  <h3 className="font-semibold text-gray-700">主催者</h3>
+                <div className="event-detail-sidebar-item">
+                  <h3 className="event-detail-sidebar-label">主催者</h3>
                   <p>{event.organizer}</p>
                 </div>
               )}
 
-              <div>
-                <h3 className="font-semibold text-gray-700">お問い合わせ</h3>
+              <div className="event-detail-sidebar-item">
+                <h3 className="event-detail-sidebar-label">お問い合わせ</h3>
                 {event.contactEmail && (
-                  <p className="flex items-center">
-                    <span className="inline-block mr-2">✉️</span>
-                    <a href={`mailto:${event.contactEmail}`} className="text-blue-500 hover:underline">
+                  <p className="event-detail-contact">
+                    <span className="event-detail-icon">✉️</span>
+                    <a href={`mailto:${event.contactEmail}`} className="event-detail-link">
                       {event.contactEmail}
                     </a>
                   </p>
                 )}
                 {event.contactPhone && (
-                  <p className="flex items-center">
-                    <span className="inline-block mr-2">📞</span>
-                    <a href={`tel:${event.contactPhone}`} className="text-blue-500 hover:underline">
+                  <p className="event-detail-contact">
+                    <span className="event-detail-icon">📞</span>
+                    <a href={`tel:${event.contactPhone}`} className="event-detail-link">
                       {event.contactPhone}
                     </a>
                   </p>
@@ -199,15 +199,15 @@ export default function EventDetail({ eventId }: EventDetailProps) {
               </div>
 
               {event.sourceUrl && (
-                <div>
-                  <h3 className="font-semibold text-gray-700">公式サイト</h3>
+                <div className="event-detail-sidebar-item">
+                  <h3 className="event-detail-sidebar-label">公式サイト</h3>
                   <a
                     href={event.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline flex items-center"
+                    className="event-detail-external-link"
                   >
-                    <span className="inline-block mr-2">🔗</span>
+                    <span className="event-detail-icon">🔗</span>
                     公式サイトを見る
                   </a>
                 </div>
@@ -217,16 +217,16 @@ export default function EventDetail({ eventId }: EventDetailProps) {
         </div>
 
         {/* フッター */}
-        <div className="mt-8 pt-4 border-t border-gray-200">
-          <div className="flex justify-between items-center">
-            <Link href="/events" className="text-blue-500 hover:underline">
+        <div className="event-detail-footer">
+          <div className="event-detail-actions">
+            <Link href="/events" className="event-detail-back-link">
               ← イベント一覧に戻る
             </Link>
-            <div className="flex space-x-2">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            <div className="event-detail-buttons">
+              <button className="event-detail-favorite-button">
                 お気に入りに追加
               </button>
-              <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+              <button className="event-detail-share-button">
                 シェアする
               </button>
             </div>

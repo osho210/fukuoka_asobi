@@ -75,24 +75,24 @@ export default function EventCategoryList() {
     fetchCategories();
   }, []);
 
-  if (loading) return <div className="text-center py-4">読み込み中...</div>;
-  if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
-  if (categories.length === 0) return <div className="text-center py-4">カテゴリが見つかりませんでした</div>;
+  if (loading) return <div className="event-category-loading">読み込み中...</div>;
+  if (error) return <div className="event-category-error">{error}</div>;
+  if (categories.length === 0) return <div className="event-category-empty">カテゴリが見つかりませんでした</div>;
 
   return (
-    <div className="w-full">
-      <h2 className="text-xl font-bold mb-4">イベントカテゴリ</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="event-category-container">
+      <h2 className="event-category-heading">イベントカテゴリ</h2>
+      <div className="event-category-grid">
         {categories.map((category) => (
           <Link
             key={category.id}
             href={`/events/categories/${category.id}`}
-            className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            className="event-category-card"
           >
-            <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
+            <div className="event-category-card-content">
+              <h3 className="event-category-card-title">{category.name}</h3>
               {category.description && (
-                <p className="text-sm text-gray-600 line-clamp-2">{category.description}</p>
+                <p className="event-category-card-description">{category.description}</p>
               )}
             </div>
           </Link>

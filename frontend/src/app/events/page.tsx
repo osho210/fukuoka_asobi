@@ -8,25 +8,25 @@ export const metadata = {
 
 export default function EventsPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">福岡のイベント</h1>
+    <div className="events-page-container">
+      <h1 className="events-page-heading">福岡のイベント</h1>
 
       {/* イベントカテゴリ一覧 */}
-      <section className="mb-12">
+      <section className="events-category-section">
         <EventCategoryList />
       </section>
 
       {/* 今後のイベント */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6">今後のイベント</h2>
+      <section className="events-upcoming-section">
+        <h2 className="events-section-heading">今後のイベント</h2>
         <EventList upcoming={true} limit={8} showAll={false} />
       </section>
 
       {/* 注目のイベント */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6">注目のイベント</h2>
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-          <p className="text-yellow-700">
+      <section className="events-featured-section">
+        <h2 className="events-section-heading">注目のイベント</h2>
+        <div className="events-featured-info">
+          <p className="events-featured-text">
             福岡市内外で開催される様々なイベント情報を掲載しています。
             お気に入りのイベントを見つけて、福岡での時間をもっと楽しみましょう！
           </p>
@@ -35,9 +35,9 @@ export default function EventsPage() {
       </section>
 
       {/* オンラインイベント */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6">オンラインイベント</h2>
-        <p className="text-gray-600 mb-6">
+      <section className="events-online-section">
+        <h2 className="events-section-heading">オンラインイベント</h2>
+        <p className="events-online-description">
           自宅からでも参加できるオンラインイベントをチェックしましょう。
         </p>
         <EventList limit={4} showAll={false} />
