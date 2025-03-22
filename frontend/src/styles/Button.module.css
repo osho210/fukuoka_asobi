@@ -11,12 +11,12 @@
 
 /* バリアント */
 .primaryButton {
-    background-color: #4a6cf7;
+    background-color: #CB6B52;
     color: white;
 }
 
 .primaryButton:hover {
-    background-color: #3a5bd9;
+    background-color: #CB6B52;
 }
 
 .secondaryButton {
@@ -30,8 +30,8 @@
 
 .outlineButton {
     background-color: transparent;
-    border: 1px solid #4a6cf7;
-    color: #4a6cf7;
+    border: 1px solid #CB6B52;
+    color: #CB6B52;
 }
 
 .outlineButton:hover {

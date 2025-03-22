@@ -14,6 +14,18 @@
     margin-bottom: 1rem;
 }
 
+.searchForm {
+    position: relative;
+    align-items: center;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 12px #00000026;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    transition: transform .2s ease-in-out;
+    margin-top: -5px;
+}
+
 .formGroup {
     margin-bottom: 1.5rem;
 }
@@ -34,8 +46,8 @@
 
 .formControl:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 1px #4a6cf7;
+    border-color: #CB6B52;
+    box-shadow: 0 0 0 1px #CB6B52;
 }
 
 .formRow {
@@ -56,6 +68,30 @@
 
 .nextButton {
     min-width: 200px;
+}
+
+.areaGroup,
+.calendarGroup,
+.genderGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.areaGroup:hover,
+.calendarGroup:hover {
+    border-color: #CB6B52;
+    box-shadow: 0 0 0 1px #CB6B52;
+}
+
+.selectionText {
+    flex: 1;
+    font-size: 0.95rem;
 }
 
 .genderGroup {
@@ -97,4 +133,200 @@
 
 .radioInput {
     margin-right: 0.5rem;
+}
+
+/* カスタムオプションセレクタ */
+.customOptionSelector {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.customOptionSelector:hover {
+    border-color: #CB6B52;
+    box-shadow: 0 0 0 1px #CB6B52;
+}
+
+.optionLabel {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+
+.selectedOption {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* トグルオプション */
+.toggleOptionsContainer {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.toggleOption {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.toggleOptionActive {
+    background-color: #f0f9ff;
+    border-color: #CB6B52;
+    color: #CB6B52;
+}
+
+.toggleIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* カテゴリーボタン */
+.categoryButtonsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.categoryButton {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #fff;
+    border: 1px solid #CB6B52;
+    color: #CB6B52;
+}
+
+.categoryButtonActive {
+    background-color: #CB6B52;
+    color: #fff;
+}
+
+.categoryButton:hover {
+    opacity: 0.9;
+}
+
+/* オプションリスト */
+.optionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.optionItem {
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.optionItem:hover {
+    background-color: #f9fafb;
+}
+
+.optionItemActive {
+    background-color: #f0f9ff;
+    color: #CB6B52;
+    font-weight: 500;
+}
+
+/* モーダル関連のスタイル */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: white;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modalTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modalCloseButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.modalCloseButton:hover {
+    color: #111827;
+}
+
+.modalBody {
+    padding: 1rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.modalFooter {
+    padding: 1rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modalButton {
+    background-color: #CB6B52;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modalButton:hover {
+    background-color: #3b5bd9;
+}
+
+.mapDescription {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #6b7280;
 }

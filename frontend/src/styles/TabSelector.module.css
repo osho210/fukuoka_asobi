@@ -4,10 +4,13 @@
 }
 
 .tabButton {
-    padding: 0.75rem 1.5rem;
     text-align: center;
-    font-weight: 500;
-    font-size: 0.875rem;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    background: #fff;
+    border: #CB6B52 0.5px solid;
 }
 
 .tabButton:focus {
@@ -15,12 +18,12 @@
 }
 
 .activeTab {
-    border-bottom: 2px solid #4a6cf7;
-    color: #4a6cf7;
+    background: #CB6B52;
+    color: #fff;
 }
 
 .inactiveTab {
-    color: #6b7280;
+    color: #CB6B52;
 }
 
 .inactiveTab:hover {

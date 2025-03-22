@@ -14,8 +14,8 @@
 
 .timePickerInput:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 1px #4a6cf7;
+    border-color: #CB6B52;
+    box-shadow: 0 0 0 1px #CB6B52;
 }
 
 .timePickerDropdown {
@@ -43,12 +43,12 @@
 }
 
 .selectedTime {
-    background-color: #4a6cf7;
+    background-color: #CB6B52;
     color: white;
 }
 
 .selectedTime:hover {
-    background-color: #4a6cf7;
+    background-color: #CB6B52;
 }
 
 .timePickerLabel {

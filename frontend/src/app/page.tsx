@@ -1,7 +1,8 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import HamburgerMenu from '@/components/HamburgerMenu'
+// TODO: default exportを変更する
+import { Header } from '@/components/Header'
 import Footer from '@/components/Footer'
 import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
@@ -16,16 +17,7 @@ import '../../public/styles/RecommendedNews.css';
 export default function Home() {
   return (
     <div className="container">
-      {/* <SpotList /> */}
-      <header className="header">
-        <Link href={'/'}>
-          <h1>
-            <Image className="logo" src={'/logo.png'} width={190} height={45} alt="kv" />
-          </h1>
-        </Link>
-
-        <HamburgerMenu />
-      </header>
+      <Header />
       <div className="image-container">
         <Image src={'/kv.jpg'} width={380} height={700} alt="kv" />
         <p className="vertical-text">

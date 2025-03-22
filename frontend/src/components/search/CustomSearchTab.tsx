@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SearchParams, CustomOptions } from '@/types/search';
 import styles from '@/styles/SearchForm.module.css';
 
@@ -46,6 +46,11 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   searchParams,
   updateSearchParams,
 }) => {
+  // モーダルの表示状態
+  const [isTransportationModalOpen, setIsTransportationModalOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+  const [isStartingPointModalOpen, setIsStartingPointModalOpen] = useState(false);
+
   // カスタムオプションの更新
   const updateCustomOptions = (updates: Partial<CustomOptions>) => {
     updateSearchParams({
@@ -59,11 +64,13 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   // 移動手段の更新
   const handleTransportationChange = (method: string) => {
     updateCustomOptions({ transportationMethod: method });
+    setIsTransportationModalOpen(false);
   };
 
   // テーマの更新
   const handleThemeChange = (theme: string) => {
     updateCustomOptions({ theme });
+    setIsThemeModalOpen(false);
   };
 
   // 雨天対応の更新
@@ -81,25 +88,30 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
     updateCustomOptions({ startingPoint: point });
   };
 
+  // 出発地点の確定
+  const handleStartingPointConfirm = () => {
+    setIsStartingPointModalOpen(false);
+  };
+
   // スポット数の更新
   const handleSpotCountChange = (count: number) => {
     updateCustomOptions({ spotCount: count });
   };
 
   // カテゴリーの更新
-  const handleCategoryChange = (categoryId: string, checked: boolean) => {
+  const handleCategoryChange = (categoryId: string) => {
     const currentCategories = searchParams.customOptions?.categories || [];
 
-    let newCategories: string[];
-    if (checked) {
-      // カテゴリーを追加
-      newCategories = [...currentCategories, categoryId];
+    // 既に選択されている場合は削除、そうでなければ追加
+    if (currentCategories.includes(categoryId)) {
+      updateCustomOptions({
+        categories: currentCategories.filter(id => id !== categoryId)
+      });
     } else {
-      // カテゴリーを削除
-      newCategories = currentCategories.filter((id) => id !== categoryId);
+      updateCustomOptions({
+        categories: [...currentCategories, categoryId]
+      });
     }
-
-    updateCustomOptions({ categories: newCategories });
   };
 
   // カテゴリーが選択されているかチェック
@@ -107,84 +119,85 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
     return searchParams.customOptions?.categories?.includes(categoryId) || false;
   };
 
+  // 選択された移動手段のテキスト
+  const getSelectedTransportationText = () => {
+    if (!searchParams.customOptions?.transportationMethod) {
+      return '移動手段を選択';
+    }
+    const selected = transportationOptions.find(
+      option => option.id === searchParams.customOptions?.transportationMethod
+    );
+    return selected ? selected.label : '移動手段を選択';
+  };
+
+  // 選択されたテーマのテキスト
+  const getSelectedThemeText = () => {
+    if (!searchParams.customOptions?.theme) {
+      return 'テーマを選択';
+    }
+    const selected = themeOptions.find(
+      option => option.id === searchParams.customOptions?.theme
+    );
+    return selected ? selected.label : 'テーマを選択';
+  };
+
   return (
     <div>
       <div className={styles.formGroup}>
-        <label className={styles.formLabel}>移動手段</label>
-        <div className={styles.radioGroup}>
-          {transportationOptions.map((option) => (
-            <div key={option.id} className={styles.radio}>
-              <input
-                type="radio"
-                id={`transportation-${option.id}`}
-                name="transportation"
-                className={styles.radioInput}
-                checked={searchParams.customOptions?.transportationMethod === option.id}
-                onChange={() => handleTransportationChange(option.id)}
-              />
-              <label htmlFor={`transportation-${option.id}`}>{option.label}</label>
-            </div>
-          ))}
+        <div
+          className={styles.customOptionSelector}
+          onClick={() => setIsTransportationModalOpen(true)}
+        >
+          <span className={styles.optionLabel}>移動手段</span>
+          <span className={styles.selectedOption}>{getSelectedTransportationText()}</span>
         </div>
       </div>
 
       <div className={styles.formGroup}>
-        <label className={styles.formLabel}>テーマ</label>
-        <div className={styles.radioGroup}>
-          {themeOptions.map((option) => (
-            <div key={option.id} className={styles.radio}>
-              <input
-                type="radio"
-                id={`theme-${option.id}`}
-                name="theme"
-                className={styles.radioInput}
-                checked={searchParams.customOptions?.theme === option.id}
-                onChange={() => handleThemeChange(option.id)}
-              />
-              <label htmlFor={`theme-${option.id}`}>{option.label}</label>
+        <div
+          className={styles.customOptionSelector}
+          onClick={() => setIsThemeModalOpen(true)}
+        >
+          <span className={styles.optionLabel}>テーマ</span>
+          <span className={styles.selectedOption}>{getSelectedThemeText()}</span>
+        </div>
+      </div>
+
+      <div className={styles.formGroup}>
+        <div className={styles.toggleOptionsContainer}>
+          <div
+            className={`${styles.toggleOption} ${searchParams.customOptions?.rainyDayOption ? styles.toggleOptionActive : ''}`}
+            onClick={() => handleRainyDayOptionChange(!searchParams.customOptions?.rainyDayOption)}
+          >
+            <div className={styles.toggleIcon}>
+              ☂️
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.formRow}>
-        <div className={styles.formColumn}>
-          <div className={styles.checkbox}>
-            <input
-              type="checkbox"
-              id="rainyDayOption"
-              className={styles.checkboxInput}
-              checked={searchParams.customOptions?.rainyDayOption || false}
-              onChange={(e) => handleRainyDayOptionChange(e.target.checked)}
-            />
-            <label htmlFor="rainyDayOption">雨天でも楽しめるプラン</label>
+            <span>雨天でも楽しめる</span>
           </div>
-        </div>
 
-        <div className={styles.formColumn}>
-          <div className={styles.checkbox}>
-            <input
-              type="checkbox"
-              id="includeEvents"
-              className={styles.checkboxInput}
-              checked={searchParams.customOptions?.includeEvents || false}
-              onChange={(e) => handleIncludeEventsChange(e.target.checked)}
-            />
-            <label htmlFor="includeEvents">イベントを含む</label>
+          <div
+            className={`${styles.toggleOption} ${searchParams.customOptions?.includeEvents ? styles.toggleOptionActive : ''}`}
+            onClick={() => handleIncludeEventsChange(!searchParams.customOptions?.includeEvents)}
+          >
+            <div className={styles.toggleIcon}>
+              🎭
+            </div>
+            <span>イベントを含む</span>
           </div>
         </div>
       </div>
 
       <div className={styles.formRow}>
         <div className={styles.formColumn}>
-          <label className={styles.formLabel}>出発地点</label>
-          <input
-            type="text"
-            className={styles.formControl}
-            value={searchParams.customOptions?.startingPoint || ''}
-            onChange={(e) => handleStartingPointChange(e.target.value)}
-            placeholder="例: 福岡空港"
-          />
+          <div
+            className={styles.customOptionSelector}
+            onClick={() => setIsStartingPointModalOpen(true)}
+          >
+            <span className={styles.optionLabel}>出発地点</span>
+            <span className={styles.selectedOption}>
+              {searchParams.customOptions?.startingPoint || '出発地点を入力'}
+            </span>
+          </div>
         </div>
 
         <div className={styles.formColumn}>
@@ -202,21 +215,112 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
 
       <div className={styles.formGroup}>
         <label className={styles.formLabel}>カテゴリー</label>
-        <div className={styles.checkboxGroup}>
+        <div className={styles.categoryButtonsContainer}>
           {categoryOptions.map((option) => (
-            <div key={option.id} className={styles.checkbox}>
-              <input
-                type="checkbox"
-                id={`category-${option.id}`}
-                className={styles.checkboxInput}
-                checked={isCategorySelected(option.id)}
-                onChange={(e) => handleCategoryChange(option.id, e.target.checked)}
-              />
-              <label htmlFor={`category-${option.id}`}>{option.label}</label>
-            </div>
+            <button
+              key={option.id}
+              className={`${styles.categoryButton} ${isCategorySelected(option.id) ? styles.categoryButtonActive : ''}`}
+              onClick={() => handleCategoryChange(option.id)}
+            >
+              {option.label}
+            </button>
           ))}
         </div>
       </div>
+
+      {/* 移動手段選択モーダル */}
+      {isTransportationModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsTransportationModalOpen(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>移動手段を選択</h2>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setIsTransportationModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.optionsList}>
+                {transportationOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    className={`${styles.optionItem} ${searchParams.customOptions?.transportationMethod === option.id ? styles.optionItemActive : ''}`}
+                    onClick={() => handleTransportationChange(option.id)}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* テーマ選択モーダル */}
+      {isThemeModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsThemeModalOpen(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>テーマを選択</h2>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setIsThemeModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.optionsList}>
+                {themeOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    className={`${styles.optionItem} ${searchParams.customOptions?.theme === option.id ? styles.optionItemActive : ''}`}
+                    onClick={() => handleThemeChange(option.id)}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 出発地点入力モーダル */}
+      {isStartingPointModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsStartingPointModalOpen(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>出発地点を入力</h2>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setIsStartingPointModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <input
+                type="text"
+                className={styles.formControl}
+                value={searchParams.customOptions?.startingPoint || ''}
+                onChange={(e) => handleStartingPointChange(e.target.value)}
+                placeholder="例: 福岡空港"
+              />
+            </div>
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.modalButton}
+                onClick={handleStartingPointConfirm}
+              >
+                確定
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

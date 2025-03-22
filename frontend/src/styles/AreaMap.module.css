@@ -26,12 +26,12 @@
 }
 
 .selectedArea {
-    fill: #4a6cf7;
-    stroke: #3a5bd9;
+    fill: #CB6B52;
+    stroke: #CB6B52;
 }
 
 .selectedArea:hover {
-    fill: #3a5bd9;
+    fill: #CB6B52;
 }
 
 .areaLabel {
@@ -55,7 +55,7 @@
 .areaTag {
     display: flex;
     align-items: center;
-    background-color: #4a6cf7;
+    background-color: #CB6B52;
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
@@ -82,4 +82,28 @@
     font-size: 0.875rem;
     color: #6b7280;
     margin-bottom: 1rem;
+}
+
+.mapWrapper {
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+    max-width: 300px;
+}
+
+.areaButton {
+    position: absolute;
+    padding: 0.5px 15px;
+    background-color: #fff;
+    color: #cb6b52;
+    border: 1px solid #cb6b52;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color .2s, color .2s;
+    font-weight: bold;
+}
+
+.areaButton.selected {
+    background-color: #CB6B52;
+    color: #fff;
 }
