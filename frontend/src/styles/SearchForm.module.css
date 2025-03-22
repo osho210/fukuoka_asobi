@@ -2,6 +2,8 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1.5rem;
+    background: #fff;
+    color: #000;
 }
 
 .formSection {
