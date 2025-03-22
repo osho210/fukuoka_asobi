@@ -4,53 +4,34 @@ import React, { useState } from 'react';
 import { SearchParams, CustomOptions } from '@/types/search';
 import styles from '@/styles/SearchForm.module.css';
 import Image from 'next/image';
+import { useOptions } from '@/lib/hooks/useOptions';
 
 interface CustomSearchTabProps {
   searchParams: SearchParams;
   updateSearchParams: (updates: Partial<SearchParams>) => void;
 }
 
-// 移動手段の選択肢
-const transportationOptions = [
-  { id: 'walk', label: '徒歩' },
-  { id: 'train', label: '電車' },
-  { id: 'car', label: '車' },
-  { id: 'bicycle', label: '自転車' },
-  { id: 'other', label: 'その他' },
-];
-
-// テーマの選択肢
-const themeOptions = [
-  { id: 'healing', label: '癒しの旅' },
-  { id: 'active', label: 'アクティブ' },
-  { id: 'costeffective', label: 'コスパ' },
-  { id: 'gourmet', label: 'グルメ' },
-  { id: 'nature', label: '自然' },
-  { id: 'culture', label: '文化と歴史' },
-];
-
-// カテゴリーの選択肢
-const categoryOptions = [
-  { id: 'onsen', label: '温泉' },
-  { id: 'museum', label: '美術館' },
-  { id: 'izakaya', label: '居酒屋' },
-  { id: 'roadstation', label: '道の駅' },
-  { id: 'experience', label: '体験' },
-  { id: 'scenery', label: '絶景' },
-  { id: 'cafe', label: 'カフェ' },
-  { id: 'shopping', label: 'ショッピング' },
-  { id: 'park', label: '公園' },
-  { id: 'shrine', label: '神社・寺' },
-];
-
 const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   searchParams,
   updateSearchParams,
 }) => {
+  // GraphQLから選択肢データを取得
+  const { themeOptions, transportationOptions, categoryOptions, loading, error } = useOptions();
+
   // モーダルの表示状態
   const [isTransportationModalOpen, setIsTransportationModalOpen] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isStartingPointModalOpen, setIsStartingPointModalOpen] = useState(false);
+
+  // データ取得中の表示
+  if (loading) {
+    return <div className={styles.loadingContainer}>選択肢データを読み込み中...</div>;
+  }
+
+  // エラー時の表示
+  if (error) {
+    return <div className={styles.errorContainer}>データの取得に失敗しました: {error.message}</div>;
+  }
 
   // カスタムオプションの更新
   const updateCustomOptions = (updates: Partial<CustomOptions>) => {

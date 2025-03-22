@@ -10,11 +10,8 @@
 
 puts "シードデータの作成を開始します..."
 
-# カテゴリーテーブル
-puts "カテゴリーデータを作成中..."
-['カフェ', 'レストラン', 'アクティビティ', '観光地', 'ショッピング', 'イベント', 'その他'].each do |category_name|
-  Category.find_or_create_by!(name: category_name)
-end
+# カテゴリーのシードデータを読み込む
+require_relative 'seeds/categories'
 
 # 地区テーブル
 puts "地区データを作成中..."
@@ -102,5 +99,8 @@ require_relative 'seeds/events'
 
 # ニュースのシードデータを読み込む
 require_relative 'seeds/news'
+
+# 移動手段のシードデータを読み込む
+require_relative 'seeds/travel_methods'
 
 puts "シードデータの作成が完了しました！"

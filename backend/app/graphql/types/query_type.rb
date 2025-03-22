@@ -112,5 +112,10 @@ module Types
     def recommended_fors
       RecommendedFor.all
     end
+
+    # 選択肢データ
+    field :theme_options, resolver: Resolvers::ThemeOptionsResolver
+    field :transportation_options, resolver: Resolvers::TransportationOptionsResolver
+    field :category_options, resolver: Resolvers::CategoryOptionsResolver
   end
 end

@@ -1,0 +1,14 @@
+query GetOptions {
+  themeOptions {
+    id
+    label
+  }
+  transportationOptions {
+    id
+    label
+  }
+  categoryOptions {
+    id
+    label
+  }
+}

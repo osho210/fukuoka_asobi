@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_21_160228) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_22_055500) do
   create_table "areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "area_name", null: false
     t.bigint "district_id", null: false
@@ -286,6 +286,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_160228) do
     t.index ["theme"], name: "index_spots_on_theme"
   end
 
+  create_table "travel_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "plan_detail_id", null: false
+    t.integer "sequence_number", null: false
+    t.string "travel_method", null: false
+    t.integer "travel_time"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_detail_id", "sequence_number"], name: "index_travel_details_on_plan_detail_id_and_sequence_number", unique: true
+    t.index ["plan_detail_id"], name: "index_travel_details_on_plan_detail_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "profile_image_url"
@@ -335,4 +347,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_21_160228) do
   add_foreign_key "spot_purposes", "purposes"
   add_foreign_key "spot_purposes", "spots"
   add_foreign_key "spots", "districts"
+  add_foreign_key "travel_details", "plan_details"
 end
