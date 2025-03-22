@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { SearchParams, CustomOptions } from '@/types/search';
 import styles from '@/styles/SearchForm.module.css';
+import Image from 'next/image';
 
 interface CustomSearchTabProps {
   searchParams: SearchParams;
@@ -133,33 +134,33 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   // 選択されたテーマのテキスト
   const getSelectedThemeText = () => {
     if (!searchParams.customOptions?.theme) {
-      return 'テーマを選択';
+      return '遊びのテーマを選択';
     }
     const selected = themeOptions.find(
       option => option.id === searchParams.customOptions?.theme
     );
-    return selected ? selected.label : 'テーマを選択';
+    return selected ? selected.label : '遊びのテーマを選択';
   };
 
   return (
     <div>
       <div className={styles.formGroup}>
         <div
-          className={styles.customOptionSelector}
+          className={styles.areaGroup}
           onClick={() => setIsTransportationModalOpen(true)}
         >
-          <span className={styles.optionLabel}>移動手段</span>
-          <span className={styles.selectedOption}>{getSelectedTransportationText()}</span>
+          <Image src="/calendar_icon.svg" width={30} height={30} alt='移動手段' />
+          <span className={styles.selectionText}>{getSelectedTransportationText()}</span>
         </div>
       </div>
 
       <div className={styles.formGroup}>
         <div
-          className={styles.customOptionSelector}
+          className={styles.areaGroup}
           onClick={() => setIsThemeModalOpen(true)}
         >
-          <span className={styles.optionLabel}>テーマ</span>
-          <span className={styles.selectedOption}>{getSelectedThemeText()}</span>
+          <Image src="/calendar_icon.svg" width={30} height={30} alt='テーマ' />
+          <span className={styles.selectionText}>{getSelectedThemeText()}</span>
         </div>
       </div>
 
@@ -190,18 +191,18 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
       <div className={styles.formRow}>
         <div className={styles.formColumn}>
           <div
-            className={styles.customOptionSelector}
+            className={styles.areaGroup}
             onClick={() => setIsStartingPointModalOpen(true)}
           >
-            <span className={styles.optionLabel}>出発地点</span>
-            <span className={styles.selectedOption}>
+            <Image src="/location_icon.svg" width={30} height={30} alt='出発地点' />
+            <span className={styles.selectionText}>
               {searchParams.customOptions?.startingPoint || '出発地点を入力'}
             </span>
           </div>
         </div>
 
         <div className={styles.formColumn}>
-          <label className={styles.formLabel}>訪問スポット数</label>
+          <label className={""}>訪問スポット数</label>
           <input
             type="number"
             min="1"
@@ -213,8 +214,8 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
         </div>
       </div>
 
-      <div className={styles.formGroup}>
-        <label className={styles.formLabel}>カテゴリー</label>
+      <div className={styles.categoryGroup}>
+        <label className={styles.categoryFormLabel}>プランに含めるカテゴリー</label>
         <div className={styles.categoryButtonsContainer}>
           {categoryOptions.map((option) => (
             <button

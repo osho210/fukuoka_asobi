@@ -147,7 +147,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
               : '利用メンバーを選択'}
           </span>
         </div>
-        <div className={styles.formGroup}>
+        <div className={styles.budgetGroup}>
           <label className={styles.formLabel}>予算</label>
           <RangeSlider
             min={0}
