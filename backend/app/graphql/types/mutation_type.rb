@@ -8,5 +8,9 @@ module Types
     field :user_logout, mutation: Mutations::UserLogout
     field :user_google_auth, mutation: Mutations::UserGoogleAuth
     field :user_apple_auth, mutation: Mutations::UserAppleAuth
+
+    # プラン関連
+    field :create_play_plan, mutation: Mutations::CreatePlayPlan
+    field :update_play_plan, mutation: Mutations::UpdatePlayPlan
   end
 end

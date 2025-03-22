@@ -1,9 +1,8 @@
 // 検索条件の型定義
 
-// 性別と人数の入力
-export interface GenderInfo {
-  male: number;
-  female: number;
+// 利用メンバー情報
+export interface MemberInfo {
+  recommendedForIds: string[];
 }
 
 // 予算範囲の入力
@@ -29,7 +28,7 @@ export interface SearchParams {
   date: string; // 日付（YYYY-MM-DD形式）
   startTime?: string; // 開始時間（HH:MM形式）
   endTime?: string; // 終了時間（HH:MM形式）
-  genderInfo: GenderInfo; // 性別と人数
+  memberInfo: MemberInfo; // 利用メンバー情報
   budget: BudgetRange; // 予算範囲
   customOptions?: CustomOptions; // カスタムオプション
 }

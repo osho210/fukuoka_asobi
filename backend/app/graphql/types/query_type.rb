@@ -106,5 +106,11 @@ module Types
     # ニュース
     field :news, resolver: Resolvers::NewsResolver
     field :news_detail, resolver: Resolvers::NewsDetailResolver
+
+    # おすすめ対象
+    field :recommended_fors, [Types::RecommendedForType], null: false
+    def recommended_fors
+      RecommendedFor.all
+    end
   end
 end
