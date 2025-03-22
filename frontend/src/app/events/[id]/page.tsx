@@ -7,7 +7,7 @@ type EventPageProps = {
 };
 
 export const metadata = {
-  title: 'イベント詳細 | 福岡遊び',
+  title: 'イベント詳細 | 福岡遊び日記',
   description: '福岡市内で開催されるイベントの詳細情報です。開催日時、場所、料金などの情報を確認できます。',
 };
 

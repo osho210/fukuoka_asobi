@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "福岡遊び",
+  title: "福岡遊び日記",
   description: "福岡の遊び場所を探すアプリ",
 };
 

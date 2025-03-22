@@ -33,10 +33,10 @@ export default function Home() {
         </p>
       </div>
       <div className="section section-content">
-        <p className="section-bubble-title">福岡遊び日記とは？</p>
+        <p className="section-bubble-title">福岡遊び日記日記とは？</p>
         <h3 className="section-subheading">ディープな福岡の魅力を多くの人に伝えて、もっと福岡の魅力を伝えたい。</h3>
         <p className="section-content-text">
-          福岡遊び日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
+          福岡遊び日記日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
           普段の暮らしでは知ることができない、一歩踏み込んだ情報を発信しています。
         </p>
         <Link href={''} className="section-link concept">コンセプトについて</Link>

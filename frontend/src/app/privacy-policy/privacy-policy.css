@@ -1,0 +1,124 @@
+.privacy-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.privacy-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+}
+
+.privacy-updated {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.privacy-introduction {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.privacy-introduction p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.privacy-section {
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+.privacy-section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #CB6B52;
+  padding-bottom: 8px;
+}
+
+.privacy-section-content {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.privacy-list {
+  padding-left: 25px;
+  margin-bottom: 15px;
+}
+
+.privacy-list li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 10px;
+  list-style-type: decimal;
+}
+
+.privacy-sublist {
+  padding-left: 25px;
+  margin: 10px 0;
+}
+
+.privacy-sublist li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666;
+  margin-bottom: 8px;
+  list-style-type: lower-alpha;
+}
+
+.privacy-contact {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.privacy-contact p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .privacy-page {
+    margin: 30px auto;
+  }
+
+  .privacy-title {
+    font-size: 24px;
+  }
+
+  .privacy-section-title {
+    font-size: 18px;
+  }
+
+  .privacy-section-content,
+  .privacy-list li {
+    font-size: 14px;
+  }
+
+  .privacy-sublist li {
+    font-size: 13px;
+  }
+
+  .privacy-contact {
+    padding: 15px;
+  }
+}

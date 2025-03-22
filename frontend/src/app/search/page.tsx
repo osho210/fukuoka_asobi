@@ -5,7 +5,7 @@ import { Header } from '@/components/Header'
 
 
 export const metadata = {
-  title: 'プラン検索 | 福岡遊び',
+  title: 'プラン検索 | 福岡遊び日記',
   description: '福岡県内の遊びプランを検索できます。エリア、日時、予算などの条件を指定して、あなたにぴったりのプランを見つけましょう。',
 };
 

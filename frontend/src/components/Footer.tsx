@@ -6,19 +6,19 @@ export const Footer = () => {
             <p className="footer-title">事業者・店舗関係の皆さま</p>
             <ul className="footer-nav">
                 <li className="footer-nav-item">
-                    <a href="#" className="footer-nav-link">お問い合わせ</a>
+                    <a href="/contact" className="footer-nav-link">お問い合わせ</a>
                 </li>
                 <li className="footer-nav-item">
-                    <a href="#" className="footer-nav-link">よくある質問</a>
+                    <a href="/faq" className="footer-nav-link">よくある質問</a>
                 </li>
                 <li className="footer-nav-item">
-                    <a href="#" className="footer-nav-link">広告掲載について</a>
+                    <a href="/advertising" className="footer-nav-link">広告掲載について</a>
                 </li>
                 <li className="footer-nav-item">
-                    <a href="#" className="footer-nav-link">プライバシーポリシー</a>
+                    <a href="/privacy-policy" className="footer-nav-link">プライバシーポリシー</a>
                 </li>
                 <li className="footer-nav-item">
-                    <a href="#" className="footer-nav-link">サイトマップ</a>
+                    <a href="/sitemap" className="footer-nav-link">サイトマップ</a>
                 </li>
             </ul>
             <Image className="footer-logo" src={'/logo_inversion.png'} width={190} height={45} alt="footer img" />

@@ -15,23 +15,10 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   searchParams,
   updateSearchParams,
 }) => {
-  // GraphQLから選択肢データを取得
-  const { themeOptions, transportationOptions, categoryOptions, loading, error } = useOptions();
-
   // モーダルの表示状態
   const [isTransportationModalOpen, setIsTransportationModalOpen] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isStartingPointModalOpen, setIsStartingPointModalOpen] = useState(false);
-
-  // データ取得中の表示
-  if (loading) {
-    return <div className={styles.loadingContainer}>選択肢データを読み込み中...</div>;
-  }
-
-  // エラー時の表示
-  if (error) {
-    return <div className={styles.errorContainer}>データの取得に失敗しました: {error.message}</div>;
-  }
 
   // カスタムオプションの更新
   const updateCustomOptions = (updates: Partial<CustomOptions>) => {

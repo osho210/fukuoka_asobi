@@ -7,7 +7,7 @@ type CategoryPageProps = {
 };
 
 export const metadata = {
-  title: 'カテゴリ別イベント | 福岡遊び',
+  title: 'カテゴリ別イベント | 福岡遊び日記',
   description: '福岡市内で開催されるイベントをカテゴリ別に探せます。フェス、マーケット、展示会、ワークショップなど、様々なジャンルのイベントを掲載しています。',
 };
 

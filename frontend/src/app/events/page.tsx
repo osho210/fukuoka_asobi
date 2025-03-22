@@ -2,7 +2,7 @@ import EventList from '../../components/EventList';
 import EventCategoryList from '../../components/EventCategoryList';
 
 export const metadata = {
-  title: 'イベント一覧 | 福岡遊び',
+  title: 'イベント一覧 | 福岡遊び日記',
   description: '福岡市内で開催される様々なイベント情報を掲載しています。フェス、マーケット、展示会、ワークショップなど、ジャンル別に探せます。',
 };
 

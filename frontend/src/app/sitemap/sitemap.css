@@ -1,0 +1,172 @@
+.sitemap-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.sitemap-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.sitemap-description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #555;
+}
+
+.sitemap-contact-link {
+  color: #CB6B52;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.sitemap-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.sitemap-section {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.sitemap-section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #CB6B52;
+  padding-bottom: 8px;
+}
+
+.sitemap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sitemap-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sitemap-link {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.sitemap-link:hover {
+  color: #CB6B52;
+  text-decoration: underline;
+}
+
+.sitemap-description-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.sitemap-search-section {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 40px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.sitemap-search-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.sitemap-search-text {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.sitemap-search-form {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.sitemap-search-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.sitemap-search-button {
+  padding: 10px 20px;
+  background-color: #CB6B52;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sitemap-search-button:hover {
+  background-color: #b85a43;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .sitemap-page {
+    margin: 30px auto;
+  }
+
+  .sitemap-title {
+    font-size: 24px;
+  }
+
+  .sitemap-section-title {
+    font-size: 18px;
+  }
+
+  .sitemap-link {
+    font-size: 15px;
+  }
+
+  .sitemap-description-text {
+    font-size: 13px;
+  }
+
+  .sitemap-search-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sitemap-search-input {
+    border-radius: 5px;
+  }
+
+  .sitemap-search-button {
+    border-radius: 5px;
+    width: 100%;
+  }
+}
