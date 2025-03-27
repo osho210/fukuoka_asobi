@@ -11,6 +11,12 @@ query GetPlayPlans($limit: Int) {
     reviewCount
     favoriteCount
     status
+    user {
+      id
+      username
+      profileImageUrl
+      role
+    }
   }
 }
 

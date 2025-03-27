@@ -64,7 +64,7 @@ const AreaMap: React.FC<AreaMapProps> = ({
 
   // エリア名を取得
   const getAreaName = (areaId: string) => {
-    const area = areas.find((a) => a.id === areaId);
+    const area = areaPositions.find((area) => area.id === areaId);
     return area ? area.name : '';
   };
 
