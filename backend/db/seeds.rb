@@ -13,28 +13,8 @@ puts "シードデータの作成を開始します..."
 # カテゴリーのシードデータを読み込む
 require_relative 'seeds/categories'
 
-# 地区テーブル
-puts "地区データを作成中..."
-['博多区', '中央区', '東区', '南区', '西区', '城南区', '早良区'].each do |district_name|
-  District.find_or_create_by!(district_name: district_name)
-end
-
-# 地域テーブル
-puts "地域データを作成中..."
-{
-  '博多区' => ['博多駅周辺', '祇園', '中洲', '冷泉', '東比恵', '吉塚', '千代'],
-  '中央区' => ['天神', '大名', '今泉', '赤坂', '薬院', '平尾', '六本松', '桜坂', '大濠', '舞鶴'],
-  '東区' => ['箱崎', '香椎', '和白', '名島', '千早'],
-  '南区' => ['大橋', '高宮', '野多目', '塩原', '長住'],
-  '西区' => ['姪浜', '西新', '室見', '今宿', '糸島'],
-  '城南区' => ['七隈', '別府', '茶山', '金山', '片江'],
-  '早良区' => ['西新', '藤崎', '百道', '原', '野芥', '次郎丸', '四箇']
-}.each do |district_name, area_names|
-  district = District.find_by(district_name: district_name)
-  area_names.each do |area_name|
-    Area.find_or_create_by!(area_name: area_name, district: district)
-  end
-end
+# 既存のデータを保持するスクリプトを読み込む
+require_relative 'seeds/existing_data'
 
 # ハッシュタグテーブル
 puts "ハッシュタグデータを作成中..."
@@ -102,5 +82,9 @@ require_relative 'seeds/news'
 
 # 移動手段のシードデータを読み込む
 require_relative 'seeds/travel_methods'
+
+# 糟屋町のスポットと営業時間のシードデータを読み込む
+puts "糟屋町のスポットと営業時間データを作成中..."
+require_relative 'seeds/spots_with_opening_hours'
 
 puts "シードデータの作成が完了しました！"

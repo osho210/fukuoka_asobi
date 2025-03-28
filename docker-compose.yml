@@ -35,8 +35,8 @@ services:
       - "3000:3000"
     environment:
       RAILS_ENV: development
-      DB_USERNAME: rails
-      DB_PASSWORD: rails
+      DB_USERNAME: root
+      DB_PASSWORD: root
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: fukuoka_asobi_development

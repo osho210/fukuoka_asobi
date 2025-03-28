@@ -3,7 +3,7 @@ class OpeningHour < ApplicationRecord
 
   validates :day_of_week, presence: true
   validates :day_of_week, uniqueness: { scope: :spot_id }
-  validates :day_of_week, inclusion: { in: %w(月 火 水 木 金 土 日) }
+  validates :day_of_week, inclusion: { in: %w(mon tue wed thu fri sat sun) }
   validates :open_time, presence: true, unless: :is_closed_day
   validates :close_time, presence: true, unless: :is_closed_day
 

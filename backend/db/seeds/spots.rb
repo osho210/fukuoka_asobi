@@ -57,21 +57,33 @@ SpotPurpose.find_or_create_by!(spot: hakata_cafe, purpose: friends_purpose)
 SpotAmbianceRelation.find_or_create_by!(spot: hakata_cafe, spot_ambiance: stylish_ambiance)
 
 # 営業時間の設定
-['月', '火', '水', '木', '金'].each do |day|
-  OpeningHour.find_or_create_by!(
+['mon', 'tue', 'wed', 'thu', 'fri'].each do |day|
+  # 既存のレコードを削除
+  existing = OpeningHour.find_by(spot: hakata_cafe, day_of_week: day)
+  existing.destroy if existing
+
+  # 新しいレコードを作成
+  OpeningHour.create!(
     spot: hakata_cafe,
     day_of_week: day,
     open_time: '10:00',
-    close_time: '21:00'
+    close_time: '21:00',
+    is_closed_day: false
   )
 end
 
-['土', '日'].each do |day|
-  OpeningHour.find_or_create_by!(
+['sat', 'sun'].each do |day|
+  # 既存のレコードを削除
+  existing = OpeningHour.find_by(spot: hakata_cafe, day_of_week: day)
+  existing.destroy if existing
+
+  # 新しいレコードを作成
+  OpeningHour.create!(
     spot: hakata_cafe,
     day_of_week: day,
     open_time: '11:00',
-    close_time: '20:00'
+    close_time: '20:00',
+    is_closed_day: false
   )
 end
 
@@ -116,12 +128,18 @@ SpotPurpose.find_or_create_by!(spot: tenjin_restaurant, purpose: date_purpose)
 SpotAmbianceRelation.find_or_create_by!(spot: tenjin_restaurant, spot_ambiance: stylish_ambiance)
 
 # 営業時間の設定
-['月', '火', '水', '木', '金', '土', '日'].each do |day|
-  OpeningHour.find_or_create_by!(
+['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].each do |day|
+  # 既存のレコードを削除
+  existing = OpeningHour.find_by(spot: tenjin_restaurant, day_of_week: day)
+  existing.destroy if existing
+
+  # 新しいレコードを作成
+  OpeningHour.create!(
     spot: tenjin_restaurant,
     day_of_week: day,
     open_time: '17:00',
-    close_time: '23:00'
+    close_time: '23:00',
+    is_closed_day: false
   )
 end
 

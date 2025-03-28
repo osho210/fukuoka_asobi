@@ -22,16 +22,32 @@ if PlanDetail.exists?
     # 移動時間をランダムに設定（5分〜60分）
     travel_time = rand(5..60)
 
-    # 移動詳細を作成
-    TravelDetail.find_or_create_by!(
-      plan_detail: plan_detail,
-      sequence_number: 1,
-      travel_method: travel_method,
-      travel_time: travel_time,
-      notes: "#{travel_method}で移動（#{travel_time}分）"
-    )
+    # 既存のTravelDetailを確認
+    existing_travel_detail = TravelDetail.where(plan_detail: plan_detail).order(sequence_number: :desc).first
+    next_sequence_number = existing_travel_detail ? existing_travel_detail.sequence_number + 1 : 1
 
-    puts "  - PlanDetail ID: #{plan_detail.id}に移動手段「#{travel_method}」を追加しました"
+    # 既存のTravelDetailを確認（plan_detailとsequence_numberの組み合わせで）
+    existing_detail = TravelDetail.find_by(plan_detail: plan_detail, sequence_number: next_sequence_number)
+
+    if existing_detail
+      # 既存のレコードを更新
+      existing_detail.update!(
+        travel_method: travel_method,
+        travel_time: travel_time,
+        notes: "#{travel_method}で移動（#{travel_time}分）"
+      )
+      puts "  - PlanDetail ID: #{plan_detail.id}の移動手段を更新しました"
+    else
+      # 新しいレコードを作成
+      TravelDetail.create!(
+        plan_detail: plan_detail,
+        sequence_number: next_sequence_number,
+        travel_method: travel_method,
+        travel_time: travel_time,
+        notes: "#{travel_method}で移動（#{travel_time}分）"
+      )
+      puts "  - PlanDetail ID: #{plan_detail.id}に移動手段「#{travel_method}」を追加しました"
+    end
   end
 else
   puts "  - PlanDetailが存在しないため、移動手段のサンプルデータは作成しませんでした"
