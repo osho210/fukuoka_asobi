@@ -7,7 +7,7 @@ module Mutations
     description "検索条件に基づいてプランを自動生成"
 
     # 直接引数を定義
-    argument :areas, [ID], required: true
+    argument :districts, [ID], required: true
     argument :date, String, required: true
     argument :member_info, Types::MemberInfoInputType, required: true
     argument :budget, Types::BudgetInputType, required: true
@@ -18,10 +18,10 @@ module Mutations
     field :plan, Types::GeneratedPlanType, null: true
     field :errors, [String], null: false
 
-    def resolve(areas:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
+    def resolve(districts:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
       # プラン生成サービスを呼び出す
       plan_generator = Services::PlanGenerator.new(
-        areas: areas,
+        districts: districts,
         date: date,
         member_info: member_info,
         budget: budget,

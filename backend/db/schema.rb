@@ -10,14 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_22_055500) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_28_013837) do
   create_table "areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "area_name", null: false
     t.bigint "district_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["area_name", "district_id"], name: "index_areas_on_area_name_and_district_id", unique: true
     t.index ["district_id"], name: "index_areas_on_district_id"
+    t.index ["slug"], name: "index_areas_on_slug"
   end
 
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -31,7 +33,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_22_055500) do
     t.string "district_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["district_name"], name: "index_districts_on_district_name", unique: true
+    t.index ["slug"], name: "index_districts_on_slug", unique: true
   end
 
   create_table "event_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

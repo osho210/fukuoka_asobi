@@ -228,10 +228,10 @@ export type MutationCreatePlayPlanArgs = {
 
 
 export type MutationGeneratePlanArgs = {
-  areas: Array<Scalars['ID']['input']>;
   budget: BudgetInput;
   customOptions?: InputMaybe<CustomOptionsInput>;
   date: Scalars['String']['input'];
+  districts: Array<Scalars['ID']['input']>;
   endTime?: InputMaybe<Scalars['String']['input']>;
   memberInfo: MemberInfoInput;
   startTime?: InputMaybe<Scalars['String']['input']>;
@@ -723,7 +723,7 @@ export type UserRegisterPayload = {
 };
 
 export type GeneratePlanMutationVariables = Exact<{
-  areas: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  districts: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
   date: Scalars['String']['input'];
   memberInfo: MemberInfoInput;
   budget: BudgetInput;

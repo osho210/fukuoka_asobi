@@ -60,7 +60,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
 
   // エリア選択の更新
   const handleAreaChange = (areas: string[]) => {
-    updateSearchParams({ areas });
+    updateSearchParams({ districts: areas });
   };
 
   // 日付選択時の処理
@@ -102,10 +102,10 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
 
   // 選択されたエリアの表示
   const getSelectedAreasText = () => {
-    if (searchParams.areas.length === 0) {
+    if (!searchParams.districts || searchParams.districts.length === 0) {
       return 'エリアを選択';
     }
-    return `${[...searchParams.areas]}`;
+    return `${[...searchParams.districts]}`;
   };
 
   // 選択された日時の表示
@@ -176,7 +176,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
             </div>
             <div className={styles.modalBody}>
               <AreaMap
-                selectedAreas={searchParams.areas}
+                selectedAreas={searchParams.districts || []}
                 onChange={handleAreaChange}
                 maxSelections={3}
                 title=""

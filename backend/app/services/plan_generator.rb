@@ -3,8 +3,8 @@ require 'securerandom'
 
 module Services
   class PlanGenerator
-    def initialize(areas:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
-      @areas = areas
+    def initialize(districts:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
+      @districts = districts
       @date = Date.parse(date)
       @member_info = member_info
       @budget = budget
@@ -41,8 +41,21 @@ module Services
       # 基本クエリ
       query = Spot.all
 
-      # エリアによるフィルタリング
-      query = query.joins(:areas).where(areas: { id: @areas }) if @areas.present?
+      # 地区によるフィルタリング
+      if @districts.present?
+        # 数値IDとslugの両方に対応
+        district_ids = @districts.map do |district_identifier|
+          # 数値IDの場合はそのまま使用
+          if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
+            district_identifier
+          else
+            # 文字列（slug）の場合はIDに変換
+            District.find_by(slug: district_identifier)&.id
+          end
+        end.compact
+
+        query = query.where(district_id: district_ids)
+      end
 
       # 営業時間によるフィルタリング
       day_of_week = @date.strftime("%a").downcase
@@ -269,11 +282,24 @@ module Services
     # 6. プラン生成
     def create_plan(route_with_times)
       # プラン名を生成
-      area_names = Area.where(id: @areas).pluck(:area_name).join('・')
+      # IDまたはslugから地区名を取得
+      district_names = @districts.map do |district_identifier|
+        if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
+          District.find_by(id: district_identifier)&.district_name
+        else
+          District.find_by(slug: district_identifier)&.district_name
+        end
+      end.compact.join('・')
+
+      pp '----district----------'
+      pp @districts
+      pp '--------------'
+
       theme_name = @custom_options[:theme].present? ?
                   Resolvers::ThemeOptionsResolver.new.resolve.find { |t| t[:id] == @custom_options[:theme] }&.dig(:label) :
                   '遊び'
-      plan_name = "#{area_names}で#{theme_name}プラン"
+      #TODO: 暫定的にプラン名は固定で表示させるが将来的にはランダムでプランが生成されるように変更する
+      plan_name = "#{district_names}で#{theme_name}プラン"
 
       # 総予算を計算（予算レンジから概算）
       budget_values = {

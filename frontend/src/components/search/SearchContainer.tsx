@@ -83,7 +83,7 @@ const SearchContainer: React.FC = () => {
 
   // 検索条件
   const [searchParams, setSearchParams] = useState<SearchParams>({
-    areas: [],
+    districts: [],
     date: '',
     memberInfo: { recommendedForIds: [] },
     budget: { min: 0, max: 20000 },
@@ -114,7 +114,7 @@ const SearchContainer: React.FC = () => {
       return;
     }
 
-    if (searchParams.areas.length === 0) {
+    if (searchParams.districts.length === 0) {
       setErrorMessage('エリアを選択してください');
       return;
     }
@@ -130,7 +130,7 @@ const SearchContainer: React.FC = () => {
     try {
       // GraphQLクエリのパラメータを準備
       const variables = {
-        areas: searchParams.areas,
+        districts: searchParams.districts,
         date: searchParams.date,
         memberInfo: searchParams.memberInfo,
         budget: searchParams.budget,

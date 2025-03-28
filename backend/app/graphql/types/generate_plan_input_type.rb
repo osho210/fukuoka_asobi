@@ -3,7 +3,7 @@ module Types
     graphql_name "GeneratePlanInputObject"
     description "プラン生成の入力パラメータ"
 
-    argument :areas, [ID], required: true, description: "エリアID"
+    argument :districts, [ID], required: true, description: "地区ID"
     argument :date, String, required: true, description: "日付（YYYY-MM-DD形式）"
     argument :member_info, Types::MemberInfoInputType, required: true, description: "利用メンバー情報"
     argument :budget, Types::BudgetInputType, required: true, description: "予算範囲"

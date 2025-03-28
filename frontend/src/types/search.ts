@@ -24,13 +24,14 @@ export interface CustomOptions {
 
 // 検索条件全体
 export interface SearchParams {
-  areas: string[]; // エリアID
+  districts: string[]; // 地区ID
   date: string; // 日付（YYYY-MM-DD形式）
   startTime?: string; // 開始時間（HH:MM形式）
   endTime?: string; // 終了時間（HH:MM形式）
   memberInfo: MemberInfo; // 利用メンバー情報
   budget: BudgetRange; // 予算範囲
   customOptions?: CustomOptions; // カスタムオプション
+  areas?: string[]; // 後方互換性のため残す
 }
 
 // 検索結果のスポット情報

@@ -4,7 +4,7 @@ import { GeneratePlanMutation, GeneratePlanMutationVariables } from '@/__generat
 // .graphqlファイルからクエリをインポート
 export const GENERATE_PLAN = gql`
   mutation GeneratePlan(
-    $areas: [ID!]!,
+    $districts: [ID!]!,
     $date: String!,
     $memberInfo: MemberInfoInput!,
     $budget: BudgetInput!,
@@ -13,7 +13,7 @@ export const GENERATE_PLAN = gql`
     $customOptions: CustomOptionsInput
   ) {
     generatePlan(
-      areas: $areas,
+      districts: $districts,
       date: $date,
       memberInfo: $memberInfo,
       budget: $budget,
