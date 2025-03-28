@@ -3,25 +3,31 @@
 require_relative '../../services/plan_generator'
 
 module Mutations
-  class GeneratePlan < BaseMutation
+  class GeneratePlan < GraphQL::Schema::Mutation
     description "検索条件に基づいてプランを自動生成"
 
-    # InputObjectを使用
-    argument :input, Types::GeneratePlanInputType, required: true
+    # 直接引数を定義
+    argument :areas, [ID], required: true
+    argument :date, String, required: true
+    argument :member_info, Types::MemberInfoInputType, required: true
+    argument :budget, Types::BudgetInputType, required: true
+    argument :start_time, String, required: false
+    argument :end_time, String, required: false
+    argument :custom_options, Types::CustomOptionsInputType, required: false
 
     field :plan, Types::GeneratedPlanType, null: true
     field :errors, [String], null: false
 
-    def resolve(input:)
+    def resolve(areas:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
       # プラン生成サービスを呼び出す
       plan_generator = Services::PlanGenerator.new(
-        areas: input[:areas],
-        date: input[:date],
-        member_info: input[:member_info],
-        budget: input[:budget],
-        start_time: input[:start_time],
-        end_time: input[:end_time],
-        custom_options: input[:custom_options]
+        areas: areas,
+        date: date,
+        member_info: member_info,
+        budget: budget,
+        start_time: start_time,
+        end_time: end_time,
+        custom_options: custom_options
       )
 
       begin

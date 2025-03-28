@@ -1,3 +1,6 @@
+require 'ostruct'
+require 'securerandom'
+
 module Services
   class PlanGenerator
     def initialize(areas:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
@@ -50,8 +53,11 @@ module Services
 
       # 予算によるフィルタリング
       # 注: 予算はスポット単位ではなくプラン全体で考慮するため、ここでは緩めのフィルタリング
-      max_spot_budget = @budget[:max] * 0.7 # 1スポットあたりの最大予算を全体の70%と仮定
-      query = query.where("budget <= ?", max_spot_budget) if max_spot_budget.present?
+      if @budget[:max] <= 5000
+        query = query.where(budget_range: "安い")
+      elsif @budget[:max] <= 15000
+        query = query.where(budget_range: ["安い", "普通"])
+      end
 
       # カスタムオプションによるフィルタリング
       if @custom_options.present?
@@ -97,14 +103,15 @@ module Services
         end
 
         # 予算適合度
-        if spot.budget.present?
-          budget_ratio = spot.budget.to_f / @budget[:max].to_f
-          if budget_ratio <= 0.3
-            score += 15 # 予算の30%以下なら加点
-          elsif budget_ratio > 0.7
-            score -= 10 # 予算の70%超なら減点
-          end
+        budget_score = case spot.budget_range
+        when "安い"
+          15 # 安い場合は加点
+        when "高い"
+          -10 # 高い場合は減点
+        else
+          0 # 普通の場合は変化なし
         end
+        score += budget_score
 
         # 利用メンバー適合度
         if @member_info[:recommended_for_ids].present?
@@ -262,14 +269,21 @@ module Services
     # 6. プラン生成
     def create_plan(route_with_times)
       # プラン名を生成
-      area_names = Area.where(id: @areas).pluck(:name).join('・')
+      area_names = Area.where(id: @areas).pluck(:area_name).join('・')
       theme_name = @custom_options[:theme].present? ?
                   Resolvers::ThemeOptionsResolver.new.resolve.find { |t| t[:id] == @custom_options[:theme] }&.dig(:label) :
                   '遊び'
       plan_name = "#{area_names}で#{theme_name}プラン"
 
-      # 総予算を計算
-      total_budget = route_with_times.sum { |item| item[:spot].budget.to_i }
+      # 総予算を計算（予算レンジから概算）
+      budget_values = {
+        "安い" => 3000,
+        "普通" => 8000,
+        "高い" => 15000
+      }
+      total_budget = route_with_times.sum do |item|
+        budget_values[item[:spot].budget_range] || budget_values["普通"]
+      end
 
       # 開始・終了時間を計算
       current_time = @start_time
@@ -289,6 +303,7 @@ module Services
 
       # PlayPlanを作成
       play_plan = PlayPlan.new(
+        id: SecureRandom.random_number(10000),
         plan_name: plan_name,
         description: "#{@date.strftime('%Y年%m月%d日')}の#{plan_name}です。",
         status: 'draft',
@@ -306,6 +321,9 @@ module Services
         stay_end = current_time + item[:stay_time] * 60
         current_time = stay_end
 
+        # 予算を設定（予算レンジから概算）
+        spot_budget = budget_values[item[:spot].budget_range] || budget_values["普通"]
+
         # PlanDetailを作成
         plan_detail = play_plan.plan_details.build(
           step_number: index + 1,
@@ -314,7 +332,7 @@ module Services
           spot: item[:spot],
           start_datetime: stay_start,
           end_datetime: stay_end,
-          budget: item[:spot].budget
+          budget: spot_budget
         )
 
         # 移動がある場合はTravelDetailを作成

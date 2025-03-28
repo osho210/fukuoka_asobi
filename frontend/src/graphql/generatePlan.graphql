@@ -1,5 +1,21 @@
-mutation GeneratePlan($input: GeneratePlanInput!) {
-  generatePlan(input: $input) {
+mutation GeneratePlan(
+  $areas: [ID!]!,
+  $date: String!,
+  $memberInfo: MemberInfoInput!,
+  $budget: BudgetInput!,
+  $startTime: String,
+  $endTime: String,
+  $customOptions: CustomOptionsInput
+) {
+  generatePlan(
+    areas: $areas,
+    date: $date,
+    member_info: $memberInfo,
+    budget: $budget,
+    start_time: $startTime,
+    end_time: $endTime,
+    custom_options: $customOptions
+  ) {
     plan {
       id
       planName

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { SearchParams } from '@/types/search';
 import NormalSearchTab from './NormalSearchTab';
 import CustomSearchTab from './CustomSearchTab';
@@ -10,60 +10,8 @@ import Button from '@/components/common/Button';
 import GeneratedPlanView from '@/components/GeneratedPlanView';
 import styles from '@/styles/SearchForm.module.css';
 
-// GraphQLクエリの定義
-const GENERATE_PLAN = gql`
-  mutation GeneratePlan($input: GeneratePlanInput!) {
-    generatePlan(input: $input) {
-      plan {
-        id
-        planName
-        description
-        totalBudget
-        startDatetime
-        endDatetime
-        planDetails {
-          id
-          stepNumber
-          stepName
-          stepDescription
-          startDatetime
-          endDatetime
-          budget
-          spot {
-            id
-            spotName
-            address
-            catchphrase
-            imageUrl
-          }
-          travelDetails {
-            sequenceNumber
-            travelMethod
-            travelTime
-          }
-        }
-        travelRoute {
-          totalDistance
-          totalTravelTime
-          travelSegments {
-            fromSpot {
-              id
-              spotName
-            }
-            toSpot {
-              id
-              spotName
-            }
-            distance
-            travelTime
-            travelMethod
-          }
-        }
-      }
-      errors
-    }
-  }
-`;
+// GraphQLクエリのインポート
+import { GENERATE_PLAN } from '../../graphql/generatePlan';
 
 // 生成されたプランの型定義
 interface TravelDetail {
@@ -182,15 +130,13 @@ const SearchContainer: React.FC = () => {
     try {
       // GraphQLクエリのパラメータを準備
       const variables = {
-        input: {
-          areas: searchParams.areas,
-          date: searchParams.date,
-          memberInfo: searchParams.memberInfo,
-          budget: searchParams.budget,
-          startTime: searchParams.startTime,
-          endTime: searchParams.endTime,
-          customOptions: searchParams.customOptions
-        }
+        areas: searchParams.areas,
+        date: searchParams.date,
+        memberInfo: searchParams.memberInfo,
+        budget: searchParams.budget,
+        startTime: searchParams.startTime,
+        endTime: searchParams.endTime,
+        customOptions: searchParams.customOptions
       };
 
       console.log('プラン生成パラメータ:', variables);
