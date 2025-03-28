@@ -61,6 +61,12 @@ class Spot < ApplicationRecord
     end
   end
 
+  # おすすめ対象を取得
+  def recommended_fors
+    recommended_for_names = [recommended_for_1, recommended_for_2].compact
+    RecommendedFor.where(name: recommended_for_names)
+  end
+
   private
 
   # 曜日の範囲を整形する（例: 月,火,水,木 → 月 - 木）

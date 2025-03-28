@@ -352,6 +352,7 @@ module Services
 
         # PlanDetailを作成
         plan_detail = play_plan.plan_details.build(
+          id: SecureRandom.random_number(10000),
           step_number: index + 1,
           step_name: item[:spot].spot_name,
           step_description: item[:spot].catchphrase,
@@ -368,6 +369,7 @@ module Services
           current_time = travel_end
 
           plan_detail.travel_details.build(
+            id: SecureRandom.random_number(10000),
             sequence_number: 1,
             travel_method: item[:travel_method],
             travel_time: item[:travel_time]

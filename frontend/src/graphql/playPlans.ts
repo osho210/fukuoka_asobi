@@ -57,8 +57,18 @@ export const GET_PLAY_PLAN = gql`
         spot {
           id
           spotName
-          address
+          address 
+          phoneNumber
+          budgetRange
+          isRainyOk
+          imageUrl
           catchphrase
+          categories{
+            name
+          }
+          district{
+            districtName
+          }
         }
       }
     }

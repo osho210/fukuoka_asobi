@@ -7,7 +7,7 @@
   margin-bottom: 30px;
 }
 
-.plan-header-tag{
+.plan-header-tag {
   background: #cb6b52;
   color: #fff;
   font-size: 12px;
@@ -253,7 +253,6 @@
 
 .plan-step-description {
   margin-bottom: 15px;
-  line-height: 1.5;
 }
 
 .plan-step-planner-title {
@@ -316,7 +315,6 @@
   height: 150px;
   position: relative;
   border-radius: 8px;
-  overflow: hidden;
   margin-bottom: 10px;
 }
 
