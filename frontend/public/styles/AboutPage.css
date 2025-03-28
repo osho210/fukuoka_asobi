@@ -1,0 +1,293 @@
+.about-page {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: #333;
+}
+
+.hero {
+  background-image: url('/kv.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  padding: 80px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: #FF6B6B;
+}
+
+.concept-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.concept-text {
+  flex: 1;
+}
+
+.concept-text p {
+  margin-bottom: 20px;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.concept-image {
+  flex: 1;
+}
+
+.rounded-image {
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.target-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.target-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.target-card:hover {
+  transform: translateY(-5px);
+}
+
+.target-icon {
+  margin-bottom: 20px;
+}
+
+.target-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #FF6B6B;
+}
+
+.target-card p {
+  line-height: 1.6;
+}
+
+.scenario {
+  background-color: #f9f9f9;
+}
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 120px;
+  width: 2px;
+  background: #FF6B6B;
+}
+
+.timeline-item {
+  display: flex;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.time {
+  width: 100px;
+  text-align: right;
+  padding-right: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding-top: 5px;
+}
+
+.event {
+  flex: 1;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-left: 40px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.event h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.event p {
+  color: #666;
+}
+
+.weather-note {
+  text-align: center;
+  margin-top: 40px;
+  padding: 15px;
+  background: #e9f7fe;
+  border-radius: 8px;
+  color: #0277bd;
+}
+
+.benefits {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  color: white;
+}
+
+.benefits .section-title::after {
+  background-color: white;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.benefit-item {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.benefit-item:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.benefit-item h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.cta {
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.cta h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #FF6B6B;
+  color: white;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #ff5252;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .concept-content {
+    flex-direction: column;
+  }
+
+  .timeline::before {
+    left: 30px;
+  }
+
+  .time {
+    width: 60px;
+    font-size: 0.9rem;
+  }
+
+  .event {
+    margin-left: 20px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+}
