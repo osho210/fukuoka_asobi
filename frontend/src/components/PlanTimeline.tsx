@@ -32,6 +32,7 @@ interface PlanTimelineProps {
 const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
   // 時間フォーマット（HH:mm）
   const formatTime = (dateTimeStr: string) => {
+    console.log(dateTimeStr);
     const date = new Date(dateTimeStr);
     return format(date, 'HH:mm');
   };
@@ -103,9 +104,9 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
               <div className={styles.timelineTravelInfo}>
                 <div className={styles.timelineTravelMethod}>
                   {detail.travelDetails[0].travelMethod === 'walk' ? '徒歩' :
-                   detail.travelDetails[0].travelMethod === 'car' ? '車' :
-                   detail.travelDetails[0].travelMethod === 'train' ? '電車' :
-                   detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
+                    detail.travelDetails[0].travelMethod === 'car' ? '車' :
+                      detail.travelDetails[0].travelMethod === 'train' ? '電車' :
+                        detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
                 </div>
                 <div className={styles.timelineTravelTime}>
                   {formatTravelTime(detail.travelDetails[0].travelTime)}

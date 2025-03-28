@@ -134,8 +134,8 @@ const SearchContainer: React.FC = () => {
         date: searchParams.date,
         memberInfo: searchParams.memberInfo,
         budget: searchParams.budget,
-        startTime: searchParams.startTime,
-        endTime: searchParams.endTime,
+        startTime: searchParams.startTime ? `${searchParams.startTime}+09:00` : undefined,
+        endTime: searchParams.endTime ? `${searchParams.endTime}+09:00` : undefined,
         customOptions: searchParams.customOptions
       };
 

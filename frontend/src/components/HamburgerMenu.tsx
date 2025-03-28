@@ -22,16 +22,16 @@ const HamburgerMenu = () => {
                         </div>
                         <ul className='modal-content__links'>
                             <li className='modal-content__link'>
-                                <a href='login'>ログイン</a>
+                                <a href='/login'>ログイン</a>
+                            </li>
+                            {/* <li className='modal-content__link'>
+                                <a href='/plans'>遊びを計画する</a>
+                            </li> */}
+                            <li className='modal-content__link'>
+                                <a href='/about'>福岡遊び日記とは</a>
                             </li>
                             <li className='modal-content__link'>
-                                <a href='#'>遊びを計画する</a>
-                            </li>
-                            <li className='modal-content__link'>
-                                <a href='#'>福岡遊び日記日記とは</a>
-                            </li>
-                            <li className='modal-content__link'>
-                                <a href='#'>お問い合わせ</a>
+                                <a href='/contact'>お問い合わせ</a>
                             </li>
                         </ul>
                     </div>

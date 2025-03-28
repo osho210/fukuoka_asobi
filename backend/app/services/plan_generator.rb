@@ -16,8 +16,23 @@ module Services
       @date = Date.parse(date)
       @member_info = member_info
       @budget = budget
-      @start_time = start_time ? Time.parse(start_time) : Time.parse("#{date} 09:00")
-      @end_time = end_time ? Time.parse(end_time) : Time.parse("#{date} 21:00")
+      # 日付と時間を正しく組み合わせる
+      # 時間帯情報（+09:00）が含まれている場合はそのまま解析、そうでない場合は日付と組み合わせる
+      @start_time = if start_time && start_time.include?('+')
+                      Time.parse(start_time)
+                    elsif start_time
+                      Time.parse("#{date} #{start_time}")
+                    else
+                      Time.parse("#{date} 09:00")
+                    end
+
+      @end_time = if end_time && end_time.include?('+')
+                    Time.parse(end_time)
+                  elsif end_time
+                    Time.parse("#{date} #{end_time}")
+                  else
+                    Time.parse("#{date} 21:00")
+                  end
       @custom_options = custom_options || {}
       @total_available_time = (@end_time - @start_time) / 60 # 分単位
     end
@@ -635,6 +650,9 @@ module Services
         current_time = @start_time
         end_datetime = current_time
 
+        # 入力された開始時間を保存
+        original_start_time = @start_time
+
         begin
           route_with_times.each_with_index do |item, i|
             # スポット滞在
@@ -666,7 +684,7 @@ module Services
             plan_name: plan_name,
             description: "#{@date.strftime('%Y年%m月%d日')}の#{plan_name}です。",
             status: 'draft',
-            start_datetime: @start_time.in_time_zone('Asia/Tokyo').iso8601,
+            start_datetime: original_start_time.in_time_zone('Asia/Tokyo').iso8601,
             end_datetime: end_datetime.in_time_zone('Asia/Tokyo').iso8601,
             total_budget: total_budget,
             trip_type: 'day_trip'
@@ -680,7 +698,7 @@ module Services
 
         # PlanDetailとTravelDetailを作成
         @logger.debug("PlanDetailとTravelDetailを作成中...")
-        current_time = @start_time
+        current_time = original_start_time
 
         begin
           route_with_times.each_with_index do |item, index|
