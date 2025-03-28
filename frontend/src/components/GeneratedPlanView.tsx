@@ -6,6 +6,7 @@ import { ja } from 'date-fns/locale';
 import PlanTimeline from './PlanTimeline';
 import RouteMap from './RouteMap';
 import styles from '@/styles/GeneratedPlan.module.css';
+import Image from 'next/image';
 
 interface TravelDetail {
   sequenceNumber: number;
@@ -71,11 +72,6 @@ interface GeneratedPlanViewProps {
 }
 
 const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onEdit }) => {
-  // 日付フォーマット
-  const formatDateTime = (dateTimeStr: string) => {
-    const date = new Date(dateTimeStr);
-    return format(date, 'yyyy年MM月dd日 HH:mm', { locale: ja });
-  };
 
   // 時間フォーマット（HH:mm）
   const formatTime = (dateTimeStr: string) => {
@@ -114,7 +110,7 @@ const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onE
           <div className={styles.planMetaItem}>
             <span className={styles.metaLabel}>日時:</span>
             <span className={styles.metaValue}>
-              {formatDateTime(plan.startDatetime)} 〜 {formatTime(plan.endDatetime)}
+              {formatTime(plan.startDatetime)} 〜 {formatTime(plan.endDatetime)}
             </span>
           </div>
           <div className={styles.planMetaItem}>
@@ -150,7 +146,7 @@ const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onE
               <div key={detail.id} className={styles.spotCard}>
                 <div className={styles.spotImageContainer}>
                   {detail.spot.imageUrl ? (
-                    <img
+                    <Image
                       src={detail.spot.imageUrl}
                       alt={detail.spot.spotName}
                       className={styles.spotImage}

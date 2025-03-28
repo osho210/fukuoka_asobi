@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import styles from '@/styles/AreaMap.module.css';
-import { AreaData, fukuokaAreas } from '@/data/fukuokaAreas';
 import Image from 'next/image';
 
 interface AreaMapProps {
   selectedAreas: string[];
-  onChange: (areas: string[]) => void;
+  onChange: (districts: string[]) => void;
   maxSelections?: number;
   title?: string;
   description?: string;
@@ -42,7 +41,6 @@ const AreaMap: React.FC<AreaMapProps> = ({
   title = 'エリアを選択',
   description = '地図から最大3つのエリアを選択してください',
 }) => {
-  const [areas] = useState<AreaData[]>(fukuokaAreas);
 
   // エリアをクリックしたときの処理
   const handleAreaClick = (areaId: string) => {
@@ -92,7 +90,7 @@ const AreaMap: React.FC<AreaMapProps> = ({
 
 
       {selectedAreas.length > 0 && (
-        <div className={styles.areasList}>
+        <div className={styles.districtsList}>
           {selectedAreas.map((areaId) => (
             <div key={areaId} className={styles.areaTag}>
               {getAreaName(areaId)}

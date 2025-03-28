@@ -32,5 +32,11 @@ module Backend
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # デフォルトのタイムゾーンJS(日本時刻に変更)
+    config.time_zone = 'Tokyo'
+
+    # dbのデフォルトタイムゾーンはUTC
+    config.active_record.default_timezone = :utc
   end
 end
