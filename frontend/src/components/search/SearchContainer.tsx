@@ -134,8 +134,9 @@ const SearchContainer: React.FC = () => {
         date: searchParams.date,
         memberInfo: searchParams.memberInfo,
         budget: searchParams.budget,
-        startTime: searchParams.startTime,
-        endTime: searchParams.endTime,
+        // 時刻をJST（日本標準時）のDateオブジェクトに変換
+        startTime: searchParams.startTime ? new Date(`${searchParams.date}T${searchParams.startTime}:00+09:00`).toISOString() : undefined,
+        endTime: searchParams.endTime ? new Date(`${searchParams.date}T${searchParams.endTime}:00+09:00`).toISOString() : undefined,
         customOptions: searchParams.customOptions
       };
 

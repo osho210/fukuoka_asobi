@@ -2,7 +2,7 @@
 import { Header } from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import '../../../public/styles/common.css';
+import '@styles/common.css';
 import './sitemap.css';
 
 export default function SitemapPage() {

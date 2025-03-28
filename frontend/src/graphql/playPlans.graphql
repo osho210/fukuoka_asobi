@@ -20,39 +20,39 @@ query GetPlayPlans($limit: Int) {
   }
 }
 
-query GetPlayPlan($id: Int!) {
-  playPlan(id: $id) {
-    id
-    planName
-    description
-    imageUrl
-    location
-    tripType
-    totalBudget
-    rating
-    reviewCount
-    favoriteCount
-    status
-    startDatetime
-    endDatetime
-    tags
-    recommendedForString
-    planDetails {
-      id
-      stepNumber
-      stepName
-      stepDescription
-      comment
-      startDatetime
-      endDatetime
-      budget
-      notes
-      spot {
-        id
-        spotName
-        address
-        catchphrase
-      }
-    }
-  }
-}
+# query GetPlayPlan($id: Int!) {
+#   playPlan(id: $id) {
+#     id
+#     planName
+#     description
+#     imageUrl
+#     location
+#     tripType
+#     totalBudget
+#     rating
+#     reviewCount
+#     favoriteCount
+#     status
+#     startDatetime
+#     endDatetime
+#     tags
+#     recommendedForString
+#     planDetails {
+#       id
+#       stepNumber
+#       stepName
+#       stepDescription
+#       comment
+#       startDatetime
+#       endDatetime
+#       budget
+#       notes
+#       spot {
+#         id
+#         spotName
+#         address
+#         catchphrase
+#       }
+#     }
+#   }
+# }

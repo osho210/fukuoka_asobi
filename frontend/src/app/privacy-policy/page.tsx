@@ -1,7 +1,7 @@
 'use client';
 import { Header } from '@/components/Header';
 import Footer from '@/components/Footer';
-import '../../../public/styles/common.css';
+import '@styles/common.css';
 import './privacy-policy.css';
 
 export default function PrivacyPolicyPage() {

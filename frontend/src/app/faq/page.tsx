@@ -2,7 +2,7 @@
 import { Header } from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
-import '../../../public/styles/common.css';
+import '@styles/common.css';
 import './faq.css';
 
 // FAQデータ

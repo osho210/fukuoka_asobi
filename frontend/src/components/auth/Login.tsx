@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import '../../../public/styles/Auth.css';
+import '@styles/Auth.css';
 
 // ログイン画面コンポーネント
 const Login = () => {

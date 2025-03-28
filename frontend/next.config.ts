@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@styles": path.resolve(__dirname, "./public/styles"),
+    };
+    return config;
+  },
   images: {
     domains: ["example.com"], // 外部画像のホスト名を追加
     remotePatterns: [
