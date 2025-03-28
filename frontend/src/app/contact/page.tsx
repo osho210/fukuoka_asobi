@@ -1,7 +1,7 @@
 'use client';
 import { Header } from '@/components/Header';
 import Footer from '@/components/Footer';
-import '../../../public/styles/common.css';
+import '@styles/common.css';
 import './contact.css';
 
 export default function ContactPage() {

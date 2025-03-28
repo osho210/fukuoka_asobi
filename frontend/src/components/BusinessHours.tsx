@@ -1,5 +1,5 @@
 'use client';
-import '../../public/styles/BusinessHour.css';
+import '@styles/BusinessHour.css';
 
 interface OpeningHourList {
   dayOfWeek: string;

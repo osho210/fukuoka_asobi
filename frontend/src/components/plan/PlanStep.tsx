@@ -4,7 +4,7 @@ import { PlanDetail } from '@/types/plan';
 import { formatTime, formatTravelTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
 import styles from '@/styles/GeneratedPlan.module.css';
-import '../../../public/styles/PlayPlanDetail.css';
+import '@styles/PlayPlanDetail.css';
 
 interface PlanStepProps {
   detail: PlanDetail;

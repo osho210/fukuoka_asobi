@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../public/styles/HamburgerMenu.css';
+import '@styles/HamburgerMenu.css';
 import Link from 'next/link';
 
 const HamburgerMenu = () => {

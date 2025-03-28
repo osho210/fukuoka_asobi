@@ -6,8 +6,8 @@ import Image from 'next/image';
 import HamburgerMenu from '@/components/HamburgerMenu';
 import Footer from '@/components/Footer';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
-import '../../../../public/styles/common.css';
-import '../../../../public/styles/PlayPlanDetail.css';
+import '@styles/common.css';
+import '@styles/PlayPlanDetail.css';
 import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 
 // GraphQLクエリの定義

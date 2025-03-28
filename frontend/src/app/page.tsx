@@ -8,11 +8,11 @@ import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
 import RecommendedEvent from '@/components/RecommendedEvent'
 import RecommendedNews from '@/components/RecommendedNews'
-import '../../public/styles/common.css';
-import '../../public/styles/PlayPlanList.css';
-import '../../public/styles/RecommendedSpot.css';
-import '../../public/styles/RecommendedEvent.css';
-import '../../public/styles/RecommendedNews.css';
+import '@styles/common.css';
+import '@styles/PlayPlanList.css';
+import '@styles/RecommendedSpot.css';
+import '@styles/RecommendedEvent.css';
+import '@styles/RecommendedNews.css';
 
 export default function Home() {
   return (
