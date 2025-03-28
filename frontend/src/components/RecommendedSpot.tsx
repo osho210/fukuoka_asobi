@@ -1,35 +1,10 @@
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Spot } from '../types/spot';
-
-// GraphQLクエリの定義
-const GET_RECOMMENDED_SPOTS = gql`
-  query GetRecommendedSpots {
-    spots {
-      id
-      spotName
-      spotType
-      address
-      reviewRating
-      reviewCount
-      imageUrl
-      district {
-        districtName
-      }
-      categories {
-        name
-      }
-    }
-  }
-`;
-
-interface RecommendedSpotsData {
-  spots: Spot[];
-}
+import { GET_RECOMMENDED_SPOTS, GetRecommendedSpotsQuery } from '@/graphql/getRecommendedSpots';
 
 const RecommendedSpot = () => {
-  const { loading, error, data } = useQuery<RecommendedSpotsData>(GET_RECOMMENDED_SPOTS);
+  const { loading, error, data } = useQuery<GetRecommendedSpotsQuery>(GET_RECOMMENDED_SPOTS);
 
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました: {error.message}</p>;

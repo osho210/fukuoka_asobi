@@ -1,0 +1,17 @@
+query GetRecommendedSpots {
+  spots {
+    id
+    spotName
+    spotType
+    address
+    reviewRating
+    reviewCount
+    imageUrl
+    district {
+      districtName
+    }
+    categories {
+      name
+    }
+  }
+}

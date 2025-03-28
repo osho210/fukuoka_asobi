@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
+import { GeneratePlanMutation, GeneratePlanMutationVariables } from '@/__generated__/types';
 
+// .graphqlファイルからクエリをインポート
 export const GENERATE_PLAN = gql`
   mutation GeneratePlan(
     $areas: [ID!]!,
@@ -69,3 +71,5 @@ export const GENERATE_PLAN = gql`
     }
   }
 `;
+
+export type { GeneratePlanMutation, GeneratePlanMutationVariables };

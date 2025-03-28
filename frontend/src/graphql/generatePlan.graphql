@@ -10,11 +10,11 @@ mutation GeneratePlan(
   generatePlan(
     areas: $areas,
     date: $date,
-    member_info: $memberInfo,
+    memberInfo: $memberInfo,
     budget: $budget,
-    start_time: $startTime,
-    end_time: $endTime,
-    custom_options: $customOptions
+    startTime: $startTime,
+    endTime: $endTime,
+    customOptions: $customOptions
   ) {
     plan {
       id

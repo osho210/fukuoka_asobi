@@ -1,14 +1,14 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import HamburgerMenu from '@/components/HamburgerMenu';
 import Footer from '@/components/Footer';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
 import '../../../../public/styles/common.css';
 import '../../../../public/styles/PlayPlanDetail.css';
-import 
+import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 
 // GraphQLクエリの定義
 export default function PlanDetailPage() {

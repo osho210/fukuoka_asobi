@@ -1,0 +1,15 @@
+query GetRecommendedEvents {
+  events(limit: 5, upcoming: true) {
+    id
+    title
+    location
+    startDatetime
+    endDatetime
+    bannerImage
+    isOnline
+    eventCategory {
+      id
+      name
+    }
+  }
+}

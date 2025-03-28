@@ -1,7 +1,7 @@
 'use client';
 
-import { useQuery, gql } from '@apollo/client';
-import { GetPlayPlansQuery, GetPlayPlansQueryVariables } from '@/__generated__/types';
+import { useQuery } from '@apollo/client';
+import { GET_PLAY_PLANS, GetPlayPlansQuery, GetPlayPlansQueryVariables } from '@/graphql/playPlans';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,33 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 
-// 生成された型を使用
-
 const PlayPlanList = () => {
-// graphqlファイルからクエリをインポート
-const GET_PLAY_PLANS = gql`
-  query GetPlayPlans($limit: Int) {
-    playPlans(limit: $limit) {
-      id
-      planName
-      description
-      imageUrl
-      location
-      tripType
-      totalBudget
-      rating
-      reviewCount
-      favoriteCount
-      status
-      user {
-        id
-        username
-        profileImageUrl
-        role
-      }
-    }
-  }
-`;
 
   const { loading, error, data } = useQuery<GetPlayPlansQuery, GetPlayPlansQueryVariables>(GET_PLAY_PLANS, {
     variables: { limit: 5 },
