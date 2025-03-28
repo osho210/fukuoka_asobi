@@ -1,41 +1,15 @@
 'use client';
 
 import React from 'react';
-import { format } from 'date-fns';
+import { PlanDetail } from '@/types/plan';
+import { formatTime } from '@/utils/dateUtils';
 import styles from '@/styles/PlanTimeline.module.css';
-
-interface TravelDetail {
-  sequenceNumber: number;
-  travelMethod: string;
-  travelTime: number;
-}
-
-interface Spot {
-  id: string;
-  spotName: string;
-}
-
-interface PlanDetail {
-  id: string;
-  stepNumber: number;
-  stepName: string;
-  startDatetime: string;
-  endDatetime: string;
-  spot: Spot;
-  travelDetails: TravelDetail[];
-}
 
 interface PlanTimelineProps {
   planDetails: PlanDetail[];
 }
 
 const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
-  // 時間フォーマット（HH:mm）
-  const formatTime = (dateTimeStr: string) => {
-    const date = new Date(dateTimeStr);
-    return format(date, 'HH:mm');
-  };
-
   // 移動手段のアイコン
   const getTravelMethodIcon = (method: string) => {
     switch (method) {
@@ -53,7 +27,7 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
   };
 
   // 移動時間の表示（分→時間分）
-  const formatTravelTime = (minutes: number) => {
+  const formatLocalTravelTime = (minutes: number) => {
     if (minutes < 60) {
       return `${minutes}分`;
     }
@@ -62,13 +36,19 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
     return mins > 0 ? `${hours}時間${mins}分` : `${hours}時間`;
   };
 
+  // 安全に日付を計算する関数
+  const calculateDuration = (startTime?: string, endTime?: string) => {
+    if (!startTime || !endTime) return 0;
+    return Math.round((new Date(endTime).getTime() - new Date(startTime).getTime()) / 60000);
+  };
+
   return (
     <div className={styles.timelineContainer}>
       {planDetails.map((detail, index) => (
         <React.Fragment key={detail.id}>
           <div className={styles.timelineItem}>
             <div className={styles.timelineTime}>
-              {formatTime(detail.startDatetime)}
+              {detail.startDatetime && formatTime(detail.startDatetime)}
             </div>
             <div className={styles.timelinePoint}>
               <div className={styles.timelinePointDot}></div>
@@ -82,18 +62,20 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
           </div>
 
           {/* 滞在時間 */}
-          <div className={styles.timelineStay}>
-            <div className={styles.timelineStayLine}></div>
-            <div className={styles.timelineStayDuration}>
-              滞在: {Math.round((new Date(detail.endDatetime).getTime() - new Date(detail.startDatetime).getTime()) / 60000)}分
+          {detail.startDatetime && detail.endDatetime && (
+            <div className={styles.timelineStay}>
+              <div className={styles.timelineStayLine}></div>
+              <div className={styles.timelineStayDuration}>
+                滞在: {calculateDuration(detail.startDatetime, detail.endDatetime)}分
+              </div>
             </div>
-          </div>
+          )}
 
           {/* 移動情報（最後のスポット以外） */}
-          {index < planDetails.length - 1 && detail.travelDetails.length > 0 && (
+          {index < planDetails.length - 1 && detail.travelDetails && detail.travelDetails.length > 0 && (
             <div className={styles.timelineTravel}>
               <div className={styles.timelineTime}>
-                {formatTime(detail.endDatetime)}
+                {detail.endDatetime && formatTime(detail.endDatetime)}
               </div>
               <div className={styles.timelineTravelLine}>
                 <div className={styles.timelineTravelIcon}>
@@ -108,7 +90,7 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
                    detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
                 </div>
                 <div className={styles.timelineTravelTime}>
-                  {formatTravelTime(detail.travelDetails[0].travelTime)}
+                  {formatLocalTravelTime(detail.travelDetails[0].travelTime)}
                 </div>
               </div>
             </div>
@@ -117,7 +99,7 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
       ))}
 
       {/* 最終時間 */}
-      {planDetails.length > 0 && (
+      {planDetails.length > 0 && planDetails[planDetails.length - 1].endDatetime && (
         <div className={styles.timelineItem}>
           <div className={styles.timelineTime}>
             {formatTime(planDetails[planDetails.length - 1].endDatetime)}

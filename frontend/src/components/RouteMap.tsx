@@ -1,27 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { TravelRoute } from '@/types/plan';
+import { formatTravelTime } from '@/utils/dateUtils';
 import styles from '@/styles/RouteMap.module.css';
-
-interface TravelSegment {
-  fromSpot: {
-    id: string;
-    spotName: string;
-  };
-  toSpot: {
-    id: string;
-    spotName: string;
-  };
-  distance: number;
-  travelTime: number;
-  travelMethod: string;
-}
-
-interface TravelRoute {
-  totalDistance: number;
-  totalTravelTime: number;
-  travelSegments: TravelSegment[];
-}
 
 interface RouteMapProps {
   travelRoute: TravelRoute;
@@ -60,16 +42,6 @@ const RouteMap: React.FC<RouteMapProps> = ({ travelRoute }) => {
       default:
         return 'その他';
     }
-  };
-
-  // 移動時間の表示（分→時間分）
-  const formatTravelTime = (minutes: number) => {
-    if (minutes < 60) {
-      return `${minutes}分`;
-    }
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return mins > 0 ? `${hours}時間${mins}分` : `${hours}時間`;
   };
 
   useEffect(() => {

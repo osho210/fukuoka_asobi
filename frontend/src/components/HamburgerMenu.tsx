@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../public/styles/HamburgerMenu.css';
+import Link from 'next/link';
 
 const HamburgerMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,16 +23,16 @@ const HamburgerMenu = () => {
                         </div>
                         <ul className='modal-content__links'>
                             <li className='modal-content__link'>
-                                <a href='login'>ログイン</a>
+                                <Link href='/login'>ログイン</Link>
                             </li>
                             <li className='modal-content__link'>
-                                <a href='#'>遊びを計画する</a>
+                                <Link href='/plans'>遊びを計画する</Link>
                             </li>
                             <li className='modal-content__link'>
-                                <a href='#'>福岡遊び日記日記とは</a>
+                                <Link href='/about'>福岡遊び日記とは</Link>
                             </li>
                             <li className='modal-content__link'>
-                                <a href='#'>お問い合わせ</a>
+                                <Link href='/contact'>お問い合わせ</Link>
                             </li>
                         </ul>
                     </div>
