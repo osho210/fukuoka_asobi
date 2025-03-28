@@ -1,12 +1,75 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { SearchParams } from '@/types/search';
 import NormalSearchTab from './NormalSearchTab';
 import CustomSearchTab from './CustomSearchTab';
 import TabSelector from '@/components/common/TabSelector';
 import Button from '@/components/common/Button';
+import GeneratedPlanView from '@/components/GeneratedPlanView';
 import styles from '@/styles/SearchForm.module.css';
+
+// GraphQLクエリのインポート
+import { GENERATE_PLAN } from '../../graphql/generatePlan';
+
+// 生成されたプランの型定義
+interface TravelDetail {
+  sequenceNumber: number;
+  travelMethod: string;
+  travelTime: number;
+}
+
+interface Spot {
+  id: string;
+  spotName: string;
+  address: string;
+  catchphrase: string;
+  imageUrl: string;
+}
+
+interface PlanDetail {
+  id: string;
+  stepNumber: number;
+  stepName: string;
+  stepDescription: string;
+  startDatetime: string;
+  endDatetime: string;
+  budget: number;
+  spot: Spot;
+  travelDetails: TravelDetail[];
+}
+
+interface TravelSegment {
+  fromSpot: {
+    id: string;
+    spotName: string;
+  };
+  toSpot: {
+    id: string;
+    spotName: string;
+  };
+  distance: number;
+  travelTime: number;
+  travelMethod: string;
+}
+
+interface TravelRoute {
+  totalDistance: number;
+  totalTravelTime: number;
+  travelSegments: TravelSegment[];
+}
+
+interface GeneratedPlan {
+  id: string;
+  planName: string;
+  description: string;
+  totalBudget: number;
+  startDatetime: string;
+  endDatetime: string;
+  planDetails: PlanDetail[];
+  travelRoute: TravelRoute;
+}
 
 // 検索タブの定義
 enum SearchTab {
@@ -26,6 +89,18 @@ const SearchContainer: React.FC = () => {
     budget: { min: 0, max: 20000 },
   });
 
+  // 生成されたプラン
+  const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(null);
+
+  // ローディング状態
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // エラーメッセージ
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // GraphQL Mutation
+  const [generatePlan] = useMutation(GENERATE_PLAN);
+
   // 検索条件の更新
   const updateSearchParams = (updates: Partial<SearchParams>) => {
     setSearchParams((prev) => ({ ...prev, ...updates }));
@@ -33,7 +108,24 @@ const SearchContainer: React.FC = () => {
 
   // 検索を実行
   const handleSearch = async () => {
-    console.log('作成条件:', searchParams);
+    // 必須項目のバリデーション
+    if (!searchParams.date) {
+      setErrorMessage('日付を選択してください');
+      return;
+    }
+
+    if (searchParams.areas.length === 0) {
+      setErrorMessage('エリアを選択してください');
+      return;
+    }
+
+    if (searchParams.memberInfo.recommendedForIds.length === 0) {
+      setErrorMessage('利用メンバーを選択してください');
+      return;
+    }
+
+    setErrorMessage(null);
+    setIsLoading(true);
 
     try {
       // GraphQLクエリのパラメータを準備
@@ -42,29 +134,40 @@ const SearchContainer: React.FC = () => {
         date: searchParams.date,
         memberInfo: searchParams.memberInfo,
         budget: searchParams.budget,
+        startTime: searchParams.startTime,
+        endTime: searchParams.endTime,
         customOptions: searchParams.customOptions
       };
 
+      console.log('プラン生成パラメータ:', variables);
+
       // GraphQLクエリを実行
-      // 注: 実際の実装では、Apollo Clientなどを使用してクエリを実行します
-      // const { data } = await client.query({
-      //   query: SEARCH_PLANS_QUERY,
-      //   variables
-      // });
+      const { data } = await generatePlan({ variables });
 
-      // 検索結果を処理
-      // setSearchResults(data.searchPlans);
+      // 生成されたプランを設定
+      if (data.generatePlan.errors && data.generatePlan.errors.length > 0) {
+        setErrorMessage(data.generatePlan.errors.join(', '));
+        return;
+      }
 
-      // 検索結果画面に遷移
-      // router.push('/search/results');
-
-      // 開発中は結果をコンソールに出力
-      console.log('検索パラメータ:', variables);
-      alert('検索機能は開発中です。検索条件がコンソールに出力されました。');
+      setGeneratedPlan(data.generatePlan.plan);
     } catch (error) {
-      console.error('検索エラー:', error);
-      alert('検索中にエラーが発生しました。');
+      console.error('プラン生成エラー:', error);
+      setErrorMessage('プラン生成中にエラーが発生しました。入力内容を確認してください。');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // プラン生成をリセット
+  const resetPlan = () => {
+    setGeneratedPlan(null);
+  };
+
+  // プランを保存
+  const savePlan = () => {
+    alert('プランを保存しました！');
+    // 実際の実装では、保存APIを呼び出す
   };
 
   // タブの定義
@@ -72,6 +175,19 @@ const SearchContainer: React.FC = () => {
     { id: SearchTab.Normal, label: '通常作成' },
     { id: SearchTab.Custom, label: 'カスタム条件' },
   ];
+
+  // 生成されたプランがある場合はそれを表示
+  if (generatedPlan) {
+    return (
+      <div className={styles.searchResultContainer}>
+        <GeneratedPlanView
+          plan={generatedPlan}
+          onSave={savePlan}
+          onEdit={resetPlan}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.searchFormContainer}>
@@ -93,12 +209,18 @@ const SearchContainer: React.FC = () => {
           />
         )}
       </div>
+      {errorMessage && (
+        <div className={styles.errorMessage}>
+          {errorMessage}
+        </div>
+      )}
       <div className={styles.buttonContainer}>
         <Button
           onClick={handleSearch}
           className={styles.nextButton}
+          disabled={isLoading}
         >
-          プランを作成する
+          {isLoading ? 'プラン生成中...' : 'プランを作成する'}
         </Button>
       </div>
     </div>

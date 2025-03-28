@@ -105,7 +105,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
     if (searchParams.areas.length === 0) {
       return 'エリアを選択';
     }
-    return `${searchParams.areas.length}エリア選択中`;
+    return `${[...searchParams.areas]}`;
   };
 
   // 選択された日時の表示

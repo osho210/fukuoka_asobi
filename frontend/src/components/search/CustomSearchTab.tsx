@@ -15,6 +15,7 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   searchParams,
   updateSearchParams,
 }) => {
+  const { themeOptions, transportationOptions, categoryOptions } = useOptions();
   // モーダルの表示状態
   const [isTransportationModalOpen, setIsTransportationModalOpen] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);

@@ -1,0 +1,21 @@
+query GetPlayPlans($limit: Int) {
+  playPlans(limit: $limit) {
+    id
+    planName
+    description
+    imageUrl
+    location
+    tripType
+    totalBudget
+    rating
+    reviewCount
+    favoriteCount
+    status
+    user {
+      id
+      username
+      profileImageUrl
+      role
+    }
+  }
+}

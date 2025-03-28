@@ -1,92 +1,16 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import HamburgerMenu from '@/components/HamburgerMenu';
 import Footer from '@/components/Footer';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
 import '../../../../public/styles/common.css';
 import '../../../../public/styles/PlayPlanDetail.css';
+import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 
 // GraphQLクエリの定義
-const GET_PLAY_PLAN = gql`
-  query GetPlayPlan($id: Int!) {
-    playPlan(id: $id) {
-      id
-      planName
-      description
-      imageUrl
-      location
-      tripType
-      totalBudget
-      rating
-      reviewCount
-      favoriteCount
-      status
-      startDatetime
-      endDatetime
-      tags
-      createdAt
-      updatedAt
-      recommendedFors {
-        id
-        name
-      }
-      plannerTitle
-      plannerDescription
-      user {
-        id
-        username
-        profileImageUrl
-        role
-      }
-      planDetails {
-        id
-        stepNumber
-        stepName
-        stepDescription
-        comment
-        startDatetime
-        endDatetime
-        budget
-        notes
-        plannerTitle
-        plannerDescription
-        spot {
-          id
-          spotName
-          address
-          phoneNumber
-          website
-          catchphrase
-          reviewRating
-          reviewCount
-          instagramUrl
-          budgetRange
-          imageUrl
-          theme
-          isRainyOk
-          parkingAvailable
-          closedDays
-          district {
-            id
-            districtName
-          }
-          categories {
-            id
-            name
-          }
-          openingHourList {
-            dayOfWeek
-            businessHour
-          }
-        }
-      }
-    }
-  }
-`;
-
 export default function PlanDetailPage() {
   const params = useParams();
   const id = parseInt(params.id as string, 10);

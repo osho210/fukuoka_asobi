@@ -11,10 +11,16 @@ query GetPlayPlans($limit: Int) {
     reviewCount
     favoriteCount
     status
+    user {
+      id
+      username
+      profileImageUrl
+      role
+    }
   }
 }
 
-query GetPlayPlan($id: ID!) {
+query GetPlayPlan($id: Int!) {
   playPlan(id: $id) {
     id
     planName
@@ -30,7 +36,7 @@ query GetPlayPlan($id: ID!) {
     startDatetime
     endDatetime
     tags
-    recommendedFor
+    recommendedForString
     planDetails {
       id
       stepNumber
@@ -43,7 +49,7 @@ query GetPlayPlan($id: ID!) {
       notes
       spot {
         id
-        storeName
+        spotName
         address
         catchphrase
       }

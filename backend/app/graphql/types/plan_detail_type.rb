@@ -29,5 +29,11 @@ module Types
     def play_plan
       object.play_plan
     end
+
+    # 関連する移動詳細情報を取得
+    field :travel_details, [Types::TravelDetailType], null: false
+    def travel_details
+      object.travel_details
+    end
   end
 end

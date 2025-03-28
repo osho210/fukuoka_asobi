@@ -117,5 +117,8 @@ module Types
     field :theme_options, resolver: Resolvers::ThemeOptionsResolver
     field :transportation_options, resolver: Resolvers::TransportationOptionsResolver
     field :category_options, resolver: Resolvers::CategoryOptionsResolver
+
+    # プラン生成
+    field :generate_plan, resolver: Resolvers::GeneratePlanResolver
   end
 end

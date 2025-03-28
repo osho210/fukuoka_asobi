@@ -21,7 +21,7 @@ query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $bud
       stepDescription
       spot {
         id
-        name
+        spotName
         address
         catchphrase
       }

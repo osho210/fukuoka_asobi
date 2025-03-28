@@ -1,37 +1,14 @@
 'use client';
 
-import { useQuery, gql } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Event } from '../types/event';
 import { formatDate } from '../lib/dateUtils';
 import '../../public/styles/RecommendedEvent.css';
-
-// GraphQLクエリの定義
-const GET_RECOMMENDED_EVENTS = gql`
-  query GetRecommendedEvents {
-    events(limit: 5, upcoming: true) {
-      id
-      title
-      location
-      startDatetime
-      endDatetime
-      bannerImage
-      isOnline
-      eventCategory {
-        id
-        name
-      }
-    }
-  }
-`;
-
-interface RecommendedEventsData {
-  events: Event[];
-}
+import { GET_RECOMMENDED_EVENTS, GetRecommendedEventsQuery } from '@/graphql/getRecommendedEvents';
 
 const RecommendedEvent = () => {
-  const { loading, error, data } = useQuery<RecommendedEventsData>(GET_RECOMMENDED_EVENTS);
+  const { loading, error, data } = useQuery<GetRecommendedEventsQuery>(GET_RECOMMENDED_EVENTS);
 
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました: {error.message}</p>;

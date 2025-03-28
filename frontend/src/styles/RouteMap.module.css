@@ -1,0 +1,76 @@
+.routeMapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.routeMapCanvas {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.routeMapLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.legendLabel {
+  font-size: 13px;
+  color: #333;
+}
+
+.routeMapInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.routeMapInfoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoLabel {
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.infoValue {
+  color: #333;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .routeMapContainer {
+    flex-direction: column;
+  }
+
+  .routeMapLegend, .routeMapInfo {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
