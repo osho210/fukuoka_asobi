@@ -351,6 +351,7 @@ module Services
         spot_budget = budget_values[item[:spot].budget_range] || budget_values["普通"]
 
         # PlanDetailを作成
+        # TODO: 将来的にはここもdbに保存するが現在は不要なデータを増やすのみのため後ほど実装
         plan_detail = play_plan.plan_details.build(
           id: SecureRandom.random_number(10000),
           step_number: index + 1,

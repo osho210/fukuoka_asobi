@@ -26,7 +26,7 @@ const HamburgerMenu = () => {
                                 <Link href='/login'>ログイン</Link>
                             </li>
                             <li className='modal-content__link'>
-                                <Link href='/plans'>遊びを計画する</Link>
+                                <Link href='/search'>遊びを計画する</Link>
                             </li>
                             <li className='modal-content__link'>
                                 <Link href='/about'>福岡遊び日記とは</Link>
