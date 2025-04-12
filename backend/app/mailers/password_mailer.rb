@@ -13,7 +13,7 @@ class PasswordMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      subject: '【福岡遊び】パスワード再設定のご案内'
+      subject: '【福岡遊び日記】パスワード再設定のご案内'
     )
   end
 end

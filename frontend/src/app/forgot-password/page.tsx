@@ -5,7 +5,7 @@ import '@styles/Auth.css';
 import ForgotPassword from '@/components/auth/ForgotPassword';
 
 export const metadata = {
-    title: 'パスワードをお忘れの方 | 福岡遊び',
+    title: 'パスワードをお忘れの方 | 福岡遊び日記',
     description: 'パスワードをお忘れの方はこちらからパスワードリセットのリクエストを行ってください。',
 };
 
