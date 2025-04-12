@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import ResetPassword from '@/components/auth/ResetPassword';
 
 export const metadata = {
-  title: 'パスワード再設定 | 福岡遊び',
+  title: 'パスワード再設定 | 福岡遊び日記',
   description: '新しいパスワードを設定してください。',
 };
 
