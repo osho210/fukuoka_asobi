@@ -44,7 +44,7 @@ class User < ApplicationRecord
 
       # トークンを保存（Deviseの方法を使用せず、直接保存）
       self.reset_password_token = raw_token
-      self.reset_password_sent_at = Time.now.jst
+      self.reset_password_sent_at = Time.now.current
       save!
 
       # 生のトークンを返す（メール送信用）
@@ -54,7 +54,7 @@ class User < ApplicationRecord
       # エラーが発生した場合でも処理を続行
       raw_token = SecureRandom.hex(10)
       self.reset_password_token = raw_token
-      self.reset_password_sent_at = Time.now.jst
+      self.reset_password_sent_at = Time.now.current
       save(validate: false)
       raw_token
     end
@@ -62,7 +62,7 @@ class User < ApplicationRecord
 
   # パスワードリセットトークンの有効期限をチェック
   def password_token_valid?
-    reset_password_sent_at.present? && (reset_password_sent_at + 2.hours) > Time.now.jst
+    reset_password_sent_at.present? && (reset_password_sent_at + 2.hours) > Time.now.current
   end
 
   # パスワードをリセット
