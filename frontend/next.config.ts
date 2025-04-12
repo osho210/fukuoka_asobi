@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
         source: '/graphql',
         destination: 'http://localhost:3000/graphql',
       },
+      {
+        source: '/letter_opener/:path*',
+        destination: 'http://localhost:3000/letter_opener',
+      },
     ];
   },
 };

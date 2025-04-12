@@ -1,4 +1,29 @@
 /* 認証関連の共通スタイル */
+
+/* ローディング表示 */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666666;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* ページレイアウト */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem 0;
+}
+
 .auth-container {
   max-width: 400px;
   margin: 0 auto;
@@ -14,6 +39,42 @@
   margin-bottom: 1.5rem;
   text-align: center;
   color: #333333;
+}
+
+/* 説明文 */
+.auth-description {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #666666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* メッセージ表示 */
+.message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.message.success {
+  background-color: #e6f7e6;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.message.error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.redirect-notice {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  font-style: italic;
 }
 
 .auth-form {
@@ -57,7 +118,9 @@
   margin-top: 0.25rem;
 }
 
-.auth-button {
+/* ボタン */
+.auth-button,
+.submit-button {
   padding: 0.75rem;
   background-color: #c47a5d;
   color: white;
@@ -67,17 +130,21 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
+  width: 100%;
 }
 
-.auth-button:hover {
+.auth-button:hover,
+.submit-button:hover {
   background-color: #b36c4f;
 }
 
-.auth-button:disabled {
+.auth-button:disabled,
+.submit-button:disabled {
   background-color: #e0c0b0;
   cursor: not-allowed;
 }
 
+/* リンク */
 .auth-link {
   color: #c47a5d;
   text-decoration: none;
@@ -89,6 +156,13 @@
 
 .auth-link:hover {
   text-decoration: underline;
+}
+
+/* リンク領域 */
+.auth-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 
 .social-buttons {
@@ -225,5 +299,13 @@
     padding: 1.5rem;
     border-radius: 0;
     box-shadow: none;
+  }
+
+  .auth-page {
+    padding: 1rem 0;
+  }
+
+  .message {
+    padding: 0.75rem;
   }
 }
