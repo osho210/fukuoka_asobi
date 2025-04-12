@@ -35,4 +35,53 @@ class User < ApplicationRecord
   def paid_member?
     is_paid_member && paid_end_date && paid_end_date >= Date.today
   end
+
+  # パスワードリセット用のトークンを生成して保存
+  def generate_password_token!
+    begin
+      # 独自のトークン生成ロジックを使用
+      raw_token = generate_token
+
+      # トークンを保存（Deviseの方法を使用せず、直接保存）
+      self.reset_password_token = raw_token
+      self.reset_password_sent_at = Time.now.jst
+      save!
+
+      # 生のトークンを返す（メール送信用）
+      raw_token
+    rescue => e
+      Rails.logger.error "パスワードトークン生成エラー: #{e.message}"
+      # エラーが発生した場合でも処理を続行
+      raw_token = SecureRandom.hex(10)
+      self.reset_password_token = raw_token
+      self.reset_password_sent_at = Time.now.jst
+      save(validate: false)
+      raw_token
+    end
+  end
+
+  # パスワードリセットトークンの有効期限をチェック
+  def password_token_valid?
+    reset_password_sent_at.present? && (reset_password_sent_at + 2.hours) > Time.now.jst
+  end
+
+  # パスワードをリセット
+  def reset_password!(password)
+    begin
+      self.reset_password_token = nil
+      self.reset_password_sent_at = nil
+      self.password = password
+      save
+    rescue => e
+      Rails.logger.error "パスワードリセットエラー: #{e.message}"
+      false
+    end
+  end
+
+  private
+
+  # ランダムなトークンを生成
+  def generate_token
+    SecureRandom.hex(20)
+  end
 end
