@@ -13,5 +13,13 @@ module Types
     field :create_play_plan, mutation: Mutations::CreatePlayPlan
     field :update_play_plan, mutation: Mutations::UpdatePlayPlan
     field :generate_plan, mutation: Mutations::GeneratePlan
+
+    # ユーザープロフィール関連
+    field :update_user_profile, mutation: Mutations::UpdateUserProfile
+
+    # ブックマーク関連
+    field :create_bookmark, mutation: Mutations::CreateBookmark
+    field :update_bookmark, mutation: Mutations::UpdateBookmark
+    field :delete_bookmark, mutation: Mutations::DeleteBookmark
   end
 end

@@ -123,5 +123,11 @@ module Types
 
     # 現在のユーザー
     field :current_user, resolver: Resolvers::CurrentUserResolver
+
+    # ユーザーの作成したプラン
+    field :user_play_plans, resolver: Resolvers::UserPlayPlansResolver
+
+    # ユーザーのブックマーク
+    field :user_bookmarks, resolver: Resolvers::UserBookmarksResolver
   end
 end
