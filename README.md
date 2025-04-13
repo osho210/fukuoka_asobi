@@ -206,6 +206,9 @@ fukuoka-asobi/
 - `POST /api/v1/login`: ログイン
 - `POST /api/v1/signup`: 会員登録
 - `DELETE /api/v1/logout`: ログアウト
+- `/api/v1/login_user`: ログインユーザーの取得
+- `/password/forgot`: パスワードリセット
+- `api/password/reset`: パスワードリセット実行
 
 ### ルーティング設定
 

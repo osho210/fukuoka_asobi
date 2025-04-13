@@ -2,11 +2,14 @@
 
 import { ApolloProvider } from '@apollo/client';
 import client from '@/lib/apolloClient';
+import { AuthProvider } from '@/lib/auth/AuthContext';
 
 export default function ApolloWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ApolloProvider client={client}>
-      {children}
+      <AuthProvider>
+        {children}
+      </AuthProvider>
     </ApolloProvider>
   );
 }

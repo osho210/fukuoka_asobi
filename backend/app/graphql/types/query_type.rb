@@ -120,5 +120,8 @@ module Types
 
     # プラン生成
     field :generate_plan, resolver: Resolvers::GeneratePlanResolver
+
+    # 現在のユーザー
+    field :current_user, resolver: Resolvers::CurrentUserResolver
   end
 end
