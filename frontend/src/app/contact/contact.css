@@ -146,6 +146,43 @@
   font-weight: bold;
 }
 
+/* エラーメッセージとフォームエラー表示 */
+.contact-form-input-error {
+  border-color: #e74c3c !important;
+}
+
+.contact-form-error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.contact-form-help {
+  color: #777;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.contact-success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contact-error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .contact-page {

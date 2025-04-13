@@ -22,31 +22,31 @@ RSpec.describe Event, type: :model do
     it 'titleがなければ無効であること' do
       event = Event.new(title: nil)
       event.valid?
-      expect(event.errors[:title]).to include("can't be blank")
+      expect(event.errors[:title]).to include("を入力してください")
     end
 
     it 'descriptionがなければ無効であること' do
       event = Event.new(description: nil)
       event.valid?
-      expect(event.errors[:description]).to include("can't be blank")
+      expect(event.errors[:description]).to include("を入力してください")
     end
 
     it 'locationがなければ無効であること' do
       event = Event.new(location: nil)
       event.valid?
-      expect(event.errors[:location]).to include("can't be blank")
+      expect(event.errors[:location]).to include("を入力してください")
     end
 
     it 'start_datetimeがなければ無効であること' do
       event = Event.new(start_datetime: nil)
       event.valid?
-      expect(event.errors[:start_datetime]).to include("can't be blank")
+      expect(event.errors[:start_datetime]).to include("を入力してください")
     end
 
     it 'end_datetimeがなければ無効であること' do
       event = Event.new(end_datetime: nil)
       event.valid?
-      expect(event.errors[:end_datetime]).to include("can't be blank")
+      expect(event.errors[:end_datetime]).to include("を入力してください")
     end
 
     it 'end_datetimeがstart_datetimeより前の場合は無効であること' do

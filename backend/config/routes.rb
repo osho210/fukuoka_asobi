@@ -23,6 +23,11 @@ Rails.application.routes.draw do
 
       # ユーザー情報
       get 'login_user', to: 'users#login_user'
+
+      # お問い合わせ
+      post 'contact', to: 'contacts#create'
+      get 'contacts', to: 'contacts#index'
+      get 'contacts/:id', to: 'contacts#show'
     end
   end
 

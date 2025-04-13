@@ -13,7 +13,7 @@ RSpec.describe EventCategory, type: :model do
     it 'nameがなければ無効であること' do
       event_category = EventCategory.new(name: nil)
       event_category.valid?
-      expect(event_category.errors[:name]).to include("can't be blank")
+      expect(event_category.errors[:name]).to include("を入力してください")
     end
   end
 
