@@ -13,8 +13,8 @@ module Mutations
       current_user = context[:current_user]
 
       if current_user
-        # JTIを更新してトークンを無効化
-        current_user.update(jti: SecureRandom.uuid)
+        # Cookieを削除
+        context[:controller].send(:clear_user_cookie)
 
         {
           success: true,

@@ -17,9 +17,12 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       # 認証関連
-      post 'login', to: 'auth#login'
+      post 'login', to: 'sessions#create'
       post 'signup', to: 'auth#signup'
-      delete 'logout', to: 'auth#logout'
+      delete 'logout', to: 'sessions#destroy'
+
+      # ユーザー情報
+      get 'login_user', to: 'users#login_user'
     end
   end
 

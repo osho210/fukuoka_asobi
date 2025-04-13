@@ -41,12 +41,11 @@ const Login = () => {
           email: formData.email,
           password: formData.password
         }),
+        credentials: 'include', // Cookieを送受信するために必要
       });
 
       if (response.ok) {
-        const data = await response.json();
-        // ログイン成功時の処理（トークンの保存など）
-        localStorage.setItem('token', data.token);
+        // ログイン成功時の処理
         // ホーム画面などへリダイレクト
         window.location.href = '/';
       } else {

@@ -11,6 +11,7 @@ module Mutations
     # 出力フィールド
     field :user, Types::UserType, null: true
     field :token, String, null: true
+    field :success, Boolean, null: false
     field :errors, [String], null: false
 
     def resolve(email:, password:)
@@ -19,12 +20,16 @@ module Mutations
 
       # ユーザーが存在し、パスワードが正しい場合
       if user&.valid_password?(password)
-        # JWTトークンを生成
+        # Cookieを設定
+        context[:controller].send(:set_user_cookie, user)
+
+        # JWTトークンを生成（互換性のために残す）
         token = generate_token(user)
 
         {
           user: user,
           token: token,
+          success: true,
           errors: []
         }
       else
