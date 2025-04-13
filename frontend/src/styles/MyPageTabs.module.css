@@ -1,0 +1,37 @@
+.mypage-tabs-container {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.mypage-tab-button {
+  text-align: center;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  background: #fff;
+  border: #CB6B52 0.5px solid;
+  cursor: pointer;
+}
+
+.mypage-tab-button:focus {
+  outline: none;
+}
+
+.mypage-tab-active {
+  background: #CB6B52;
+  color: #fff;
+}
+
+.mypage-tab-inactive {
+  color: #CB6B52;
+}
+
+.mypage-tab-inactive:hover {
+  color: #374151;
+}
+
+.mypage-tab-content {
+  padding: 20px 0;
+}

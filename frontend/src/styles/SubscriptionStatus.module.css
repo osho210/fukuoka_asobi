@@ -1,0 +1,150 @@
+.subscription-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.subscription-header {
+  margin-bottom: 20px;
+}
+
+.subscription-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.subscription-status-card {
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.subscription-status-icon {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  margin-right: 24px;
+}
+
+.subscription-icon-paid {
+  color: #10B981;
+  width: 100%;
+  height: 100%;
+}
+
+.subscription-icon-free {
+  color: #6B7280;
+  width: 100%;
+  height: 100%;
+}
+
+.subscription-status-info {
+  flex-grow: 1;
+}
+
+.subscription-status-type {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #1F2937;
+}
+
+.subscription-dates {
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #F3F4F6;
+  border-radius: 6px;
+}
+
+.subscription-date-item {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.subscription-date-item:last-child {
+  margin-bottom: 0;
+}
+
+.subscription-date-label {
+  font-weight: bold;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.subscription-date-value {
+  color: #4B5563;
+}
+
+.subscription-benefits {
+  margin-top: 16px;
+}
+
+.subscription-benefits-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #1F2937;
+}
+
+.subscription-benefits-list {
+  list-style: none;
+  padding: 0;
+}
+
+.subscription-benefit-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #4B5563;
+}
+
+.subscription-benefit-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 12px;
+  font-weight: bold;
+  background-color: #F3F4F6;
+  color: #9CA3AF;
+}
+
+.subscription-benefit-available {
+  background-color: #D1FAE5;
+  color: #10B981;
+}
+
+.subscription-upgrade {
+  text-align: center;
+  padding: 24px;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  border: 1px dashed #D1D5DB;
+}
+
+.subscription-upgrade-button {
+  display: inline-block;
+  background-color: #CB6B52;
+  color: white;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.subscription-upgrade-button:hover {
+  background-color: #b55a43;
+}
+
+.subscription-upgrade-note {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  color: #6B7280;
+}

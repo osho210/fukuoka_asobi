@@ -1,0 +1,57 @@
+# ユーザーのブックマーク一覧を取得するクエリ
+query GetUserBookmarks($limit: Int, $bookmarkableType: String, $category: String) {
+  userBookmarks(limit: $limit, bookmarkableType: $bookmarkableType, category: $category) {
+    id
+    bookmarkableType
+    bookmarkableId
+    title
+    note
+    category
+    createdAt
+    bookmarkable {
+      ... on PlayPlan {
+        id
+        planName
+        description
+        imageUrl
+        status
+      }
+    }
+  }
+}
+
+# ブックマークを作成するミューテーション
+mutation CreateBookmark($bookmarkableType: String!, $bookmarkableId: ID!, $title: String, $note: String, $category: String) {
+  createBookmark(input: { bookmarkableType: $bookmarkableType, bookmarkableId: $bookmarkableId, title: $title, note: $note, category: $category }) {
+    bookmark {
+      id
+      bookmarkableType
+      bookmarkableId
+      title
+      note
+      category
+    }
+    errors
+  }
+}
+
+# ブックマークを更新するミューテーション
+mutation UpdateBookmark($id: ID!, $title: String, $note: String, $category: String) {
+  updateBookmark(input: { id: $id, title: $title, note: $note, category: $category }) {
+    bookmark {
+      id
+      title
+      note
+      category
+    }
+    errors
+  }
+}
+
+# ブックマークを削除するミューテーション
+mutation DeleteBookmark($id: ID!) {
+  deleteBookmark(input: { id: $id }) {
+    success
+    errors
+  }
+}

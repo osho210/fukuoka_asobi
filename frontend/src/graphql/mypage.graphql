@@ -1,0 +1,41 @@
+# 現在のユーザー情報を取得するクエリ
+query GetCurrentUser {
+  currentUser {
+    id
+    username
+    email
+    profileImageUrl
+    bio
+    instagramUrl
+    isPaidMember
+    paidStartDate
+    paidEndDate
+  }
+}
+
+# ユーザーの作成したプラン一覧を取得するクエリ
+# query GetUserPlayPlans($limit: Int) {
+#   userPlayPlans(limit: $limit) {
+#     id
+#     planName
+#     description
+#     imageUrl
+#     status
+#     createdAt
+#     totalBudget
+#   }
+# }
+
+# ユーザープロフィール更新ミューテーション
+mutation UpdateUserProfile($username: String, $instagramUrl: String, $bio: String, $profileImageUrl: String) {
+  updateUserProfile(input: { username: $username, instagramUrl: $instagramUrl, bio: $bio, profileImageUrl: $profileImageUrl }) {
+    user {
+      id
+      username
+      instagramUrl
+      bio
+      profileImageUrl
+    }
+    errors
+  }
+}

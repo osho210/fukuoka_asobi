@@ -1,0 +1,138 @@
+.user-play-plans-container {
+  width: 100%;
+}
+
+.user-play-plans-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.user-play-plans-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.user-play-plans-create-button {
+  display: inline-block;
+  background-color: #CB6B52;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.user-play-plans-create-button:hover {
+  background-color: #b55a43;
+}
+
+.user-play-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.user-play-plans-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.user-play-plans-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.user-play-plans-card-image {
+  position: relative;
+  height: 160px;
+  background-color: #f3f4f6;
+}
+
+.user-play-plans-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-play-plans-card-no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  font-weight: bold;
+}
+
+.user-play-plans-card-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.user-play-plans-card-content {
+  padding: 16px;
+}
+
+.user-play-plans-card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.user-play-plans-card-description {
+  color: #4b5563;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.user-play-plans-card-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.user-play-plans-card-tags {
+  font-size: 0.75rem;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.user-play-plans-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: #6b7280;
+}
+
+.user-play-plans-error {
+  padding: 20px;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #b91c1c;
+}
+
+.user-play-plans-empty {
+  text-align: center;
+  padding: 40px 0;
+  color: #6b7280;
+}

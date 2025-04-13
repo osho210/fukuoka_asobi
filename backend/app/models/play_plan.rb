@@ -3,6 +3,7 @@ class PlayPlan < ApplicationRecord
   has_many :plan_details, foreign_key: :plan_id, dependent: :destroy
   has_many :play_plan_recommended_fors, dependent: :destroy
   has_many :recommended_fors, through: :play_plan_recommended_fors
+  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
 
   validates :plan_name, presence: true
 

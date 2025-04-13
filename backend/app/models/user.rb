@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :play_plans, dependent: :nullify
   has_many :news, foreign_key: :author_id, dependent: :nullify
+  has_many :bookmarks, dependent: :destroy
 
   validates :username, presence: true
   validates :email, presence: true, uniqueness: true
