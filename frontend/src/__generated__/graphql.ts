@@ -267,7 +267,7 @@ export type Mutation = {
   createPlayPlan?: Maybe<CreatePlayPlanPayload>;
   /** ブックマークを削除します */
   deleteBookmark?: Maybe<DeleteBookmarkPayload>;
-  /** 検索条件に基づいてプランを自動生成 */
+  /** 検索条件に基づいてプランを自動生成（要ログイン） */
   generatePlan?: Maybe<GeneratePlanPayload>;
   /** ブックマークを更新します */
   updateBookmark?: Maybe<UpdateBookmarkPayload>;
