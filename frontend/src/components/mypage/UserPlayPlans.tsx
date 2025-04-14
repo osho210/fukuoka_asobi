@@ -37,7 +37,7 @@ export const UserPlayPlans: React.FC = () => {
     return (
       <div className={styles['user-play-plans-empty']}>
         <p>作成したプランはありません。</p>
-        <Link href="/plans/new" className={styles['user-play-plans-create-button']}>
+        <Link href="/search" className={styles['user-play-plans-create-button']}>
           新しいプランを作成する
         </Link>
       </div>
@@ -49,7 +49,7 @@ export const UserPlayPlans: React.FC = () => {
     <div className={styles['user-play-plans-container']}>
       <div className={styles['user-play-plans-header']}>
         <h2 className={styles['user-play-plans-title']}>作成したプラン一覧</h2>
-        <Link href="/plans/new" className={styles['user-play-plans-create-button']}>
+        <Link href="/search" className={styles['user-play-plans-create-button']}>
           新しいプランを作成
         </Link>
       </div>

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 import { SearchParams } from '@/types/search';
 import NormalSearchTab from './NormalSearchTab';
 import CustomSearchTab from './CustomSearchTab';
@@ -78,6 +79,8 @@ enum SearchTab {
 }
 
 const SearchContainer: React.FC = () => {
+  const router = useRouter();
+
   // 現在のタブ
   const [activeTab, setActiveTab] = useState<SearchTab>(SearchTab.Normal);
 
@@ -147,6 +150,14 @@ const SearchContainer: React.FC = () => {
 
       // 生成されたプランを設定
       if (data.generatePlan.errors && data.generatePlan.errors.length > 0) {
+        // 認証エラーの場合はログインページにリダイレクト
+        if (data.generatePlan.errors.some((error: string) => error.includes('ログインが必要'))) {
+          // 現在のURLをクエリパラメータとして渡し、ログイン後に戻れるようにする
+          const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+          router.push(`/login?returnUrl=${returnUrl}`);
+          return;
+        }
+
         setErrorMessage(data.generatePlan.errors.join(', '));
         return;
       }

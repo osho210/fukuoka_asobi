@@ -3,15 +3,16 @@ require 'securerandom'
 
 module Services
   class PlanGenerator
-    def initialize(districts:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil)
-      @districts = districts
-      @date = Date.parse(date)
-      @member_info = member_info
-      @budget = budget
-      @start_time = start_time ? Time.parse("#{date} #{start_time}") : Time.parse("#{date} 09:00")
-      @end_time = end_time ? Time.parse("#{date} #{end_time}") : Time.parse("#{date} 21:00")
-      @custom_options = custom_options || {}
-      @total_available_time = (@end_time - @start_time) / 60 # 分単位
+  def initialize(districts:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil, user: nil)
+    @districts = districts
+    @date = Date.parse(date)
+    @member_info = member_info
+    @budget = budget
+    @start_time = start_time ? Time.parse("#{date} #{start_time}") : Time.parse("#{date} 09:00")
+    @end_time = end_time ? Time.parse("#{date} #{end_time}") : Time.parse("#{date} 21:00")
+    @custom_options = custom_options || {}
+    @total_available_time = (@end_time - @start_time) / 60 # 分単位
+    @user = user # ユーザー情報を保持
     end
 
     def generate
@@ -268,14 +269,16 @@ module Services
       # 実際の実装ではGoogle Maps APIなどを使用
       # ここではダミーデータを返す
       case travel_method
-      when 'walk'
+      when 'walk', '徒歩'
         rand(15..45) # 15〜45分
-      when 'car'
+      when 'car', '車'
         rand(5..20) # 5〜20分
-      when 'train'
+      when 'train', '電車'
         rand(10..30) # 10〜30分
+      when 'bicycle', '自転車'
+        rand(10..25) # 10〜25分
       else
-        rand(10..30) # デフォルト
+        rand(10..30) # デフォルト（その他）
       end
     end
 
@@ -328,53 +331,79 @@ module Services
       end
 
       # PlayPlanを作成
+      # TODO: ステータス、旅行のタイプは見直しかける
       play_plan = PlayPlan.new(
-        id: SecureRandom.random_number(10000),
+        user_id: @user&.id, # ユーザーIDを設定
         plan_name: plan_name,
         description: "#{@date.strftime('%Y年%m月%d日')}の#{plan_name}です。",
-        status: 'draft',
+        status: 'published',
         start_datetime: @start_time,
         end_datetime: end_datetime,
         total_budget: total_budget,
         trip_type: 'day_trip'
       )
 
-      # PlanDetailとTravelDetailを作成
-      current_time = @start_time
-      route_with_times.each_with_index do |item, index|
-        # スポット滞在の開始・終了時間
-        stay_start = current_time
-        stay_end = current_time + item[:stay_time] * 60
-        current_time = stay_end
+      # トランザクションでプランとその詳細を保存
+      ActiveRecord::Base.transaction do
+        # プランをデータベースに保存
+        play_plan.save!
 
-        # 予算を設定（予算レンジから概算）
-        spot_budget = budget_values[item[:spot].budget_range] || budget_values["普通"]
+        # PlanDetailとTravelDetailを作成
+        current_time = @start_time
+        route_with_times.each_with_index do |item, index|
+          # スポット滞在の開始・終了時間
+          stay_start = current_time
+          stay_end = current_time + item[:stay_time] * 60
+          current_time = stay_end
 
-        # PlanDetailを作成
-        # TODO: 将来的にはここもdbに保存するが現在は不要なデータを増やすのみのため後ほど実装
-        plan_detail = play_plan.plan_details.build(
-          id: SecureRandom.random_number(10000),
-          step_number: index + 1,
-          step_name: item[:spot].spot_name,
-          step_description: item[:spot].catchphrase,
-          spot: item[:spot],
-          start_datetime: stay_start,
-          end_datetime: stay_end,
-          budget: spot_budget
-        )
+          # 予算を設定（予算レンジから概算）
+          spot_budget = budget_values[item[:spot].budget_range] || budget_values["普通"]
 
-        # 移動がある場合はTravelDetailを作成
-        if item[:travel_time]
-          travel_start = stay_end
-          travel_end = travel_start + item[:travel_time] * 60
-          current_time = travel_end
-
-          plan_detail.travel_details.build(
-            id: SecureRandom.random_number(10000),
-            sequence_number: 1,
-            travel_method: item[:travel_method],
-            travel_time: item[:travel_time]
+          # PlanDetailを作成して保存
+          plan_detail = PlanDetail.new(
+            plan_id: play_plan.id, # 明示的にplan_idを設定
+            step_number: index + 1,
+            step_name: item[:spot].spot_name,
+            step_description: item[:spot].catchphrase,
+            spot: item[:spot],
+            start_datetime: stay_start,
+            end_datetime: stay_end,
+            budget: spot_budget
           )
+          plan_detail.save!
+
+          # 移動がある場合はTravelDetailを作成
+          if item[:travel_time]
+            travel_start = stay_end
+            travel_end = travel_start + item[:travel_time] * 60
+            current_time = travel_end
+
+            # 既存のTravelDetailを削除（もし存在すれば）
+            TravelDetail.where(plan_detail_id: plan_detail.id).destroy_all
+
+            # 移動手段を日本語に変換
+            japanese_travel_method = case item[:travel_method]
+            when 'walk'
+              '徒歩'
+            when 'car'
+              '車'
+            when 'train'
+              '電車'
+            when 'bicycle'
+              '自転車'
+            else
+              'その他'
+            end
+
+            # 新しいTravelDetailを作成
+            travel_detail = TravelDetail.new(
+              plan_detail_id: plan_detail.id, # 明示的にplan_detail_idを設定
+              sequence_number: 1,
+              travel_method: japanese_travel_method,
+              travel_time: item[:travel_time]
+            )
+            travel_detail.save!
+          end
         end
       end
 
@@ -389,7 +418,7 @@ module Services
         @travel_route
       end
 
-      # プランを返す（実際の実装では保存も行う）
+      # 保存済みのプランを返す
       play_plan
     end
 
