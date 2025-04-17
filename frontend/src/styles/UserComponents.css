@@ -1,0 +1,272 @@
+/* 共通コンテナスタイル */
+.user-components-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ヘッダー部分 */
+.user-components-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.user-components-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-components-create-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #cb6b52;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.user-components-create-button:hover {
+  background-color: #3a5ce5;
+}
+
+/* グリッドレイアウト */
+.user-components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* カード */
+.user-components-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: white;
+  position: relative;
+}
+
+.user-components-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* カード画像 */
+.user-components-card-image {
+  position: relative;
+  height: 160px;
+  background-color: #f5f5f5;
+}
+
+.user-components-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-components-card-no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.user-components-card-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* カードコンテンツ */
+.user-components-card-content {
+  padding: 1rem;
+}
+
+.user-components-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.user-components-card-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.user-components-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.user-components-card-budget,
+.user-components-card-date {
+  margin: 0;
+}
+
+.user-components-card-tags {
+  font-size: 0.8rem;
+  color: #4a6cf7;
+  background-color: rgba(74, 108, 247, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* ローディング */
+.user-components-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+/* エラー */
+.user-components-error {
+  color: #e53e3e;
+  padding: 1rem;
+  border: 1px solid #e53e3e;
+  border-radius: 4px;
+  background-color: rgba(229, 62, 62, 0.05);
+}
+
+/* 空の状態 */
+.user-components-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.user-components-empty p {
+  margin-bottom: 1rem;
+}
+
+.user-components-description {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 0.5rem;
+}
+
+/* お気に入りリスト */
+.user-components-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-components-item {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.user-components-thumbnail {
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+}
+
+.user-components-no-image {
+  width: 160px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.user-components-details {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-components-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-components-plan-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.user-components-date {
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.user-components-remove {
+  align-self: flex-start;
+  padding: 0.25rem 0.5rem;
+  background-color: transparent;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.user-components-remove:hover {
+  background-color: rgba(229, 62, 62, 0.1);
+}
+
+.user-components-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.user-components-remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--uc-danger);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.user-components-remove-btn:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+}
+
+.user-components-remove-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
