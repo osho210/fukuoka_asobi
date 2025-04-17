@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '@/styles/RangeSlider.module.css';
 
+
 interface RangeSliderProps {
   min: number;
   max: number;

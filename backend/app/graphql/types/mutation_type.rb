@@ -21,5 +21,9 @@ module Types
     field :create_bookmark, mutation: Mutations::CreateBookmark
     field :update_bookmark, mutation: Mutations::UpdateBookmark
     field :delete_bookmark, mutation: Mutations::DeleteBookmark
+
+    # お気に入り関連
+    field :add_favorite, mutation: Mutations::AddFavorite
+    field :remove_favorite, mutation: Mutations::RemoveFavorite
   end
 end

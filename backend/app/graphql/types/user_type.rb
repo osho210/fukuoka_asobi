@@ -15,5 +15,17 @@ module Types
     field :paid_end_date, GraphQL::Types::ISO8601Date
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    # ユーザーのお気に入りプラン一覧を取得
+    field :favorites, [Types::FavoriteType], null: true
+    def favorites
+      object.favorites.latest
+    end
+
+    # ユーザーのお気に入りプラン一覧を取得（プランオブジェクトの配列）
+    field :favorite_play_plans, [Types::PlayPlanType], null: true
+    def favorite_play_plans
+      object.favorite_play_plans
+    end
   end
 end

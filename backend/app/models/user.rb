@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :play_plans, dependent: :nullify
   has_many :news, foreign_key: :author_id, dependent: :nullify
   has_many :bookmarks, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_play_plans, through: :favorites, source: :play_plan
 
   validates :username, presence: true
   validates :email, presence: true, uniqueness: true

@@ -15,6 +15,7 @@ export const GET_PLAY_PLANS = gql`
       rating
       reviewCount
       favoriteCount
+      isFavorite
       status
       user {
         id
@@ -39,6 +40,7 @@ export const GET_PLAY_PLAN = gql`
       rating
       reviewCount
       favoriteCount
+      isFavorite
       status
       startDatetime
       endDatetime
@@ -57,7 +59,7 @@ export const GET_PLAY_PLAN = gql`
         spot {
           id
           spotName
-          address 
+          address
           phoneNumber
           budgetRange
           isRainyOk

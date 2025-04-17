@@ -1,280 +1,129 @@
-.user-bookmarks-container {
+.container {
   width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 24px 16px;
 }
 
-.user-bookmarks-header {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.user-bookmarks-title {
-  font-size: 1.5rem;
-  font-weight: bold;
+.title {
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 16px;
 }
 
-.user-bookmarks-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 12px;
-}
-
-.user-bookmarks-filter-label {
-  margin-right: 10px;
-  font-weight: bold;
-  color: #4b5563;
-}
-
-.user-bookmarks-filter-button {
-  background-color: #f3f4f6;
-  border: none;
-  padding: 6px 12px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.user-bookmarks-filter-button:hover {
-  background-color: #e5e7eb;
-}
-
-.user-bookmarks-filter-active {
-  background-color: #CB6B52;
-  color: white;
-}
-
-.user-bookmarks-filter-active:hover {
-  background-color: #b55a43;
-}
-
-.user-bookmarks-list {
-  display: flex;
-  flex-direction: column;
+/* ---- Grid for bookmark cards ---- */
+.list {
+  display: grid;
   gap: 16px;
 }
 
-.user-bookmarks-item {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+@media (min-width: 768px) {
+  .list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Card ---- */
+.item {
+  background-color: #ffffff;
+  border: 1px solid #f1f1f1;
+  border-radius: 12px;
   overflow: hidden;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s;
-}
-
-.user-bookmarks-item:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.user-bookmarks-item-content {
   display: flex;
-  padding: 16px;
+  flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.user-bookmarks-item-image {
-  width: 120px;
-  height: 120px;
-  flex-shrink: 0;
-  margin-right: 16px;
-  background-color: #f3f4f6;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.user-bookmarks-item-image img {
+/* ---- Image ---- */
+.thumbnail {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
+  aspect-ratio: 16 / 9;
 }
 
-.user-bookmarks-item-no-image {
+.noImage {
   width: 100%;
-  height: 100%;
+  padding-top: 56.25%;
+  position: relative;
+  background: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
-  font-size: 0.875rem;
+  color: #7a7a7a;
+  font-size: 14px;
 }
 
-.user-bookmarks-item-details {
-  flex-grow: 1;
-}
-
-.user-bookmarks-item-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #1f2937;
-}
-
-.user-bookmarks-item-category {
-  display: inline-block;
-  background-color: #f3f4f6;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  color: #4b5563;
-  margin-bottom: 8px;
-}
-
-.user-bookmarks-item-note {
-  font-size: 0.875rem;
-  color: #4b5563;
-  margin-bottom: 12px;
-  line-height: 1.4;
-}
-
-.user-bookmarks-item-date {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
-.user-bookmarks-item-link {
-  display: inline-block;
-  background-color: #CB6B52;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.user-bookmarks-item-link:hover {
-  background-color: #b55a43;
-}
-
-.user-bookmarks-item-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 8px 16px;
-  background-color: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-}
-
-.user-bookmarks-item-edit,
-.user-bookmarks-item-delete {
-  background: none;
-  border: none;
-  padding: 6px 12px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.user-bookmarks-item-edit {
-  color: #4b5563;
-}
-
-.user-bookmarks-item-edit:hover {
-  color: #1f2937;
-}
-
-.user-bookmarks-item-delete {
-  color: #ef4444;
-}
-
-.user-bookmarks-item-delete:hover {
-  color: #b91c1c;
-}
-
-.user-bookmarks-edit-form {
+/* ---- Details ---- */
+.details {
   padding: 16px;
-}
-
-.user-bookmarks-edit-field {
-  margin-bottom: 12px;
-}
-
-.user-bookmarks-edit-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 4px;
-  color: #4b5563;
-}
-
-.user-bookmarks-edit-input,
-.user-bookmarks-edit-textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 0.875rem;
-}
-
-.user-bookmarks-edit-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-.user-bookmarks-edit-actions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 16px;
+  flex-direction: column;
+  flex: 1;
 }
 
-.user-bookmarks-edit-save,
-.user-bookmarks-edit-cancel {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.planName {
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date {
+  font-size: 12px;
+  color: #6b7280;
+  /* gray-500 */
+  margin-top: 4px;
+}
+
+/* ---- Remove button ---- */
+.remove {
+  color: black;
+  margin-top: auto;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.15s ease;
 }
 
-.user-bookmarks-edit-save {
-  background-color: #CB6B52;
-  color: white;
-  margin-right: 8px;
+.remove:hover {
+  background: #f9fafb;
 }
 
-.user-bookmarks-edit-save:hover {
-  background-color: #b55a43;
-}
-
-.user-bookmarks-edit-cancel {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.user-bookmarks-edit-cancel:hover {
-  background-color: #e5e7eb;
-}
-
-.user-bookmarks-loading {
+/* ---- Generic states ---- */
+.loading,
+.error,
+.empty {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px 0;
-  color: #6b7280;
-}
-
-.user-bookmarks-error {
-  padding: 20px;
-  background-color: #fee2e2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
-  color: #b91c1c;
-}
-
-.user-bookmarks-empty {
   text-align: center;
-  padding: 40px 0;
-  color: #6b7280;
 }
 
-.user-bookmarks-empty-description {
+.description {
+  font-size: 14px;
+  color: #6b7280;
   margin-top: 8px;
-  font-size: 0.875rem;
-  color: #9ca3af;
 }
