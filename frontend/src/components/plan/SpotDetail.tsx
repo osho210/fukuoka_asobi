@@ -63,7 +63,7 @@ const SpotDetail: React.FC<SpotDetailProps> = ({ spot }) => {
       {spot.categories && spot.categories.length > 0 && (
         <div className="plan-step-spot-categories">
           {spot.categories.map(category => (
-            <span key={category.id} className="plan-step-spot-category">
+            <span key={category.name} className="plan-step-spot-category">
               {category.name}
             </span>
           ))}

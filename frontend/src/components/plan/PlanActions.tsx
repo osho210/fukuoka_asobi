@@ -1,6 +1,10 @@
 'use client';
 
+import FavoriteButton from '../common/FavoriteButton';
+import { PlayPlan } from '@/types/plan';
+
 interface PlanActionsProps {
+  plan?: PlayPlan;
   onSave?: () => void;
   onEdit?: () => void;
   showFavorite?: boolean;
@@ -9,6 +13,7 @@ interface PlanActionsProps {
 }
 
 const PlanActions: React.FC<PlanActionsProps> = ({
+  plan,
   onSave,
   onEdit,
   showFavorite = true,
@@ -17,11 +22,14 @@ const PlanActions: React.FC<PlanActionsProps> = ({
 }) => {
   return (
     <div className="plan-actions">
-      {showFavorite && (
-        <button className="plan-action-button primary">
-          <span>♡</span>
-          <span>お気に入りに追加</span>
-        </button>
+      {showFavorite && plan && (
+        <FavoriteButton
+          playPlanId={plan.id}
+          isFavorite={plan.isFavorite}
+          className="plan-action-button primary"
+          showText={true}
+          size="md"
+        />
       )}
 
       {showShare && (

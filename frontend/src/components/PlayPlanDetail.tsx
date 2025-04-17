@@ -25,7 +25,7 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
       </div>
 
       <PlanTotalBudget totalBudget={plan.totalBudget} />
-      <PlanActions showFavorite={true} showShare={true} />
+      <PlanActions plan={plan} showFavorite={true} showShare={true} />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import FavoriteButton from './common/FavoriteButton';
 
 
 const PlayPlanList = () => {
@@ -73,7 +74,16 @@ const PlayPlanList = () => {
                 <div className="play-plan-stats">
                   <span className="plan-rating">★ {plan.rating.toFixed(1)}</span>
                   <span className="plan-reviews">({plan.reviewCount}件のレビュー)</span>
-                  <span className="plan-favorites">♡ {plan.favoriteCount}</span>
+                  <div className="plan-favorites-container" onClick={(e) => e.preventDefault()}>
+                    <FavoriteButton
+                      playPlanId={String(plan.id)}
+                      isFavorite={!!plan.isFavorite}
+                      size="sm"
+                      showText={false}
+                      className="plan-favorites-button"
+                    />
+                    <span className="plan-favorites-count">{plan.favoriteCount}</span>
+                  </div>
                 </div>
                 <div className='play-plan-user-info'>
                   {/* TODO: 画像の差し替え対応はやる必要あり */}

@@ -25,7 +25,7 @@ export default function SpotList() {
               <p className="spot-card-catchphrase">{spot.catchphrase}</p>
               <div className="spot-card-categories">
                 {spot.categories.map((category: Category) => (
-                  <span key={category.id} className="spot-category-tag">
+                  <span key={category.name} className="spot-category-tag">
                     {category.name}
                   </span>
                 ))}

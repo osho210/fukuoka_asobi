@@ -84,6 +84,7 @@ export interface PlayPlan {
   rating: number;
   reviewCount: number;
   favoriteCount: number;
+  isFavorite?: boolean;
   status: string;
   startDatetime?: string;
   endDatetime?: string;
