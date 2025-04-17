@@ -1,0 +1,27 @@
+# お気に入り関連のGraphQLクエリとミューテーション
+
+
+# プランがお気に入りに登録されているかを確認
+query IsFavorite($playPlanId: ID!) {
+  isFavorite(playPlanId: $playPlanId)
+}
+
+# プランをお気に入りに追加
+mutation AddFavorite($playPlanId: ID!) {
+  addFavorite(input: { playPlanId: $playPlanId }) {
+    favorite {
+      id
+      playPlanId
+      createdAt
+    }
+    errors
+  }
+}
+
+# プランをお気に入りから削除
+mutation RemoveFavorite($playPlanId: ID!) {
+  removeFavorite(input: { playPlanId: $playPlanId }) {
+    success
+    errors
+  }
+}
