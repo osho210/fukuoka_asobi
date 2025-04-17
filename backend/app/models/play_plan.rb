@@ -4,6 +4,8 @@ class PlayPlan < ApplicationRecord
   has_many :play_plan_recommended_fors, dependent: :destroy
   has_many :recommended_fors, through: :play_plan_recommended_fors
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_by_users, through: :favorites, source: :user
 
   validates :plan_name, presence: true
 

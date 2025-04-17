@@ -129,5 +129,11 @@ module Types
 
     # ユーザーのブックマーク
     field :user_bookmarks, resolver: Resolvers::UserBookmarksResolver
+
+    # ユーザーのお気に入り
+    field :user_favorites, resolver: Resolvers::UserFavoritesResolver
+
+    # プランがお気に入りに登録されているか
+    field :is_favorite, resolver: Resolvers::IsFavoriteResolver
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_13_052618) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_17_083400) do
   create_table "areas", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "area_name", null: false
     t.bigint "district_id", null: false
@@ -91,6 +91,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_052618) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
+  end
+
+  create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "play_plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["play_plan_id"], name: "index_favorites_on_play_plan_id"
+    t.index ["user_id", "play_plan_id"], name: "index_favorites_on_user_id_and_play_plan_id", unique: true
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "hashtags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -358,6 +368,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_052618) do
   add_foreign_key "areas", "districts"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "events", "event_categories"
+  add_foreign_key "favorites", "play_plans", on_delete: :cascade
+  add_foreign_key "favorites", "users", on_delete: :cascade
   add_foreign_key "news", "categories"
   add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"

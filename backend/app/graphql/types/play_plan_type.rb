@@ -37,5 +37,19 @@ module Types
 
     # おすすめ対象の文字列表現を取得
     field :recommended_for_string, String, null: true
+
+    # 現在のユーザーがお気に入り登録しているかどうか
+    field :is_favorite, Boolean, null: false
+    def is_favorite
+      current_user = context[:current_user]
+      return false unless current_user
+
+      current_user.favorites.exists?(play_plan_id: object.id)
+    end
+
+    # お気に入り数を取得
+    def favorite_count
+      object.favorites.count
+    end
   end
 end
