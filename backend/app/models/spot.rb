@@ -41,6 +41,7 @@ class Spot < ApplicationRecord
     hours_by_time = {}
 
     opening_hours.where(is_closed_day: false).each do |hour|
+      next unless hour.open_time && hour.close_time && hour.day_of_week
       business_hour = hour.open_time.strftime('%H:%M') + ' ~ ' + hour.close_time.strftime('%H:%M')
       hours_by_time[business_hour] ||= []
       hours_by_time[business_hour] << hour.day_of_week
@@ -71,21 +72,21 @@ class Spot < ApplicationRecord
 
   # 曜日の範囲を整形する（例: 月,火,水,木 → 月 - 木）
   def format_day_range(days)
-    return days.first if days.size == 1
+    return '' if days.blank?
 
-    # 曜日の順序を定義
+    # nilを除去し、日付順に並び替え
     day_order = %w(月 火 水 木 金 土 日)
-    sorted_days = days.sort_by { |day| day_order.index(day) }
-
+    sorted_days = days.sort_by { |day| day_order.index(day) || 99 }
+    return '' if sorted_days.empty?
     # 連続した曜日をグループ化
     ranges = []
     current_range = [sorted_days.first]
 
     (1...sorted_days.size).each do |i|
-      prev_idx = day_order.index(sorted_days[i-1])
+      prev_idx = day_order.index(sorted_days[i - 1])
       curr_idx = day_order.index(sorted_days[i])
 
-      if curr_idx == prev_idx + 1
+      if prev_idx && curr_idx && curr_idx == prev_idx + 1
         current_range << sorted_days[i]
       else
         ranges << current_range

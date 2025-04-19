@@ -12,6 +12,7 @@ export const GET_SPOTS = gql`
       reviewCount
       budgetRange
       theme
+      imageUrl
       district {
         id
         districtName
@@ -28,6 +29,10 @@ export const GET_SPOTS = gql`
         id
         hashtagName
       }
+    }
+    categories {
+      id
+      name
     }
   }
 `;

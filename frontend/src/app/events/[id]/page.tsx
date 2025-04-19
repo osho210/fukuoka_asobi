@@ -1,6 +1,11 @@
-import EventDetail from '../../../components/EventDetail';
+import Image from 'next/image';
+import HamburgerMenu from '@/components/HamburgerMenu';
+import Footer from '@/components/Footer';
+import '@styles/common.css';
 import EventList from '../../../components/EventList';
-import Link from 'next/link';
+import '@styles/EventsPage.css';
+import '@styles/ContentDetail.css';
+import EventDetailContainer from './event-detail.container';
 
 type EventPageProps = {
   params: Promise<{ id: string }>
@@ -15,22 +20,23 @@ export default async function EventPage({ params }: EventPageProps) {
   const { id } = await params;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-4">
-        <Link href="/events" className="text-blue-500 hover:underline">
-          ← イベント一覧に戻る
-        </Link>
-      </div>
+    <div className="container">
+      <header className="header">
+        <h1>
+          <Image className="logo" src={'/logo.png'} width={190} height={45} alt="logo" />
+        </h1>
+        <HamburgerMenu />
+      </header>
 
       {/* イベント詳細 */}
-      <EventDetail eventId={id} />
+      <EventDetailContainer eventId={id} />
 
       {/* 関連イベント */}
       <section className="mt-16">
-        <h2 className="text-2xl font-bold mb-6">関連イベント</h2>
+        <h2 className="text-2xl font-bold mb-6">開催中のイベント</h2>
         <EventList limit={4} showAll={false} />
       </section>
+      <Footer />
     </div>
   );
 }
-

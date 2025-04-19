@@ -573,6 +573,7 @@ export type QueryIsFavoriteArgs = {
 
 export type QueryNewsArgs = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -1038,14 +1039,6 @@ export type GetUserPlayPlansQueryVariables = Exact<{
 
 export type GetUserPlayPlansQuery = { __typename?: 'Query', userPlayPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, status: PlayPlanStatusEnum, createdAt: any, totalBudget?: number | null }> };
 
-export type GetNewsQueryVariables = Exact<{
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type GetNewsQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status: string, imageUrl?: string | null, createdAt: any, updatedAt: any, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null, category?: { __typename?: 'Category', id: string, name: string } | null }> };
-
 export type GetNewsDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1087,10 +1080,32 @@ export type GetDistrictsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetDistrictsQuery = { __typename?: 'Query', districts: Array<{ __typename?: 'District', id: string, districtName: string }> };
 
+export type GetEventQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, description: string, location: string, latitude?: number | null, longitude?: number | null, startDatetime: any, endDatetime: any, recurringRule?: string | null, price?: string | null, organizer?: string | null, contactEmail?: string | null, contactPhone?: string | null, capacity?: number | null, isOnline: boolean, sourceUrl?: string | null, bannerImage?: string | null, status: string, eventCategoryId: number, createdAt: any, updatedAt: any, eventCategory: { __typename?: 'EventCategory', id: string, name: string, description?: string | null } } | null };
+
 export type GetHashtagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetHashtagsQuery = { __typename?: 'Query', hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> };
+
+export type GetNewsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetNewsQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status: string, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }> };
+
+export type GetNewsListQueryVariables = Exact<{
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status: string, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1107,7 +1122,7 @@ export type GetSpotQueryVariables = Exact<{
 }>;
 
 
-export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, recommendedFor1?: string | null, recommendedFor2?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, closedDays: Array<string>, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, spotType: SpotTypeEnum, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string, businessHour: string }>, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
+export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, nearestStation?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, budgetRange?: string | null, maxPeople?: number | null, minPeople?: number | null, isRainyOk?: boolean | null, theme?: string | null, imageUrl?: string | null, spotType: SpotTypeEnum, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, openingHourList: Array<{ __typename?: 'OpeningHourList', dayOfWeek: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, instagramEmbeds: Array<{ __typename?: 'InstagramEmbed', id: string, instagramEmbedName: string, embedCode: string, embedUrl: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }> } | null };
 
 export type GetSpotAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1117,7 +1132,7 @@ export type GetSpotAmbiancesQuery = { __typename?: 'Query', spotAmbiances: Array
 export type GetSpotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, reviewRating?: number | null, reviewCount?: number | null, budgetRange?: string | null, theme?: string | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }> };
+export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, reviewRating?: number | null, reviewCount?: number | null, budgetRange?: string | null, theme?: string | null, imageUrl?: string | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type SearchPlansQueryVariables = Exact<{
   areas?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;

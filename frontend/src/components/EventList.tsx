@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
+import '@styles/EventsPage.css';
 import Image from 'next/image';
 
 type Event = {
@@ -48,7 +49,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             startDatetime: '2025-04-01T10:00:00Z',
             endDatetime: '2025-04-03T18:00:00Z',
             price: '入場無料（飲食は有料）',
-            bannerImage: 'https://example.com/images/beer-festival.jpg',
+            bannerImage: '',
             isOnline: false,
             status: 'PUBLISHED',
             eventCategory: {
@@ -64,7 +65,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             startDatetime: '2025-03-25T09:00:00Z',
             endDatetime: '2025-03-25T17:00:00Z',
             price: '入場無料',
-            bannerImage: 'https://example.com/images/itoshima-market.jpg',
+            bannerImage: '',
             isOnline: false,
             status: 'PUBLISHED',
             eventCategory: {
@@ -80,7 +81,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             startDatetime: '2025-04-15T10:00:00Z',
             endDatetime: '2025-04-22T18:00:00Z',
             price: '会場により異なる',
-            bannerImage: 'https://example.com/images/art-week.jpg',
+            bannerImage: '',
             isOnline: false,
             status: 'PUBLISHED',
             eventCategory: {
@@ -96,7 +97,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             startDatetime: '2025-03-20T13:00:00Z',
             endDatetime: '2025-03-20T16:00:00Z',
             price: '3,000円（材料費込み）',
-            bannerImage: 'https://example.com/images/hakata-dolls.jpg',
+            bannerImage: '',
             isOnline: false,
             status: 'PUBLISHED',
             eventCategory: {

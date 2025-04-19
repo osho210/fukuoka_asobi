@@ -1,0 +1,100 @@
+'use client';
+
+import SpotCard from '@/components/SpotCard';
+import SpotCategoryList from '@/components/SpotCategoryList';
+import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_SPOTS } from '@/graphql/queries/getSpots';
+import '@styles/SpotsPage.css';
+
+type Category = {
+    id: string;
+    name: string;
+};
+
+type Spot = {
+    id: string;
+    spotName: string;
+    address: string | null;
+    catchphrase: string | null;
+    reviewRating: number | null;
+    reviewCount: number | null;
+    imageUrl: string | null;
+    budgetRange: string | null;
+    spotType: string;
+    district: {
+        id: string;
+        districtName: string;
+    };
+    categories: {
+        id: string;
+        name: string;
+    }[];
+    areas: {
+        id: string;
+        areaName: string;
+    }[];
+    hashtags: {
+        id: string;
+        hashtagName: string;
+    }[];
+};
+
+interface SpotsListData {
+    spots: Spot[];
+    categories: Category[];
+}
+
+export default function SpotsPage() {
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+
+    const { loading, error, data } = useQuery<SpotsListData>(GET_SPOTS);
+
+    if (loading) return <div className="spots-loading-container">読み込み中...</div>;
+    if (error) return <div className="spots-error-container">エラーが発生しました</div>;
+
+    // カテゴリーでフィルタリング
+    const filteredSpots = data?.spots.filter(spot => {
+        if (!selectedCategoryId) return true;
+        return spot.categories.some(category => category.id === selectedCategoryId);
+    }) || [];
+
+    return (
+        <div className="spots-container">
+            <h1 className="spots-heading">スポット</h1>
+
+            {/* カテゴリーリスト */}
+            <section className="spots-category-section">
+                <SpotCategoryList
+                    categories={data?.categories || []}
+                    selectedCategoryId={selectedCategoryId}
+                    onSelectCategory={setSelectedCategoryId}
+                />
+            </section>
+
+            {/* スポット一覧 */}
+            {filteredSpots.length === 0 ? (
+                <div className="spots-empty-container">
+                    <p className="spots-empty-message">スポットがありません</p>
+                </div>
+            ) : (
+                <div className="spots-grid">
+                    {filteredSpots.map((spot: Spot) => (
+                        <SpotCard
+                            key={spot.id}
+                            id={spot.id}
+                            spotName={spot.spotName}
+                            address={spot.address}
+                            catchphrase={spot.catchphrase}
+                            imageUrl={spot.imageUrl}
+                            reviewRating={spot.reviewRating}
+                            reviewCount={spot.reviewCount}
+                            budgetRange={spot.budgetRange}
+                            categoryNames={spot.categories.map(category => category.name)}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
