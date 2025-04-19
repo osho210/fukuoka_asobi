@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import Link from 'next/link';
 import Image from 'next/image';
+import { memo } from 'react';
 
 type NewsCardProps = {
   id: string;
@@ -13,7 +14,7 @@ type NewsCardProps = {
   authorName?: string | null;
 };
 
-export default function NewsCard({
+function NewsCard({
   id,
   title,
   body,
@@ -36,7 +37,7 @@ export default function NewsCard({
         <div className="news-card-image-container">
           {imageUrl ? (
             <Image
-              src={imageUrl}
+              src={imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`}
               alt={title}
               fill
               className="news-card-image"
@@ -64,3 +65,5 @@ export default function NewsCard({
     </Link>
   );
 }
+
+export default memo(NewsCard);

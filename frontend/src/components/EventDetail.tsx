@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatDateRange } from '../lib/dateUtils';
+import '@styles/EventsPage.css';
 
 type Event = {
   id: string;
@@ -61,7 +62,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
           capacity: 5000,
           isOnline: false,
           sourceUrl: 'itoshima.png',
-          bannerImage: 'https://example.com/images/beer-festival.jpg',
+          bannerImage: '',
           eventCategory: {
             id: '1',
             name: 'フェス・マーケット'
@@ -96,7 +97,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
             <Image src={event.bannerImage} alt={event.title} width={300} height={200} layout="responsive" />
           ) : (
             <div className="event-detail-no-image">
-              <span className="event-detail-no-image-text">No Image</span>
+              <span className="image-placeholder">No Image</span>
             </div>
           )}
         </div>
@@ -213,19 +214,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* フッター */}
-        <div className="event-detail-footer">
-          <div className="event-detail-actions">
-            <Link href="/events" className="event-detail-back-link">
-              ← イベント一覧に戻る
-            </Link>
             <div className="event-detail-buttons">
-              <button className="event-detail-favorite-button">
-                お気に入りに追加
-              </button>
               <button className="event-detail-share-button">
                 シェアする
               </button>

@@ -15,6 +15,14 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+.event-detail-no-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #eee;
+    height: 200px;
+}
+
 /* スポットカード（横レイアウトに統一） */
 .spot-card {
     position: relative;

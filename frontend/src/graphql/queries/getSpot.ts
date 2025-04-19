@@ -9,15 +9,8 @@ export const GET_SPOT = gql`
       phoneNumber
       website
       catchphrase
-      recommendedFor1
-      recommendedFor2
       parkingAvailable
       nearestStation
-      openingHourList {
-        dayOfWeek
-        businessHour
-      }
-      closedDays
       reviewRating
       reviewCount
       instagramUrl
@@ -27,10 +20,16 @@ export const GET_SPOT = gql`
       minPeople
       isRainyOk
       theme
+      imageUrl
       spotType
+      createdAt
+      updatedAt
       district {
         id
         districtName
+      }
+      openingHourList {
+        dayOfWeek
       }
       areas {
         id
