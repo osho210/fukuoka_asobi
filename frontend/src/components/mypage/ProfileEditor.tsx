@@ -11,6 +11,7 @@ interface User {
     username: string;
     email: string;
     profileImageUrl: string | null;
+    avatarUrl: string | null;
     bio: string | null;
     instagramUrl: string | null;
     isPaidMember: boolean;
@@ -28,23 +29,23 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
     const [bio, setBio] = useState(user.bio || '');
     const [instagramUrl, setInstagramUrl] = useState(user.instagramUrl || '');
     const [profileImageUrl, setProfileImageUrl] = useState(user.profileImageUrl || '');
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-    // プロフィール更新ミューテーション
     const [updateUserProfile] = useMutation(UPDATE_USER_PROFILE, {
         onCompleted: (data) => {
             setIsSubmitting(false);
+
             if (data.updateUserProfile.errors && data.updateUserProfile.errors.length > 0) {
                 setErrorMessages(data.updateUserProfile.errors);
                 setSuccessMessage('');
             } else {
                 setSuccessMessage('プロフィールを更新しました');
                 setErrorMessages([]);
-                onUpdate(); // 親コンポーネントに更新を通知
+                onUpdate();
 
-                // 成功メッセージを3秒後に消す
                 setTimeout(() => {
                     setSuccessMessage('');
                 }, 3000);
@@ -57,37 +58,56 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
         }
     });
 
-    // プロフィール更新処理
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrorMessages([]);
         setSuccessMessage('');
 
-        updateUserProfile({
-            variables: {
-                username: username || undefined,
-                bio: bio || undefined,
-                instagramUrl: instagramUrl || undefined,
-                profileImageUrl: profileImageUrl || undefined
-            }
-        });
-    };
+        if (avatarFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const avatarBase64 = reader.result as string;
 
-    // 画像アップロード処理（実際のアップロード機能は未実装）
+                updateUserProfile({
+                    variables: {
+                        username: username || undefined,
+                        bio: bio || undefined,
+                        instagramUrl: instagramUrl || undefined,
+                        profileImageUrl: profileImageUrl || undefined,
+                        avatar: avatarBase64,
+                    }
+                });
+            };
+            reader.readAsDataURL(avatarFile);
+        } else {
+            updateUserProfile({
+                variables: {
+                    username: username || undefined,
+                    bio: bio || undefined,
+                    instagramUrl: instagramUrl || undefined,
+                    profileImageUrl: profileImageUrl || undefined,
+                }
+            });
+        }
+    };
+    const baseMinioUrl = 'http://localhost:9000/fukuoka-asobi-dev';
+    const fullAvatarUrl = `${baseMinioUrl}/${user.avatarUrl}`;
+
+
+    // 画像アップロード時の処理（Base64変換用）
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // 実際のアップロード処理はここに実装
-        // 今回はモックとして、アップロードされた画像のURLをセットする
         if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setAvatarFile(file);
+
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (event.target && event.target.result) {
-                    // 実際のアプリケーションでは、ここでS3などにアップロードし、
-                    // 返却されたURLをsetProfileImageUrlにセットする
                     setProfileImageUrl(event.target.result.toString());
                 }
             };
-            reader.readAsDataURL(e.target.files[0]);
+            reader.readAsDataURL(file);
         }
     };
 
@@ -150,10 +170,21 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 <div className={styles['profile-editor-field']}>
                     <label className={styles['profile-editor-label']}>プロフィール画像</label>
                     <div className={styles['profile-editor-image-container']}>
-                        {profileImageUrl ? (
-
+                        {avatarFile ? (
                             <img
-                                src={profileImageUrl}
+                                src={fullAvatarUrl}
+                                alt="プロフィール画像"
+                                className={styles['profile-editor-image']}
+                            />
+                        ) : user.avatarUrl ? (
+                            <img
+                                src={fullAvatarUrl}
+                                alt="プロフィール画像"
+                                className={styles['profile-editor-image']}
+                            />
+                        ) : profileImageUrl ? (
+                            <img
+                                src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
                             />
@@ -208,7 +239,6 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 </div>
             </div>
 
-            {/* サブスクリプション情報 */}
             <div className={styles['profile-editor-subscription']}>
                 <h3 className={styles['profile-editor-section-title']}>サブスクリプション情報</h3>
                 <SubscriptionStatus user={user} />

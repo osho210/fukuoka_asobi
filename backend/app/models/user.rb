@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :trackable, :jwt_authenticatable, jwt_revocation_strategy: self
 
+  # ActiveStorage
+  has_one_attached :avatar
+
   has_many :play_plans, dependent: :nullify
   has_many :news, foreign_key: :author_id, dependent: :nullify
   has_many :bookmarks, dependent: :destroy

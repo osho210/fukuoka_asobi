@@ -13,6 +13,7 @@ export const GET_CURRENT_USER = gql`
       isPaidMember
       paidStartDate
       paidEndDate
+      avatarUrl
     }
   }
 `;
@@ -32,14 +33,15 @@ export const GET_USER_PLAY_PLANS = gql`
 `;
 
 export const UPDATE_USER_PROFILE = gql`
-  mutation UpdateUserProfile($username: String, $instagramUrl: String, $bio: String, $profileImageUrl: String) {
-    updateUserProfile(input: { username: $username, instagramUrl: $instagramUrl, bio: $bio, profileImageUrl: $profileImageUrl }) {
+  mutation UpdateUserProfile($username: String, $instagramUrl: String, $bio: String, $profileImageUrl: String, $avatar: String) {
+    updateUserProfile(input: { username: $username, instagramUrl: $instagramUrl, bio: $bio, profileImageUrl: $profileImageUrl, avatar: $avatar }) {
       user {
         id
         username
         instagramUrl
         bio
         profileImageUrl
+        avatarUrl
       }
       errors
     }

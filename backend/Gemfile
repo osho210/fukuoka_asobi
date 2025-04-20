@@ -75,6 +75,9 @@ end
 # graphqlの導入
 gem 'graphql'
 
+# 画像アップロードのs3 gemの追加
+gem 'aws-sdk-s3', require: false
+
 # CORSの設定
 gem 'rack-cors'
 
