@@ -1,14 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@styles/HamburgerMenu.css';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
 
 const HamburgerMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const { isLoggedIn, loading } = useAuth();
+    const pathname = usePathname();
+
+    // パスが変更されたらメニューを閉じる
+    useEffect(() => {
+        if (isOpen) {
+            setIsOpen(false);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
     const toggleModal = () => {
         setIsOpen(!isOpen);
