@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PROFILE } from '@/graphql/mypage';
 import styles from '@/styles/ProfileEditor.module.css';
 import { SubscriptionStatus } from '@/components/mypage/SubscriptionStatus';
+import Image from 'next/image';
 
 interface User {
     id: string;
@@ -171,19 +172,19 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                     <label className={styles['profile-editor-label']}>プロフィール画像</label>
                     <div className={styles['profile-editor-image-container']}>
                         {avatarFile ? (
-                            <img
+                            <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
                             />
                         ) : user.avatarUrl ? (
-                            <img
+                            <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
                             />
                         ) : profileImageUrl ? (
-                            <img
+                            <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}

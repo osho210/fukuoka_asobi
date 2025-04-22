@@ -6,6 +6,7 @@ import ContentDetail from '../ContentDetail';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import '@styles/ContentDetail.css';
+import Image from "next/image";
 
 type NewsDetailAdapterProps = {
   news: News;
@@ -65,7 +66,7 @@ export default function NewsDetailAdapter({ news }: NewsDetailAdapterProps) {
       content: (
         <div className="content-detail-author">
           {news.author.profileImageUrl && (
-            <img
+            <Image
               src={news.author.profileImageUrl}
               alt={news.author.username}
               className="content-detail-author-image"
