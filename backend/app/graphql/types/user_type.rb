@@ -16,6 +16,15 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
+    # ActiveStorageのアバター画像URL
+    field :avatar_url, String, null: true
+    def avatar_url
+      if object.avatar.attached?
+        object.avatar.blob.key
+      end
+    end
+
+
     # ユーザーのお気に入りプラン一覧を取得
     field :favorites, [Types::FavoriteType], null: true
     def favorites
