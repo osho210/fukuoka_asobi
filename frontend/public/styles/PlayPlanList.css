@@ -206,3 +206,6 @@
   background: #cb6b52;
   bottom: -10px;
 }
+.swiper{
+  z-index: 0!important;
+}
