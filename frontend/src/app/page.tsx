@@ -30,25 +30,25 @@ export default function Home() {
           福岡遊び日記日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
           普段の暮らしでは知ることができない、一歩踏み込んだ情報を発信しています。
         </p>
-        <Link href={''} className="section-link concept">コンセプトについて</Link>
+        <Link href={'/about'} className="section-link concept">コンセプトについて</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
         <p className="section-subtitle">編集部イチオシプラン</p>
         <PlayPlanList />
-        <Link href={''} className="section-link">プラン一覧を見る</Link>
+        <Link href={'/plans'} className="section-link">プラン一覧を見る</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Spot</h2>
         <p className="section-subtitle">編集部イチオシスポット</p>
         <RecommendedSpot />
-        <Link href={''} className="section-link">スポット一覧を見る</Link>
+        <Link href={'/spots'} className="section-link">スポット一覧を見る</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Event</h2>
         <p className="section-subtitle">編集部イチオシイベント</p>
         <RecommendedEvent />
-        <Link href={''} className="section-link">開催中のイベントを見る</Link>
+        <Link href={'/events'} className="section-link">開催中のイベントを見る</Link>
       </div>
       <div className="section official-sns">
         <Link href={'https://www.instagram.com/fukuoka___cafe/'}>
