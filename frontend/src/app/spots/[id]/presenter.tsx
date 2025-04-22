@@ -1,8 +1,5 @@
 import { Spot } from '../../../types/spot';
 import Image from 'next/image';
-import HamburgerMenu from '@/components/HamburgerMenu';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
 import Link from 'next/link';
 import BusinessHours from '../../../components/BusinessHours';
 import '@styles/RecommendedSpot.css'
@@ -13,13 +10,7 @@ interface SpotPresenterProps {
 
 export default function SpotPresenter({ spot }: SpotPresenterProps) {
   return (
-    <div className="container">
-      <header className="header">
-        <h1>
-          <Image className="logo" src={'/logo.png'} width={190} height={45} alt="logo" />
-        </h1>
-        <HamburgerMenu />
-      </header>
+    <>
       <div className="mb-4">
         <Link href="/spots" className="section-link">
           ← スポット一覧に戻る
@@ -127,7 +118,6 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
           </div>
         </div>
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

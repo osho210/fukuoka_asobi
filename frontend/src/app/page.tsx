@@ -1,23 +1,14 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-// TODO: default exportを変更する
-import { Header } from '@/components/Header'
-import Footer from '@/components/Footer'
 import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
 import RecommendedEvent from '@/components/RecommendedEvent'
 import RecommendedNews from '@/components/RecommendedNews'
-import '@styles/common.css';
-import '@styles/PlayPlanList.css';
-import '@styles/RecommendedSpot.css';
-import '@styles/RecommendedEvent.css';
-import '@styles/RecommendedNews.css';
 
 export default function Home() {
   return (
-    <div className="container">
-      <Header />
+    <>
       <div className="image-container">
         <Image src={'/kv.jpg'} width={380} height={700} alt="kv" />
         <p className="vertical-text">
@@ -70,7 +61,6 @@ export default function Home() {
         <RecommendedNews />
         <Link href={'/news'} className="section-link">ニュース一覧を見る</Link>
       </div>
-      <Footer />
-    </div >
+    </>
   );
 }

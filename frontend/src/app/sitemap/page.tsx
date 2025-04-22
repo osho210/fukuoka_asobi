@@ -1,14 +1,10 @@
 'use client';
-import { Header } from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
-import '@styles/common.css';
 import './sitemap.css';
 
 export default function SitemapPage() {
     return (
-        <div className="container">
-            <Header />
+        <>
             <div className="sitemap-page">
                 <h1 className="sitemap-title">サイトマップ</h1>
                 <p className="sitemap-description">
@@ -130,7 +126,6 @@ export default function SitemapPage() {
                     </div>
                 </div>
             </div>
-            <Footer />
-        </div>
+        </>
     );
 }

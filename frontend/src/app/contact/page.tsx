@@ -1,13 +1,9 @@
 'use client';
-import { Header } from '@/components/Header';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
 import './contact.css';
 
 export default function ContactPage() {
     return (
-        <div className="container">
-            <Header />
+        <>
             <div className="contact-page">
                 <h1 className="contact-title">お問い合わせ</h1>
                 <p className="contact-description">
@@ -77,7 +73,6 @@ export default function ContactPage() {
                     </div>
                 </div>
             </div>
-            <Footer />
-        </div>
+        </>
     );
 }
