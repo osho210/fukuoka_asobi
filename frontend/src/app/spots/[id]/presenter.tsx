@@ -1,7 +1,7 @@
 import { Spot } from '../../../types/spot';
 import Image from 'next/image';
 import Link from 'next/link';
-import BusinessHours from '../../../components/BusinessHours';
+import BusinessHours from '@/components/BusinessHours';
 import '@styles/RecommendedSpot.css'
 
 interface SpotPresenterProps {

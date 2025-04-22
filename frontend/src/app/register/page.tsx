@@ -1,4 +1,4 @@
-import RegisterFlow from '../../components/auth/RegisterFlow';
+import RegisterFlow from '@/components/auth/RegisterFlow';
 
 // 会員登録ページ
 export default function RegisterPage() {

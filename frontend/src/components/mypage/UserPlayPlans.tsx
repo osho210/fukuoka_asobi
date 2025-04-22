@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_PLAY_PLANS } from '@/graphql/mypage';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * 型定義
@@ -79,7 +80,7 @@ export const UserPlayPlans: React.FC = () => {
             <Link href={`/plans/${plan.id}`}>
               <div className="user-components-card-image">
                 {plan.imageUrl ? (
-                  <img src={plan.imageUrl} alt={plan.planName} />
+                  <Image src={plan.imageUrl} alt={plan.planName} width={300} height={300} />
                 ) : (
                   <div className="user-components-card-no-image">No Image</div>
                 )}
