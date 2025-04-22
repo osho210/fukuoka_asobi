@@ -1,13 +1,9 @@
 'use client';
-import { Header } from '@/components/Header';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
 import './privacy-policy.css';
 
 export default function PrivacyPolicyPage() {
     return (
-        <div className="container">
-            <Header />
+        <>
             <div className="privacy-page">
                 <h1 className="privacy-title">プライバシーポリシー</h1>
                 <p className="privacy-updated">最終更新日：2025年3月22日</p>
@@ -150,7 +146,6 @@ export default function PrivacyPolicyPage() {
                     </div>
                 </div>
             </div>
-            <Footer />
-        </div>
+        </>
     );
 }

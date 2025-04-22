@@ -1,13 +1,9 @@
 'use client';
-import { Header } from '@/components/Header';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
 import './advertising.css';
 
 export default function AdvertisingPage() {
   return (
-    <div className="container">
-      <Header />
+    <>
       <div className="advertising-page">
         <h1 className="advertising-title">広告掲載について</h1>
         <p className="advertising-description">
@@ -232,7 +228,6 @@ export default function AdvertisingPage() {
           </div>
         </section>
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

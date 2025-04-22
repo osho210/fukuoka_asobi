@@ -1,9 +1,5 @@
-import Image from 'next/image';
-import HamburgerMenu from '@/components/HamburgerMenu';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
-import EventList from '../../components/EventList';
-import EventCategoryList from '../../components/EventCategoryList';
+import EventList from '@/components/EventList';
+import EventCategoryList from '@/components/EventCategoryList';
 import '@styles/EventsPage.css';
 
 export const metadata = {
@@ -13,13 +9,7 @@ export const metadata = {
 
 export default function EventsPage() {
   return (
-    <div className="container">
-      <header className="header">
-        <h1>
-          <Image className="logo" src={'/logo.png'} width={190} height={45} alt="logo" />
-        </h1>
-        <HamburgerMenu />
-      </header>
+    <>
       <div className="events-page-container">
         <h1 className="events-page-heading">福岡のイベント</h1>
 
@@ -55,7 +45,6 @@ export default function EventsPage() {
           <EventList limit={4} showAll={false} />
         </section>
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

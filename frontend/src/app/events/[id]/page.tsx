@@ -1,8 +1,4 @@
-import Image from 'next/image';
-import HamburgerMenu from '@/components/HamburgerMenu';
-import Footer from '@/components/Footer';
-import '@styles/common.css';
-import EventList from '../../../components/EventList';
+import EventList from '@/components/EventList';
 import '@styles/EventsPage.css';
 import '@styles/ContentDetail.css';
 import EventDetailContainer from './event-detail.container';
@@ -20,14 +16,7 @@ export default async function EventPage({ params }: EventPageProps) {
   const { id } = await params;
 
   return (
-    <div className="container">
-      <header className="header">
-        <h1>
-          <Image className="logo" src={'/logo.png'} width={190} height={45} alt="logo" />
-        </h1>
-        <HamburgerMenu />
-      </header>
-
+    <>
       {/* イベント詳細 */}
       <EventDetailContainer eventId={id} />
 
@@ -36,7 +25,6 @@ export default async function EventPage({ params }: EventPageProps) {
         <h2 className="text-2xl font-bold mb-6">開催中のイベント</h2>
         <EventList limit={4} showAll={false} />
       </section>
-      <Footer />
-    </div>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import SearchContainer from '@/components/search/SearchContainer';
 import Loading from '@/components/common/Loading';
-import { Header } from '@/components/Header'
 
 
 export const metadata = {
@@ -12,7 +11,6 @@ export const metadata = {
 export default function SearchPage() {
   return (
     <>
-      <Header />
       <main className="min-h-screen py-8">
         <div className="container mx-auto px-4">
           <Suspense fallback={<Loading />}>

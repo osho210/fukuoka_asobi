@@ -8,10 +8,6 @@ import { UserPlayPlans } from '@/components/mypage/UserPlayPlans';
 import { UserBookmarks } from '@/components/mypage/UserBookmarks';
 import { ProfileEditor } from '@/components/mypage/ProfileEditor';
 import { useRouter } from 'next/navigation';
-import { Header } from '@/components/Header'
-import Footer from '@/components/Footer';
-import '@styles/common.css';
-
 
 export default function MyPage() {
   const router = useRouter();
@@ -78,8 +74,7 @@ export default function MyPage() {
   ];
 
   return (
-    <div className="container">
-      <Header />
+    <>
       <div className="">
         <MyPageTabs
           tabs={tabs}
@@ -87,7 +82,6 @@ export default function MyPage() {
           onTabChange={setActiveTab}
         />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

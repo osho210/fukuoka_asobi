@@ -1,8 +1,5 @@
 'use client';
-import { Header } from '@/components/Header';
-import Footer from '@/components/Footer';
 import { useState } from 'react';
-import '@styles/common.css';
 import './faq.css';
 
 // FAQデータ
@@ -102,8 +99,7 @@ export default function FAQPage() {
     };
 
     return (
-        <div className="container">
-            <Header />
+        <>
             <div className="faq-page">
                 <h1 className="faq-title">よくある質問</h1>
                 <p className="faq-description">
@@ -162,7 +158,6 @@ export default function FAQPage() {
                     <a href="/contact" className="faq-contact-button">お問い合わせはこちら</a>
                 </div>
             </div>
-            <Footer />
-        </div>
+        </>
     );
 }
