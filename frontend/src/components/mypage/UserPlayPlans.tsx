@@ -80,7 +80,7 @@ export const UserPlayPlans: React.FC = () => {
             <Link href={`/plans/${plan.id}`}>
               <div className="user-components-card-image">
                 {plan.imageUrl ? (
-                  <Image src={plan.imageUrl} alt={plan.planName} width={"300"} height={"300"} />
+                  <Image src={plan.imageUrl} alt={plan.planName} width={300} height={300} />
                 ) : (
                   <div className="user-components-card-no-image">No Image</div>
                 )}
