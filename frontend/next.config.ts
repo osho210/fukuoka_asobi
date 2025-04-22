@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
         port: '8200',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000',
+        pathname: '/fukuoka-asobi-dev/**',
+      },
     ],
   },
   // APIリクエストをバックエンドに転送するためのプロキシ設定
