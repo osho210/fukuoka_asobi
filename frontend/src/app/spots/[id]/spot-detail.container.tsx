@@ -3,7 +3,7 @@
 import { useQuery } from '@apollo/client';
 import { GET_SPOT } from '../../../graphql/queries/getSpot';
 import { Spot } from '../../../types/spot';
-import SpotDetailAdapter from '../../../components/adapters/SpotDetailAdapter';
+import SpotDetailAdapter from '@/components/adapters/SpotDetailAdapter';
 
 interface SpotDetailContainerProps {
   spotId: string;

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import EventList from '../../../../components/EventList';
-import EventCategoryList from '../../../../components/EventCategoryList';
+import EventList from '@/components/EventList';
+import EventCategoryList from '@/components/EventCategoryList';
 
 type CategoryPageProps = {
   params: Promise<{ id: string }>
