@@ -34,15 +34,6 @@
   - 3ステップの会員登録フロー
   - JWTを使用したセッション管理
 
-### 今後実装予定の機能
-
-- **カテゴリー別の場所一覧表示**
-- **場所の詳細情報表示**
-- **お気に入り登録機能**
-- **レビュー投稿機能**
-- **プラン作成・共有機能**
-- **天候に応じたプラン提案機能**
-
 ## 🏗 システム構成
 
 ### フロントエンド
@@ -64,60 +55,9 @@
 ### インフラ
 
 - **開発環境**: Docker Compose
-- **本番環境**: 未定
+- **本番環境**: vercel, aws
 
-## 🚀 セットアップ手順
 
-### 前提条件
-
-- Docker と Docker Compose がインストールされていること
-- Node.js と npm がインストールされていること
-- Ruby がインストールされていること
-
-### 開発環境のセットアップ
-
-1. リポジトリをクローン
-
-```bash
-git clone <repository-url>
-cd fukuoka-asobi
-```
-
-2. バックエンドのセットアップ
-
-```bash
-cd backend
-bundle install
-rails db:create
-rails db:migrate
-rails db:seed
-```
-
-3. フロントエンドのセットアップ
-
-```bash
-cd ../frontend
-npm install
-```
-
-4. 開発サーバーの起動
-
-バックエンド:
-```bash
-cd backend
-rails server -p 3000
-```
-
-フロントエンド:
-```bash
-cd frontend
-npm run dev
-```
-
-5. ブラウザでアクセス
-
-フロントエンド: http://localhost:8200
-バックエンドGraphQLエンドポイント: http://localhost:3000/graphql
 
 ## 💻 開発ワークフロー
 
@@ -153,102 +93,311 @@ npm run dev
 4. コードレビューを受け、必要に応じて修正
 5. レビュー承認後、ブランチをマージ
 
-## 📁 ディレクトリ構造
+## プロジェクト構成
 
 ```
 fukuoka-asobi/
-├── .github/                # GitHub関連ファイル
+├── .github/                # GitHub関連ファイル（現在は未実装）
 ├── backend/                # Railsバックエンド
 │   ├── app/                # アプリケーションコード
 │   │   ├── controllers/    # コントローラー
+│   │   │   ├── api/        # API用コントローラー
+│   │   │   │   ├── passwords_controller.rb  # パスワードリセット
+│   │   │   │   └── v1/     # APIバージョン1
+│   │   │   │       ├── auth_controller.rb   # 認証
+│   │   │   │       ├── sessions_controller.rb  # セッション管理
+│   │   │   │       └── users_controller.rb  # ユーザー管理
+│   │   │   ├── application_controller.rb    # アプリケーション共通コントローラー
+│   │   │   ├── graphql_controller.rb        # GraphQL用コントローラー
+│   │   │   └── concerns/   # 共通関心事
+│   │   │       └── authentication.rb        # 認証関連の共通処理
 │   │   ├── graphql/        # GraphQL関連
+│   │   │   ├── backend_schema.rb            # GraphQLスキーマ定義
+│   │   │   ├── mutations/  # ミューテーション（データ更新操作）
+│   │   │   │   ├── add_favorite.rb          # お気に入り追加
+│   │   │   │   ├── base_mutation.rb         # 基底ミューテーション
+│   │   │   │   ├── create_bookmark.rb       # ブックマーク作成
+│   │   │   │   ├── create_play_plan.rb      # 遊びプラン作成
+│   │   │   │   ├── delete_bookmark.rb       # ブックマーク削除
+│   │   │   │   ├── generate_plan.rb         # プラン生成
+│   │   │   │   ├── remove_favorite.rb       # お気に入り削除
+│   │   │   │   ├── update_bookmark.rb       # ブックマーク更新
+│   │   │   │   ├── update_play_plan.rb      # 遊びプラン更新
+│   │   │   │   ├── update_user_profile.rb   # ユーザープロフィール更新
+│   │   │   │   ├── user_apple_auth.rb       # Apple認証
+│   │   │   │   ├── user_google_auth.rb      # Google認証
+│   │   │   │   ├── user_login.rb            # ログイン
+│   │   │   │   ├── user_logout.rb           # ログアウト
+│   │   │   │   └── user_register.rb         # ユーザー登録
+│   │   │   ├── resolvers/  # リゾルバー（データ取得操作）
+│   │   │   │   ├── base_resolver.rb         # 基底リゾルバー
+│   │   │   │   ├── category_options_resolver.rb  # カテゴリーオプション
+│   │   │   │   ├── current_user_resolver.rb      # 現在のユーザー
+│   │   │   │   ├── event_resolver.rb             # イベント
+│   │   │   │   ├── events_resolver.rb            # イベント一覧
+│   │   │   │   ├── generate_plan_resolver.rb     # プラン生成
+│   │   │   │   ├── is_favorite_resolver.rb       # お気に入り確認
+│   │   │   │   ├── news_detail_resolver.rb       # ニュース詳細
+│   │   │   │   ├── news_resolver.rb              # ニュース
+│   │   │   │   ├── play_plan_resolver.rb         # 遊びプラン
+│   │   │   │   ├── play_plans_resolver.rb        # 遊びプラン一覧
+│   │   │   │   ├── search_plans_resolver.rb      # プラン検索
+│   │   │   │   ├── theme_options_resolver.rb     # テーマオプション
+│   │   │   │   ├── transportation_options_resolver.rb  # 交通手段オプション
+│   │   │   │   ├── user_bookmarks_resolver.rb    # ユーザーブックマーク
+│   │   │   │   ├── user_favorites_resolver.rb    # ユーザーお気に入り
+│   │   │   │   └── user_play_plans_resolver.rb   # ユーザー遊びプラン
+│   │   │   └── types/      # 型定義
+│   │   │       ├── area_type.rb                  # エリア型
+│   │   │       ├── base_*.rb                     # 基底型定義
+│   │   │       ├── bookmark_type.rb              # ブックマーク型
+│   │   │       ├── bookmarkable_union.rb         # ブックマーク可能型ユニオン
+│   │   │       ├── category_type.rb              # カテゴリー型
+│   │   │       ├── district_type.rb              # 地区型
+│   │   │       ├── event_type.rb                 # イベント型
+│   │   │       ├── favorite_type.rb              # お気に入り型
+│   │   │       ├── hashtag_type.rb               # ハッシュタグ型
+│   │   │       ├── mutation_type.rb              # ミューテーション型
+│   │   │       ├── news_type.rb                  # ニュース型
+│   │   │       ├── opening_hour_type.rb          # 営業時間型
+│   │   │       ├── plan_detail_type.rb           # プラン詳細型
+│   │   │       ├── play_plan_type.rb             # 遊びプラン型
+│   │   │       ├── query_type.rb                 # クエリ型
+│   │   │       ├── spot_type.rb                  # スポット型
+│   │   │       ├── travel_detail_type.rb         # 移動詳細型
+│   │   │       └── user_type.rb                  # ユーザー型
 │   │   ├── models/         # モデル
-│   │   └── ...
+│   │   │   ├── application_record.rb             # アプリケーション共通レコード
+│   │   │   ├── area.rb                           # エリアモデル
+│   │   │   ├── bookmark.rb                       # ブックマークモデル
+│   │   │   ├── category.rb                       # カテゴリーモデル
+│   │   │   ├── district.rb                       # 地区モデル
+│   │   │   ├── event.rb                          # イベントモデル
+│   │   │   ├── event_category.rb                 # イベントカテゴリーモデル
+│   │   │   ├── favorite.rb                       # お気に入りモデル
+│   │   │   ├── hashtag.rb                        # ハッシュタグモデル
+│   │   │   ├── instagram_embed.rb                # インスタグラム埋め込みモデル
+│   │   │   ├── menu.rb                           # メニューモデル
+│   │   │   ├── news.rb                           # ニュースモデル
+│   │   │   ├── opening_hour.rb                   # 営業時間モデル
+│   │   │   ├── plan_detail.rb                    # プラン詳細モデル
+│   │   │   ├── play_plan.rb                      # 遊びプランモデル
+│   │   │   ├── play_plan_recommended_for.rb      # 遊びプランおすすめ対象モデル
+│   │   │   ├── purpose.rb                        # 目的モデル
+│   │   │   ├── recommended_for.rb                # おすすめ対象モデル
+│   │   │   ├── spot.rb                           # スポットモデル
+│   │   │   ├── spot_ambiance.rb                  # スポット雰囲気モデル
+│   │   │   ├── spot_ambiance_relation.rb         # スポット雰囲気関連モデル
+│   │   │   ├── spot_area.rb                      # スポットエリアモデル
+│   │   │   ├── spot_category.rb                  # スポットカテゴリーモデル
+│   │   │   ├── spot_hashtag.rb                   # スポットハッシュタグモデル
+│   │   │   ├── spot_instagram_embed.rb           # スポットインスタグラム埋め込みモデル
+│   │   │   ├── spot_menu.rb                      # スポットメニューモデル
+│   │   │   ├── spot_purpose.rb                   # スポット目的モデル
+│   │   │   ├── travel_detail.rb                  # 移動詳細モデル
+│   │   │   └── user.rb                           # ユーザーモデル
+│   │   ├── services/       # サービスクラス
+│   │   │   ├── plan_generator.rb                 # プラン生成サービス
+│   │   │   └── favorites/  # お気に入り関連サービス
+│   │   │       └── toggle_service.rb             # お気に入り切り替えサービス
+│   │   ├── mailers/        # メーラー
+│   │   │   ├── application_mailer.rb             # アプリケーション共通メーラー
+│   │   │   └── password_mailer.rb                # パスワードリセットメーラー
+│   │   └── views/          # ビュー
 │   ├── config/             # 設定ファイル
+│   │   ├── application.rb                        # アプリケーション設定
+│   │   ├── boot.rb                               # 起動設定
+│   │   ├── database.yml                          # データベース設定
+│   │   ├── routes.rb                             # ルーティング設定
+│   │   ├── environments/                         # 環境別設定
+│   │   └── initializers/                         # 初期化設定
 │   ├── db/                 # データベース関連
-│   └── ...
+│   │   ├── migrate/        # マイグレーションファイル
+│   │   │   ├── 20250302004218_create_categories.rb            # カテゴリーテーブル作成
+│   │   │   ├── 20250307174617_create_districts.rb             # 地区テーブル作成
+│   │   │   ├── 20250307174627_create_areas.rb                 # エリアテーブル作成
+│   │   │   ├── 20250307174635_create_stores.rb                # 店舗テーブル作成
+│   │   │   ├── 20250307174641_create_opening_hours.rb         # 営業時間テーブル作成
+│   │   │   ├── 20250315113843_create_users.rb                 # ユーザーテーブル作成
+│   │   │   ├── 20250315231537_rename_store_to_spot_and_add_spot_type.rb  # 店舗→スポットリネーム
+│   │   │   ├── 20250316145732_create_event_categories.rb      # イベントカテゴリーテーブル作成
+│   │   │   ├── 20250316145752_create_events.rb                # イベントテーブル作成
+│   │   │   ├── 20250317144322_create_news.rb                  # ニューステーブル作成
+│   │   │   ├── 20250320063105_add_planner_fields_to_play_plans.rb  # プランナーフィールド追加
+│   │   │   ├── 20250322055500_create_travel_details.rb        # 移動詳細テーブル作成
+│   │   │   ├── 20250413052618_create_bookmarks.rb             # ブックマークテーブル作成
+│   │   │   └── 20250417083400_create_favorites.rb             # お気に入りテーブル作成
+│   │   ├── schema.rb                                          # スキーマ定義
+│   │   └── seeds.rb                                           # 初期データ
+│   ├── lib/                # ライブラリ
+│   │   └── tasks/          # Rakeタスク
+│   ├── spec/               # テスト
+│   │   ├── factories/      # ファクトリー
+│   │   ├── fixtures/       # フィクスチャ
+│   │   ├── graphql/        # GraphQLテスト
+│   │   ├── models/         # モデルテスト
+│   │   └── services/       # サービステスト
+│   ├── Gemfile             # Gem依存関係
+│   └── Gemfile.lock        # Gemバージョンロック
 ├── docs/                   # ドキュメント
-│   └── design.md           # 設計ドキュメント
-└── frontend/               # Next.jsフロントエンド
-    ├── public/             # 静的ファイル
-    ├── src/                # ソースコード
-    │   ├── app/            # Next.js App Router
-    │   ├── components/     # コンポーネント
-    │   ├── graphql/        # GraphQLクエリ・ミューテーション
-    │   └── lib/            # ユーティリティ関数
-    └── ...
+│   ├── design.md                                 # 全体設計書
+│   ├── cookie_auth_design.md                     # Cookie認証設計
+│   ├── generate_plan_auth_design.md              # プラン生成認証設計
+│   ├── news_design.md                            # ニュース機能設計
+│   ├── password_reset_design.md                  # パスワードリセット設計
+│   ├── plan_detail_auth_design.md                # プラン詳細認証設計
+│   ├── plan_generator_design.md                  # プラン生成機能設計
+│   ├── plan_search_design.md                     # プラン検索機能設計
+│   └── user_profile_update_design.md             # ユーザープロフィール更新設計
+├── frontend/               # Next.jsフロントエンド
+│   ├── public/             # 静的ファイル
+│   │   ├── logo.png                              # ロゴ
+│   │   ├── logo_inversion.png                    # 反転ロゴ
+│   │   ├── kv.jpg                                # キービジュアル
+│   │   ├── fukuoka_map.svg                       # 福岡マップ
+│   │   └── styles/                               # スタイルシート
+│   ├── src/                # ソースコード
+│   │   ├── app/            # Next.js App Router
+│   │   │   ├── layout.tsx                        # レイアウト
+│   │   │   ├── page.tsx                          # トップページ
+│   │   │   ├── about/                            # 会社概要ページ
+│   │   │   ├── advertising/                      # 広告ページ
+│   │   │   ├── contact/                          # お問い合わせページ
+│   │   │   ├── events/                           # イベントページ
+│   │   │   │   └── [id]/                         # イベント詳細ページ
+│   │   │   ├── faq/                              # FAQページ
+│   │   │   ├── forgot-password/                  # パスワード忘れページ
+│   │   │   ├── login/                            # ログインページ
+│   │   │   ├── mypage/                           # マイページ
+│   │   │   ├── news/                             # ニュースページ
+│   │   │   │   └── [id]/                         # ニュース詳細ページ
+│   │   │   ├── plans/                            # プランページ
+│   │   │   │   └── [id]/                         # プラン詳細ページ
+│   │   │   ├── privacy-policy/                   # プライバシーポリシーページ
+│   │   │   ├── register/                         # 登録ページ
+│   │   │   ├── reset-password/                   # パスワードリセットページ
+│   │   │   ├── search/                           # 検索ページ
+│   │   │   ├── sitemap/                          # サイトマップページ
+│   │   │   └── spots/                            # スポットページ
+│   │   │       └── [id]/                         # スポット詳細ページ
+│   │   ├── components/     # コンポーネント
+│   │   │   ├── ApolloWrapper.tsx                 # Apolloラッパー
+│   │   │   ├── BusinessHours.tsx                 # 営業時間
+│   │   │   ├── Categories.tsx                    # カテゴリー
+│   │   │   ├── EventDetail.tsx                   # イベント詳細
+│   │   │   ├── EventList.tsx                     # イベント一覧
+│   │   │   ├── Footer.tsx                        # フッター
+│   │   │   ├── Header.tsx                        # ヘッダー
+│   │   │   ├── NewsCard.tsx                      # ニュースカード
+│   │   │   ├── PlanTimeline.tsx                  # プランタイムライン
+│   │   │   ├── PlayPlanDetail.tsx                # 遊びプラン詳細
+│   │   │   ├── PlayPlanList.tsx                  # 遊びプラン一覧
+│   │   │   ├── SpotCard.tsx                      # スポットカード
+│   │   │   ├── SpotList.tsx                      # スポット一覧
+│   │   │   ├── adapters/                         # アダプター
+│   │   │   │   ├── EventDetailAdapter.tsx        # イベント詳細アダプター
+│   │   │   │   ├── NewsDetailAdapter.tsx         # ニュース詳細アダプター
+│   │   │   │   └── SpotDetailAdapter.tsx         # スポット詳細アダプター
+│   │   │   ├── auth/                             # 認証関連
+│   │   │   │   ├── ForgotPassword.tsx            # パスワード忘れ
+│   │   │   │   ├── Login.tsx                     # ログイン
+│   │   │   │   ├── RegisterFlow.tsx              # 登録フロー
+│   │   │   │   └── ResetPassword.tsx             # パスワードリセット
+│   │   │   ├── common/                           # 共通コンポーネント
+│   │   │   │   ├── AreaMap.tsx                   # エリアマップ
+│   │   │   │   ├── Button.tsx                    # ボタン
+│   │   │   │   ├── DatePicker.tsx                # 日付選択
+│   │   │   │   ├── FavoriteButton.tsx            # お気に入りボタン
+│   │   │   │   ├── Loading.tsx                   # ローディング
+│   │   │   │   └── TabSelector.tsx               # タブ選択
+│   │   │   ├── mypage/                           # マイページ関連
+│   │   │   │   ├── MyPageTabs.tsx                # マイページタブ
+│   │   │   │   ├── ProfileEditor.tsx             # プロフィール編集
+│   │   │   │   └── UserBookmarks.tsx             # ユーザーブックマーク
+│   │   │   ├── plan/                             # プラン関連
+│   │   │   │   ├── PlanHeader.tsx                # プランヘッダー
+│   │   │   │   ├── PlanRecommendation.tsx        # プラン推薦
+│   │   │   │   └── PlanStepList.tsx              # プランステップリスト
+│   │   │   ├── search/                           # 検索関連
+│   │   │   │   ├── AreaSelector.tsx              # エリア選択
+│   │   │   │   ├── DateTimeSelector.tsx          # 日時選択
+│   │   │   │   └── SearchContainer.tsx           # 検索コンテナ
+│   │   │   └── tests/                            # テスト
+│   │   │       └── Login.test.tsx                # ログインテスト
+│   │   ├── graphql/        # GraphQLクエリ・ミューテーション
+│   │   │   ├── bookmarks.graphql                 # ブックマーククエリ
+│   │   │   ├── favorites.graphql                 # お気に入りクエリ
+│   │   │   ├── generatePlan.graphql              # プラン生成クエリ
+│   │   │   ├── getRecommendedEvents.graphql      # おすすめイベント取得
+│   │   │   ├── getRecommendedSpots.graphql       # おすすめスポット取得
+│   │   │   ├── mypage.graphql                    # マイページクエリ
+│   │   │   ├── news.graphql                      # ニュースクエリ
+│   │   │   ├── searchPlans.graphql               # プラン検索クエリ
+│   │   │   └── queries/                          # クエリ
+│   │   │       ├── getAreas.ts                   # エリア取得
+│   │   │       ├── getCategories.ts              # カテゴリー取得
+│   │   │       ├── getEvent.ts                   # イベント取得
+│   │   │       ├── getNews.ts                    # ニュース取得
+│   │   │       └── getSpot.ts                    # スポット取得
+│   │   ├── lib/            # ユーティリティ関数
+│   │   │   ├── apolloClient.ts                   # Apolloクライアント
+│   │   │   ├── dateUtils.ts                      # 日付ユーティリティ
+│   │   │   ├── api/                              # API関連
+│   │   │   │   ├── client.ts                     # APIクライアント
+│   │   │   │   └── passwordApi.ts                # パスワードAPI
+│   │   │   ├── auth/                             # 認証関連
+│   │   │   │   └── AuthContext.tsx               # 認証コンテキスト
+│   │   │   └── hooks/                            # カスタムフック
+│   │   │       └── useOptions.ts                 # オプションフック
+│   │   ├── styles/         # スタイル
+│   │   │   ├── Button.module.css                 # ボタンスタイル
+│   │   │   ├── DatePicker.module.css             # 日付選択スタイル
+│   │   │   ├── PlanTimeline.module.css           # プランタイムラインスタイル
+│   │   │   └── SearchForm.module.css             # 検索フォームスタイル
+│   │   ├── types/          # 型定義
+│   │   │   ├── event.ts                          # イベント型
+│   │   │   ├── news.ts                           # ニュース型
+│   │   │   ├── plan.ts                           # プラン型
+│   │   │   └── spot.ts                           # スポット型
+│   │   └── utils/          # ユーティリティ
+│   │       ├── authUtils.ts                      # 認証ユーティリティ
+│   │       └── dateUtils.ts                      # 日付ユーティリティ
+│   ├── package.json        # パッケージ設定
+│   └── tsconfig.json       # TypeScript設定
+└── schemaspy/              # SchemaSpy関連
+    ├── config/             # SchemaSpy設定ファイル
+    │   └── schemaspy.properties                  # SchemaSpy設定
+    ├── output/             # 生成されたER図などの出力
+    │   ├── index.html                            # メインインデックス
+    │   ├── diagrams/                             # 図表
+    │   │   ├── summary/                          # 概要図
+    │   │   │   ├── relationships.real.compact.svg  # 実際のリレーション（コンパクト）
+    │   │   │   └── relationships.real.large.svg    # 実際のリレーション（大）
+    │   │   └── tables/                           # テーブル図
+    │   └── tables/                               # テーブル情報
+    └── run-schemaspy.sh    # 実行スクリプト
 ```
 
-## 📡 API仕様
+## 主要コンポーネント
 
-### GraphQL API
+### バックエンド (Rails)
 
-バックエンドはGraphQLを使用してAPIを提供しています。エンドポイントは `/graphql` です。
+- **コントローラー**: API・GraphQLエンドポイントを提供
+- **モデル**: データベースとのインタラクションを管理
+- **GraphQL**: フロントエンドとのデータやり取りを担当
+- **サービス**: ビジネスロジックを実装
 
-#### 主なクエリ
+### フロントエンド (Next.js)
 
-- `categories`: カテゴリー一覧を取得
-- `spots`: スポット一覧を取得
-- `spot(id: ID!)`: 特定のスポットを取得
+- **App Router**: ページルーティングを管理
+- **コンポーネント**: UI要素を構築
+- **GraphQL**: バックエンドとのデータやり取りを担当
+- **ユーティリティ**: 共通機能を提供
 
-#### 主なミューテーション
+### データベース
 
-- `userRegister`: ユーザー登録
-- `userLogin`: ログイン
-- `userLogout`: ログアウト
-- `userGoogleAuth`: Google認証
-- `userAppleAuth`: Apple認証
-
-### REST API
-
-認証関連の一部機能はREST APIも提供しています。
-
-- `POST /api/v1/login`: ログイン
-- `POST /api/v1/signup`: 会員登録
-- `DELETE /api/v1/logout`: ログアウト
-- `/api/v1/login_user`: ログインユーザーの取得
-- `/password/forgot`: パスワードリセット
-- `api/password/reset`: パスワードリセット実行
-
-### ルーティング設定
-
-フロントエンドからバックエンドへのAPIリクエストは、Next.jsのリライト機能を使用して転送されます。
-
-#### Next.jsのリライト設定
-
-`next.config.ts`で以下のリライトルールが設定されています：
-
-```typescript
-async rewrites() {
-  return [
-    {
-      source: '/api/v1/:path*',
-      destination: 'http://localhost:3000/api/v1/:path*',
-    },
-    {
-      source: '/graphql',
-      destination: 'http://localhost:3000/graphql',
-    },
-  ];
-}
-```
-
-#### Apollo Clientの設定
-
-Apollo Clientは相対パスを使用してGraphQLエンドポイントにアクセスします：
-
-```typescript
-const client = new ApolloClient({
-    link: new HttpLink({
-        uri: '/graphql',
-        credentials: 'include',
-    }),
-    cache: new InMemoryCache(),
-});
-```
-
-これにより、リクエストはNext.jsのリライトルールを通じてバックエンドに転送されます。
-
+- **マイグレーション**: データベーススキーマを定義・更新
+- **SchemaSpy**: データベース構造を可視化
 ## 👥 貢献ガイドライン
 
 ### コーディング規約
@@ -263,15 +412,4 @@ const client = new ApolloClient({
 
 ### ドキュメント
 
-- 新機能を追加する場合は、対応するドキュメントも更新する
-- APIの変更がある場合は、API仕様書を更新する
-
-### Issue・Pull Request
-
-- 新機能の追加や大きな変更を行う前に、Issueを作成して議論する
-- Pull Requestは小さく保ち、1つの機能や修正に焦点を当てる
-- Pull Requestには適切なテストとドキュメントを含める
-
-## 📄 ライセンス
-
-このプロジェクトは [MIT License](LICENSE) の下で公開されています。
+- 設計書: 各機能の詳細設計を記述
