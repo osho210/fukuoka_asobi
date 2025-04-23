@@ -1,85 +1,77 @@
-# SchemaSpy 使用ガイド
+# SchemaSpy
+
+このディレクトリには、データベース構造を可視化するためのSchemaSpy関連ファイルが含まれています。
 
 ## 概要
 
-SchemaSpy は、データベースのスキーマを分析し、ER図やテーブル間の関係などを視覚的に表示するツールです。このプロジェクトでは、Docker を使用して SchemaSpy を実行し、福岡遊び日記のデータベース設計を可視化します。
+SchemaSpyは、データベースのスキーマを分析し、HTML形式のドキュメントとして出力するツールです。テーブル間のリレーションシップ、カラム情報、インデックスなどを視覚的に確認することができます。
 
-## セットアップ
+## ディレクトリ構成
 
-すでに必要なファイルとディレクトリは作成されています：
+```
+schemaspy/
+├── config/             # SchemaSpy設定ファイル
+│   └── schemaspy.properties  # 主要設定ファイル
+├── output/             # 生成されたER図などの出力
+│   ├── index.html      # メインインデックスページ
+│   ├── diagrams/       # 図表ディレクトリ
+│   │   ├── summary/    # 概要図
+│   │   └── tables/     # テーブル図
+│   └── tables/         # テーブル情報
+└── run-schemaspy.sh    # 実行スクリプト
+```
 
-- `docker-compose.yml` - SchemaSpy サービスの定義
-- `schemaspy/config/schemaspy.properties` - SchemaSpy の設定ファイル
-- `schemaspy/run-schemaspy.sh` - SchemaSpy 実行スクリプト
-- `schemaspy/output/` - SchemaSpy の出力ディレクトリ
+## 設定ファイル
+
+`config/schemaspy.properties`には以下の主要な設定が含まれています：
+
+- データベース接続設定（ホスト、ポート、ユーザー名、パスワードなど）
+- 出力設定
+- テーブル設定（特定のテーブルの包含/除外）
+- その他の設定（デバッグモード、文字セットなど）
 
 ## 使用方法
 
-### SchemaSpy の実行
+### ER図の生成
 
-1. プロジェクトのルートディレクトリで以下のコマンドを実行します：
+以下のコマンドを実行して、データベースのER図を生成します：
 
 ```bash
 ./schemaspy/run-schemaspy.sh
 ```
 
-2. スクリプトが実行され、SchemaSpy がデータベースのスキーマを分析します。
-3. 実行が完了すると、結果が `schemaspy/output` ディレクトリに保存されます。
+このスクリプトは以下の処理を行います：
+
+1. 既存のSchemaSpy Dockerコンテナを停止・削除（存在する場合）
+2. SchemaSpy Dockerコンテナを実行
+3. データベースに接続してスキーマを分析
+4. HTML形式のドキュメントを`./schemaspy/output`ディレクトリに生成
 
 ### 結果の確認
 
-1. ブラウザで `schemaspy/output/index.html` ファイルを開きます：
+生成されたドキュメントは以下の方法で確認できます：
 
-```bash
-open schemaspy/output/index.html
-```
+1. ブラウザで`./schemaspy/output/index.html`を開く
+2. 各テーブルの詳細情報、リレーションシップ図、カラム情報などを閲覧
 
-2. ブラウザで ER 図やテーブル定義などが表示されます。
+## 主要な出力ファイル
 
-## 主な機能
+- `index.html`: メインインデックスページ
+- `tables/[テーブル名].html`: 各テーブルの詳細情報
+- `diagrams/summary/relationships.real.large.svg`: 全体のER図（大）
+- `diagrams/summary/relationships.real.compact.svg`: 全体のER図（コンパクト）
+- `diagrams/tables/[テーブル名].1degree.svg`: 特定テーブルとその直接の関連テーブルを表示
 
-SchemaSpy の主な機能は以下の通りです：
+## 注意事項
 
-- **ER図の生成**: データベース内のテーブル間の関係を視覚的に表示します。
-- **テーブル定義**: 各テーブルの列定義、データ型、制約などを表示します。
-- **インデックス情報**: テーブルのインデックス情報を表示します。
-- **制約情報**: 主キー、外部キー、ユニーク制約などの情報を表示します。
-- **統計情報**: テーブルのサイズや行数などの統計情報を表示します。
+- SchemaSpy実行にはDockerが必要です
+- データベースが起動していることを確認してから実行してください
+- 大規模なデータベースの場合、生成に時間がかかることがあります
 
 ## カスタマイズ
 
-SchemaSpy の設定をカスタマイズする場合は、`schemaspy/config/schemaspy.properties` ファイルを編集します。主な設定項目は以下の通りです：
+必要に応じて`config/schemaspy.properties`ファイルを編集することで、出力内容をカスタマイズできます：
 
-- **特定のテーブルのみを含める**: `schemaspy.i=table1,table2` のように指定します。
-- **特定のテーブルを除外する**: `schemaspy.I=table3,table4` のように指定します。
-- **詳細なログを出力**: `schemaspy.debug=true` を設定します。
-- **関係のないテーブルを非表示**: `schemaspy.noorphans=true` を設定します。
-
-詳細な設定オプションについては、[SchemaSpy の公式ドキュメント](http://schemaspy.org/) を参照してください。
-
-## トラブルシューティング
-
-### データベースに接続できない場合
-
-1. データベースが実行中であることを確認します：
-
-```bash
-docker-compose ps db
-```
-
-2. データベースの接続情報が正しいことを確認します：
-
-```bash
-docker-compose exec db mysql -u rails -prails -h localhost fukuoka_asobi_development -e "SHOW TABLES;"
-```
-
-### SchemaSpy の実行に失敗する場合
-
-1. Docker ログを確認します：
-
-```bash
-docker-compose logs schemaspy
-```
-
-2. 設定ファイルのパラメータが正しいことを確認します。
-3. 必要に応じて、`docker-compose.yml` の SchemaSpy サービス定義を修正します。
+- 特定のテーブルのみを含める/除外する
+- 出力形式や詳細レベルを変更する
+- メタデータを追加する
