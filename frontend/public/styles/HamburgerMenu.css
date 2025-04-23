@@ -1,3 +1,10 @@
+.hamburger-menu-container {
+    position: fixed;
+    top: 25px;
+    right: 20px;
+    z-index: 10;
+}
+
 .hamburger-menu {
     display: flex;
     flex-direction: column;
@@ -6,7 +13,6 @@
     height: 20px;
     cursor: pointer;
     position: relative;
-    z-index: 10;
 }
 
 .hamburger-menu__bar {
@@ -96,7 +102,8 @@
     gap: 10px;
 }
 
-.confirm-button, .cancel-button {
+.confirm-button,
+.cancel-button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -117,4 +124,10 @@
 .logout-button {
     cursor: pointer;
     margin: 0;
+}
+
+@media screen and (min-width: 768px) {
+    .hamburger-menu-container {
+        right: 200px;
+    }
 }

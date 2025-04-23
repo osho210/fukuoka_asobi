@@ -176,18 +176,24 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
+                                width={100}
+                                height={100}
                             />
                         ) : user.avatarUrl ? (
                             <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
+                                width={100}
+                                height={100}
                             />
                         ) : profileImageUrl ? (
                             <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
                                 className={styles['profile-editor-image']}
+                                width={100}
+                                height={100}
                             />
                         ) : (
                             <div className={styles['profile-editor-image-placeholder']}>

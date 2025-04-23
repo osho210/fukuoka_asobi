@@ -17,7 +17,7 @@ const HamburgerMenu = () => {
         if (isOpen) {
             setIsOpen(false);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname]);
 
     const toggleModal = () => {
@@ -50,9 +50,11 @@ const HamburgerMenu = () => {
 
     return (
         <div>
-            <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} onClick={toggleModal}>
-                <div className='hamburger-menu__bar'></div>
-                <div className='hamburger-menu__bar'></div>
+            <div className='hamburger-menu-container'>
+                <div className={`hamburger-menu ${isOpen ? 'open' : ''}`} onClick={toggleModal}>
+                    <div className='hamburger-menu__bar'></div>
+                    <div className='hamburger-menu__bar'></div>
+                </div>
             </div>
             {isOpen && (
                 <div className='modal'>
