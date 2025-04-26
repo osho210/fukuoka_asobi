@@ -1,0 +1,629 @@
+/* グローバルスタイル */
+:root {
+  --primary-color: #F58F81;
+  --secondary-color: #333333;
+  --background-color: #FFFFFF;
+  --foreground-color: #333333;
+  --border-color: #E5E7EB;
+  --input-color: #E5E7EB;
+  --ring-color: #333333;
+  --muted-color: #F3F4F6;
+  --muted-foreground-color: #6B7280;
+  --accent-color: #F3F4F6;
+  --accent-foreground-color: #111827;
+  --destructive-color: #EF4444;
+  --destructive-foreground-color: #FFFFFF;
+  --radius: 0.5rem;
+}
+
+/* ベーススタイル */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+  color: var(--foreground-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ボタンスタイル */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  height: 2.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--primary-color), black 10%);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: color-mix(in srgb, var(--secondary-color), black 10%);
+}
+
+.btn-outline {
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+}
+
+.btn-outline:hover {
+  background-color: var(--accent-color);
+  color: var(--accent-foreground-color);
+}
+
+.btn-destructive {
+  background-color: var(--destructive-color);
+  color: var(--destructive-foreground-color);
+}
+
+.btn-destructive:hover {
+  background-color: color-mix(in srgb, var(--destructive-color), black 10%);
+}
+
+.btn-ghost {
+  background-color: transparent;
+}
+
+.btn-ghost:hover {
+  background-color: var(--accent-color);
+  color: var(--accent-foreground-color);
+}
+
+.btn-link {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  background-color: transparent;
+  height: auto;
+  padding: 0;
+}
+
+.btn-sm {
+  height: 2.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: var(--radius);
+}
+
+.btn-lg {
+  height: 2.75rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-radius: var(--radius);
+}
+
+.btn-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0;
+}
+
+/* フォームスタイル */
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field-full {
+  width: 100%;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground-color);
+  margin-bottom: 0.25rem;
+}
+
+.form-label-required::after {
+  content: "*";
+  color: var(--destructive-color);
+  margin-left: 0.25rem;
+}
+
+.form-input {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-color);
+  background-color: var(--background-color);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.form-input:focus-visible {
+  outline: none;
+  border-color: var(--ring-color);
+  box-shadow: 0 0 0 2px var(--ring-color);
+}
+
+.form-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-textarea {
+  display: flex;
+  min-height: 5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-color);
+  background-color: var(--background-color);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.form-textarea:focus-visible {
+  outline: none;
+  border-color: var(--ring-color);
+  box-shadow: 0 0 0 2px var(--ring-color);
+}
+
+.form-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-select {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-color);
+  background-color: var(--background-color);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.form-select:focus-visible {
+  outline: none;
+  border-color: var(--ring-color);
+  box-shadow: 0 0 0 2px var(--ring-color);
+}
+
+.form-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-multiselect {
+  display: flex;
+  min-height: 7.5rem;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--input-color);
+  background-color: var(--background-color);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.form-multiselect:focus-visible {
+  outline: none;
+  border-color: var(--ring-color);
+  box-shadow: 0 0 0 2px var(--ring-color);
+}
+
+.form-multiselect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.form-toggle-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.form-toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 2.75rem;
+  height: 1.5rem;
+  background-color: #E5E7EB;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.form-toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.form-toggle-input:checked + .form-toggle-slider {
+  background-color: var(--primary-color);
+}
+
+.form-toggle-input:checked + .form-toggle-slider::after {
+  transform: translateX(1.25rem);
+}
+
+.form-toggle-label {
+  margin-left: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-helper-text {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground-color);
+}
+
+.form-error-text {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--destructive-color);
+}
+
+.form-input-error,
+.form-textarea-error,
+.form-select-error,
+.form-multiselect-error {
+  border-color: var(--destructive-color);
+}
+
+.form-input-error:focus-visible,
+.form-textarea-error:focus-visible,
+.form-select-error:focus-visible,
+.form-multiselect-error:focus-visible {
+  border-color: var(--destructive-color);
+  box-shadow: 0 0 0 2px var(--destructive-color);
+}
+
+/* テーブルスタイル */
+.table-container {
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+.table-header {
+  background-color: #F9FAFB;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-header-cell {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  color: #6B7280;
+}
+
+.table-header-cell-sortable {
+  cursor: pointer;
+}
+
+.table-row {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-row-clickable {
+  cursor: pointer;
+}
+
+.table-row-clickable:hover {
+  background-color: #F9FAFB;
+}
+
+.table-row-hovered {
+  background-color: #F9FAFB;
+}
+
+.table-cell {
+  padding: 0.75rem 1rem;
+}
+
+.table-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #6B7280;
+}
+
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.table-pagination-info {
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+.table-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-pagination-text {
+  font-size: 0.875rem;
+}
+
+/* レイアウトスタイル */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* テキストスタイル */
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-gray-500 {
+  color: #6B7280;
+}
+
+.text-red-500 {
+  color: var(--destructive-color);
+}
+
+/* ボーダーとシャドウ */
+.border {
+  border: 1px solid var(--border-color);
+}
+
+.border-b {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rounded-md {
+  border-radius: var(--radius);
+}
+
+.rounded-lg {
+  border-radius: calc(var(--radius) + 2px);
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* グリッドレイアウト */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .md-grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* その他のユーティリティ */
+.w-full {
+  width: 100%;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-gray-50 {
+  background-color: #F9FAFB;
+}
