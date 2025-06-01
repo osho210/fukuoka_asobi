@@ -43,7 +43,9 @@ export function DataTable<T extends Record<string, unknown>>({
   pagination,
   sorting
 }: DataTableProps<T>) {
+  // 値の型定義
   type ValueType = string | number | boolean | null | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hoveredRowId, setHoveredRowId] = useState<ValueType>(null);
 
   // ソート状態の切り替え
@@ -65,23 +67,23 @@ export function DataTable<T extends Record<string, unknown>>({
   const currentPage = pagination?.currentPage || 1;
 
   return (
-    <div className="table-container">
-      <div className="border rounded-md">
-        <table className="table">
-          <thead className="table-header">
+    <div className="admin-table-container">
+      <div className="admin-card">
+        <table className="admin-table">
+          <thead>
             <tr>
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className={`table-header-cell ${column.sortable ? 'table-header-cell-sortable' : ''}`}
+                  className={column.sortable ? 'cursor-pointer' : ''}
                 >
                   {column.sortable && sorting ? (
                     <button
-                      className="flex items-center gap-1"
+                      className="admin-flex admin-items-center"
                       onClick={() => handleSort(column)}
                     >
                       {column.header}
-                      <ArrowUpDown className="w-4 h-4" />
+                      <ArrowUpDown className="w-4 h-4 admin-ml-1" />
                     </button>
                   ) : (
                     column.header
@@ -95,7 +97,7 @@ export function DataTable<T extends Record<string, unknown>>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="table-empty"
+                  className="admin-table-empty"
                 >
                   データがありません
                 </td>
@@ -104,17 +106,13 @@ export function DataTable<T extends Record<string, unknown>>({
               data.map((item) => (
                 <tr
                   key={String(item[keyField])}
-                  className={`table-row ${
-                    onRowClick ? 'table-row-clickable' : ''
-                  } ${
-                    hoveredRowId === item[keyField] ? 'table-row-hovered' : ''
-                  }`}
+                  className={onRowClick ? 'admin-table-clickable' : ''}
                   onClick={() => onRowClick && onRowClick(item)}
                   onMouseEnter={() => setHoveredRowId(item[keyField] as ValueType)}
                   onMouseLeave={() => setHoveredRowId(null)}
                 >
                   {columns.map((column, cellIndex) => (
-                    <td key={cellIndex} className="table-cell">
+                    <td key={cellIndex}>
                       {column.cell
                         ? column.cell(item)
                         : String(item[column.accessorKey] || '')}
@@ -128,14 +126,14 @@ export function DataTable<T extends Record<string, unknown>>({
       </div>
 
       {pagination && (
-        <div className="table-pagination">
-          <div className="table-pagination-info">
+        <div className="admin-pagination">
+          <div className="admin-pagination-info">
             全 {pagination.totalCount} 件中 {(currentPage - 1) * pagination.pageSize + 1} - {Math.min(
               currentPage * pagination.pageSize,
               pagination.totalCount
             )} 件を表示
           </div>
-          <div className="table-pagination-controls">
+          <div className="admin-pagination-controls">
             <Button
               variant="outline"
               size="sm"
@@ -152,7 +150,7 @@ export function DataTable<T extends Record<string, unknown>>({
             >
               <ChevronLeftIcon className="w-4 h-4" />
             </Button>
-            <span className="table-pagination-text">
+            <span className="admin-pagination-text">
               {currentPage} / {totalPages}
             </span>
             <Button

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ApolloWrapper } from "@/components/ApolloWrapper";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,56 +28,56 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#FAFAFA]`}>
         <ApolloWrapper>
-          <div className="flex min-h-screen">
-            <aside className="w-64 bg-white border-r border-gray-200 p-4">
-              <div className="mb-8">
-                <h1 className="text-xl font-bold text-primary">福岡遊び管理</h1>
+          <div className="admin-layout">
+            <aside className="admin-sidebar">
+              <div className="admin-sidebar-header">
+                <h1 className="admin-sidebar-title">福岡遊び管理</h1>
               </div>
-              <nav>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="/admin" className="block p-2 rounded hover:bg-gray-100">ダッシュボード</a>
+              <nav className="admin-sidebar-nav">
+                <ul className="admin-sidebar-nav-list">
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="/" className="admin-sidebar-nav-link">ダッシュボード</Link>
                   </li>
-                  <li>
-                    <a href="/admin/spots" className="block p-2 rounded hover:bg-gray-100">スポット</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="spots" className="admin-sidebar-nav-link">スポット</Link>
                   </li>
-                  <li>
-                    <a href="/admin/areas" className="block p-2 rounded hover:bg-gray-100">エリア</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="areas" className="admin-sidebar-nav-link">エリア</Link>
                   </li>
-                  <li>
-                    <a href="/admin/categories" className="block p-2 rounded hover:bg-gray-100">カテゴリー</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="categories" className="admin-sidebar-nav-link">カテゴリー</Link>
                   </li>
-                  <li>
-                    <a href="/admin/districts" className="block p-2 rounded hover:bg-gray-100">地区</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="districts" className="admin-sidebar-nav-link">地区</Link>
                   </li>
-                  <li>
-                    <a href="/admin/hashtags" className="block p-2 rounded hover:bg-gray-100">ハッシュタグ</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="hashtags" className="admin-sidebar-nav-link">ハッシュタグ</Link>
                   </li>
-                  <li>
-                    <a href="/admin/menus" className="block p-2 rounded hover:bg-gray-100">メニュー</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="menus" className="admin-sidebar-nav-link">メニュー</Link>
                   </li>
-                  <li>
-                    <a href="/admin/purposes" className="block p-2 rounded hover:bg-gray-100">目的</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="purposes" className="admin-sidebar-nav-link">目的</Link>
                   </li>
-                  <li>
-                    <a href="/admin/recommended_fors" className="block p-2 rounded hover:bg-gray-100">おすすめ対象</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="recommended_fors" className="admin-sidebar-nav-link">おすすめ対象</Link>
                   </li>
-                  <li>
-                    <a href="/admin/spot_ambiances" className="block p-2 rounded hover:bg-gray-100">雰囲気</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="spot_ambiances" className="admin-sidebar-nav-link">雰囲気</Link>
                   </li>
-                  <li>
-                    <a href="/admin/play_plans" className="block p-2 rounded hover:bg-gray-100">遊びプラン</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="play_plans" className="admin-sidebar-nav-link">遊びプラン</Link>
                   </li>
-                  <li>
-                    <a href="/admin/events" className="block p-2 rounded hover:bg-gray-100">イベント</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="events" className="admin-sidebar-nav-link">イベント</Link>
                   </li>
-                  <li>
-                    <a href="/admin/news" className="block p-2 rounded hover:bg-gray-100">ニュース</a>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="news" className="admin-sidebar-nav-link">ニュース</Link>
                   </li>
                 </ul>
               </nav>
             </aside>
-            <main className="flex-1 p-8">
+            <main className="admin-main">
               {children}
             </main>
           </div>

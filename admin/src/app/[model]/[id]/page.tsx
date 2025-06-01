@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -8,6 +8,8 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
+import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
+import { ModelInput } from '@/lib/modelGraphQL';
 
 // モデルデータの型定義
 interface ModelData {
@@ -20,68 +22,6 @@ interface RelationData {
   id: string;
   [key: string]: string | number | boolean | object | null;
 }
-
-// ダミーデータ（GraphQLが未実装の場合に使用）
-const dummyData: Record<string, Record<string, ModelData>> = {
-  areas: {
-    '1': { id: '1', areaName: '天神', district: { id: '1', districtName: '福岡市中央区' }, updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', areaName: '博多', district: { id: '2', districtName: '福岡市博多区' }, updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  categories: {
-    '1': { id: '1', categoryName: 'カフェ', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', categoryName: 'レストラン', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  districts: {
-    '1': { id: '1', districtName: '福岡市中央区', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', districtName: '福岡市博多区', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  hashtags: {
-    '1': { id: '1', hashtagName: 'おしゃれ', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', hashtagName: '穴場', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  menus: {
-    '1': { id: '1', menuName: 'モーニング', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', menuName: 'ランチ', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  purposes: {
-    '1': { id: '1', purposeName: 'デート', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', purposeName: '女子会', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  recommended_fors: {
-    '1': { id: '1', recommendedForName: 'カップル', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', recommendedForName: '友達同士', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  spot_ambiances: {
-    '1': { id: '1', ambianceName: '落ち着いた', updatedAt: '2025-04-01T10:00:00Z' },
-    '2': { id: '2', ambianceName: '賑やか', updatedAt: '2025-04-02T10:00:00Z' },
-  },
-  spots: {
-    '1': {
-      id: '1',
-      storeName: 'カフェA',
-      address: '福岡市中央区天神1-1-1',
-      district: { id: '1', districtName: '福岡市中央区' },
-      phone: '092-123-4567',
-      website: 'https://example.com',
-      catchphrase: '天神の隠れ家カフェ',
-      isRainyOk: true,
-      budgetRange: '普通',
-      updatedAt: '2025-04-01T10:00:00Z'
-    },
-    '2': {
-      id: '2',
-      storeName: 'レストランB',
-      address: '福岡市博多区博多駅前2-2-2',
-      district: { id: '2', districtName: '福岡市博多区' },
-      phone: '092-987-6543',
-      website: 'https://example.org',
-      catchphrase: '博多の人気レストラン',
-      isRainyOk: false,
-      budgetRange: '高い',
-      updatedAt: '2025-04-02T10:00:00Z'
-    },
-  },
-};
 
 // モデル名の日本語表示
 const modelDisplayNames: Record<string, string> = {
@@ -106,7 +46,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'district', type: 'relation', required: true },
   ],
   categories: [
-    { name: 'categoryName', type: 'text', required: true },
+    { name: 'name', type: 'text', required: true },
   ],
   districts: [
     { name: 'districtName', type: 'text', required: true },
@@ -121,16 +61,16 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'purposeName', type: 'text', required: true },
   ],
   recommended_fors: [
-    { name: 'recommendedForName', type: 'text', required: true },
+    { name: 'name', type: 'text', required: true },
   ],
   spot_ambiances: [
     { name: 'ambianceName', type: 'text', required: true },
   ],
   spots: [
-    { name: 'storeName', type: 'text', required: true },
+    { name: 'spotName', type: 'text', required: true },
     { name: 'address', type: 'text', required: true },
     { name: 'district', type: 'relation', required: true },
-    { name: 'phone', type: 'text' },
+    { name: 'phoneNumber', type: 'text' },
     { name: 'website', type: 'text' },
     { name: 'catchphrase', type: 'text' },
     { name: 'isRainyOk', type: 'boolean' },
@@ -142,16 +82,15 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
 const fieldDisplayNames: Record<string, string> = {
   areaName: 'エリア名',
   district: '地区',
-  categoryName: 'カテゴリー名',
+  name: '名前',
   districtName: '地区名',
   hashtagName: 'ハッシュタグ名',
   menuName: 'メニュー名',
   purposeName: '目的名',
-  recommendedForName: 'おすすめ対象名',
   ambianceName: '雰囲気名',
-  storeName: '店舗名',
+  spotName: 'スポット名',
   address: '住所',
-  phone: '電話番号',
+  phoneNumber: '電話番号',
   website: 'ウェブサイト',
   catchphrase: 'キャッチフレーズ',
   isRainyOk: '雨天可否',
@@ -175,40 +114,13 @@ export default function ModelDetailPage() {
   const isNew = id === 'new';
 
   const [formData, setFormData] = useState<ModelData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading,] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = modelFields[modelRoute] || [];
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      try {
-        if (isNew) {
-          // 新規作成の場合は空のフォームデータを作成
-          const newData: ModelData = { id: '' };
-          setFormData(newData);
-        } else {
-          // 既存データの取得（ダミーデータを使用）
-          const data = dummyData[modelRoute]?.[id];
-          if (data) {
-            setFormData(data);
-          } else {
-            console.error('データが見つかりません');
-          }
-        }
-      } catch (error) {
-        console.error('データの取得に失敗しました:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [modelRoute, id, isNew]);
 
   const handleChange = (name: string, value: string | boolean | RelationData) => {
     if (!formData) return;
@@ -240,23 +152,55 @@ export default function ModelDetailPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const prepareFormData = (): ModelInput => {
+    const input: ModelInput = {};
+
+    // フォームデータからGraphQLミューテーション用のデータを作成
+    fields.forEach((field) => {
+      const fieldName = field.name;
+      const value = formData?.[fieldName];
+
+      if (field.type === 'relation' && typeof value === 'object' && value !== null) {
+        // リレーションフィールドの場合はIDを取得
+        const relationData = value as RelationData;
+        input[`${fieldName}Id`] = relationData.id;
+      } else {
+        // 通常のフィールドの場合はそのまま設定
+        if (value !== undefined && value !== null) {
+          input[fieldName] = value as string | number | boolean;
+        }
+      }
+    });
+
+    return input;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!validateForm() || !formData) {
       return;
     }
 
     setIsSaving(true);
+    setError(null);
 
     try {
-      // GraphQLミューテーションの代わりにダミー処理
-      console.log('保存データ:', formData);
+      const input = prepareFormData();
+
+      if (isNew) {
+        // 新規作成
+        await createModel(modelRoute, input);
+      } else {
+        // 更新
+        await updateModel(modelRoute, id, input);
+      }
 
       // 成功したら一覧ページに戻る
-      router.push(`/admin/${modelRoute}`);
-    } catch (error) {
-      console.error('保存に失敗しました:', error);
+      router.push(`/${modelRoute}`);
+    } catch (err) {
+      console.error('保存に失敗しました:', err);
+      setError('保存に失敗しました');
     } finally {
       setIsSaving(false);
     }
@@ -267,39 +211,45 @@ export default function ModelDetailPage() {
       return;
     }
 
+    setError(null);
+
     try {
-      // GraphQLミューテーションの代わりにダミー処理
-      console.log('削除データ:', formData);
+      await deleteModel(modelRoute, id);
 
       // 成功したら一覧ページに戻る
-      router.push(`/admin/${modelRoute}`);
-    } catch (error) {
-      console.error('削除に失敗しました:', error);
+      router.push(`/${modelRoute}`);
+    } catch (err) {
+      console.error('削除に失敗しました:', err);
+      setError('削除に失敗しました');
     }
   };
 
   if (isLoading) {
-    return <div className="p-4">読み込み中...</div>;
+    return (
+      <div className="admin-loading">
+        <div className="admin-spinner"></div>
+      </div>
+    );
   }
 
   if (!formData) {
-    return <div className="p-4">データが見つかりません</div>;
+    return <div className="admin-card">データが見つかりません</div>;
   }
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center">
+      <div className="admin-header">
+        <div className="admin-flex admin-items-center">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push(`/admin/${modelRoute}`)}
-            className="mr-2"
+            onClick={() => router.push(`/${modelRoute}`)}
+            className="admin-mr-2"
           >
-            <ArrowLeft className="h-4 w-4 mr-1" />
+            <ArrowLeft className="h-4 w-4 admin-mr-1" />
             戻る
           </Button>
-          <h1 className="text-2xl font-bold">
+          <h1 className="admin-page-title">
             {isNew ? `${fieldLabel}新規作成` : `${fieldLabel}編集`}
           </h1>
         </div>
@@ -309,14 +259,20 @@ export default function ModelDetailPage() {
             onClick={handleDelete}
             disabled={isSaving}
           >
-            <Trash2 className="h-4 w-4 mr-1" />
+            <Trash2 className="h-4 w-4 admin-mr-1" />
             削除
           </Button>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {error && (
+        <div className="admin-alert admin-alert-danger admin-mb-4">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="admin-card">
+        <div className="admin-form-grid">
           {fields.map((field) => {
             const fieldName = field.name;
             const fieldLabel = fieldDisplayNames[fieldName] || fieldName;
@@ -405,13 +361,13 @@ export default function ModelDetailPage() {
           })}
         </div>
 
-        <div className="mt-8 flex justify-end">
+        <div className="admin-mt-4 admin-flex admin-justify-end">
           <Button
             type="submit"
             disabled={isSaving}
           >
-            <Save className="h-4 w-4 mr-1" />
-            保存
+            <Save className="h-4 w-4 admin-mr-1" />
+            {isSaving ? '保存中...' : '保存'}
           </Button>
         </div>
       </form>

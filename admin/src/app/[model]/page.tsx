@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { DataTable } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon } from 'lucide-react';
+import { fetchModelList } from '@/lib/modelGraphQL';
 
 // 各モデルの列定義
 interface ColumnDefinition {
@@ -22,7 +23,7 @@ const columnConfigs: Record<string, ColumnDefinition[]> = {
   ],
   categories: [
     { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'categoryName', sortable: true },
+    { header: '名前', accessorKey: 'name', sortable: true },
     { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   districts: [
@@ -47,7 +48,7 @@ const columnConfigs: Record<string, ColumnDefinition[]> = {
   ],
   recommended_fors: [
     { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'recommendedForName', sortable: true },
+    { header: '名前', accessorKey: 'name', sortable: true },
     { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   spot_ambiances: [
@@ -57,7 +58,7 @@ const columnConfigs: Record<string, ColumnDefinition[]> = {
   ],
   spots: [
     { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'storeName', sortable: true },
+    { header: '名前', accessorKey: 'spotName', sortable: true },
     { header: '住所', accessorKey: 'address', sortable: false },
     { header: '地区', accessorKey: 'district.districtName', sortable: false },
     { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
@@ -91,58 +92,6 @@ interface ModelData {
   [key: string]: string | number | boolean | object | null;
 }
 
-// ダミーデータ（GraphQLが未実装の場合に使用）
-const dummyData: Record<string, ModelData[]> = {
-  areas: [
-    { id: '1', areaName: '天神', district: { districtName: '福岡市中央区' }, updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', areaName: '博多', district: { districtName: '福岡市博多区' }, updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  categories: [
-    { id: '1', categoryName: 'カフェ', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', categoryName: 'レストラン', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  districts: [
-    { id: '1', districtName: '福岡市中央区', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', districtName: '福岡市博多区', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  hashtags: [
-    { id: '1', hashtagName: 'おしゃれ', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', hashtagName: '穴場', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  menus: [
-    { id: '1', menuName: 'モーニング', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', menuName: 'ランチ', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  purposes: [
-    { id: '1', purposeName: 'デート', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', purposeName: '女子会', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  recommended_fors: [
-    { id: '1', recommendedForName: 'カップル', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', recommendedForName: '友達同士', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  spot_ambiances: [
-    { id: '1', ambianceName: '落ち着いた', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', ambianceName: '賑やか', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  spots: [
-    { id: '1', storeName: 'カフェA', address: '福岡市中央区天神1-1-1', district: { districtName: '福岡市中央区' }, updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', storeName: 'レストランB', address: '福岡市博多区博多駅前2-2-2', district: { districtName: '福岡市博多区' }, updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  play_plans: [
-    { id: '1', planName: '天神デートプラン', status: '公開', user: { username: '山田太郎' }, updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', planName: '博多グルメツアー', status: '下書き', user: { username: '佐藤花子' }, updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  events: [
-    { id: '1', title: '天神祭り', location: '福岡市中央区天神', startDatetime: '2025-05-01T10:00:00Z', endDatetime: '2025-05-01T18:00:00Z', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', title: '博多どんたく', location: '福岡市博多区', startDatetime: '2025-05-03T09:00:00Z', endDatetime: '2025-05-04T21:00:00Z', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-  news: [
-    { id: '1', title: '新しいカフェがオープン', publishedAt: '2025-04-01T10:00:00Z', updatedAt: '2025-04-01T10:00:00Z' },
-    { id: '2', title: '博多駅周辺の新スポット特集', publishedAt: '2025-04-02T10:00:00Z', updatedAt: '2025-04-02T10:00:00Z' },
-  ],
-};
-
 // モデル名の日本語表示
 const modelDisplayNames: Record<string, string> = {
   areas: 'エリア',
@@ -165,6 +114,8 @@ export default function ModelListPage() {
   const modelRoute = params.model as string;
 
   const [data, setData] = useState<ModelData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [sortField, setSortField] = useState<string | null>(null);
@@ -175,33 +126,37 @@ export default function ModelListPage() {
   const displayName = modelDisplayNames[modelRoute] || modelRoute;
 
   useEffect(() => {
-    // GraphQLクエリの代わりにダミーデータを使用
-    const fetchData = () => {
-      // ダミーデータを取得
-      const modelData = dummyData[modelRoute] || [];
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      console.log('モデルルート:', modelRoute);
 
-      // ソート処理
-      const sortedData = [...modelData];
-      if (sortField && sortDirection) {
-        sortedData.sort((a, b) => {
-          const aValue = a[sortField];
-          const bValue = b[sortField];
+      try {
+        // バックエンドAPIが利用可能な場合はGraphQLクエリを使用
+        const variables = {
+          limit: pageSize,
+          sortField: sortField || undefined,
+          sortDirection: sortDirection || undefined,
+        };
 
-          if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-          if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-          return 0;
-        });
+        const result = await fetchModelList(modelRoute, variables);
+        setData(result);
+        console.log('取得したデータ:', result);
+        setTotalCount(result.length); // 実際のAPIではtotalCountも返すべき
+      } catch (err) {
+        console.error('データ取得エラー:', err);
+        setError('データの取得に失敗しました。  xcxcx');
+
+      } finally {
+        setIsLoading(false);
       }
-
-      setData(sortedData);
-      setTotalCount(sortedData.length);
     };
 
     fetchData();
-  }, [modelRoute, sortField, sortDirection]);
+  }, [modelRoute, sortField, sortDirection, pageSize]);
 
   const handleRowClick = (item: ModelData) => {
-    router.push(`/admin/${modelRoute}/${item.id}`);
+    router.push(`/${modelRoute}/${item.id}`);
   };
 
   const handleSortChange = (field: string, direction: 'asc' | 'desc') => {
@@ -219,31 +174,43 @@ export default function ModelListPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{displayName}一覧</h1>
-        <Button onClick={() => router.push(`/admin/${modelRoute}/new`)}>
-          <PlusIcon className="mr-2 h-4 w-4" />
+      <div className="admin-header">
+        <h1 className="admin-page-title">{displayName}一覧</h1>
+        <Button onClick={() => router.push(`/${modelRoute}/new`)}>
+          <PlusIcon className="admin-mr-2 h-4 w-4" />
           新規作成
         </Button>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={data}
-        onRowClick={handleRowClick}
-        keyField="id"
-        pagination={{
-          pageSize,
-          totalCount,
-          currentPage,
-          onPageChange: handlePageChange,
-        }}
-        sorting={{
-          field: sortField,
-          direction: sortDirection,
-          onSortChange: handleSortChange,
-        }}
-      />
+      {error && (
+        <div className="admin-alert admin-alert-danger admin-mb-4">
+          {error}
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="admin-loading">
+          <div className="admin-spinner"></div>
+        </div>
+      ) : (
+        <DataTable
+          columns={columns}
+          data={data}
+          onRowClick={handleRowClick}
+          keyField="id"
+          pagination={{
+            pageSize,
+            totalCount,
+            currentPage,
+            onPageChange: handlePageChange,
+          }}
+          sorting={{
+            field: sortField,
+            direction: sortDirection,
+            onSortChange: handleSortChange,
+          }}
+        />
+      )}
     </div>
   );
 }

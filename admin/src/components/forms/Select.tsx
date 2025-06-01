@@ -26,17 +26,17 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     };
 
     return (
-      <div className={`form-field ${fullWidth ? 'form-field-full' : ''} ${className}`}>
+      <div className={`admin-form-group ${fullWidth ? 'admin-w-full' : ''} ${className}`}>
         {label && (
           <label
-            className={`form-label ${props.required ? 'form-label-required' : ''}`}
+            className={`admin-form-label ${props.required ? 'admin-form-label-required' : ''}`}
             htmlFor={props.id}
           >
             {label}
           </label>
         )}
         <select
-          className={`form-select ${error ? 'form-select-error' : ''}`}
+          className={`admin-form-control admin-form-select ${error ? 'admin-form-control-error' : ''}`}
           ref={ref}
           onChange={handleChange}
           {...props}
@@ -53,9 +53,9 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ))}
         </select>
         {helperText && !error && (
-          <p className="form-helper-text">{helperText}</p>
+          <p className="admin-form-text admin-form-helper-text">{helperText}</p>
         )}
-        {error && <p className="form-error-text">{error}</p>}
+        {error && <p className="admin-form-text admin-form-error-text">{error}</p>}
       </div>
     );
   }

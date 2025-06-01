@@ -18,6 +18,40 @@ module Types
       ids.map { |id| context.schema.object_from_id(id, context) }
     end
 
+    # カウント系フィールド（個別）
+    field :spots_count, Integer, null: false, description: "スポットの総数"
+    def spots_count
+      Spot.count
+    end
+
+    field :areas_count, Integer, null: false, description: "エリアの総数"
+    def areas_count
+      Area.count
+    end
+
+    field :categories_count, Integer, null: false, description: "カテゴリーの総数"
+    def categories_count
+      Category.count
+    end
+
+    field :play_plans_count, Integer, null: false, description: "遊びプランの総数"
+    def play_plans_count
+      PlayPlan.count
+    end
+
+    field :events_count, Integer, null: false, description: "イベントの総数"
+    def events_count
+      Event.count
+    end
+
+    field :news_count, Integer, null: false, description: "ニュースの総数"
+    def news_count
+      News.count
+    end
+
+    # ダッシュボード統計情報（まとめて取得）
+    field :dashboard_stats, resolver: Resolvers::DashboardStatsResolver
+
     # カテゴリー
     field :categories, [Types::CategoryType], null: false
     def categories
@@ -135,5 +169,55 @@ module Types
 
     # プランがお気に入りに登録されているか
     field :is_favorite, resolver: Resolvers::IsFavoriteResolver
+
+    # --------------------------------------------
+    # ① Category 単体取得
+    # --------------------------------------------
+    field :category, Types::CategoryType, null: true do
+      argument :id, ID, required: true
+    end
+    def category(id:)
+      Category.find_by(id: id)
+    end
+
+    # --------------------------------------------
+    # ② Hashtag 単体取得
+    # --------------------------------------------
+    field :hashtag, Types::HashtagType, null: true do
+      argument :id, ID, required: true
+    end
+    def hashtag(id:)
+      Hashtag.find_by(id: id)
+    end
+
+    # --------------------------------------------
+    # ③ Purpose 単体取得
+    # --------------------------------------------
+    field :purpose, Types::PurposeType, null: true do
+      argument :id, ID, required: true
+    end
+    def purpose(id:)
+      Purpose.find_by(id: id)
+    end
+
+    # --------------------------------------------
+    # ④ RecommendedFor 単体取得
+    # --------------------------------------------
+    field :recommended_for, Types::RecommendedForType, null: true do
+      argument :id, ID, required: true
+    end
+    def recommended_for(id:)
+      RecommendedFor.find_by(id: id)
+    end
+
+    # --------------------------------------------
+    # ⑤ SpotAmbiance 単体取得
+    # --------------------------------------------
+    field :spot_ambiance, Types::SpotAmbianceType, null: true do
+      argument :id, ID, required: true
+    end
+    def spot_ambiance(id:)
+      SpotAmbiance.find_by(id: id)
+    end
   end
 end

@@ -23,28 +23,28 @@ const ToggleSwitch = forwardRef<HTMLInputElement, ToggleSwitchProps>(
     };
 
     return (
-      <div className={`form-field ${className}`}>
-        <label className="form-toggle">
+      <div className={`admin-form-group ${className}`}>
+        <label className="admin-form-check">
           <input
             type="checkbox"
-            className="form-toggle-input"
+            className="admin-form-check-input"
             checked={isChecked}
             onChange={handleChange}
             ref={ref}
             {...props}
           />
-          <div className="form-toggle-slider" />
+          <div className="admin-form-toggle-slider" />
           {label && (
-            <span className="form-toggle-label">
+            <span className="admin-form-check-label">
               {label}
-              {props.required && <span className="text-red-500 ml-1">*</span>}
+              {props.required && <span className="admin-text-danger admin-ml-1">*</span>}
             </span>
           )}
         </label>
         {helperText && !error && (
-          <p className="form-helper-text">{helperText}</p>
+          <p className="admin-form-text admin-form-helper-text">{helperText}</p>
         )}
-        {error && <p className="form-error-text">{error}</p>}
+        {error && <p className="admin-form-text admin-form-error-text">{error}</p>}
       </div>
     );
   }

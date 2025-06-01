@@ -71,18 +71,18 @@ services:
     stdin_open: true
 
   # SchemaSpy サービスの追加
-  schemaspy:
-    image: schemaspy/schemaspy:latest
-    container_name: fukuoka_asobi_schemaspy
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./schemaspy/output:/output
-      - ./schemaspy/config:/config
-    command: >
-      -configFile /config/schemaspy.properties
-    restart: "no"
+  # schemaspy:
+    # image: schemaspy/schemaspy:latest
+    # container_name: fukuoka_asobi_schemaspy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    # volumes:
+    #   - ./schemaspy/output:/output
+    #   - ./schemaspy/config:/config
+    # command: >
+    #   -configFile /config/schemaspy.properties
+    # restart: "no"
 
 volumes:
   # MySQLの外部ボリューム（Composeからは削除されない）
