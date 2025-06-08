@@ -15,6 +15,7 @@ export interface Column<T> {
   accessorKey: string;
   cell?: (item: T) => React.ReactNode;
   sortable?: boolean;
+  editable?: boolean; // 編集可能かどうか
 }
 
 export interface DataTableProps<T extends Record<string, unknown>> {
@@ -66,6 +67,9 @@ export function DataTable<T extends Record<string, unknown>>({
 
   const currentPage = pagination?.currentPage || 1;
 
+  // データの存在確認とデバッグ
+  console.log('DataTable受け取りデータ:', data);
+
   return (
     <div className="admin-table-container">
       <div className="admin-card">
@@ -111,13 +115,22 @@ export function DataTable<T extends Record<string, unknown>>({
                   onMouseEnter={() => setHoveredRowId(item[keyField] as ValueType)}
                   onMouseLeave={() => setHoveredRowId(null)}
                 >
-                  {columns.map((column, cellIndex) => (
-                    <td key={cellIndex}>
-                      {column.cell
-                        ? column.cell(item)
-                        : String(item[column.accessorKey] || '')}
-                    </td>
-                  ))}
+                  {columns.map((column, cellIndex) => {
+                    // ネストされたプロパティへのアクセスをサポート（例：user.username）
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const getValue = (obj: Record<string, any>, path: string) => {
+                      const keys = path.split('.');
+                      return keys.reduce((o, key) => (o && o[key] !== undefined) ? o[key] : '', obj);
+                    };
+
+                    const value = getValue(item, column.accessorKey);
+
+                    return (
+                      <td key={cellIndex}>
+                        {column.cell ? column.cell(item) : String(value || '')}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             )}

@@ -6,11 +6,12 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   error?: string;
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
   fullWidth?: boolean;
 }
 
 const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ className = '', label, helperText, error, fullWidth = false, ...props }, ref) => {
+  ({ className = '', label, type, helperText, error, fullWidth = false, ...props }, ref) => {
     return (
       <div className={`admin-form-group ${fullWidth ? 'admin-w-full' : ''} ${className}`}>
         {label && (
@@ -24,6 +25,7 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         <input
           className={`admin-form-control ${error ? 'admin-form-control-error' : ''}`}
           ref={ref}
+          type={type}
           {...props}
         />
         {helperText && !error && (

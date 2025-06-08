@@ -46,6 +46,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
               {placeholder}
             </option>
           )}
+          <option>--選択して下さい--</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

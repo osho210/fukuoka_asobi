@@ -1,5 +1,6 @@
 import { client } from '@/lib/apolloClient';
 import { getModelNameFromRoute } from './modelRouteMap';
+import { toCamelCase } from '@/app/utils/stringUtils';
 
 // クエリのインポート
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -10,7 +11,10 @@ import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { GET_PURPOSES, } from '@/graphql/queries/getPurposes';
 import { GET_RECOMMENDED_FORS, } from '@/graphql/queries/getRecommendedFors';
 import { GET_SPOT_AMBIANCES, } from '@/graphql/queries/getSpotAmbiances';
+import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
+import { GET_EVENTS } from '@/graphql/queries/getEvents';
+import { GET_NEWS_LIST } from '@/graphql/queries/getNews';
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -57,7 +61,10 @@ const listQueries: Record<string, DocumentNode> = {
   purposes: GET_PURPOSES,
   recommended_fors: GET_RECOMMENDED_FORS,
   spot_ambiances: GET_SPOT_AMBIANCES,
+  play_plans: GET_PLAY_PLANS,
   spots: GET_SPOTS,
+  events: GET_EVENTS,
+  news: GET_NEWS_LIST, // ニュースはGET_EVENTSで取得
 };
 
 // ミューテーションマッピング
@@ -119,13 +126,21 @@ export const fetchModelList = async (
   }
 
   try {
-    const { data } = await client.query({
+    const response = await client.query({
       query,
       variables,
       fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
     });
 
-    return data[modelRoute] || [];
+    console.log('GraphQLレスポンス:', response);
+
+    // レスポンスの構造を確認
+    if (response.data) {
+      return response.data[toCamelCase(modelRoute)];
+    } else {
+      console.error(`モデル ${modelRoute} のデータが見つかりません:`, response);
+      return [];
+    }
   } catch (error) {
     console.error(`モデル ${modelRoute} のリスト取得に失敗しました:`, error);
     throw error;
