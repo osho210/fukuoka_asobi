@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { DataTable } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon } from 'lucide-react';
 import { fetchModelList } from '@/lib/modelGraphQL';
+import { ModelDetailModal } from '@/components/ModelDetailModal';
 
 // 各モデルの列定義
 interface ColumnDefinition {
@@ -110,7 +111,7 @@ const modelDisplayNames: Record<string, string> = {
 
 export default function ModelListPage() {
   const params = useParams();
-  const router = useRouter();
+  // routerは使用しないため削除
   const modelRoute = params.model as string;
 
   const [data, setData] = useState<ModelData[]>([]);
@@ -121,16 +122,22 @@ export default function ModelListPage() {
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
 
+  // モーダル関連の状態
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<ModelData | null>(null);
+  const [isNewItem, setIsNewItem] = useState(false);
+
   const pageSize = 10;
   const columns = columnConfigs[modelRoute] || [];
   const displayName = modelDisplayNames[modelRoute] || modelRoute;
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      console.log('モデルルート:', modelRoute);
+    let isMounted = true;
+    setIsLoading(true);
+    setError(null);
+    console.log('モデルルート:', modelRoute);
 
+    const fetchData = async () => {
       try {
         // バックエンドAPIが利用可能な場合はGraphQLクエリを使用
         const variables = {
@@ -140,23 +147,80 @@ export default function ModelListPage() {
         };
 
         const result = await fetchModelList(modelRoute, variables);
-        setData(result);
-        console.log('取得したデータ:', result);
-        setTotalCount(result.length); // 実際のAPIではtotalCountも返すべき
+        console.log(`${modelRoute}データ取得結果:`, result);
+
+        // コンポーネントがアンマウントされていない場合のみ状態を更新
+        if (isMounted) {
+          setData(result);
+          setTotalCount(result.length); // 実際のAPIではtotalCountも返すべき
+          setIsLoading(false);
+        }
       } catch (err) {
         console.error('データ取得エラー:', err);
-        setError('データの取得に失敗しました。  xcxcx');
 
-      } finally {
-        setIsLoading(false);
+        // コンポーネントがアンマウントされていない場合のみ状態を更新
+        if (isMounted) {
+          setError('データの取得に失敗しました。');
+          setIsLoading(false);
+        }
       }
     };
 
     fetchData();
+
+    // クリーンアップ関数
+    return () => {
+      isMounted = false;
+    };
   }, [modelRoute, sortField, sortDirection, pageSize]);
 
+  // 行クリック時にモーダルを表示
   const handleRowClick = (item: ModelData) => {
-    router.push(`/${modelRoute}/${item.id}`);
+    setSelectedItem(item);
+    setIsNewItem(false);
+    setIsModalOpen(true);
+  };
+
+  // 新規作成ボタンクリック時
+  const handleCreateClick = () => {
+    setSelectedItem(null);
+    setIsNewItem(true);
+    setIsModalOpen(true);
+  };
+
+  // モーダルが閉じられたとき
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  // データが保存されたとき
+  const handleDataSaved = () => {
+    // データを再取得
+    fetchData();
+  };
+
+  // データ取得関数
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const variables = {
+        limit: pageSize,
+        sortField: sortField || undefined,
+        sortDirection: sortDirection || undefined,
+      };
+
+      const result = await fetchModelList(modelRoute, variables);
+      console.log(`${modelRoute}データ取得結果:`, result);
+      setData(result);
+      setTotalCount(result.length);
+    } catch (err) {
+      console.error('データ取得エラー:', err);
+      setError('データの取得に失敗しました。');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSortChange = (field: string, direction: 'asc' | 'desc') => {
@@ -176,7 +240,7 @@ export default function ModelListPage() {
     <div>
       <div className="admin-header">
         <h1 className="admin-page-title">{displayName}一覧</h1>
-        <Button onClick={() => router.push(`/${modelRoute}/new`)}>
+        <Button onClick={handleCreateClick}>
           <PlusIcon className="admin-mr-2 h-4 w-4" />
           新規作成
         </Button>
@@ -211,6 +275,16 @@ export default function ModelListPage() {
           }}
         />
       )}
+
+      {/* モデル詳細モーダル */}
+      <ModelDetailModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        modelRoute={modelRoute}
+        modelId={isNewItem ? 'new' : selectedItem?.id}
+        onSaved={handleDataSaved}
+        initialData={selectedItem}
+      />
     </div>
   );
 }

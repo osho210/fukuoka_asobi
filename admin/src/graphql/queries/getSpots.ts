@@ -16,6 +16,17 @@ export const GET_SPOTS = gql`
       catchphrase
       isRainyOk
       budgetRange
+      instagramUrl
+      nearestStation
+      isClosed
+      imageUrl
+      minPeople
+      maxPeople
+      recommendedFor1
+      recommendedFor2
+      reviewCount
+      reviewRating
+      spotType
       areas {
         id
         areaName

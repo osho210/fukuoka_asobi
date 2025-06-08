@@ -1,24 +1,87 @@
-// 注意: 現在のバックエンドAPIでは、スポットのミューテーションは提供されていません。
-// 将来的にバックエンドAPIが拡張された場合に備えて、以下のようなミューテーションを定義しておきます。
-
 import { gql } from '@apollo/client';
 
-// ダミーのミューテーションを定義して、インポートエラーを回避
 export const CREATE_SPOT = gql`
-  mutation CreateSpot($spotName: String!, $districtId: ID!) {
-    __typename
+  mutation CreateSpot(
+    $input: CreateSpotInput!
+  ) {
+    createSpot(
+      input: $input
+    ) {
+      spot {
+        id
+        spotName
+        address
+        district {
+          id
+          districtName
+        }
+        districtId
+        phoneNumber
+        website
+        catchphrase
+        isRainyOk
+        budgetRange
+        spotType
+        theme
+        reviewRating
+        reviewCount
+        instagramUrl
+        isClosed
+        maxPeople
+        minPeople
+        createdAt
+        updatedAt
+      }
+      errors
+    }
   }
 `;
 
 export const UPDATE_SPOT = gql`
-  mutation UpdateSpot($id: ID!, $spotName: String) {
-    __typename
+  mutation UpdateSpot(
+    $input: UpdateSpotInput!
+  ) {
+    updateSpot(
+      input: $input
+    ) {
+      spot {
+        id
+        spotName
+        address
+        district {
+          id
+          districtName
+        }
+        districtId
+        phoneNumber
+        website
+        catchphrase
+        isRainyOk
+        budgetRange
+        spotType
+        theme
+        reviewRating
+        reviewCount
+        instagramUrl
+        isClosed
+        maxPeople
+        minPeople
+        recommendedFor1
+        recommendedFor2
+        imageUrl
+        nearestStation
+      }
+      errors
+    }
   }
 `;
 
 export const DELETE_SPOT = gql`
   mutation DeleteSpot($id: ID!) {
-    __typename
+    deleteSpot(input: { id: $id }) {
+      success
+      errors
+    }
   }
 `;
 
@@ -91,5 +154,15 @@ export const ADD_SPOT_AMBIANCE = gql`
 export const REMOVE_SPOT_AMBIANCE = gql`
   mutation RemoveSpotAmbiance($spotId: ID!, $ambianceId: ID!) {
     __typename
+  }
+`;
+
+export const GET_ENUM_VALUES = gql`
+  query GetEnumValues($enumName: String!) {
+    __type(name: $enumName) {
+      enumValues {
+        name
+      }
+    }
   }
 `;
