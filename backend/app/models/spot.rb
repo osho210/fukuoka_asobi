@@ -19,7 +19,7 @@ class Spot < ApplicationRecord
   validates :spot_name, presence: true
 
   # 予算感のバリデーション
-  validates :budget_range, inclusion: { in: %w(安い 普通 高い) }, allow_nil: true
+  validates :budget_range, inclusion: { in: %w(CHEAP AVERAGE EXPENSIVE) }, allow_nil: true
 
   # テーマのバリデーション
   validates :theme, inclusion: { in: %w(癒しの旅 アクティブ コスパ グルメ 自然 文化と歴史) }, allow_nil: true

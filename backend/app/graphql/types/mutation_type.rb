@@ -25,5 +25,45 @@ module Types
     # お気に入り関連
     field :add_favorite, mutation: Mutations::AddFavorite
     field :remove_favorite, mutation: Mutations::RemoveFavorite
+
+    # エリア関連
+    field :create_area, mutation: Mutations::CreateArea
+    field :update_area, mutation: Mutations::UpdateArea
+    field :delete_area, mutation: Mutations::DeleteArea
+
+    # カテゴリー関連
+    field :create_category, mutation: Mutations::CreateCategory
+    field :update_category, mutation: Mutations::UpdateCategory
+    field :delete_category, mutation: Mutations::DeleteCategory
+
+    # 地区関連
+    field :create_district, mutation: Mutations::CreateDistrict
+    field :update_district, mutation: Mutations::UpdateDistrict
+    field :delete_district, mutation: Mutations::DeleteDistrict
+
+    # ハッシュタグ関連
+    field :create_hashtag, mutation: Mutations::CreateHashtag
+    field :update_hashtag, mutation: Mutations::UpdateHashtag
+    field :delete_hashtag, mutation: Mutations::DeleteHashtag
+
+    # 目的関連
+    field :create_purpose, mutation: Mutations::CreatePurpose
+    field :update_purpose, mutation: Mutations::UpdatePurpose
+    field :delete_purpose, mutation: Mutations::DeletePurpose
+
+    # 雰囲気関連
+    field :create_spot_ambiance, mutation: Mutations::CreateSpotAmbiance
+    field :update_spot_ambiance, mutation: Mutations::UpdateSpotAmbiance
+    field :delete_spot_ambiance, mutation: Mutations::DeleteSpotAmbiance
+
+    # spot関連
+    field :create_spot, mutation: Mutations::CreateSpot
+    field :update_spot, mutation: Mutations::UpdateSpot
+    field :delete_spot, mutation: Mutations::DeleteSpot
+
+    # おすすめ対象関連
+    field :create_recommended_for, mutation: Mutations::CreateRecommendedFor
+    field :update_recommended_for, mutation: Mutations::UpdateRecommendedFor
+    field :delete_recommended_for, mutation: Mutations::DeleteRecommendedFor
   end
 end

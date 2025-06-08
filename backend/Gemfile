@@ -81,6 +81,8 @@ gem 'aws-sdk-s3', require: false
 # CORSの設定
 gem 'rack-cors'
 
+gem "graphiql-rails"
+
 group :development do
   gem "graphiql-rails"
 end

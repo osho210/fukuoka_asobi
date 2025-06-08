@@ -7,7 +7,8 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:8200'
+    # 通常のリクエストと管理画面用のリクエストを追加
+    origins 'http://localhost:8200', 'http://localhost:9200'
 
     resource '*',
       headers: :any,

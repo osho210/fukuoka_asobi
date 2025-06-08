@@ -1,0 +1,426 @@
+import { client } from '@/lib/apolloClient';
+import { getModelNameFromRoute } from './modelRouteMap';
+import { toCamelCase } from '@/app/utils/stringUtils';
+
+// クエリのインポート
+import { GET_AREAS } from '@/graphql/queries/getAreas';
+import { GET_CATEGORIES } from '@/graphql/queries/getCategories';
+import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
+import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
+import { GET_MENUS } from '@/graphql/queries/getMenus';
+import { GET_PURPOSES, } from '@/graphql/queries/getPurposes';
+import { GET_RECOMMENDED_FORS, } from '@/graphql/queries/getRecommendedFors';
+import { GET_SPOT_AMBIANCES, } from '@/graphql/queries/getSpotAmbiances';
+import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
+import { GET_SPOTS } from '@/graphql/queries/getSpots';
+import { GET_EVENTS } from '@/graphql/queries/getEvents';
+import { GET_NEWS_LIST } from '@/graphql/queries/getNews';
+
+// ミューテーションのインポート
+import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
+import { CREATE_CATEGORY, UPDATE_CATEGORY, DELETE_CATEGORY } from '@/graphql/mutations/categories';
+import { CREATE_DISTRICT, UPDATE_DISTRICT, DELETE_DISTRICT } from '@/graphql/mutations/districts';
+import { CREATE_HASHTAG, UPDATE_HASHTAG, DELETE_HASHTAG } from '@/graphql/mutations/hashtags';
+import { CREATE_MENU, UPDATE_MENU, DELETE_MENU } from '@/graphql/mutations/menus';
+import { CREATE_PURPOSE, UPDATE_PURPOSE, DELETE_PURPOSE } from '@/graphql/mutations/purposes';
+import { CREATE_RECOMMENDED_FOR, UPDATE_RECOMMENDED_FOR, DELETE_RECOMMENDED_FOR } from '@/graphql/mutations/recommendedFors';
+import { CREATE_SPOT_AMBIANCE, UPDATE_SPOT_AMBIANCE, DELETE_SPOT_AMBIANCE } from '@/graphql/mutations/spotAmbiances';
+import {
+  CREATE_SPOT,
+  UPDATE_SPOT,
+  DELETE_SPOT,
+  ADD_SPOT_AREA,
+  REMOVE_SPOT_AREA,
+  ADD_SPOT_CATEGORY,
+  REMOVE_SPOT_CATEGORY,
+  ADD_SPOT_HASHTAG,
+  REMOVE_SPOT_HASHTAG,
+  ADD_SPOT_MENU,
+  REMOVE_SPOT_MENU,
+  ADD_SPOT_PURPOSE,
+  REMOVE_SPOT_PURPOSE,
+  ADD_SPOT_AMBIANCE,
+  REMOVE_SPOT_AMBIANCE
+} from '@/graphql/mutations/spots';
+
+/**
+ * モデル入力データの型定義
+ */
+export type ModelInput = Record<string, string | number | boolean | null | string[]>;
+
+// GraphQLクエリの型定義
+import { DocumentNode } from 'graphql';
+
+// クエリマッピング
+const listQueries: Record<string, DocumentNode> = {
+  areas: GET_AREAS,
+  categories: GET_CATEGORIES,
+  districts: GET_DISTRICTS,
+  hashtags: GET_HASHTAGS,
+  menus: GET_MENUS,
+  purposes: GET_PURPOSES,
+  recommended_fors: GET_RECOMMENDED_FORS,
+  spot_ambiances: GET_SPOT_AMBIANCES,
+  play_plans: GET_PLAY_PLANS,
+  spots: GET_SPOTS,
+  events: GET_EVENTS,
+  news: GET_NEWS_LIST, // ニュースはGET_EVENTSで取得
+};
+
+// ミューテーションマッピング
+const createMutations: Record<string, DocumentNode> = {
+  areas: CREATE_AREA,
+  categories: CREATE_CATEGORY,
+  districts: CREATE_DISTRICT,
+  hashtags: CREATE_HASHTAG,
+  menus: CREATE_MENU,
+  purposes: CREATE_PURPOSE,
+  recommended_fors: CREATE_RECOMMENDED_FOR,
+  spot_ambiances: CREATE_SPOT_AMBIANCE,
+  spots: CREATE_SPOT,
+};
+
+const updateMutations: Record<string, DocumentNode> = {
+  areas: UPDATE_AREA,
+  categories: UPDATE_CATEGORY,
+  districts: UPDATE_DISTRICT,
+  hashtags: UPDATE_HASHTAG,
+  menus: UPDATE_MENU,
+  purposes: UPDATE_PURPOSE,
+  recommended_fors: UPDATE_RECOMMENDED_FOR,
+  spot_ambiances: UPDATE_SPOT_AMBIANCE,
+  spots: UPDATE_SPOT,
+};
+
+const deleteMutations: Record<string, DocumentNode> = {
+  areas: DELETE_AREA,
+  categories: DELETE_CATEGORY,
+  districts: DELETE_DISTRICT,
+  hashtags: DELETE_HASHTAG,
+  menus: DELETE_MENU,
+  purposes: DELETE_PURPOSE,
+  recommended_fors: DELETE_RECOMMENDED_FOR,
+  spot_ambiances: DELETE_SPOT_AMBIANCE,
+  spots: DELETE_SPOT,
+};
+
+/**
+ * モデル一覧を取得するためのGraphQLクエリを実行
+ *
+ * @param modelRoute モデルのルート名（例: 'areas', 'categories'）
+ * @param variables クエリ変数（limit, sortField, sortDirection）
+ * @returns クエリ結果
+ */
+export const fetchModelList = async (
+  modelRoute: string,
+  variables: {
+    limit?: number;
+    sortField?: string;
+    sortDirection?: 'asc' | 'desc';
+  } = {}
+) => {
+  const query = listQueries[modelRoute];
+  if (!query) {
+    throw new Error(`モデル ${modelRoute} のリストクエリが見つかりません`);
+  }
+
+  try {
+    const response = await client.query({
+      query,
+      variables,
+      fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
+    });
+
+    console.log('GraphQLレスポンス:', response);
+
+    // レスポンスの構造を確認
+    if (response.data) {
+      return response.data[toCamelCase(modelRoute)];
+    } else {
+      console.error(`モデル ${modelRoute} のデータが見つかりません:`, response);
+      return [];
+    }
+  } catch (error) {
+    console.error(`モデル ${modelRoute} のリスト取得に失敗しました:`, error);
+    throw error;
+  }
+};
+/**
+ * モデルを作成するためのGraphQLミューテーションを実行
+ *
+ * @param modelRoute モデルのルート名（例: 'areas', 'categories'）
+ * @param input 作成するモデルのデータ
+ * @returns ミューテーション結果
+ */
+export const createModel = async (modelRoute: string, input: ModelInput) => {
+  const mutation = createMutations[modelRoute];
+  if (!mutation) {
+    throw new Error(`モデル ${modelRoute} の作成ミューテーションが見つかりません`);
+  }
+
+  const modelName = getModelNameFromRoute(modelRoute);
+  const mutationName = `create${modelName}`;
+
+  try {
+    const { data } = await client.mutate({
+      mutation,
+      variables: { input },
+    });
+
+    return data[mutationName] || null;
+  } catch (error) {
+    console.error(`モデル ${modelRoute} の作成に失敗しました:`, error);
+    throw error;
+  }
+};
+
+/**
+ * モデルを更新するためのGraphQLミューテーションを実行
+ *
+ * @param modelRoute モデルのルート名（例: 'areas', 'categories'）
+ * @param id 更新するモデルのID
+ * @param input 更新するモデルのデータ
+ * @returns ミューテーション結果
+ */
+export const updateModel = async (modelRoute: string, id: string, input: ModelInput) => {
+  const mutation = updateMutations[modelRoute];
+  if (!mutation) {
+    throw new Error(`モデル ${modelRoute} の更新ミューテーションが見つかりません`);
+  }
+
+  const modelName = getModelNameFromRoute(modelRoute);
+  const mutationName = `update${modelName}`;
+
+  try {
+    const { data } = await client.mutate({
+      mutation,
+      variables: { input: { id, ...input } },
+    });
+
+    return data[mutationName] || null;
+  } catch (error) {
+    console.error(`モデル ${modelRoute} の更新に失敗しました:`, error);
+    throw error;
+  }
+};
+
+/**
+ * モデルを削除するためのGraphQLミューテーションを実行
+ *
+ * @param modelRoute モデルのルート名（例: 'areas', 'categories'）
+ * @param id 削除するモデルのID
+ * @returns ミューテーション結果
+ */
+export const deleteModel = async (modelRoute: string, id: string) => {
+  const mutation = deleteMutations[modelRoute];
+  if (!mutation) {
+    throw new Error(`モデル ${modelRoute} の削除ミューテーションが見つかりません`);
+  }
+
+  const modelName = getModelNameFromRoute(modelRoute);
+  const mutationName = `delete${modelName}`;
+
+  try {
+    const { data } = await client.mutate({
+      mutation,
+      variables: { id },
+    });
+
+    return data[mutationName] || null;
+  } catch (error) {
+    console.error(`モデル ${modelRoute} の削除に失敗しました:`, error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するエリアを追加
+ */
+export const addSpotArea = async (spotId: string, areaId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_AREA,
+      variables: { spotId, areaId },
+    });
+    return data.addSpotArea;
+  } catch (error) {
+    console.error('スポットにエリアを追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するエリアを削除
+ */
+export const removeSpotArea = async (spotId: string, areaId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_AREA,
+      variables: { spotId, areaId },
+    });
+    return data.removeSpotArea;
+  } catch (error) {
+    console.error('スポットからエリアを削除できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するカテゴリーを追加
+ */
+export const addSpotCategory = async (spotId: string, categoryId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_CATEGORY,
+      variables: { spotId, categoryId },
+    });
+    return data.addSpotCategory;
+  } catch (error) {
+    console.error('スポットにカテゴリーを追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するカテゴリーを削除
+ */
+export const removeSpotCategory = async (spotId: string, categoryId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_CATEGORY,
+      variables: { spotId, categoryId },
+    });
+    return data.removeSpotCategory;
+  } catch (error) {
+    console.error('スポットからカテゴリーを削除できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するハッシュタグを追加
+ */
+export const addSpotHashtag = async (spotId: string, hashtagId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_HASHTAG,
+      variables: { spotId, hashtagId },
+    });
+    return data.addSpotHashtag;
+  } catch (error) {
+    console.error('スポットにハッシュタグを追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するハッシュタグを削除
+ */
+export const removeSpotHashtag = async (spotId: string, hashtagId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_HASHTAG,
+      variables: { spotId, hashtagId },
+    });
+    return data.removeSpotHashtag;
+  } catch (error) {
+    console.error('スポットからハッシュタグを削除できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するメニューを追加
+ */
+export const addSpotMenu = async (spotId: string, menuId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_MENU,
+      variables: { spotId, menuId },
+    });
+    return data.addSpotMenu;
+  } catch (error) {
+    console.error('スポットにメニューを追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連するメニューを削除
+ */
+export const removeSpotMenu = async (spotId: string, menuId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_MENU,
+      variables: { spotId, menuId },
+    });
+    return data.removeSpotMenu;
+  } catch (error) {
+    console.error('スポットからメニューを削除できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連する目的を追加
+ */
+export const addSpotPurpose = async (spotId: string, purposeId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_PURPOSE,
+      variables: { spotId, purposeId },
+    });
+    return data.addSpotPurpose;
+  } catch (error) {
+    console.error('スポットに目的を追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連する目的を削除
+ */
+export const removeSpotPurpose = async (spotId: string, purposeId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_PURPOSE,
+      variables: { spotId, purposeId },
+    });
+    return data.removeSpotPurpose;
+  } catch (error) {
+    console.error('スポットから目的を削除できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連する雰囲気を追加
+ */
+export const addSpotAmbiance = async (spotId: string, ambianceId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_SPOT_AMBIANCE,
+      variables: { spotId, ambianceId },
+    });
+    return data.addSpotAmbiance;
+  } catch (error) {
+    console.error('スポットに雰囲気を追加できませんでした:', error);
+    throw error;
+  }
+};
+
+/**
+ * スポットに関連する雰囲気を削除
+ */
+export const removeSpotAmbiance = async (spotId: string, ambianceId: string) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: REMOVE_SPOT_AMBIANCE,
+      variables: { spotId, ambianceId },
+    });
+    return data.removeSpotAmbiance;
+  } catch (error) {
+    console.error('スポットから雰囲気を削除できませんでした:', error);
+    throw error;
+  }
+};
