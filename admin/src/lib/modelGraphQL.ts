@@ -119,7 +119,6 @@ export const fetchModelList = async (
     sortDirection?: 'asc' | 'desc';
   } = {}
 ) => {
-  console.log(modelRoute)
   const query = listQueries[modelRoute];
   if (!query) {
     throw new Error(`モデル ${modelRoute} のリストクエリが見つかりません`);

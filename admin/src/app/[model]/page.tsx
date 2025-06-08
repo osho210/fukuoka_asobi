@@ -1,91 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { DataTable } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon } from 'lucide-react';
 import { fetchModelList } from '@/lib/modelGraphQL';
 import { ModelDetailModal } from '@/components/ModelDetailModal';
-
-// 各モデルの列定義
-interface ColumnDefinition {
-  header: string;
-  accessorKey: string;
-  sortable: boolean;
-}
-
-const columnConfigs: Record<string, ColumnDefinition[]> = {
-  areas: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'areaName', sortable: true },
-    { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  categories: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  districts: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'districtName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  hashtags: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'hashtagName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  menus: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'menuName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  purposes: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'purposeName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  recommended_fors: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  spot_ambiances: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'ambianceName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  spots: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'spotName', sortable: true },
-    { header: '住所', accessorKey: 'address', sortable: false },
-    { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  play_plans: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: '名前', accessorKey: 'planName', sortable: true },
-    { header: 'ステータス', accessorKey: 'status', sortable: true },
-    { header: '作成者', accessorKey: 'user.username', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  events: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: 'タイトル', accessorKey: 'title', sortable: true },
-    { header: '場所', accessorKey: 'location', sortable: false },
-    { header: '開始日時', accessorKey: 'startDatetime', sortable: true },
-    { header: '終了日時', accessorKey: 'endDatetime', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-  news: [
-    { header: 'ID', accessorKey: 'id', sortable: true },
-    { header: 'タイトル', accessorKey: 'title', sortable: true },
-    { header: '公開日', accessorKey: 'publishedAt', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
-  ],
-};
+import { columnConfigs, modelDisplayNames } from '@/lib/modelConstants';
 
 // モデルデータの型定義
 interface ModelData {
@@ -93,27 +15,10 @@ interface ModelData {
   [key: string]: string | number | boolean | object | null;
 }
 
-// モデル名の日本語表示
-const modelDisplayNames: Record<string, string> = {
-  areas: 'エリア',
-  categories: 'カテゴリー',
-  districts: '地区',
-  hashtags: 'ハッシュタグ',
-  menus: 'メニュー',
-  purposes: '目的',
-  recommended_fors: 'おすすめ対象',
-  spot_ambiances: '雰囲気',
-  spots: 'スポット',
-  play_plans: '遊びプラン',
-  events: 'イベント',
-  news: 'ニュース',
-};
-
-export default function ModelListPage() {
-  const params = useParams();
-  // routerは使用しないため削除
-  const modelRoute = params.model as string;
-
+/**
+ * モデルデータを取得・管理するカスタムフック
+ */
+function useModelData(modelRoute: string, pageSize: number) {
   const [data, setData] = useState<ModelData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -122,24 +27,42 @@ export default function ModelListPage() {
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
 
-  // モーダル関連の状態
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ModelData | null>(null);
-  const [isNewItem, setIsNewItem] = useState(false);
+  // データ取得関数
+  const fetchData = async () => {
+    if (!modelRoute) return;
 
-  const pageSize = 10;
-  const columns = columnConfigs[modelRoute] || [];
-  const displayName = modelDisplayNames[modelRoute] || modelRoute;
-
-  useEffect(() => {
-    let isMounted = true;
     setIsLoading(true);
     setError(null);
-    console.log('モデルルート:', modelRoute);
 
-    const fetchData = async () => {
+    try {
+      const variables = {
+        limit: pageSize,
+        sortField: sortField || undefined,
+        sortDirection: sortDirection || undefined,
+      };
+
+      const result = await fetchModelList(modelRoute, variables);
+      setData(result);
+      setTotalCount(result.length); // 実際のAPIではtotalCountも返すべき
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '不明なエラーが発生しました';
+      setError(`データの取得に失敗しました: ${errorMessage}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // モデルルートが変更されたときにデータを再取得
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      if (!modelRoute) return;
+
+      setIsLoading(true);
+      setError(null);
+
       try {
-        // バックエンドAPIが利用可能な場合はGraphQLクエリを使用
         const variables = {
           limit: pageSize,
           sortField: sortField || undefined,
@@ -147,32 +70,86 @@ export default function ModelListPage() {
         };
 
         const result = await fetchModelList(modelRoute, variables);
-        console.log(`${modelRoute}データ取得結果:`, result);
 
         // コンポーネントがアンマウントされていない場合のみ状態を更新
         if (isMounted) {
           setData(result);
-          setTotalCount(result.length); // 実際のAPIではtotalCountも返すべき
+          setTotalCount(result.length);
           setIsLoading(false);
         }
       } catch (err) {
-        console.error('データ取得エラー:', err);
-
         // コンポーネントがアンマウントされていない場合のみ状態を更新
         if (isMounted) {
-          setError('データの取得に失敗しました。');
+          const errorMessage = err instanceof Error ? err.message : '不明なエラーが発生しました';
+          setError(`データの取得に失敗しました: ${errorMessage}`);
           setIsLoading(false);
         }
       }
     };
 
-    fetchData();
+    loadData();
 
     // クリーンアップ関数
     return () => {
       isMounted = false;
     };
   }, [modelRoute, sortField, sortDirection, pageSize]);
+
+  // ソート変更ハンドラ
+  const handleSortChange = (field: string, direction: 'asc' | 'desc') => {
+    setSortField(field);
+    setSortDirection(direction);
+  };
+
+  // ページ変更ハンドラ
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  return {
+    data,
+    isLoading,
+    error,
+    currentPage,
+    totalCount,
+    sortField,
+    sortDirection,
+    fetchData,
+    handleSortChange,
+    handlePageChange,
+  };
+}
+
+/**
+ * モデル一覧ページコンポーネント
+ */
+export default function ModelListPage() {
+  const params = useParams();
+  const modelRoute = params.model as string;
+  const pageSize = 10;
+
+  // モーダル関連の状態
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<ModelData | null>(null);
+  const [isNewItem, setIsNewItem] = useState(false);
+
+  // カスタムフックを使用してデータ取得と状態管理
+  const {
+    data,
+    isLoading,
+    error,
+    currentPage,
+    totalCount,
+    sortField,
+    sortDirection,
+    fetchData,
+    handleSortChange,
+    handlePageChange,
+  } = useModelData(modelRoute, pageSize);
+
+  // 列定義とモデル表示名をメモ化
+  const columns = useMemo(() => columnConfigs[modelRoute] || [], [modelRoute]);
+  const displayName = useMemo(() => modelDisplayNames[modelRoute] || modelRoute, [modelRoute]);
 
   // 行クリック時にモーダルを表示
   const handleRowClick = (item: ModelData) => {
@@ -199,39 +176,7 @@ export default function ModelListPage() {
     fetchData();
   };
 
-  // データ取得関数
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const variables = {
-        limit: pageSize,
-        sortField: sortField || undefined,
-        sortDirection: sortDirection || undefined,
-      };
-
-      const result = await fetchModelList(modelRoute, variables);
-      console.log(`${modelRoute}データ取得結果:`, result);
-      setData(result);
-      setTotalCount(result.length);
-    } catch (err) {
-      console.error('データ取得エラー:', err);
-      setError('データの取得に失敗しました。');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSortChange = (field: string, direction: 'asc' | 'desc') => {
-    setSortField(field);
-    setSortDirection(direction);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
+  // モデルが見つからない場合
   if (!modelRoute || !columns.length) {
     return <div className="p-4">モデルが見つかりません</div>;
   }

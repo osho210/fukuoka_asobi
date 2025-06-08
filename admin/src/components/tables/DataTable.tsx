@@ -67,9 +67,6 @@ export function DataTable<T extends Record<string, unknown>>({
 
   const currentPage = pagination?.currentPage || 1;
 
-  // データの存在確認とデバッグ
-  console.log('DataTable受け取りデータ:', data);
-
   return (
     <div className="admin-table-container">
       <div className="admin-card">
@@ -78,7 +75,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <tr>
               {columns.map((column, index) => (
                 <th
-                  key={index}
+                  key={column.accessorKey || index}
                   className={column.sortable ? 'cursor-pointer' : ''}
                 >
                   {column.sortable && sorting ? (

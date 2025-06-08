@@ -12,6 +12,7 @@ import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
 import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM } from '@/graphql/queries/getEnumTypes';
+import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
 // モデルデータの型定義
 interface ModelData {
@@ -24,102 +25,6 @@ interface RelationData {
   id: string;
   [key: string]: string | number | boolean | object | null;
 }
-
-// モデル名の日本語表示
-const modelDisplayNames: Record<string, string> = {
-  areas: 'エリア',
-  categories: 'カテゴリー',
-  districts: '地区',
-  hashtags: 'ハッシュタグ',
-  menus: 'メニュー',
-  purposes: '目的',
-  recommended_fors: 'おすすめ対象',
-  spot_ambiances: '雰囲気',
-  spots: 'スポット',
-  play_plans: '遊びプラン',
-  events: 'イベント',
-  news: 'ニュース',
-};
-
-// 各モデルのフィールド定義
-const modelFields: Record<string, { name: string; type: string; required?: boolean; enumKey?: string }[]> = {
-  areas: [
-    { name: 'areaName', type: 'text', required: true },
-    { name: 'district', type: 'relation', required: true },
-  ],
-  categories: [
-    { name: 'name', type: 'text', required: true },
-  ],
-  districts: [
-    { name: 'districtName', type: 'text', required: true },
-  ],
-  hashtags: [
-    { name: 'hashtagName', type: 'text', required: true },
-  ],
-  menus: [
-    { name: 'menuName', type: 'text', required: true },
-  ],
-  purposes: [
-    { name: 'purposeName', type: 'text', required: true },
-  ],
-  recommended_fors: [
-    { name: 'name', type: 'text', required: true },
-  ],
-  spot_ambiances: [
-    { name: 'ambianceName', type: 'text', required: true },
-  ],
-  spots: [
-    { name: 'spotName', type: 'text', required: true },
-    { name: 'address', type: 'text', required: true },
-    { name: 'district', type: 'relation', required: true },
-    { name: 'phoneNumber', type: 'text' },
-    { name: 'website', type: 'text' },
-    { name: 'catchphrase', type: 'text' },
-    { name: 'isRainyOk', type: 'boolean' },
-    { name: 'isClosed', type: 'boolean' },
-    { name: 'nearestStation', type: 'text' },
-    { name: 'imageUrl', type: 'text' },
-    { name: 'minPeople', type: 'number' },
-    { name: 'maxPeople', type: 'number' },
-    { name: 'recommendedFor1', type: 'text' },
-    { name: 'recommendedFor2', type: 'text' },
-    { name: 'reviewCount', type: 'number' },
-    { name: 'reviewRating', type: 'number' },
-    { name: 'instagramUrl', type: 'text' },
-    { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
-    { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
-  ],
-};
-
-// フィールド名の日本語表示
-const fieldDisplayNames: Record<string, string> = {
-  areaName: 'エリア名',
-  district: '地区',
-  name: '名前',
-  districtName: '地区名',
-  hashtagName: 'ハッシュタグ名',
-  menuName: 'メニュー名',
-  purposeName: '目的名',
-  ambianceName: '雰囲気名',
-  spotName: 'スポット名',
-  address: '住所',
-  phoneNumber: '電話番号',
-  instagramUrl: 'Instagram URL',
-  website: 'ウェブサイト',
-  catchphrase: 'キャッチフレーズ',
-  isRainyOk: '雨天可否',
-  budgetRange: '予算感',
-  isClosed: '営業中',
-  nearestStation: '最寄り駅',
-  imageUrl: '画像URL',
-  minPeople: '最小人数',
-  maxPeople: '最大人数',
-  recommendedFor1: 'おすすめ対象1',
-  recommendedFor2: 'おすすめ対象2',
-  reviewCount: 'レビュー数',
-  reviewRating: 'レビュー評価',
-  spotType: 'スポットタイプ',
-};
 
 
 interface ModelDetailModalProps {
@@ -157,7 +62,10 @@ export function ModelDetailModal({
   });
 
   // useMemo でマッピングをキャッシュ
-  const enumOptions = useMemo(() => ({
+  type EnumOption = { value: string; label: string };
+  type EnumOptionsMap = { [key: string]: EnumOption[] };
+
+  const enumOptions = useMemo<EnumOptionsMap>(() => ({
     SpotTypeEnum: spotTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
       value: ev.name,
       label: ev.description ?? ev.name,
@@ -297,8 +205,6 @@ export function ModelDetailModal({
             const value = formData?.[fieldName];
             const error = errors[fieldName];
 
-            console.log(spotTypeData)
-
             switch (field.type) {
               case 'text':
                 return (
@@ -357,11 +263,8 @@ export function ModelDetailModal({
                   />
                 );
               case 'select':
+                // enumKeyが指定されている場合はenumOptionsから取得
                 const options = enumOptions[field.enumKey!] || [];
-
-                console.log('Enum Options:', options);
-                console.log('Selected Value:', value);
-
                 return (
                   <Select
                     key={field.name}
