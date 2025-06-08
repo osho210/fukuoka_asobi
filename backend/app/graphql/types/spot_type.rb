@@ -17,7 +17,7 @@ module Types
     field :review_count, Integer, null: true
     field :instagram_url, String, null: true
     field :is_closed, Boolean, null: true
-    field :budget_range, String, null: true
+    field :budget_range, Types::BudgetTypeRangeEnumType, null: true
     field :max_people, Integer, null: true
     field :min_people, Integer, null: true
     field :is_rainy_ok, Boolean, null: true

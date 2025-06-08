@@ -56,6 +56,11 @@ module Types
     field :update_spot_ambiance, mutation: Mutations::UpdateSpotAmbiance
     field :delete_spot_ambiance, mutation: Mutations::DeleteSpotAmbiance
 
+    # spot関連
+    field :create_spot, mutation: Mutations::CreateSpot
+    field :update_spot, mutation: Mutations::UpdateSpot
+    field :delete_spot, mutation: Mutations::DeleteSpot
+
     # おすすめ対象関連
     field :create_recommended_for, mutation: Mutations::CreateRecommendedFor
     field :update_recommended_for, mutation: Mutations::UpdateRecommendedFor
