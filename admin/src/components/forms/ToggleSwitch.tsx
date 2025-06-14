@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, InputHTMLAttributes, useState } from 'react';
+import { forwardRef, InputHTMLAttributes, useState, useEffect } from 'react';
 
 export interface ToggleSwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'type'> {
   label?: string;
@@ -13,6 +13,11 @@ export interface ToggleSwitchProps extends Omit<InputHTMLAttributes<HTMLInputEle
 const ToggleSwitch = forwardRef<HTMLInputElement, ToggleSwitchProps>(
   ({ className = '', label, helperText, error, checked = false, onChange, ...props }, ref) => {
     const [isChecked, setIsChecked] = useState(checked);
+
+    // checked propが変更されたときに内部状態を更新
+    useEffect(() => {
+      setIsChecked(checked);
+    }, [checked]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newChecked = e.target.checked;
