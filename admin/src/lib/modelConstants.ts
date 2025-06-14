@@ -107,7 +107,6 @@ export const columnConfigs: Record<string, ColumnDefinition[]> = {
   stations: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '駅名', accessorKey: 'name', sortable: true },
-    { header: '路線名', accessorKey: 'trainLine', sortable: true },
     { header: '説明', accessorKey: 'description', sortable: false },
     { header: '有効', accessorKey: 'active', sortable: true },
   ]
