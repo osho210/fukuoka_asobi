@@ -21,3 +21,15 @@ export const GET_BUDGET_RANGE_ENUM = gql`
     }
   }
 `;
+
+export const GET_TRAIN_LINE_ENUM = gql`
+  query GetTrainLineEnum {
+    __type(name: "TrainLineEnum") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`
+

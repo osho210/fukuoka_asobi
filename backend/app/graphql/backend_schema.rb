@@ -43,6 +43,8 @@ class BackendSchema < GraphQL::Schema
       Types::OpeningHourType
     when Purpose
       Types::PurposeType
+    when Station
+      Types::StationType
     when SpotAmbiance
       Types::SpotAmbianceType
     when RecommendedFor

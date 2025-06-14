@@ -37,6 +37,7 @@ const modelDisplayNames: Record<string, string> = {
   play_plans: '遊びプラン',
   events: 'イベント',
   news: 'ニュース',
+  station: '駅マスタ',
 };
 
 // 各モデルのフィールド定義
@@ -76,6 +77,12 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'budgetRange', type: 'select', required: true },
   ],
+  stations: [
+    { name: 'name', type: 'text', required: true },
+    { name: 'trainLine', type: 'text', required: true },
+    { name: 'description', type: 'textarea' },
+    { name: 'active', type: 'boolean' },
+  ],
 };
 
 // フィールド名の日本語表示
@@ -95,6 +102,7 @@ const fieldDisplayNames: Record<string, string> = {
   catchphrase: 'キャッチフレーズ',
   isRainyOk: '雨天可否',
   budgetRange: '予算感',
+  active: 'アクティブフラグ',
 };
 
 // 選択肢の定義

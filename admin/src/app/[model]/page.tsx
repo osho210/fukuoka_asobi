@@ -177,7 +177,8 @@ export default function ModelListPage() {
   };
 
   // モデルが見つからない場合
-  if (!modelRoute || !columns.length) {
+  if (!modelRoute && !columns.length) {
+    console.log(`モデル "${modelRoute}" が見つかりません`);
     return <div className="p-4">モデルが見つかりません</div>;
   }
 
