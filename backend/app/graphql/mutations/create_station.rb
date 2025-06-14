@@ -10,7 +10,7 @@ module Mutations
         field :station, Types::StationType, null: true
         field :errors,  [String],           null: false
 
-        def resolve(name:, description: nil, active: true)
+        def resolve(name:, description: nil, active: true, train_line: nil)
         station = Station.new(name: name, description: description, active: active, train_line: train_line)
         if station.save
             { station: station, errors: [] }

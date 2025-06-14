@@ -44,7 +44,7 @@ hakata_shopping = Spot.find_or_create_by!(
   address: '福岡県福岡市博多区博多駅中央街1-1',
   catchphrase: '博多駅直結の大型ショッピングモール',
   district: District.find_by(district_name: '博多区'),
-  budget_range: '普通',
+  budget_range: 'AVERAGE',
   theme: 'コスパ',
   spot_type: 'STORE',
   is_rainy_ok: true
@@ -54,7 +54,7 @@ tenjin_station = Spot.find_or_create_by!(
   address: '福岡県福岡市中央区天神2丁目',
   catchphrase: '福岡市の中心部にある主要駅',
   district: District.find_by(district_name: '中央区'),
-  budget_range: '安い',
+  budget_range: 'CHEAP',
   theme: '文化と歴史',
   spot_type: 'TOURIST_SPOT',
   is_rainy_ok: true
@@ -68,7 +68,7 @@ if hakata_date_plan.plan_details.empty?
     address: '福岡県福岡市博多区博多駅中央街1-1',
     catchphrase: '九州の玄関口',
     district: District.find_by(district_name: '博多区'),
-    budget_range: '安い',
+    budget_range: 'CHEAP',
     theme: '文化と歴史',
     spot_type: 'TOURIST_SPOT',
     is_rainy_ok: true
@@ -209,7 +209,7 @@ itoshima_marine = Spot.find_by(spot_name: '糸島マリンアクティビティ'
   address: '福岡県糸島市志摩芥屋',
   catchphrase: '美しい海でマリンスポーツを楽しめる',
   district: District.find_by(district_name: '西区'),
-  budget_range: '高い',
+  budget_range: 'EXPENSIVE',
   theme: 'アクティブ',
   spot_type: 'ACTIVITY',
   is_rainy_ok: false
@@ -220,7 +220,7 @@ itoshima_cafe = Spot.find_or_create_by!(
   address: '福岡県糸島市志摩桜井',
   catchphrase: '海を眺めながらくつろげるカフェ',
   district: District.find_by(district_name: '西区'),
-  budget_range: '普通',
+  budget_range: 'AVERAGE',
   theme: 'グルメ',
   spot_type: 'STORE',
   is_rainy_ok: true
@@ -231,7 +231,7 @@ itoshima_market = Spot.find_or_create_by!(
   address: '福岡県糸島市前原',
   catchphrase: '地元の新鮮な農産物や海産物が並ぶマーケット',
   district: District.find_by(district_name: '西区'),
-  budget_range: '普通',
+  budget_range: 'AVERAGE',
   theme: 'コスパ',
   spot_type: 'STORE',
   is_rainy_ok: true

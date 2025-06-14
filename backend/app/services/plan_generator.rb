@@ -68,9 +68,9 @@ module Services
       # 予算によるフィルタリング
       # 注: 予算はスポット単位ではなくプラン全体で考慮するため、ここでは緩めのフィルタリング
       if @budget[:max] <= 5000
-        query = query.where(budget_range: "安い")
+        query = query.where(budget_range: "CHEAP")
       elsif @budget[:max] <= 15000
-        query = query.where(budget_range: ["安い", "普通"])
+        query = query.where(budget_range: ["CHEAP", "AVERAGE"])
       end
 
       # カスタムオプションによるフィルタリング
@@ -118,9 +118,9 @@ module Services
 
         # 予算適合度
         budget_score = case spot.budget_range
-        when "安い"
+        when "CHEAP"
           15 # 安い場合は加点
-        when "高い"
+        when "EXPENSIVE"
           -10 # 高い場合は減点
         else
           0 # 普通の場合は変化なし
@@ -306,9 +306,9 @@ module Services
 
       # 総予算を計算（予算レンジから概算）
       budget_values = {
-        "安い" => 3000,
-        "普通" => 8000,
-        "高い" => 15000
+        "CHEAP" => 3000,
+        "AVERAGE" => 8000,
+        "EXPENSIVE" => 15000
       }
       total_budget = route_with_times.sum do |item|
         budget_values[item[:spot].budget_range] || budget_values["普通"]
