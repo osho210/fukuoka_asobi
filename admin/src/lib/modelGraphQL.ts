@@ -15,6 +15,7 @@ import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
 import { GET_EVENTS } from '@/graphql/queries/getEvents';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNews';
+import { GET_STATIONS } from '@/graphql/queries/getStations';
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -50,6 +51,7 @@ export type ModelInput = Record<string, string | number | boolean | null | strin
 
 // GraphQLクエリの型定義
 import { DocumentNode } from 'graphql';
+import { DELETE_STATION, UPDATE_STATION } from '@/graphql/mutations/station';
 
 // クエリマッピング
 const listQueries: Record<string, DocumentNode> = {
@@ -64,7 +66,8 @@ const listQueries: Record<string, DocumentNode> = {
   play_plans: GET_PLAY_PLANS,
   spots: GET_SPOTS,
   events: GET_EVENTS,
-  news: GET_NEWS_LIST, // ニュースはGET_EVENTSで取得
+  news: GET_NEWS_LIST,
+  stations: GET_STATIONS
 };
 
 // ミューテーションマッピング
@@ -90,6 +93,7 @@ const updateMutations: Record<string, DocumentNode> = {
   recommended_fors: UPDATE_RECOMMENDED_FOR,
   spot_ambiances: UPDATE_SPOT_AMBIANCE,
   spots: UPDATE_SPOT,
+  stations: UPDATE_STATION
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
@@ -102,6 +106,7 @@ const deleteMutations: Record<string, DocumentNode> = {
   recommended_fors: DELETE_RECOMMENDED_FOR,
   spot_ambiances: DELETE_SPOT_AMBIANCE,
   spots: DELETE_SPOT,
+  stations: DELETE_STATION
 };
 
 /**

@@ -104,6 +104,13 @@ export const columnConfigs: Record<string, ColumnDefinition[]> = {
     { header: '公開日', accessorKey: 'publishedAt', sortable: true },
     { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
+  stations: [
+    { header: 'ID', accessorKey: 'id', sortable: true },
+    { header: '駅名', accessorKey: 'name', sortable: true },
+    { header: '路線名', accessorKey: 'trainLine', sortable: true },
+    { header: '説明', accessorKey: 'description', sortable: false },
+    { header: '有効', accessorKey: 'active', sortable: true },
+  ]
 };
 
 // 各モデルのフィールド定義
@@ -154,6 +161,12 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
   ],
+  stations: [
+    { name: 'name', type: 'text', required: true },
+    { name: 'trainLine', type: 'select', required: true, enumKey: 'TrainLineTypeEnum' },
+    { name: 'description', type: 'textarea' },
+    { name: 'active', type: 'boolean' },
+  ],
 };
 
 // フィールド名の日本語表示
@@ -185,6 +198,7 @@ export const fieldDisplayNames: Record<string, string> = {
   reviewRating: 'レビュー評価',
   spotType: 'スポットタイプ',
   planName: 'プラン名',
+  trainLine: '路線名',
   status: 'ステータス',
   title: 'タイトル',
   location: '場所',
