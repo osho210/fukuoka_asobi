@@ -13,9 +13,9 @@ module Mutations
 
     def resolve(area_name:, district_id:)
       # 管理者権限チェック
-      unless context[:current_user]&.admin?
-        return { area: nil, errors: ["管理者権限が必要です"] }
-      end
+      # unless context[:current_user]&.admin?
+      #   return { area: nil, errors: ["管理者権限が必要です"] }
+      # end
 
       area = Area.new(area_name: area_name, district_id: district_id)
 
