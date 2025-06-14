@@ -36,43 +36,46 @@ export default function RootLayout({
               <nav className="admin-sidebar-nav">
                 <ul className="admin-sidebar-nav-list">
                   <li className="admin-sidebar-nav-item">
-                    <Link href="/" className="admin-sidebar-nav-link">ダッシュボード</Link>
+                    <Link href="//" className="admin-sidebar-nav-link">ダッシュボード</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="spots" className="admin-sidebar-nav-link">スポット</Link>
+                    <Link href="/spots" className="admin-sidebar-nav-link">スポット</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="areas" className="admin-sidebar-nav-link">エリア</Link>
+                    <Link href="/areas" className="admin-sidebar-nav-link">エリア</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="categories" className="admin-sidebar-nav-link">カテゴリー</Link>
+                    <Link href="/categories" className="admin-sidebar-nav-link">カテゴリー</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="districts" className="admin-sidebar-nav-link">地区</Link>
+                    <Link href="/districts" className="admin-sidebar-nav-link">地区</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="hashtags" className="admin-sidebar-nav-link">ハッシュタグ</Link>
+                    <Link href="/hashtags" className="admin-sidebar-nav-link">ハッシュタグ</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="menus" className="admin-sidebar-nav-link">メニュー</Link>
+                    <Link href="/menus" className="admin-sidebar-nav-link">メニュー</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="purposes" className="admin-sidebar-nav-link">目的</Link>
+                    <Link href="/purposes" className="admin-sidebar-nav-link">目的</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="recommended_fors" className="admin-sidebar-nav-link">おすすめ対象</Link>
+                    <Link href="/recommended_fors" className="admin-sidebar-nav-link">おすすめ対象</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="spot_ambiances" className="admin-sidebar-nav-link">雰囲気</Link>
+                    <Link href="/spot_ambiances" className="admin-sidebar-nav-link">雰囲気</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="play_plans" className="admin-sidebar-nav-link">遊びプラン</Link>
+                    <Link href="/play_plans" className="admin-sidebar-nav-link">遊びプラン</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="events" className="admin-sidebar-nav-link">イベント</Link>
+                    <Link href="/events" className="admin-sidebar-nav-link">イベント</Link>
                   </li>
                   <li className="admin-sidebar-nav-item">
-                    <Link href="news" className="admin-sidebar-nav-link">ニュース</Link>
+                    <Link href="/news" className="admin-sidebar-nav-link">ニュース</Link>
+                  </li>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="/stations" className="admin-sidebar-nav-link">駅マスタ</Link>
                   </li>
                 </ul>
               </nav>
