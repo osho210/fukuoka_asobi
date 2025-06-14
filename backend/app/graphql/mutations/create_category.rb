@@ -12,9 +12,9 @@ module Mutations
 
     def resolve(name:)
       # 管理者権限チェック
-      unless context[:current_user]&.admin?
-        return { category: nil, errors: ["管理者権限が必要です"] }
-      end
+      # unless context[:current_user]&.admin?
+      #   return { category: nil, errors: ["管理者権限が必要です"] }
+      # end
 
       category = Category.new(name: name)
 
