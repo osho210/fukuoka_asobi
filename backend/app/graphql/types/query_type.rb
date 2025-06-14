@@ -97,6 +97,11 @@ module Types
       Spot.find_by(id: id)
     end
 
+    field :stations, [Types::StationType], null: true
+    def stations
+      Station.all
+    end
+
     # ハッシュタグ
     field :hashtags, [Types::HashtagType], null: false
     def hashtags
