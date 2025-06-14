@@ -354,14 +354,9 @@ export default function ModelDetailPage() {
                     label={fieldLabel}
                     value={(value as RelationData)?.id || ''}
                     onChange={(val) => handleChange(fieldName, { id: val } as RelationData)}
-                    options={[
-                      { value: '1', label: '福岡市中央区' },
-                      { value: '2', label: '福岡市博多区' },
-                    ]}
                     required={field.required}
                     error={error}
-                    fullWidth
-                  />
+                    fullWidth options={[]} />
                 );
               default:
                 return null;

@@ -142,12 +142,9 @@ export const modelFields: Record<string, ModelField[]> = {
   spots: [
     { name: 'spotName', type: 'text', required: true },
     { name: 'address', type: 'text', required: true },
-    { name: 'district', type: 'relation', required: true },
     { name: 'phoneNumber', type: 'text' },
     { name: 'website', type: 'text' },
     { name: 'catchphrase', type: 'text' },
-    { name: 'isRainyOk', type: 'boolean' },
-    { name: 'isClosed', type: 'boolean' },
     { name: 'nearestStation', type: 'text' },
     { name: 'imageUrl', type: 'text' },
     { name: 'minPeople', type: 'number' },
@@ -157,8 +154,18 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'reviewCount', type: 'number' },
     { name: 'reviewRating', type: 'number' },
     { name: 'instagramUrl', type: 'text' },
+    { name: 'instagramEmbeds',  type: 'text' },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
+    { name: 'district', type: 'relation', required: true },
+    { name: 'themes', type: 'relation', required: false }, //TODO: マスタ登録必要 (CRUD)
+    { name: 'category', type: 'relation', required: false }, //TODO: 複数選択にしたい
+    { name: 'hashtags', type: 'relation', required: false }, //TODO: 複数選択にしたい
+    { name: 'spotAmbiances', type: 'relation', required: false }, //TODO: 複数選択にしたい
+    { name: 'purposes', type: 'relation', required: false }, //TODO: 複数選択にしたい
+    { name: 'isRainyOk', type: 'boolean' },
+    { name: 'isClosed', type: 'boolean' },
+    { name: 'parkingAvailable', type: 'boolean' },
   ],
   news: [
     { name: 'title', type: 'text', required: true },
@@ -215,4 +222,12 @@ export const fieldDisplayNames: Record<string, string> = {
   endDatetime: '終了日時',
   publishedAt: '公開日',
   updatedAt: '更新日時',
+  parkingAvailable: '駐車場あり',
+  themes: 'テーマ',
+  districtId: '地区ID',
+  category: 'カテゴリー',
+  hashtags: 'ハッシュタグ',
+  instagramEmbeds: 'Instagram 埋め込み',
+  spotAmbiances: '雰囲気',
+  purposes: '目的',
 };

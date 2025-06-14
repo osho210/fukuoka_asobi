@@ -60,7 +60,7 @@ type Documents = {
     "\n  mutation DeleteStation($input: DeleteStationInput!) {\n    deleteStation(input: $input) {\n      success\n      errors\n    }\n  }\n": typeof types.DeleteStationDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetAreasDocument,
     "\n  query GetArea($id: ID!) {\n    area(id: $id) {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetAreaDocument,
-    "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.CategoriesDocument,
+    "\n    query GetCategories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.GetCategoriesDocument,
     "\n  query GetDistricts {\n    districts {\n      id\n      districtName\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetDistrictsDocument,
     "\n  query GetDistrict($id: ID!) {\n    district(id: $id) {\n      id\n      districtName\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetDistrictDocument,
     "\n  query GetSpotTypeEnum {\n    __type(name: \"SpotTypeEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": typeof types.GetSpotTypeEnumDocument,
@@ -128,7 +128,7 @@ const documents: Documents = {
     "\n  mutation DeleteStation($input: DeleteStationInput!) {\n    deleteStation(input: $input) {\n      success\n      errors\n    }\n  }\n": types.DeleteStationDocument,
     "\n  query GetAreas {\n    areas {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetAreasDocument,
     "\n  query GetArea($id: ID!) {\n    area(id: $id) {\n      id\n      areaName\n      district {\n        id\n        districtName\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetAreaDocument,
-    "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": types.CategoriesDocument,
+    "\n    query GetCategories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n": types.GetCategoriesDocument,
     "\n  query GetDistricts {\n    districts {\n      id\n      districtName\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetDistrictsDocument,
     "\n  query GetDistrict($id: ID!) {\n    district(id: $id) {\n      id\n      districtName\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetDistrictDocument,
     "\n  query GetSpotTypeEnum {\n    __type(name: \"SpotTypeEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": types.GetSpotTypeEnumDocument,
@@ -351,7 +351,7 @@ export function gql(source: "\n  query GetArea($id: ID!) {\n    area(id: $id) {\
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n"): (typeof documents)["\n    query Categories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n"];
+export function gql(source: "\n    query GetCategories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n"): (typeof documents)["\n    query GetCategories {\n        categories {\n            id\n            name\n            createdAt\n            updatedAt\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

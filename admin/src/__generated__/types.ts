@@ -2152,10 +2152,10 @@ export type GetAreaQueryVariables = Exact<{
 
 export type GetAreaQuery = { __typename?: 'Query', area?: { __typename?: 'Area', id: string, areaName: string, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string } } | null };
 
-export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }> };
+export type GetCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }> };
 
 export type GetDistrictsQueryVariables = Exact<{ [key: string]: never; }>;
 
