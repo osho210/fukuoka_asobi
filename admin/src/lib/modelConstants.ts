@@ -161,6 +161,16 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
   ],
+  news: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'body', type: 'textarea', required: true },
+    { name: 'publishedAt', type: 'datetime', required: true },
+    { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
+    { name: 'imageUrl', type: 'text' },
+    { name: 'category', type: 'relation' },
+    { name: 'author', type: 'relation' },
+    { name: 'createdAt', type: 'datetime', required: true },
+  ],
   stations: [
     { name: 'name', type: 'text', required: true },
     { name: 'trainLine', type: 'select', required: true, enumKey: 'TrainLineTypeEnum' },

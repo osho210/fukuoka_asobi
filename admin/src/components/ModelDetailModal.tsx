@@ -11,7 +11,7 @@ import { Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
-import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM } from '@/graphql/queries/getEnumTypes';
+import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM } from '@/graphql/queries/getEnumTypes';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
 // モデルデータの型定義
@@ -63,6 +63,9 @@ export function ModelDetailModal({
   const { data: trainLineData } = useQuery(GET_TRAIN_LINE_ENUM, {
     variables: { enumName: "TrainLineTypeEnum" },
   });
+  const { data: statusData } = useQuery(GET_STATUS_ENUM, {
+    variables: { enumName: "StatusEnum" },
+  });
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
@@ -81,7 +84,11 @@ export function ModelDetailModal({
       value: ev.name,
       label: ev.description ?? ev.name,
     })) ?? [],
-  }), [spotTypeData, budgetData, trainLineData]);
+    StatusEnum: statusData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
+      value: ev.name,
+      label: ev.description ?? ev.name,
+    })) ?? [],
+  }), [spotTypeData, budgetData, trainLineData, statusData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {

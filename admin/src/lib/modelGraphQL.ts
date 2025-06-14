@@ -14,7 +14,7 @@ import { GET_SPOT_AMBIANCES, } from '@/graphql/queries/getSpotAmbiances';
 import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
 import { GET_EVENTS } from '@/graphql/queries/getEvents';
-import { GET_NEWS_LIST } from '@/graphql/queries/getNews';
+import { GET_NEWS } from '@/graphql/queries/getNews';
 import { GET_STATIONS } from '@/graphql/queries/getStations';
 
 // ミューテーションのインポート
@@ -66,7 +66,7 @@ const listQueries: Record<string, DocumentNode> = {
   play_plans: GET_PLAY_PLANS,
   spots: GET_SPOTS,
   events: GET_EVENTS,
-  news: GET_NEWS_LIST,
+  news: GET_NEWS,
   stations: GET_STATIONS
 };
 
