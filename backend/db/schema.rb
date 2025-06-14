@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_20_034216) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_14_040404) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -350,6 +350,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_20_034216) do
     t.index ["spot_name"], name: "index_spots_on_spot_name"
     t.index ["spot_type"], name: "index_spots_on_spot_type"
     t.index ["theme"], name: "index_spots_on_theme"
+  end
+
+  create_table "stations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "train_line", null: false
   end
 
   create_table "travel_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

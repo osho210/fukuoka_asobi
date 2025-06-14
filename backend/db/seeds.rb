@@ -19,6 +19,12 @@ puts "地区データを作成中..."
   District.find_or_create_by!(district_name: district_name)
 end
 
+#駅テーブル
+puts "駅データを作成中..."
+['博多駅', '南福岡駅', '中洲川端駅', '赤坂駅', '薬院駅', '大濠公園駅', '西新駅', '姪浜駅', '香椎駅', '箱崎駅'].each do |station_name|
+  Station.find_or_create_by!(name: station_name, description: "#{station_name}の説明", active: true)
+end
+
 # 地域テーブル
 puts "地域データを作成中..."
 {
