@@ -188,7 +188,7 @@ export type CreatePlayPlanInput = {
   planName: Scalars['String']['input'];
   recommendedForIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   startDatetime?: InputMaybe<Scalars['ISO8601DateTime']['input']>;
-  status: PlayPlanStatusEnum;
+  status: StatusEnum;
   tags?: InputMaybe<Scalars['String']['input']>;
   totalBudget?: InputMaybe<Scalars['Float']['input']>;
   tripType: TripTypeEnum;
@@ -893,7 +893,7 @@ export type News = {
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  status: Scalars['String']['output'];
+  status?: Maybe<StatusEnum>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
@@ -965,7 +965,7 @@ export type PlayPlan = {
   recommendedFors?: Maybe<Array<RecommendedFor>>;
   reviewCount: Scalars['Int']['output'];
   startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  status: PlayPlanStatusEnum;
+  status: StatusEnum;
   tags?: Maybe<Scalars['String']['output']>;
   totalBudget?: Maybe<Scalars['Float']['output']>;
   tripType: TripTypeEnum;
@@ -973,14 +973,6 @@ export type PlayPlan = {
   user?: Maybe<User>;
   userId?: Maybe<Scalars['Int']['output']>;
 };
-
-/** プランのステータス */
-export enum PlayPlanStatusEnum {
-  /** 下書き */
-  Draft = 'DRAFT',
-  /** 公開 */
-  Published = 'PUBLISHED'
-}
 
 export type Purpose = {
   __typename?: 'Purpose';
@@ -1019,10 +1011,9 @@ export type Query = {
   hashtags: Array<Hashtag>;
   /** 指定したプランがお気に入りに登録されているかを確認 */
   isFavorite: Scalars['Boolean']['output'];
-  news: Array<News>;
+  news?: Maybe<Array<News>>;
   /** ニュースの総数 */
   newsCount: Scalars['Int']['output'];
-  newsDetail?: Maybe<News>;
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
   /** 遊びプランの総数 */
@@ -1095,18 +1086,6 @@ export type QueryIsFavoriteArgs = {
 };
 
 
-export type QueryNewsArgs = {
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type QueryNewsDetailArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type QueryPlayPlanArgs = {
   id: Scalars['Int']['input'];
 };
@@ -1114,7 +1093,7 @@ export type QueryPlayPlanArgs = {
 
 export type QueryPlayPlansArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
-  status?: InputMaybe<PlayPlanStatusEnum>;
+  status?: InputMaybe<StatusEnum>;
 };
 
 
@@ -1156,7 +1135,7 @@ export type QueryUserBookmarksArgs = {
 
 export type QueryUserPlayPlansArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
-  status?: InputMaybe<PlayPlanStatusEnum>;
+  status?: InputMaybe<StatusEnum>;
 };
 
 export type RecommendedFor = {
@@ -1253,6 +1232,18 @@ export type Station = {
   trainLine: TrainLineEnum;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+/** プランのステータス */
+export enum StatusEnum {
+  /** アーカイブ */
+  Archived = 'ARCHIVED',
+  /** 削除 */
+  Deleted = 'DELETED',
+  /** 下書き */
+  Draft = 'DRAFT',
+  /** 公開 */
+  Published = 'PUBLISHED'
+}
 
 export type ThemeOption = {
   __typename?: 'ThemeOption';
@@ -1465,7 +1456,7 @@ export type UpdatePlayPlanInput = {
   planName?: InputMaybe<Scalars['String']['input']>;
   recommendedForIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   startDatetime?: InputMaybe<Scalars['ISO8601DateTime']['input']>;
-  status?: InputMaybe<PlayPlanStatusEnum>;
+  status?: InputMaybe<StatusEnum>;
   tags?: InputMaybe<Scalars['String']['input']>;
   totalBudget?: InputMaybe<Scalars['Float']['input']>;
   tripType?: InputMaybe<TripTypeEnum>;
@@ -2193,6 +2184,11 @@ export type GetTrainLineEnumQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTrainLineEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
 
+export type GetStatusEnumQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStatusEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
+
 export type GetEventsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -2224,20 +2220,17 @@ export type GetMenuQueryVariables = Exact<{
 
 export type GetMenuQuery = { __typename: 'Query' };
 
-export type GetNewsListQueryVariables = Exact<{
-  categoryId?: InputMaybe<Scalars['ID']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-}>;
+export type GetNewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status: string, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
+export type GetNewsQuery = { __typename?: 'Query', news?: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }> | null };
 
 export type GetPlayPlansQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: PlayPlanStatusEnum, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
 
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 

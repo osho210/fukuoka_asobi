@@ -3,7 +3,7 @@ module Mutations
     # 入力フィールド
     argument :plan_name, String, required: true
     argument :description, String, required: false
-    argument :status, Types::PlayPlanStatusEnum, required: true
+    argument :status, Types::StatusEnumType, required: true
     argument :trip_type, Types::TripTypeEnum, required: true
     argument :total_budget, Float, required: false
     argument :location, String, required: false

@@ -2,8 +2,6 @@ class News < ApplicationRecord
   belongs_to :author, class_name: 'User', optional: true
   belongs_to :category, optional: true
 
-  enum :status, { draft: 0, published: 1, archived: 2 }
-
   validates :title, presence: true
   validates :body, presence: true
   validates :status, presence: true

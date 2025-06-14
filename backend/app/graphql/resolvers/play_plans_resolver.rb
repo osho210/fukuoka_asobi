@@ -3,7 +3,7 @@ module Resolvers
     type [Types::PlayPlanType], null: false
 
     argument :limit, Integer, required: false, default_value: 5
-    argument :status, Types::PlayPlanStatusEnum, required: false
+    argument :status, Types::StatusEnumType, required: false
 
     def resolve(limit: 5, status: nil)
       query = PlayPlan.all
