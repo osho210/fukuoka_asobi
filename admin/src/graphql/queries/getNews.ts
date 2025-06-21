@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
-export const GET_NEWS_LIST = gql`
-  query GetNewsList($categoryId: ID, $limit: Int) {
-    news(categoryId: $categoryId, limit: $limit) {
+export const GET_NEWS = gql`
+  query GetNews {
+    news {
       id
       title
       body
@@ -19,10 +19,6 @@ export const GET_NEWS_LIST = gql`
       }
       createdAt
       updatedAt
-    }
-    categories {
-      id
-      name
     }
   }
 `;

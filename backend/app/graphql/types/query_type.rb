@@ -143,13 +143,20 @@ module Types
     field :event, resolver: Resolvers::EventResolver
 
     # ニュース
-    field :news, resolver: Resolvers::NewsResolver
-    field :news_detail, resolver: Resolvers::NewsDetailResolver
+    field :news, [Types::NewsType], null: true
+    def news
+      News.all
+    end
 
     # おすすめ対象
     field :recommended_fors, [Types::RecommendedForType], null: false
     def recommended_fors
       RecommendedFor.all
+    end
+
+    field :menus , [Types::MenuType], null: false
+    def menus
+      Menu.all
     end
 
     # 選択肢データ

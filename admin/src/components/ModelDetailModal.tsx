@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { MultiSelect } from '@/components/forms/MultiSelect';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -11,19 +12,33 @@ import { Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
-import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM } from '@/graphql/queries/getEnumTypes';
+import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM } from '@/graphql/queries/getEnumTypes';
+import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
+import { GET_CATEGORIES } from '@/graphql/queries/getCategories';
+import { GET_AREAS } from '@/graphql/queries/getAreas';
+import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
+import { GET_PURPOSES } from '@/graphql/queries/getPurposes';
+import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
+import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
+
+// 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
+interface RelationItem {
+  __typename?: string;
+  id: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
 
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | number[] | RelationItem[];
 }
 
-// 関連データの型定義
+// 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | undefined;
 }
 
 
@@ -54,6 +69,7 @@ export function ModelDetailModal({
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = modelFields[modelRoute] || [];
 
+  // Enumデータの取得
   const { data: spotTypeData } = useQuery(GET_SPOT_TYPE_ENUM, {
     variables: { enumName: "SpotTypeEnum" },
   });
@@ -63,12 +79,25 @@ export function ModelDetailModal({
   const { data: trainLineData } = useQuery(GET_TRAIN_LINE_ENUM, {
     variables: { enumName: "TrainLineTypeEnum" },
   });
+  const { data: statusData } = useQuery(GET_STATUS_ENUM, {
+    variables: { enumName: "StatusEnum" },
+  });
+
+  // マスタデータの取得
+  const { data: districtsData } = useQuery(GET_DISTRICTS);
+  const { data: categoriesData } = useQuery(GET_CATEGORIES);
+  const { data: areasData } = useQuery(GET_AREAS);
+  const { data: hashtagsData } = useQuery(GET_HASHTAGS);
+  const { data: purposesData } = useQuery(GET_PURPOSES);
+  const { data: spotAmbiancesData } = useQuery(GET_SPOT_AMBIANCES);
+  const { data: menusData } = useQuery(GET_MENUS);
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
-  type EnumOptionsMap = { [key: string]: EnumOption[] };
+  type OptionsMap = { [key: string]: EnumOption[] };
 
-  const enumOptions = useMemo<EnumOptionsMap>(() => ({
+  // Enumオプションのマッピング
+  const enumOptions = useMemo<OptionsMap>(() => ({
     SpotTypeEnum: spotTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
       value: ev.name,
       label: ev.description ?? ev.name,
@@ -81,7 +110,43 @@ export function ModelDetailModal({
       value: ev.name,
       label: ev.description ?? ev.name,
     })) ?? [],
-  }), [spotTypeData, budgetData, trainLineData]);
+    StatusEnum: statusData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
+      value: ev.name,
+      label: ev.description ?? ev.name,
+    })) ?? [],
+  }), [spotTypeData, budgetData, trainLineData, statusData]);
+
+  // マスタデータのオプションマッピング
+  const relationOptions = useMemo<OptionsMap>(() => ({
+    district: districtsData?.districts.map((district: { id: string, districtName: string }) => ({
+      value: district.id,
+      label: district.districtName,
+    })) ?? [],
+    category: categoriesData?.categories.map((category: { id: string, name: string }) => ({
+      value: category.id,
+      label: category.name,
+    })) ?? [],
+    area: areasData?.areas.map((area: { id: string, areaName: string }) => ({
+      value: area.id,
+      label: area.areaName,
+    })) ?? [],
+    hashtags: hashtagsData?.hashtags.map((hashtag: { id: string, hashtagName: string }) => ({
+      value: hashtag.id,
+      label: hashtag.hashtagName,
+    })) ?? [],
+    purpose: purposesData?.purposes.map((purpose: { id: string, purposeName: string }) => ({
+      value: purpose.id,
+      label: purpose.purposeName,
+    })) ?? [],
+    spotAmbiances: spotAmbiancesData?.spotAmbiances.map((ambiance: { id: string, ambianceName: string }) => ({
+      value: ambiance.id,
+      label: ambiance.ambianceName,
+    })) ?? [],
+    menus: menusData?.menus.map((menu: { id: string, menuName: string }) => ({
+      value: menu.id,
+      label: menu.menuName,
+    })) ?? [],
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
@@ -90,7 +155,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData]);
 
-  const handleChange = (name: string, value: string | boolean | RelationData) => {
+  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -128,10 +193,29 @@ export function ModelDetailModal({
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
+
       if (field.type === 'relation' && typeof value === 'object' && value !== null) {
         // リレーションフィールドの場合はIDを取得
         const relationData = value as RelationData;
         input[`${fieldName}Id`] = relationData.id;
+      } else if (field.type === 'multiSelect' && Array.isArray(value)) {
+        // 配列の場合は、各要素を適切に処理して数値の配列に変換
+        const ids = value.map(item => {
+          if (typeof item === 'object' && item !== null && 'id' in item) {
+            // RelationItemの場合はidプロパティを数値に変換
+            return Number((item as RelationItem).id);
+          } else if (typeof item === 'string') {
+            // 文字列の場合は数値に変換
+            return Number(item);
+          } else if (typeof item === 'number') {
+            // 数値の場合はそのまま
+            return item;
+          }
+          // その他の場合は0（エラー防止）
+          return 0;
+        });
+
+        input[fieldName] = ids;
       } else {
         // 通常のフィールドの場合はそのまま設定
         if (value !== undefined && value !== null) {
@@ -271,7 +355,7 @@ export function ModelDetailModal({
                 );
               case 'select':
                 // enumKeyが指定されている場合はenumOptionsから取得
-                const options = enumOptions[field.enumKey!] || [];
+                const enumOpts = enumOptions[field.enumKey!] || [];
                 return (
                   <Select
                     key={field.name}
@@ -280,14 +364,17 @@ export function ModelDetailModal({
                     label={fieldDisplayNames[field.name]}
                     value={value as string}
                     onChange={(val) => handleChange(field.name, val)}
-                    options={options}
+                    options={enumOpts}
                     required={field.required}
                     error={error}
                     fullWidth
                   />
                 );
               case 'relation':
-                // 関連データの選択は実際にはSelectAsyncを使用
+                // マスタデータの選択肢を取得
+                const relationName = fieldName.endsWith('s') ? fieldName.slice(0, -1) : fieldName;
+                const relationOpts = relationOptions[relationName] || [];
+
                 return (
                   <Select
                     key={fieldName}
@@ -296,14 +383,38 @@ export function ModelDetailModal({
                     label={fieldLabel}
                     value={(value as RelationData)?.id || ''}
                     onChange={(val) => handleChange(fieldName, { id: val } as RelationData)}
-                    options={[
-                      { value: '1', label: '福岡市中央区' },
-                      { value: '2', label: '福岡市博多区' },
-                    ]}
+                    options={relationOpts}
                     required={field.required}
                     error={error}
                     fullWidth
                   />
+                );
+              case 'multiSelect':
+                const multiRelationName = fieldName.endsWith('s') ? fieldName.slice(0, -1) : fieldName;
+
+                return (
+                  <MultiSelect
+                    key={fieldName}
+                    id={fieldName}
+                    label={fieldLabel}
+                    // ここではデータ一覧を取得するためにマスタ取得用のモデル名を渡す必要がある
+                    // 例えばspotAmbianceのような
+                    modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
+                    labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
+                      multiRelationName === 'area' ? 'areaName' :
+                        multiRelationName === 'spotAmbiance' ? 'ambianceName' :
+                          multiRelationName === 'purpose' ? 'purposeName' :
+                            multiRelationName === 'menu' ? 'menuName' : 'name'}
+                    selectedValues={(value as RelationItem[]) || []}
+                    onChange={(values: RelationItem[]) => {
+                      // graphqlで更新する再はfield名で更新する必要がある
+                      handleChange(fieldName, values);
+                    }}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
+
                 );
               default:
                 return null;

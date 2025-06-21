@@ -410,11 +410,11 @@
   transition: transform 0.2s;
 }
 
-.admin-form-check-input:checked + .admin-form-toggle-slider {
+.admin-form-check-input:checked+.admin-form-toggle-slider {
   background-color: var(--admin-primary);
 }
 
-.admin-form-check-input:checked + .admin-form-toggle-slider::after {
+.admin-form-check-input:checked+.admin-form-toggle-slider::after {
   transform: translateX(1.25rem);
 }
 
@@ -500,6 +500,164 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* MultiSelect コンポーネント */
+.admin-multiselect-container {
+  position: relative;
+  width: 100%;
+}
+
+.admin-multiselect-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: var(--admin-border-radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-multiselect-trigger:hover {
+  border-color: #adb5bd;
+}
+
+.admin-multiselect-trigger:focus,
+.admin-multiselect-trigger-active {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 0.2rem rgba(74, 111, 255, 0.25);
+  outline: none;
+}
+
+.admin-multiselect-placeholder {
+  color: #6c757d;
+}
+
+.admin-multiselect-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.admin-multiselect-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  margin-top: 0.25rem;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: var(--admin-border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.admin-multiselect-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.admin-multiselect-clear {
+  background: none;
+  border: none;
+  color: var(--admin-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.admin-multiselect-clear:hover {
+  background-color: rgba(74, 111, 255, 0.1);
+}
+
+.admin-multiselect-options {
+  padding: 0.25rem;
+}
+
+.admin-multiselect-option {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s ease;
+}
+
+.admin-multiselect-option:hover {
+  background-color: #f8f9fa;
+}
+
+.admin-multiselect-option-selected {
+  background-color: rgba(74, 111, 255, 0.1);
+}
+
+.admin-multiselect-option-selected:hover {
+  background-color: rgba(74, 111, 255, 0.15);
+}
+
+.admin-multiselect-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.admin-multiselect-option-selected .admin-multiselect-checkbox {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+}
+
+.admin-multiselect-checkbox-icon {
+  color: white;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.admin-multiselect-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #6c757d;
+}
+
+.admin-multiselect-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  border: 2px solid rgba(74, 111, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--admin-primary);
+  animation: admin-spin 1s linear infinite;
+}
+
+.admin-multiselect-empty {
+  padding: 1rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.admin-transition-transform {
+  width: 10px;
 }
 
 /* ユーティリティ */
@@ -621,4 +779,77 @@
 
 .admin-text-2xl {
   font-size: 1.5rem;
+}
+
+/* チップスタイル */
+.admin-selected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.admin-chip {
+  display: flex;
+  align-items: center;
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.admin-chip-remove {
+  display: inline-flex;
+  margin-left: 0.25rem;
+  color: #6b7280;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.admin-chip-remove:hover {
+  color: #374151;
+}
+
+.admin-gap-2 {
+  gap: 0.5rem;
+}
+
+.admin-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.admin-rounded-full {
+  border-radius: 9999px;
+}
+
+.admin-bg-gray-100 {
+  background-color: #f3f4f6;
+}
+
+.admin-px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.admin-py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.admin-h-4 {
+  height: 1rem;
+}
+
+.admin-w-4 {
+  width: 1rem;
+}
+
+.admin-text-gray-500 {
+  color: #6b7280;
+}
+
+.admin-hover\:admin-text-gray-700:hover {
+  color: #374151;
 }

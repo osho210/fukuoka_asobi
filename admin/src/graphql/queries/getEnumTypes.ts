@@ -33,3 +33,14 @@ export const GET_TRAIN_LINE_ENUM = gql`
   }
 `
 
+export const GET_STATUS_ENUM = gql`
+  query GetStatusEnum {
+    __type(name: "StatusEnum") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+

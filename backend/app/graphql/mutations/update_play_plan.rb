@@ -4,7 +4,7 @@ module Mutations
     argument :id, ID, required: true
     argument :plan_name, String, required: false
     argument :description, String, required: false
-    argument :status, Types::PlayPlanStatusEnum, required: false
+    argument :status, Types::StatusEnumType, required: false
     argument :trip_type, Types::TripTypeEnum, required: false
     argument :total_budget, Float, required: false
     argument :location, String, required: false

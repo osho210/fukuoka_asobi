@@ -7,20 +7,28 @@ import { TextField } from '@/components/forms/TextField';
 import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
+import { MultiSelect } from '@/components/forms/MultiSelect';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
 
+// 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
+interface RelationItem {
+  __typename?: string;
+  id: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
+
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | string[] | number[] | RelationItem[];
 }
 
-// 関連データの型定義
+// 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | undefined;
 }
 
 // モデル名の日本語表示
@@ -41,7 +49,7 @@ const modelDisplayNames: Record<string, string> = {
 };
 
 // 各モデルのフィールド定義
-const modelFields: Record<string, { name: string; type: string; required?: boolean }[]> = {
+const modelFields: Record<string, { name: string; type: string; required?: boolean; modelName?: string; labelField?: string }[]> = {
   areas: [
     { name: 'areaName', type: 'text', required: true },
     { name: 'district', type: 'relation', required: true },
@@ -76,6 +84,13 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'catchphrase', type: 'text' },
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'budgetRange', type: 'select', required: true },
+    { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
+    { name: 'hashtag', type: 'relation', modelName: 'Hashtag', labelField: 'hashtagName' },
+    { name: 'purpose', type: '', modelName: 'Purpose', labelField: 'purposeName' },
+    { name: 'spotAmbiance', type: 'multirelation', modelName: 'spotAmbiances', labelField: 'ambianceName' },
+    { name: 'categories', type: 'multirelation', modelName: 'Category', labelField: 'name' },
+    { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
+    { name: 'area', type: 'multirelation', modelName: 'Area', labelField: 'areaName' },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },
@@ -130,7 +145,7 @@ export default function ModelDetailPage() {
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = modelFields[modelRoute] || [];
 
-  const handleChange = (name: string, value: string | boolean | RelationData) => {
+  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -168,10 +183,30 @@ export default function ModelDetailPage() {
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
-      if (field.type === 'relation' && typeof value === 'object' && value !== null) {
+      if (field.type === 'relation' && typeof value === 'object' && value !== null && !Array.isArray(value)) {
         // リレーションフィールドの場合はIDを取得
         const relationData = value as RelationData;
         input[`${fieldName}Id`] = relationData.id;
+      } else if (field.type === 'multirelation' && Array.isArray(value)) {
+        // 複数関連フィールドの場合はIDの配列を設定
+        const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
+        // 配列の場合は、各要素を適切に処理して数値の配列に変換
+        const ids = value.map(item => {
+          if (typeof item === 'object' && item !== null && 'id' in item) {
+            // RelationItemの場合はidプロパティを数値に変換
+            return Number((item as RelationItem).id);
+          } else if (typeof item === 'string') {
+            // 文字列の場合は数値に変換
+            return Number(item);
+          } else if (typeof item === 'number') {
+            // 数値の場合はそのまま
+            return item;
+          }
+          // その他の場合は0（エラー防止）
+          return 0;
+        });
+
+        input[idFieldName] = ids;
       } else {
         // 通常のフィールドの場合はそのまま設定
         if (value !== undefined && value !== null) {
@@ -347,17 +382,49 @@ export default function ModelDetailPage() {
               case 'relation':
                 // 関連データの選択は実際にはSelectAsyncを使用
                 return (
-                  <Select
+                  <>
+
+                    <MultiSelect
+                      key={fieldName}
+                      id={fieldName}
+                      label={fieldLabel}
+                      modelName={field.modelName || ''}
+                      labelField={field.labelField || ''}
+                      selectedValues={(value as RelationItem[]) || []}
+                      onChange={(values) => {
+                        // 選択されたIDの配列を更新
+                        handleChange(fieldName, values);
+
+                        // 関連するIDフィールドも更新
+                        const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
+                        handleChange(idFieldName, values);
+                      }}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                    />
+                    {value}
+
+                  </>
+                );
+              case 'multirelation':
+                // 複数関連データの選択
+                return (
+                  <MultiSelect
                     key={fieldName}
                     id={fieldName}
-                    name={fieldName}
                     label={fieldLabel}
-                    value={(value as RelationData)?.id || ''}
-                    onChange={(val) => handleChange(fieldName, { id: val } as RelationData)}
-                    options={[
-                      { value: '1', label: '福岡市中央区' },
-                      { value: '2', label: '福岡市博多区' },
-                    ]}
+                    modelName={field.modelName || ''}
+                    labelField={field.labelField || ''}
+                    selectedValues={(value as RelationItem[]) || []}
+                    onChange={(values) => {
+                      // 選択されたIDの配列を更新
+                      handleChange(fieldName, values);
+
+                      // 関連するIDフィールドも更新
+                      const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
+                      handleChange(idFieldName, values);
+                    }}
                     required={field.required}
                     error={error}
                     fullWidth

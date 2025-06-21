@@ -6,7 +6,7 @@ module Resolvers
     description "ログインユーザーが作成したプラン一覧を取得します"
 
     argument :limit, Integer, required: false, default_value: 10
-    argument :status, Types::PlayPlanStatusEnum, required: false
+    argument :status, Types::StatusEnumType, required: false
 
     def resolve(limit: 10, status: nil)
       # 現在のユーザーを取得

@@ -23,19 +23,16 @@ module Mutations
     argument :recommended_for_2, String,  required: false
     argument :image_url, String,          required: false
     argument :nearest_station, String,    required: false
+    argument :parking_available, Boolean, required: false
     # argument :opening_hours, [Types::OpeningHourInput], required: false
 
-    # argument :opening_hours, [Types::OpeningHourType], required: false
-    # argument :opening_hour_list, [Types::OpeningHourListType], required: false, description: "営業時間のリスト（曜日と営業時間）"
-    # argument :closed_days, [String], required: false, description: "定休日の曜日リスト"
-    # argument :areas, [Types::AreaType], required: false
-    # argument :categories, [Types::CategoryType], required: false
-    # argument :hashtags, [Types::HashtagType], required: false
-    # argument :instagram_embeds, [Types::InstagramEmbedType], required: false
-    # argument :menus, [Types::MenuType], required: false
-    # argument :spot_ambiances, [Types::SpotAmbianceType], required: false
-    # argument :purposes, [Types::PurposeType], required: false
-
+    # 関連項目の引数を追加
+    argument :hashtags,       [ID], required: false
+    argument :purposes,       [ID], required: false
+    argument :spot_ambiances, [ID], required: false
+    argument :categories,      [ID], required: false   # typo してた categorie_ids → category_ids
+    argument :menus,         [ID], required: false
+    argument :areas,         [ID], required: false
 
     field :spot,           Types::SpotType, null: false
     field :errors,         [String],        null: false
@@ -51,17 +48,32 @@ module Mutations
       id           = args.delete(:id)
       update_attrs = args.compact       # nil を除外
 
-      pp 'UpdateSpot resolve called with args: ', update_attrs
-
+      # 基本情報から連携項目を分離
+      hashtags       = update_attrs.delete(:hashtags)
+      purposes       = update_attrs.delete(:purposes)
+      spot_ambiances = update_attrs.delete(:spot_ambiances)
+      categories     = update_attrs.delete(:categories)
+      menus          = update_attrs.delete(:menus)
+      areas          = update_attrs.delete(:areas)
 
       spot = Spot.find_by(id: id)
 
-      # 入力されたフィールドだけで update
-      if spot.update!(update_attrs)
-        { spot: spot, errors: [] }
-      else
-        { spot: spot, errors: spot.errors.full_messages }
+      ActiveRecord::Base.transaction do
+        # 基本情報の更新
+        spot.update!(update_attrs)
+
+        # 中間テーブルの更新
+        spot.hashtags       = Hashtag.where(id: hashtags) if hashtags
+        spot.purposes       = Purpose.where(id: purposes) if purposes
+        spot.spot_ambiances = SpotAmbiance.where(id: spot_ambiances) if spot_ambiances
+        spot.categories     = Category.where(id: categories) if categories
+        spot.menus          = Menu.where(id: menus) if menus
+        spot.areas          = Area.where(id: areas) if areas
       end
+
+      { spot: spot, errors: [] }
+    rescue => e
+      { spot: nil, errors: [e.message] }
     end
   end
 end

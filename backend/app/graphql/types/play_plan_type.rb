@@ -13,7 +13,7 @@ module Types
     field :start_datetime, GraphQL::Types::ISO8601DateTime, null: true
     field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
     field :description, String, null: true
-    field :status, Types::PlayPlanStatusEnum, null: false
+    field :status, Types::StatusEnumType, null: false
     field :favorite_count, Integer, null: false
     field :rating, Float, null: false
     field :review_count, Integer, null: false

@@ -1,17 +1,16 @@
-// 注意: 現在のバックエンドAPIでは、メニューのクエリは提供されていません。
-// 将来的にバックエンドAPIが拡張された場合に備えて、以下のようなクエリを定義しておきます。
-
 import { gql } from '@apollo/client';
 
-// ダミーのクエリを定義して、インポートエラーを回避
+// 現在はメニュー情報のみを保持するで良いが、将来的には店舗ごとのメニューもDBで管理する可能性があるため、
+// 中間テーブルで保持する項目を増やすかもしれない
 export const GET_MENUS = gql`
   query GetMenus {
-    __typename
-  }
-`;
-
-export const GET_MENU = gql`
-  query GetMenu($id: ID!) {
-    __typename
+    menus {
+      id
+      menuName
+      price
+      description
+      createdAt
+      updatedAt
+    }
   }
 `;
