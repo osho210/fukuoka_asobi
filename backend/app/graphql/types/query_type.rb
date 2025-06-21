@@ -154,6 +154,11 @@ module Types
       RecommendedFor.all
     end
 
+    field :menus , [Types::MenuType], null: false
+    def menus
+      Menu.all
+    end
+
     # 選択肢データ
     field :theme_options, resolver: Resolvers::ThemeOptionsResolver
     field :transportation_options, resolver: Resolvers::TransportationOptionsResolver
