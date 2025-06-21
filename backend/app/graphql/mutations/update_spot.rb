@@ -23,6 +23,7 @@ module Mutations
     argument :recommended_for_2, String,  required: false
     argument :image_url, String,          required: false
     argument :nearest_station, String,    required: false
+    argument :parking_available, Boolean, required: false
     # argument :opening_hours, [Types::OpeningHourInput], required: false
 
     # 関連項目の引数を追加

@@ -22,16 +22,23 @@ import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
+// 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
+interface RelationItem {
+  __typename?: string;
+  id: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
+
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null | number[];
+  [key: string]: string | number | boolean | object | null | number[] | RelationItem[];
 }
 
-// 関連データの型定義
+// 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | undefined;
 }
 
 
@@ -148,7 +155,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData]);
 
-  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[]) => {
+  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -186,21 +193,29 @@ export function ModelDetailModal({
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
+
       if (field.type === 'relation' && typeof value === 'object' && value !== null) {
         // リレーションフィールドの場合はIDを取得
         const relationData = value as RelationData;
         input[`${fieldName}Id`] = relationData.id;
       } else if (field.type === 'multiSelect' && Array.isArray(value)) {
-        // オブジェクトの配列からIDだけを抽出
-        if (value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
-          // 数値型に変換
-          input[fieldName] = value.map((item: RelationData | string | number) =>
-            typeof item === 'object' && item !== null ? Number(item.id) : typeof item === 'string' ? Number(item) : item
-          ) as number[];
-        } else {
-          // すでにIDの配列の場合はそのまま設定
-          input[fieldName] = value;
-        }
+        // 配列の場合は、各要素を適切に処理して数値の配列に変換
+        const ids = value.map(item => {
+          if (typeof item === 'object' && item !== null && 'id' in item) {
+            // RelationItemの場合はidプロパティを数値に変換
+            return Number((item as RelationItem).id);
+          } else if (typeof item === 'string') {
+            // 文字列の場合は数値に変換
+            return Number(item);
+          } else if (typeof item === 'number') {
+            // 数値の場合はそのまま
+            return item;
+          }
+          // その他の場合は0（エラー防止）
+          return 0;
+        });
+
+        input[fieldName] = ids;
       } else {
         // 通常のフィールドの場合はそのまま設定
         if (value !== undefined && value !== null) {
@@ -390,8 +405,8 @@ export function ModelDetailModal({
                         multiRelationName === 'spotAmbiance' ? 'ambianceName' :
                           multiRelationName === 'purpose' ? 'purposeName' :
                             multiRelationName === 'menu' ? 'menuName' : 'name'}
-                    selectedValues={(value as number[]) || []}
-                    onChange={(values: number[]) => {
+                    selectedValues={(value as RelationItem[]) || []}
+                    onChange={(values: RelationItem[]) => {
                       // graphqlで更新する再はfield名で更新する必要がある
                       handleChange(fieldName, values);
                     }}
@@ -399,6 +414,7 @@ export function ModelDetailModal({
                     error={error}
                     fullWidth
                   />
+
                 );
               default:
                 return null;

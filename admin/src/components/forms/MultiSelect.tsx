@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { gql } from '@apollo/client';
 
+// 選択項目の型定義
+interface RelationItem {
+  __typename?: string;
+  id: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
+
 interface Option {
-  value: number;
+  value: string;
   label: string;
 }
 
@@ -13,8 +20,8 @@ interface MultiSelectProps {
   label: string;
   modelName: string;
   labelField: string;
-  selectedValues: number[];
-  onChange: (values: number[]) => void;
+  selectedValues: RelationItem[];
+  onChange: (values: RelationItem[]) => void;
   required?: boolean;
   error?: string;
   fullWidth?: boolean;
@@ -50,7 +57,8 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 }) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [localSelectedValues, setLocalSelectedValues] = useState<number[]>(selectedValues || []);
+  const [localSelectedValues, setLocalSelectedValues] = useState<RelationItem[]>(selectedValues || []);
+
   // モデル名からクエリを生成
   const query = generateQuery(modelName, labelField);
 
@@ -69,7 +77,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 
     if (data && data[queryName]) {
       const fetchedOptions = data[queryName].map((item: { id: string;[key: string]: string | number | boolean }) => ({
-        value: Number(item.id),
+        value: item.id,
         label: item[labelField] as string,
       }));
       setOptions(fetchedOptions);
@@ -77,16 +85,31 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   }, [data, modelName, labelField]);
 
   // 選択状態の切り替え
-  const handleToggleOption = (value: number, e: React.MouseEvent) => {
+  const handleToggleOption = (value: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    let newValues: number[];
+    let newValues: RelationItem[];
 
-    if (localSelectedValues.includes(value)) {
-      newValues = localSelectedValues.filter(v => v !== value);
+    // 選択済みかどうかを確認
+    const isSelected = localSelectedValues.some(item => item.id === value);
+
+    if (isSelected) {
+      // 選択済みの場合は削除
+      newValues = localSelectedValues.filter(item => item.id !== value);
     } else {
-      newValues = [...localSelectedValues, value];
+      // 未選択の場合は追加
+      const option = options.find(opt => opt.value === value);
+      if (option) {
+        const newItem: RelationItem = {
+          __typename: modelName,
+          id: value,
+          [labelField]: option.label
+        };
+        newValues = [...localSelectedValues, newItem];
+      } else {
+        newValues = [...localSelectedValues];
+      }
     }
 
     setLocalSelectedValues(newValues);
@@ -96,9 +119,9 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   // 選択されたオプションのラベルを取得
   const getSelectedLabels = () => {
     return localSelectedValues
-      .map(value => {
-        const option = options.find(opt => opt.value === value);
-        return option ? option.label : '';
+      .map(item => {
+        // 直接labelFieldの値を使用するか、optionsから検索
+        return item[labelField] || options.find(opt => opt.value === item.id)?.label || '';
       })
       .filter(Boolean)
       .join(', ');
@@ -185,7 +208,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                 </div>
                 <div className="admin-multiselect-options">
                   {options.map(option => {
-                    const isSelected = localSelectedValues.includes(option.value);
+                    const isSelected = localSelectedValues.some(item => item.id === option.value);
                     return (
                       <div
                         key={option.value}
@@ -212,6 +235,38 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
           </div>
         )}
       </div>
+
+      {/* 選択項目のチップを表示 */}
+      {localSelectedValues.length > 0 && (
+        <div className="admin-selected-chips admin-mt-2 admin-flex admin-flex-wrap admin-gap-2">
+          {localSelectedValues.map(item => {
+            // 直接labelFieldの値を使用するか、optionsから検索
+            const label = item[labelField] || options.find(opt => opt.value === item.id)?.label || '';
+            if (!label) return null;
+
+            return (
+              <div key={item.id} className="admin-chip admin-bg-gray-100 admin-px-2 admin-py-1 admin-rounded-full admin-text-sm admin-flex admin-items-center">
+                <span className="admin-mr-1">{label}</span>
+                <button
+                  type="button"
+                  className="admin-chip-remove admin-text-gray-500 admin-hover:admin-text-gray-700"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const newValues = localSelectedValues.filter(v => v.id !== item.id);
+                    setLocalSelectedValues(newValues);
+                    onChange(newValues);
+                  }}
+                >
+                  <svg className="admin-h-4 admin-w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {error && <div className="admin-text-red-500 admin-text-sm admin-mt-1">{error}</div>}
     </div>
