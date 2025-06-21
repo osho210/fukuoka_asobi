@@ -1547,6 +1547,7 @@ export type UpdateSpotInput = {
   menus?: InputMaybe<Array<Scalars['ID']['input']>>;
   minPeople?: InputMaybe<Scalars['Int']['input']>;
   nearestStation?: InputMaybe<Scalars['String']['input']>;
+  parkingAvailable?: InputMaybe<Scalars['Boolean']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   purposes?: InputMaybe<Array<Scalars['ID']['input']>>;
   recommendedFor1?: InputMaybe<Scalars['String']['input']>;
