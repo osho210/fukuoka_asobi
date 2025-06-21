@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { MultiSelect } from '@/components/forms/MultiSelect';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -18,12 +19,13 @@ import { GET_AREAS } from '@/graphql/queries/getAreas';
 import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
 import { GET_PURPOSES } from '@/graphql/queries/getPurposes';
 import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
+import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null;
+  [key: string]: string | number | boolean | object | null | number[];
 }
 
 // 関連データの型定義
@@ -81,6 +83,7 @@ export function ModelDetailModal({
   const { data: hashtagsData } = useQuery(GET_HASHTAGS);
   const { data: purposesData } = useQuery(GET_PURPOSES);
   const { data: spotAmbiancesData } = useQuery(GET_SPOT_AMBIANCES);
+  const { data: menusData } = useQuery(GET_MENUS);
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
@@ -120,7 +123,7 @@ export function ModelDetailModal({
       value: area.id,
       label: area.areaName,
     })) ?? [],
-    hashtag: hashtagsData?.hashtags.map((hashtag: { id: string, hashtagName: string }) => ({
+    hashtags: hashtagsData?.hashtags.map((hashtag: { id: string, hashtagName: string }) => ({
       value: hashtag.id,
       label: hashtag.hashtagName,
     })) ?? [],
@@ -128,11 +131,15 @@ export function ModelDetailModal({
       value: purpose.id,
       label: purpose.purposeName,
     })) ?? [],
-    spotAmbiance: spotAmbiancesData?.spotAmbiances.map((ambiance: { id: string, ambianceName: string }) => ({
+    spotAmbiances: spotAmbiancesData?.spotAmbiances.map((ambiance: { id: string, ambianceName: string }) => ({
       value: ambiance.id,
       label: ambiance.ambianceName,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData]);
+    menus: menusData?.menus.map((menu: { id: string, menuName: string }) => ({
+      value: menu.id,
+      label: menu.menuName,
+    })) ?? [],
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
@@ -141,7 +148,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData]);
 
-  const handleChange = (name: string, value: string | boolean | RelationData) => {
+  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[]) => {
     if (!formData) return;
 
     setFormData({
@@ -183,6 +190,17 @@ export function ModelDetailModal({
         // リレーションフィールドの場合はIDを取得
         const relationData = value as RelationData;
         input[`${fieldName}Id`] = relationData.id;
+      } else if (field.type === 'multiSelect' && Array.isArray(value)) {
+        // オブジェクトの配列からIDだけを抽出
+        if (value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
+          // 数値型に変換
+          input[fieldName] = value.map((item: RelationData | string | number) =>
+            typeof item === 'object' && item !== null ? Number(item.id) : typeof item === 'string' ? Number(item) : item
+          ) as number[];
+        } else {
+          // すでにIDの配列の場合はそのまま設定
+          input[fieldName] = value;
+        }
       } else {
         // 通常のフィールドの場合はそのまま設定
         if (value !== undefined && value !== null) {
@@ -351,6 +369,32 @@ export function ModelDetailModal({
                     value={(value as RelationData)?.id || ''}
                     onChange={(val) => handleChange(fieldName, { id: val } as RelationData)}
                     options={relationOpts}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
+                );
+              case 'multiSelect':
+                const multiRelationName = fieldName.endsWith('s') ? fieldName.slice(0, -1) : fieldName;
+
+                return (
+                  <MultiSelect
+                    key={fieldName}
+                    id={fieldName}
+                    label={fieldLabel}
+                    // ここではデータ一覧を取得するためにマスタ取得用のモデル名を渡す必要がある
+                    // 例えばspotAmbianceのような
+                    modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
+                    labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
+                      multiRelationName === 'area' ? 'areaName' :
+                        multiRelationName === 'spotAmbiance' ? 'ambianceName' :
+                          multiRelationName === 'purpose' ? 'purposeName' :
+                            multiRelationName === 'menu' ? 'menuName' : 'name'}
+                    selectedValues={(value as number[]) || []}
+                    onChange={(values: number[]) => {
+                      // graphqlで更新する再はfield名で更新する必要がある
+                      handleChange(fieldName, values);
+                    }}
                     required={field.required}
                     error={error}
                     fullWidth

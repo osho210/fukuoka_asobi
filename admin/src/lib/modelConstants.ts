@@ -154,15 +154,17 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'reviewCount', type: 'number' },
     { name: 'reviewRating', type: 'number' },
     { name: 'instagramUrl', type: 'text' },
-    { name: 'instagramEmbeds',  type: 'text' },
+    { name: 'instagramEmbeds', type: 'text' },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
     { name: 'district', type: 'relation', required: true },
-    { name: 'themes', type: 'relation', required: false }, //TODO: マスタ登録必要 (CRUD)
-    { name: 'category', type: 'relation', required: false }, //TODO: 複数選択にしたい
-    { name: 'hashtags', type: 'relation', required: false }, //TODO: 複数選択にしたい
-    { name: 'spotAmbiances', type: 'relation', required: false }, //TODO: 複数選択にしたい
-    { name: 'purposes', type: 'relation', required: false }, //TODO: 複数選択にしたい
+    { name: 'themes', type: 'multiSelect', required: false }, //TODO: マスタ登録必要 (CRUD)
+    { name: 'categories', type: 'multiSelect', required: false },
+    { name: 'hashtags', type: 'multiSelect', required: false },
+    { name: 'spotAmbiances', type: 'multiSelect', required: false },
+    { name: 'purposes', type: 'multiSelect', required: false },
+    { name: 'menus', type: 'multiSelect', required: false },
+    { name: 'areas', type: 'multiSelect', required: false },
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'isClosed', type: 'boolean' },
     { name: 'parkingAvailable', type: 'boolean' },
@@ -229,5 +231,6 @@ export const fieldDisplayNames: Record<string, string> = {
   hashtags: 'ハッシュタグ',
   instagramEmbeds: 'Instagram 埋め込み',
   spotAmbiances: '雰囲気',
+  menus: 'メニュー',
   purposes: '目的',
 };

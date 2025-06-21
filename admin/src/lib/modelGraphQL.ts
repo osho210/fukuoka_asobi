@@ -47,7 +47,7 @@ import {
 /**
  * モデル入力データの型定義
  */
-export type ModelInput = Record<string, string | number | boolean | null | string[]>;
+export type ModelInput = Record<string, string | number | boolean | null | string[] | number[]>;
 
 // GraphQLクエリの型定義
 import { DocumentNode } from 'graphql';

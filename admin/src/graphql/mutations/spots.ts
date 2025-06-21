@@ -38,12 +38,8 @@ export const CREATE_SPOT = gql`
 `;
 
 export const UPDATE_SPOT = gql`
-  mutation UpdateSpot(
-    $input: UpdateSpotInput!
-  ) {
-    updateSpot(
-      input: $input
-    ) {
+  mutation UpdateSpot($input: UpdateSpotInput!) {
+    updateSpot(input: $input) {
       spot {
         id
         spotName
@@ -70,11 +66,37 @@ export const UPDATE_SPOT = gql`
         recommendedFor2
         imageUrl
         nearestStation
+        # 関連項目を返却する
+        hashtags {
+          id
+          hashtagName
+        }
+        purposes {
+          id
+        }
+        spotAmbiances {
+          id
+          ambianceName
+        }
+        categories {
+          id
+          name
+        }
+        menus {
+          id
+          menuName
+        }
+        areas {
+          id
+          areaName
+        }
+
       }
       errors
     }
   }
 `;
+
 
 export const DELETE_SPOT = gql`
   mutation DeleteSpot($id: ID!) {
