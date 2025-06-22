@@ -1,8 +1,6 @@
 class Event < ApplicationRecord
   belongs_to :event_category
 
-  enum :status, { draft: 0, published: 1, canceled: 2 }
-
   validates :title, presence: true
   validates :description, presence: true
   validates :location, presence: true

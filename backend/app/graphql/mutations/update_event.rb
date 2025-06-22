@@ -1,0 +1,50 @@
+# frozen_string_literal: true
+module Mutations
+  class UpdateEvent < BaseMutation
+    argument :id, ID, required: true
+    argument :title, String, required: false
+    argument :description, String, required: false
+    argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false
+    argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false
+    argument :location, String, required: false
+    argument :recurring_rule, String, required: false
+    argument :event_category_id, ID, required: false
+    argument :price, String, required: false
+    argument :organizer, String, required: false
+    argument :contact_email, String, required: false
+    argument :contact_phone, String, required: false
+    argument :capacity, Integer, required: false
+    argument :is_online, Boolean, required: false
+    argument :source_url, String, required: false
+    argument :banner_image, String, required: false
+    argument :status, Types::StatusEnumType, required: false
+
+    field :event, Types::EventType, null: false
+    field :errors, [String], null: false
+
+    def resolve(**args)
+      # 管理者権限チェック
+      # unless context[:current_user]&.admin?
+      #   return { event: nil, errors: ["管理者権限が必要です"] }
+      # end
+
+      id           = args.delete(:id)
+      update_attrs = args.compact # nil を除外
+
+      pp '----------'
+      pp update_attrs
+      pp '----------'
+
+      event = Event.find_by(id: id)
+      return { event: nil, errors: ["イベントが見つかりません"] } unless event
+
+      ActiveRecord::Base.transaction do
+        event.update!(update_attrs)
+      end
+
+      { event: event, errors: [] }
+    rescue => e
+      { event: nil, errors: [e.message] }
+    end
+  end
+end

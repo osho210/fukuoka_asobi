@@ -30,9 +30,9 @@ module Mutations
     argument :hashtags,       [ID], required: false
     argument :purposes,       [ID], required: false
     argument :spot_ambiances, [ID], required: false
-    argument :categories,      [ID], required: false   # typo してた categorie_ids → category_ids
-    argument :menus,         [ID], required: false
-    argument :areas,         [ID], required: false
+    argument :categories,     [ID], required: false
+    argument :menus,          [ID], required: false
+    argument :areas,          [ID], required: false
 
     field :spot,           Types::SpotType, null: false
     field :errors,         [String],        null: false
