@@ -24,12 +24,13 @@ type Documents = {
     "\n  mutation CreateDistrict($input: CreateDistrictInput!) {\n    createDistrict(input: $input) {\n      district {\n        id\n        districtName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.CreateDistrictDocument,
     "\n  mutation UpdateDistrict($input: UpdateDistrictInput!) {\n    updateDistrict(input: $input) {\n      district {\n        id\n        districtName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.UpdateDistrictDocument,
     "\n  mutation DeleteDistrict($input: DeleteDistrictInput!) {\n    deleteDistrict(input: $input) {\n      success\n      errors\n    }\n  }\n": typeof types.DeleteDistrictDocument,
+    "\n  mutation UpdateEvent($input: UpdateEventInput!) {\n    updateEvent(input: $input) {\n      event {\n        id\n        title\n        description\n        startDatetime\n        endDatetime\n        location\n        isOnline\n        recurringRule\n        eventCategoryId\n        price\n        organizer\n        contactEmail\n        contactPhone\n        capacity\n        status\n        isOnline\n        sourceUrl\n        bannerImage\n      }\n      errors\n    }\n  }\n": typeof types.UpdateEventDocument,
     "\n  mutation CreateHashtag($input: CreateHashtagInput!) {\n    createHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.CreateHashtagDocument,
     "\n  mutation UpdateHashtag($input: UpdateHashtagInput!) {\n    updateHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.UpdateHashtagDocument,
     "\n  mutation DeleteHashtag($input: DeleteHashtagInput!) {\n    deleteHashtag(input: $input) {\n      success\n      errors\n    }\n  }\n": typeof types.DeleteHashtagDocument,
-    "\n  mutation CreateMenu($menuName: String!) {\n    __typename\n  }\n": typeof types.CreateMenuDocument,
-    "\n  mutation UpdateMenu($id: ID!, $menuName: String) {\n    __typename\n  }\n": typeof types.UpdateMenuDocument,
-    "\n  mutation DeleteMenu($id: ID!) {\n    __typename\n  }\n": typeof types.DeleteMenuDocument,
+    "\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n": typeof types.CreateMenuDocument,
+    "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n": typeof types.UpdateMenuDocument,
+    "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n": typeof types.DeleteMenuDocument,
     "\n  mutation CreatePurpose($input: CreatePurposeInput!) {\n    createPurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.CreatePurposeDocument,
     "\n  mutation UpdatePurpose($input: UpdatePurposeInput!) {\n    updatePurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.UpdatePurposeDocument,
     "\n  mutation DeletePurpose($input: DeletePurposeInput!) {\n    deletePurpose(input: $input) {\n      success\n      errors\n    }\n  }\n": typeof types.DeletePurposeDocument,
@@ -67,8 +68,8 @@ type Documents = {
     "\n  query GetBudgetRangeEnum {\n    __type(name: \"BudgetTypeRangeEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": typeof types.GetBudgetRangeEnumDocument,
     "\n  query GetTrainLineEnum {\n    __type(name: \"TrainLineEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": typeof types.GetTrainLineEnumDocument,
     "\n  query GetStatusEnum {\n    __type(name: \"StatusEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": typeof types.GetStatusEnumDocument,
-    "\n  query GetEvents($limit: Int) {\n    events(limit: $limit) {\n      id\n      title\n      description\n      location\n      startDatetime\n      endDatetime\n      status\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetEventsDocument,
-    "\n  query GetEvent($id: ID!) {\n    event(id: $id) {\n      id\n      title\n      description\n      location\n      latitude\n      longitude\n      startDatetime\n      endDatetime\n      recurringRule\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      isOnline\n      sourceUrl\n      bannerImage\n      status\n      eventCategory {\n        id\n        name\n        description\n      }\n      eventCategoryId\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetEventDocument,
+    "\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.GetEventCategoriesDocument,
+    "\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetEventsDocument,
     "\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n": typeof types.GetHashtagsDocument,
     "\n  query GetMenus {\n    menus {\n      id\n      menuName\n      price\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetMenusDocument,
     "\n  query GetNews {\n    news {\n      id\n      title\n      body\n      publishedAt\n      status\n      imageUrl\n      category {\n        id\n        name\n      }\n      author {\n        id\n        username\n        profileImageUrl\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetNewsDocument,
@@ -91,12 +92,13 @@ const documents: Documents = {
     "\n  mutation CreateDistrict($input: CreateDistrictInput!) {\n    createDistrict(input: $input) {\n      district {\n        id\n        districtName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.CreateDistrictDocument,
     "\n  mutation UpdateDistrict($input: UpdateDistrictInput!) {\n    updateDistrict(input: $input) {\n      district {\n        id\n        districtName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.UpdateDistrictDocument,
     "\n  mutation DeleteDistrict($input: DeleteDistrictInput!) {\n    deleteDistrict(input: $input) {\n      success\n      errors\n    }\n  }\n": types.DeleteDistrictDocument,
+    "\n  mutation UpdateEvent($input: UpdateEventInput!) {\n    updateEvent(input: $input) {\n      event {\n        id\n        title\n        description\n        startDatetime\n        endDatetime\n        location\n        isOnline\n        recurringRule\n        eventCategoryId\n        price\n        organizer\n        contactEmail\n        contactPhone\n        capacity\n        status\n        isOnline\n        sourceUrl\n        bannerImage\n      }\n      errors\n    }\n  }\n": types.UpdateEventDocument,
     "\n  mutation CreateHashtag($input: CreateHashtagInput!) {\n    createHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.CreateHashtagDocument,
     "\n  mutation UpdateHashtag($input: UpdateHashtagInput!) {\n    updateHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.UpdateHashtagDocument,
     "\n  mutation DeleteHashtag($input: DeleteHashtagInput!) {\n    deleteHashtag(input: $input) {\n      success\n      errors\n    }\n  }\n": types.DeleteHashtagDocument,
-    "\n  mutation CreateMenu($menuName: String!) {\n    __typename\n  }\n": types.CreateMenuDocument,
-    "\n  mutation UpdateMenu($id: ID!, $menuName: String) {\n    __typename\n  }\n": types.UpdateMenuDocument,
-    "\n  mutation DeleteMenu($id: ID!) {\n    __typename\n  }\n": types.DeleteMenuDocument,
+    "\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n": types.CreateMenuDocument,
+    "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n": types.UpdateMenuDocument,
+    "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n": types.DeleteMenuDocument,
     "\n  mutation CreatePurpose($input: CreatePurposeInput!) {\n    createPurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.CreatePurposeDocument,
     "\n  mutation UpdatePurpose($input: UpdatePurposeInput!) {\n    updatePurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.UpdatePurposeDocument,
     "\n  mutation DeletePurpose($input: DeletePurposeInput!) {\n    deletePurpose(input: $input) {\n      success\n      errors\n    }\n  }\n": types.DeletePurposeDocument,
@@ -134,8 +136,8 @@ const documents: Documents = {
     "\n  query GetBudgetRangeEnum {\n    __type(name: \"BudgetTypeRangeEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": types.GetBudgetRangeEnumDocument,
     "\n  query GetTrainLineEnum {\n    __type(name: \"TrainLineEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": types.GetTrainLineEnumDocument,
     "\n  query GetStatusEnum {\n    __type(name: \"StatusEnum\") {\n      enumValues {\n        name\n        description\n      }\n    }\n  }\n": types.GetStatusEnumDocument,
-    "\n  query GetEvents($limit: Int) {\n    events(limit: $limit) {\n      id\n      title\n      description\n      location\n      startDatetime\n      endDatetime\n      status\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetEventsDocument,
-    "\n  query GetEvent($id: ID!) {\n    event(id: $id) {\n      id\n      title\n      description\n      location\n      latitude\n      longitude\n      startDatetime\n      endDatetime\n      recurringRule\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      isOnline\n      sourceUrl\n      bannerImage\n      status\n      eventCategory {\n        id\n        name\n        description\n      }\n      eventCategoryId\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetEventDocument,
+    "\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n": types.GetEventCategoriesDocument,
+    "\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetEventsDocument,
     "\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n": types.GetHashtagsDocument,
     "\n  query GetMenus {\n    menus {\n      id\n      menuName\n      price\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetMenusDocument,
     "\n  query GetNews {\n    news {\n      id\n      title\n      body\n      publishedAt\n      status\n      imageUrl\n      category {\n        id\n        name\n      }\n      author {\n        id\n        username\n        profileImageUrl\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetNewsDocument,
@@ -205,6 +207,10 @@ export function gql(source: "\n  mutation DeleteDistrict($input: DeleteDistrictI
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation UpdateEvent($input: UpdateEventInput!) {\n    updateEvent(input: $input) {\n      event {\n        id\n        title\n        description\n        startDatetime\n        endDatetime\n        location\n        isOnline\n        recurringRule\n        eventCategoryId\n        price\n        organizer\n        contactEmail\n        contactPhone\n        capacity\n        status\n        isOnline\n        sourceUrl\n        bannerImage\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateEvent($input: UpdateEventInput!) {\n    updateEvent(input: $input) {\n      event {\n        id\n        title\n        description\n        startDatetime\n        endDatetime\n        location\n        isOnline\n        recurringRule\n        eventCategoryId\n        price\n        organizer\n        contactEmail\n        contactPhone\n        capacity\n        status\n        isOnline\n        sourceUrl\n        bannerImage\n      }\n      errors\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation CreateHashtag($input: CreateHashtagInput!) {\n    createHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation CreateHashtag($input: CreateHashtagInput!) {\n    createHashtag(input: $input) {\n      hashtag {\n        id\n        hashtagName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -217,15 +223,15 @@ export function gql(source: "\n  mutation DeleteHashtag($input: DeleteHashtagInp
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation CreateMenu($menuName: String!) {\n    __typename\n  }\n"): (typeof documents)["\n  mutation CreateMenu($menuName: String!) {\n    __typename\n  }\n"];
+export function gql(source: "\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation UpdateMenu($id: ID!, $menuName: String) {\n    __typename\n  }\n"): (typeof documents)["\n  mutation UpdateMenu($id: ID!, $menuName: String) {\n    __typename\n  }\n"];
+export function gql(source: "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation DeleteMenu($id: ID!) {\n    __typename\n  }\n"): (typeof documents)["\n  mutation DeleteMenu($id: ID!) {\n    __typename\n  }\n"];
+export function gql(source: "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -377,11 +383,11 @@ export function gql(source: "\n  query GetStatusEnum {\n    __type(name: \"Statu
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetEvents($limit: Int) {\n    events(limit: $limit) {\n      id\n      title\n      description\n      location\n      startDatetime\n      endDatetime\n      status\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetEvents($limit: Int) {\n    events(limit: $limit) {\n      id\n      title\n      description\n      location\n      startDatetime\n      endDatetime\n      status\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function gql(source: "\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n"): (typeof documents)["\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetEvent($id: ID!) {\n    event(id: $id) {\n      id\n      title\n      description\n      location\n      latitude\n      longitude\n      startDatetime\n      endDatetime\n      recurringRule\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      isOnline\n      sourceUrl\n      bannerImage\n      status\n      eventCategory {\n        id\n        name\n        description\n      }\n      eventCategoryId\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetEvent($id: ID!) {\n    event(id: $id) {\n      id\n      title\n      description\n      location\n      latitude\n      longitude\n      startDatetime\n      endDatetime\n      recurringRule\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      isOnline\n      sourceUrl\n      bannerImage\n      status\n      eventCategory {\n        id\n        name\n        description\n      }\n      eventCategoryId\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function gql(source: "\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

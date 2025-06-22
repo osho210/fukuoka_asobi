@@ -31,6 +31,16 @@ module Types
     field :update_area, mutation: Mutations::UpdateArea
     field :delete_area, mutation: Mutations::DeleteArea
 
+    # メニュー関連
+    field :create_menu, mutation: Mutations::CreateMenu
+    field :update_menu, mutation: Mutations::UpdateMenu
+    field :delete_menu, mutation: Mutations::DeleteMenu
+
+    # イベント関連
+    # field :create_event, mutation: Mutations::CreateEvent
+    field :update_event, mutation: Mutations::UpdateEvent
+    # field :delete_event, mutation: Mutations::DeleteEvent
+
     # カテゴリー関連
     field :create_category, mutation: Mutations::CreateCategory
     field :update_category, mutation: Mutations::UpdateCategory
