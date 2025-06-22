@@ -16,6 +16,7 @@ export const modelRouteMap: Record<string, string> = {
   'RecommendedFor': 'recommended_fors',
   'SpotAmbiance': 'spot_ambiances',
 
+
   // 中間テーブル
   'SpotCategory': 'spot_categories',
   'SpotArea': 'spot_areas',
@@ -164,6 +165,7 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'title', type: 'String', required: true },
     { name: 'description', type: 'String', required: true },
     { name: 'location', type: 'String', required: true },
+    { name: 'eventCategoryId', type: 'Int', required: true },
     { name: 'startDatetime', type: 'ISO8601DateTime', required: true },
     { name: 'endDatetime', type: 'ISO8601DateTime', required: true },
     { name: 'eventCategory', type: 'EventCategory', isRelation: true, relationModel: 'EventCategory' },

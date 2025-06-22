@@ -20,6 +20,7 @@ import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
 import { GET_PURPOSES } from '@/graphql/queries/getPurposes';
 import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
+import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
 // 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
@@ -91,6 +92,7 @@ export function ModelDetailModal({
   const { data: purposesData } = useQuery(GET_PURPOSES);
   const { data: spotAmbiancesData } = useQuery(GET_SPOT_AMBIANCES);
   const { data: menusData } = useQuery(GET_MENUS);
+  const { data: eventCategoriesData } = useQuery(GET_EVENT_CATEGORIES);
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
@@ -116,7 +118,8 @@ export function ModelDetailModal({
     })) ?? [],
   }), [spotTypeData, budgetData, trainLineData, statusData]);
 
-  // マスタデータのオプションマッピング
+  // マスタとformフィールドの紐付けを行う
+  // フィールド名をキーにして、マスタデータの選択肢を生成
   const relationOptions = useMemo<OptionsMap>(() => ({
     district: districtsData?.districts.map((district: { id: string, districtName: string }) => ({
       value: district.id,
@@ -146,14 +149,39 @@ export function ModelDetailModal({
       value: menu.id,
       label: menu.menuName,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData]);
+    eventCategory: eventCategoriesData?.eventCategories.map((eventCategory: { id: string, name: string }) => ({
+      value: eventCategory.id,
+      label: eventCategory.name,
+    })) ?? [],
+    // eventCategoryIdフィールド用のオプション（eventCategoryと同じ内容）
+    eventCategoryId: eventCategoriesData?.eventCategories.map((eventCategory: { id: string, name: string }) => ({
+      value: eventCategory.id,
+      label: eventCategory.name,
+    })) ?? [],
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, eventCategoriesData]);
 
+  console.log(eventCategoriesData);
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
     if (isOpen && initialData) {
-      setFormData(initialData);
+      // relationフィールドの処理
+      const processedData = { ...initialData };
+
+      // eventsモデルの場合の特別処理
+      if (modelRoute === 'events') {
+          // eventCategoryIdをオブジェクト形式に変換
+          if (processedData.eventCategoryId) {
+            const categoryId = processedData.eventCategoryId;
+            processedData.eventCategoryId = { id: categoryId };
+
+            // eventCategoryフィールドも同様に設定（districtのように表示するため）
+            processedData.eventCategory = { id: categoryId };
+          }
+      }
+
+      setFormData(processedData);
     }
-  }, [isOpen, initialData]);
+  }, [isOpen, initialData, modelRoute]);
 
   const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;

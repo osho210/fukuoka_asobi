@@ -5,19 +5,32 @@ import { gql } from '@apollo/client';
 
 // ダミーのミューテーションを定義して、インポートエラーを回避
 export const CREATE_MENU = gql`
-  mutation CreateMenu($menuName: String!) {
-    __typename
+  mutation CreateMenu($input: CreateMenuInput!) {
+    createMenu(input: $input) {
+      menu {
+        menuName
+      }
+      errors
+    }
   }
 `;
 
 export const UPDATE_MENU = gql`
-  mutation UpdateMenu($id: ID!, $menuName: String) {
-    __typename
+mutation UpdateMenu($input: UpdateMenuInput!) {
+    updateMenu(input: $input) {
+      menu {
+        id
+        menuName
+      }
+      errors
+    }
   }
 `;
 
 export const DELETE_MENU = gql`
-  mutation DeleteMenu($id: ID!) {
-    __typename
+  mutation DeleteMenu($input: DeleteMenuInput!) {
+    deleteMenu(input: $input) {
+      errors
+    }
   }
 `;

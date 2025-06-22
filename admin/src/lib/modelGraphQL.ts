@@ -14,6 +14,7 @@ import { GET_SPOT_AMBIANCES, } from '@/graphql/queries/getSpotAmbiances';
 import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
 import { GET_EVENTS } from '@/graphql/queries/getEvents';
+import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { GET_NEWS } from '@/graphql/queries/getNews';
 import { GET_STATIONS } from '@/graphql/queries/getStations';
 
@@ -26,6 +27,7 @@ import { CREATE_MENU, UPDATE_MENU, DELETE_MENU } from '@/graphql/mutations/menus
 import { CREATE_PURPOSE, UPDATE_PURPOSE, DELETE_PURPOSE } from '@/graphql/mutations/purposes';
 import { CREATE_RECOMMENDED_FOR, UPDATE_RECOMMENDED_FOR, DELETE_RECOMMENDED_FOR } from '@/graphql/mutations/recommendedFors';
 import { CREATE_SPOT_AMBIANCE, UPDATE_SPOT_AMBIANCE, DELETE_SPOT_AMBIANCE } from '@/graphql/mutations/spotAmbiances';
+import { UPDATE_EVENT } from '@/graphql/mutations/events';
 import {
   CREATE_SPOT,
   UPDATE_SPOT,
@@ -66,6 +68,7 @@ const listQueries: Record<string, DocumentNode> = {
   play_plans: GET_PLAY_PLANS,
   spots: GET_SPOTS,
   events: GET_EVENTS,
+  eventCategories: GET_EVENT_CATEGORIES,
   news: GET_NEWS,
   stations: GET_STATIONS
 };
@@ -93,7 +96,8 @@ const updateMutations: Record<string, DocumentNode> = {
   recommended_fors: UPDATE_RECOMMENDED_FOR,
   spot_ambiances: UPDATE_SPOT_AMBIANCE,
   spots: UPDATE_SPOT,
-  stations: UPDATE_STATION
+  stations: UPDATE_STATION,
+  events: UPDATE_EVENT
 };
 
 const deleteMutations: Record<string, DocumentNode> = {

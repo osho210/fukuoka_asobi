@@ -31,6 +31,8 @@ export const modelDisplayNames: Record<string, string> = {
   play_plans: '遊びプラン',
   events: 'イベント',
   news: 'ニュース',
+  stations: '駅',
+  eventCategories: 'イベントカテゴリー',
 };
 
 // 各モデルの列定義
@@ -154,7 +156,8 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'reviewCount', type: 'number' },
     { name: 'reviewRating', type: 'number' },
     { name: 'instagramUrl', type: 'text' },
-    { name: 'instagramEmbeds', type: 'text' },
+    //  TODO: ここも中間テーブルの回収が必要
+    // { name: 'instagramEmbeds', type: 'text' },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
     { name: 'district', type: 'relation', required: true },
@@ -185,6 +188,33 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'description', type: 'textarea' },
     { name: 'active', type: 'boolean' },
   ],
+  events: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'location', type: 'text', required: true },
+    { name: 'description', type: 'textarea' },
+    //現状は利用していないので一旦コメントアウト
+    // { name: 'recurringRule', type: 'relation', required: false }, //1日限定か、1週間か
+    { name: 'price', type: 'text', required: false }, //価格
+    { name: 'organizer', type: 'text', required: false }, //主催者
+    { name: 'contactEmail', type: 'text', required: false }, //連絡先メールアドレス
+    { name: 'contactPhone', type: 'text', required: false }, //連絡先電話番号
+    { name: 'capacity', type: 'number', required: false }, //定員
+    { name: 'sourceUrl', type: 'text', required: false }, //外部リンク
+    { name: 'bannerImage', type: 'text', required: false }, //バナー画像URL
+    { name: 'isOnline', type: 'boolean', required: false }, //オンラインイベントかどうか
+    { name: 'eventCategory', type: 'relation', required: false}, //イベントカテゴリーID
+    { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
+    { name: 'startDatetime', type: 'datetime', required: false },
+    { name: 'endDatetime', type: 'datetime', required: false },
+
+    // TODO: 中間テーブルを作成して以下項目も連携できるように改修する
+    // { name: 'hashtags', type: 'multiSelect', required: false }, //ハッシュタグ
+    // { name: 'spotAmbiances', type: 'multiSelect', required: false }, //雰囲気
+    // { name: 'purposes', type: 'multiSelect', required: false }, //目的
+    // { name: 'areas', type: 'multiSelect', required: false }, //エリア
+    // { name: 'themes', type: 'multiSelect', required: false }, //TODO: マスタ登録必要 (CRUD)
+    // { name: 'instagramEmbeds', type: 'multiSelect', required: false }, //Instagram 埋め込み
+  ]
 };
 
 // フィールド名の日本語表示
@@ -233,4 +263,11 @@ export const fieldDisplayNames: Record<string, string> = {
   spotAmbiances: '雰囲気',
   menus: 'メニュー',
   purposes: '目的',
+  eventCategoryId: 'イベントカテゴリー',
+  isOnline: 'オンラインイベント',
+  sourceUrl: '外部リンク',
+  bannerImage: 'バナー画像',
+  organizer: '主催者',
+  contactEmail: '連絡先メールアドレス',
+  contactPhone: '連絡先電話番号',
 };
