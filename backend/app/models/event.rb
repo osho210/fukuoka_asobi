@@ -18,9 +18,8 @@ class Event < ApplicationRecord
 
   def end_datetime_after_start_datetime
     return if end_datetime.blank? || start_datetime.blank?
-
     if end_datetime < start_datetime
-      errors.add(:end_datetime, "はイベント開始日時より後の日時を設定してください")
+      errors.add(:event_update, 'イベント終了時刻はイベント開始日時より後の日時を設定してください')
     end
   end
 end

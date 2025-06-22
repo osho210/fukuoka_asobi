@@ -43,8 +43,9 @@ module Mutations
       end
 
       { event: event, errors: [] }
-    rescue => e
-      { event: nil, errors: [e.message] }
+
+    rescue ActiveRecord::RecordInvalid => e
+      raise GraphQL::ExecutionError, e.record.errors.full_messages.join(', ')
     end
   end
 end

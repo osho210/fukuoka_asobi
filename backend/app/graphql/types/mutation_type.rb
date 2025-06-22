@@ -37,7 +37,7 @@ module Types
     field :delete_menu, mutation: Mutations::DeleteMenu
 
     # イベント関連
-    # field :create_event, mutation: Mutations::CreateEvent
+    field :create_event, mutation: Mutations::CreateEvent
     field :update_event, mutation: Mutations::UpdateEvent
     # field :delete_event, mutation: Mutations::DeleteEvent
 

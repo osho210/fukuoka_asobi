@@ -27,7 +27,7 @@ import { CREATE_MENU, UPDATE_MENU, DELETE_MENU } from '@/graphql/mutations/menus
 import { CREATE_PURPOSE, UPDATE_PURPOSE, DELETE_PURPOSE } from '@/graphql/mutations/purposes';
 import { CREATE_RECOMMENDED_FOR, UPDATE_RECOMMENDED_FOR, DELETE_RECOMMENDED_FOR } from '@/graphql/mutations/recommendedFors';
 import { CREATE_SPOT_AMBIANCE, UPDATE_SPOT_AMBIANCE, DELETE_SPOT_AMBIANCE } from '@/graphql/mutations/spotAmbiances';
-import { UPDATE_EVENT } from '@/graphql/mutations/events';
+import { UPDATE_EVENT, CREATE_EVENT } from '@/graphql/mutations/events';
 import {
   CREATE_SPOT,
   UPDATE_SPOT,
@@ -84,6 +84,7 @@ const createMutations: Record<string, DocumentNode> = {
   recommended_fors: CREATE_RECOMMENDED_FOR,
   spot_ambiances: CREATE_SPOT_AMBIANCE,
   spots: CREATE_SPOT,
+  events: CREATE_EVENT,
 };
 
 const updateMutations: Record<string, DocumentNode> = {

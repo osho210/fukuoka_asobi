@@ -1,12 +1,20 @@
 /**
  * モデル関連の定数を定義するファイル
  */
+import { formatDateTimeToJapanese } from '@/lib/utils';
+
+// モデルデータの型定義
+export interface ModelData {
+  id: string;
+  [key: string]: string | number | boolean | object | null | undefined;
+}
 
 // 各モデルの列定義
 export interface ColumnDefinition {
   header: string;
   accessorKey: string;
   sortable: boolean;
+  cell?: (item: ModelData) => React.ReactNode;
 }
 
 // モデルフィールド定義
@@ -41,70 +49,79 @@ export const columnConfigs: Record<string, ColumnDefinition[]> = {
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'areaName', sortable: true },
     { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   categories: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   districts: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'districtName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   hashtags: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'hashtagName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   menus: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'menuName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   purposes: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'purposeName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   recommended_fors: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   spot_ambiances: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'ambianceName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   spots: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'spotName', sortable: true },
     { header: '住所', accessorKey: 'address', sortable: false },
     { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   play_plans: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'planName', sortable: true },
     { header: 'ステータス', accessorKey: 'status', sortable: true },
     { header: '作成者', accessorKey: 'user.username', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   events: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: 'タイトル', accessorKey: 'title', sortable: true },
     { header: '場所', accessorKey: 'location', sortable: false },
-    { header: '開始日時', accessorKey: 'startDatetime', sortable: true },
-    { header: '終了日時', accessorKey: 'endDatetime', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
+    {
+      header: '開始日時',
+      accessorKey: 'startDatetime',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.startDatetime as string)
+    },
+    {
+      header: '終了日時',
+      accessorKey: 'endDatetime',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.endDatetime as string)
+    },
   ],
   news: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: 'タイトル', accessorKey: 'title', sortable: true },
-    { header: '公開日', accessorKey: 'publishedAt', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
+    {
+      header: '公開日',
+      accessorKey: 'publishedAt',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.publishedAt as string)
+    },
+    {
+      header: '更新日時',
+      accessorKey: 'updatedAt',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.updatedAt as string)
+    },
   ],
   stations: [
     { header: 'ID', accessorKey: 'id', sortable: true },
@@ -202,7 +219,7 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'sourceUrl', type: 'text', required: false }, //外部リンク
     { name: 'bannerImage', type: 'text', required: false }, //バナー画像URL
     { name: 'isOnline', type: 'boolean', required: false }, //オンラインイベントかどうか
-    { name: 'eventCategory', type: 'relation', required: false}, //イベントカテゴリーID
+    { name: 'eventCategory', type: 'relation', required: false }, //イベントカテゴリーID
     { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
     { name: 'startDatetime', type: 'datetime', required: false },
     { name: 'endDatetime', type: 'datetime', required: false },

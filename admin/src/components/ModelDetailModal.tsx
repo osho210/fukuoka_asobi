@@ -8,6 +8,7 @@ import { TextField } from '@/components/forms/TextField';
 import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
+import { DateTimePicker } from '@/components/forms/DateTimePicker';
 import { Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
@@ -221,7 +222,6 @@ export function ModelDetailModal({
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
-
       if (field.type === 'relation' && typeof value === 'object' && value !== null) {
         // リレーションフィールドの場合はIDを取得
         const relationData = value as RelationData;
@@ -244,6 +244,21 @@ export function ModelDetailModal({
         });
 
         input[fieldName] = ids;
+      } else if (field.type === 'datetime') {
+        // datetime型のフィールドの場合、ISO8601形式の文字列として設定
+        if (value !== undefined && value !== null && value !== '') {
+          // 既にISO8601形式の文字列であることを確認
+          try {
+            // 日付として解析できるか確認
+            const date = new Date(value as string);
+            if (!isNaN(date.getTime())) {
+              // 有効な日付の場合はそのまま設定
+              input[fieldName] = value as string;
+            }
+          } catch (e) {
+            console.error(`日付変換エラー (${fieldName}):`, e);
+          }
+        }
       } else {
         // 通常のフィールドの場合はそのまま設定
         if (value !== undefined && value !== null) {
@@ -442,7 +457,20 @@ export function ModelDetailModal({
                     error={error}
                     fullWidth
                   />
-
+                );
+              case 'datetime':
+                return (
+                  <DateTimePicker
+                    key={fieldName}
+                    id={fieldName}
+                    name={fieldName}
+                    label={fieldLabel}
+                    value={value as string || ''}
+                    onChange={(val) => handleChange(fieldName, val)}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
                 );
               default:
                 return null;
