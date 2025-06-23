@@ -197,7 +197,6 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'imageUrl', type: 'text' },
     { name: 'category', type: 'relation' },
     { name: 'author', type: 'relation' },
-    { name: 'createdAt', type: 'datetime', required: true },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },

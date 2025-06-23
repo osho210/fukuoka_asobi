@@ -32,6 +32,8 @@ type Documents = {
     "\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n": typeof types.CreateMenuDocument,
     "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n": typeof types.UpdateMenuDocument,
     "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n": typeof types.DeleteMenuDocument,
+    "\n  mutation CreateNews($input: CreateNewsInput!) {\n    createNews(input: $input) {\n      news {\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n": typeof types.CreateNewsDocument,
+    "\n  mutation UpdateNews($input: UpdateNewsInput!) {\n    updateNews(input: $input) {\n      news {\n        id\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n": typeof types.UpdateNewsDocument,
     "\n  mutation CreatePurpose($input: CreatePurposeInput!) {\n    createPurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.CreatePurposeDocument,
     "\n  mutation UpdatePurpose($input: UpdatePurposeInput!) {\n    updatePurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": typeof types.UpdatePurposeDocument,
     "\n  mutation DeletePurpose($input: DeletePurposeInput!) {\n    deletePurpose(input: $input) {\n      success\n      errors\n    }\n  }\n": typeof types.DeletePurposeDocument,
@@ -101,6 +103,8 @@ const documents: Documents = {
     "\n  mutation CreateMenu($input: CreateMenuInput!) {\n    createMenu(input: $input) {\n      menu {\n        menuName\n      }\n      errors\n    }\n  }\n": types.CreateMenuDocument,
     "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n    updateMenu(input: $input) {\n      menu {\n        id\n        menuName\n      }\n      errors\n    }\n  }\n": types.UpdateMenuDocument,
     "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n": types.DeleteMenuDocument,
+    "\n  mutation CreateNews($input: CreateNewsInput!) {\n    createNews(input: $input) {\n      news {\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n": types.CreateNewsDocument,
+    "\n  mutation UpdateNews($input: UpdateNewsInput!) {\n    updateNews(input: $input) {\n      news {\n        id\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n": types.UpdateNewsDocument,
     "\n  mutation CreatePurpose($input: CreatePurposeInput!) {\n    createPurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.CreatePurposeDocument,
     "\n  mutation UpdatePurpose($input: UpdatePurposeInput!) {\n    updatePurpose(input: $input) {\n      purpose {\n        id\n        purposeName\n        createdAt\n        updatedAt\n      }\n      errors\n    }\n  }\n": types.UpdatePurposeDocument,
     "\n  mutation DeletePurpose($input: DeletePurposeInput!) {\n    deletePurpose(input: $input) {\n      success\n      errors\n    }\n  }\n": types.DeletePurposeDocument,
@@ -238,6 +242,14 @@ export function gql(source: "\nmutation UpdateMenu($input: UpdateMenuInput!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteMenu($input: DeleteMenuInput!) {\n    deleteMenu(input: $input) {\n      errors\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateNews($input: CreateNewsInput!) {\n    createNews(input: $input) {\n      news {\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation CreateNews($input: CreateNewsInput!) {\n    createNews(input: $input) {\n      news {\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateNews($input: UpdateNewsInput!) {\n    updateNews(input: $input) {\n      news {\n        id\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateNews($input: UpdateNewsInput!) {\n    updateNews(input: $input) {\n      news {\n        id\n        title\n        body\n        publishedAt\n        status\n        imageUrl\n        author {\n            id\n            username\n        }\n        category {\n            id\n            name\n        }\n      }\n      errors\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -61,6 +61,11 @@ module Types
     field :update_purpose, mutation: Mutations::UpdatePurpose
     field :delete_purpose, mutation: Mutations::DeletePurpose
 
+    # news関連
+    field :create_news, mutation: Mutations::CreateNews
+    field :update_news, mutation: Mutations::UpdateNews
+    # field :delete_news, mutation: Mutations::DeleteNews
+
     # 雰囲気関連
     field :create_spot_ambiance, mutation: Mutations::CreateSpotAmbiance
     field :update_spot_ambiance, mutation: Mutations::UpdateSpotAmbiance

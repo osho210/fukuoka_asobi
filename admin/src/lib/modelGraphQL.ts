@@ -28,6 +28,7 @@ import { CREATE_PURPOSE, UPDATE_PURPOSE, DELETE_PURPOSE } from '@/graphql/mutati
 import { CREATE_RECOMMENDED_FOR, UPDATE_RECOMMENDED_FOR, DELETE_RECOMMENDED_FOR } from '@/graphql/mutations/recommendedFors';
 import { CREATE_SPOT_AMBIANCE, UPDATE_SPOT_AMBIANCE, DELETE_SPOT_AMBIANCE } from '@/graphql/mutations/spotAmbiances';
 import { UPDATE_EVENT, CREATE_EVENT } from '@/graphql/mutations/events';
+import { UPDATE_NEWS, CREATE_NEWS } from '@/graphql/mutations/news';
 import {
   CREATE_SPOT,
   UPDATE_SPOT,
@@ -85,6 +86,7 @@ const createMutations: Record<string, DocumentNode> = {
   spot_ambiances: CREATE_SPOT_AMBIANCE,
   spots: CREATE_SPOT,
   events: CREATE_EVENT,
+  news: CREATE_NEWS,
 };
 
 const updateMutations: Record<string, DocumentNode> = {
@@ -98,7 +100,8 @@ const updateMutations: Record<string, DocumentNode> = {
   spot_ambiances: UPDATE_SPOT_AMBIANCE,
   spots: UPDATE_SPOT,
   stations: UPDATE_STATION,
-  events: UPDATE_EVENT
+  events: UPDATE_EVENT,
+  news: UPDATE_NEWS
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
