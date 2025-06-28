@@ -9,4 +9,12 @@ class News < ApplicationRecord
   scope :published, -> { where(status: :published).where('published_at <= ?', Time.current) }
   scope :recent, -> { order(published_at: :desc) }
   scope :by_category, ->(category_id) { where(category_id: category_id) if category_id.present? }
+
+  private
+  # 公開日が現在よりも未来の場合は、statusがpublishedの場合エラーを出す
+  def validate_published_at
+    if status == 'published' && published_at.present? && published_at > Time.current
+      errors.add(:published_at, '公開日は現在よりも未来の日付を設定してください')
+    end
+  end
 end

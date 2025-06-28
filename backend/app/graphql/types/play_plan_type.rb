@@ -8,8 +8,7 @@ module Types
       object.user
     end
     field :plan_name, String, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :plan_id, Integer, null: false
     field :start_datetime, GraphQL::Types::ISO8601DateTime, null: true
     field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
     field :description, String, null: true
@@ -25,6 +24,8 @@ module Types
     field :total_budget, Float, null: true
     field :planner_title, String, null: true
     field :planner_description, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     # 関連するプラン詳細を取得
     field :plan_details, [Types::PlanDetailType], null: true

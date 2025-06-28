@@ -253,7 +253,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     background-color: #f9fafb;
     cursor: pointer;
@@ -309,7 +309,7 @@
 }
 
 .optionItem {
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s;

@@ -1,12 +1,20 @@
 /**
  * モデル関連の定数を定義するファイル
  */
+import { formatDateTimeToJapanese } from '@/lib/utils';
+
+// モデルデータの型定義
+export interface ModelData {
+  id: string;
+  [key: string]: string | number | boolean | object | null | undefined;
+}
 
 // 各モデルの列定義
 export interface ColumnDefinition {
   header: string;
   accessorKey: string;
   sortable: boolean;
+  cell?: (item: ModelData) => React.ReactNode;
 }
 
 // モデルフィールド定義
@@ -15,6 +23,8 @@ export interface ModelField {
   type: string;
   required?: boolean;
   enumKey?: string;
+  childModel?: string;
+  fields?: ModelField[];
 }
 
 // モデル名の日本語表示
@@ -31,6 +41,8 @@ export const modelDisplayNames: Record<string, string> = {
   play_plans: '遊びプラン',
   events: 'イベント',
   news: 'ニュース',
+  stations: '駅',
+  eventCategories: 'イベントカテゴリー',
 };
 
 // 各モデルの列定義
@@ -39,70 +51,79 @@ export const columnConfigs: Record<string, ColumnDefinition[]> = {
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'areaName', sortable: true },
     { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   categories: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   districts: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'districtName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   hashtags: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'hashtagName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   menus: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'menuName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   purposes: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'purposeName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   recommended_fors: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'name', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   spot_ambiances: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'ambianceName', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   spots: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'spotName', sortable: true },
     { header: '住所', accessorKey: 'address', sortable: false },
     { header: '地区', accessorKey: 'district.districtName', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   play_plans: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: '名前', accessorKey: 'planName', sortable: true },
     { header: 'ステータス', accessorKey: 'status', sortable: true },
     { header: '作成者', accessorKey: 'user.username', sortable: false },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
   ],
   events: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: 'タイトル', accessorKey: 'title', sortable: true },
     { header: '場所', accessorKey: 'location', sortable: false },
-    { header: '開始日時', accessorKey: 'startDatetime', sortable: true },
-    { header: '終了日時', accessorKey: 'endDatetime', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
+    {
+      header: '開始日時',
+      accessorKey: 'startDatetime',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.startDatetime as string)
+    },
+    {
+      header: '終了日時',
+      accessorKey: 'endDatetime',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.endDatetime as string)
+    },
   ],
   news: [
     { header: 'ID', accessorKey: 'id', sortable: true },
     { header: 'タイトル', accessorKey: 'title', sortable: true },
-    { header: '公開日', accessorKey: 'publishedAt', sortable: true },
-    { header: '更新日時', accessorKey: 'updatedAt', sortable: true },
+    {
+      header: '公開日',
+      accessorKey: 'publishedAt',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.publishedAt as string)
+    },
+    {
+      header: '更新日時',
+      accessorKey: 'updatedAt',
+      sortable: true,
+      cell: (item) => formatDateTimeToJapanese(item.updatedAt as string)
+    },
   ],
   stations: [
     { header: 'ID', accessorKey: 'id', sortable: true },
@@ -154,7 +175,8 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'reviewCount', type: 'number' },
     { name: 'reviewRating', type: 'number' },
     { name: 'instagramUrl', type: 'text' },
-    { name: 'instagramEmbeds', type: 'text' },
+    //  TODO: ここも中間テーブルの回収が必要
+    // { name: 'instagramEmbeds', type: 'text' },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
     { name: 'district', type: 'relation', required: true },
@@ -177,7 +199,6 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'imageUrl', type: 'text' },
     { name: 'category', type: 'relation' },
     { name: 'author', type: 'relation' },
-    { name: 'createdAt', type: 'datetime', required: true },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },
@@ -185,6 +206,68 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'description', type: 'textarea' },
     { name: 'active', type: 'boolean' },
   ],
+  events: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'location', type: 'text', required: true },
+    { name: 'description', type: 'textarea' },
+    //現状は利用していないので一旦コメントアウト
+    // { name: 'recurringRule', type: 'relation', required: false }, //1日限定か、1週間か
+    { name: 'price', type: 'text', required: false }, //価格
+    { name: 'organizer', type: 'text', required: false }, //主催者
+    { name: 'contactEmail', type: 'text', required: false }, //連絡先メールアドレス
+    { name: 'contactPhone', type: 'text', required: false }, //連絡先電話番号
+    { name: 'capacity', type: 'number', required: false }, //定員
+    { name: 'sourceUrl', type: 'text', required: false }, //外部リンク
+    { name: 'bannerImage', type: 'text', required: false }, //バナー画像URL
+    { name: 'isOnline', type: 'boolean', required: false }, //オンラインイベントかどうか
+    { name: 'eventCategory', type: 'relation', required: false }, //イベントカテゴリーID
+    { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
+    { name: 'startDatetime', type: 'datetime', required: false },
+    { name: 'endDatetime', type: 'datetime', required: false },
+
+    // TODO: 中間テーブルを作成して以下項目も連携できるように改修する
+    // { name: 'hashtags', type: 'multiSelect', required: false }, //ハッシュタグ
+    // { name: 'spotAmbiances', type: 'multiSelect', required: false }, //雰囲気
+    // { name: 'purposes', type: 'multiSelect', required: false }, //目的
+    // { name: 'areas', type: 'multiSelect', required: false }, //エリア
+    // { name: 'themes', type: 'multiSelect', required: false }, //TODO: マスタ登録必要 (CRUD)
+    // { name: 'instagramEmbeds', type: 'multiSelect', required: false }, //Instagram 埋め込み
+  ],
+  play_plans: [
+    { name: 'planName', type: 'text', required: true },
+    { name: 'description', type: 'textarea', required: false },
+    { name: 'imageUrl', type: 'text', required: false },
+    { name: 'location', type: 'text', required: false },
+    { name: 'tripType', type: 'select', required: false, enumKey: 'TripTypeEnum' },
+    { name: 'totalBudget', type: 'number', required: false },
+    { name: 'rating', type: 'number', required: false },
+    { name: 'reviewCount', type: 'number', required: false },
+    { name: 'favoriteCount', type: 'number', required: false },
+    { name: 'rating', type: 'number', required: false },
+    { name: 'plannerDescription', type: 'textarea', required: false },
+    { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
+    { name: 'publishedAt', type: 'datetime', required: false },
+    { name: 'startDatetime', type: 'datetime', required: false },
+    { name: 'endDatetime', type: 'datetime', required: false },
+    // { name: 'tags', type: 'multiSelect', required: false }, //タグ
+    {
+      name: 'planDetails',
+      type: 'childModel',
+      childModel: 'planDetail',
+      fields: [
+        { name: 'stepNumber', type: 'number', required: true },
+        { name: 'stepName', type: 'text', required: true },
+        { name: 'stepDescription', type: 'textarea', required: false },
+        { name: 'startDatetime', type: 'datetime', required: false },
+        { name: 'endDatetime', type: 'datetime', required: false },
+        { name: 'budget', type: 'number', required: false },
+        { name: 'comment', type: 'textarea', required: false },
+        { name: 'notes', type: 'textarea', required: false },
+        { name: 'spot', type: 'relation', required: false }, //スポット
+      ]
+    }
+  ]
+
 };
 
 // フィールド名の日本語表示
@@ -233,4 +316,20 @@ export const fieldDisplayNames: Record<string, string> = {
   spotAmbiances: '雰囲気',
   menus: 'メニュー',
   purposes: '目的',
+  eventCategoryId: 'イベントカテゴリー',
+  isOnline: 'オンラインイベント',
+  sourceUrl: '外部リンク',
+  bannerImage: 'バナー画像',
+  organizer: '主催者',
+  contactEmail: '連絡先メールアドレス',
+  contactPhone: '連絡先電話番号',
+  // PlanDetail関連のフィールド
+  planDetails: 'プラン詳細',
+  stepNumber: 'ステップ番号',
+  stepName: 'ステップ名',
+  stepDescription: 'ステップ説明',
+  budget: '予算',
+  spotId: 'スポット',
+  comment: 'コメント',
+  notes: 'メモ',
 };

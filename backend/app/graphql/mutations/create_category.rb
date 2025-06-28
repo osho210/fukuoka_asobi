@@ -15,6 +15,10 @@ module Mutations
       # unless context[:current_user]&.admin?
       #   return { category: nil, errors: ["管理者権限が必要です"] }
       # end
+      # TODO: エラーメッセージの設計
+      # すでに登録されている名称であれば、エラーを返却する
+      raise GraphQL::ExecutionError, "このカテゴリーはすでに存在します" if Category.exists?(name: name)
+
 
       category = Category.new(name: name)
 

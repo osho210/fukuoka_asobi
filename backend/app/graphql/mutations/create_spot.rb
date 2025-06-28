@@ -19,18 +19,42 @@ module Mutations
     argument :is_closed,         Boolean, required: false
     argument :max_people,        Int,     required: false
     argument :min_people,        Int,     required: false
+    argument :recommended_for_1, String,  required: false
+    argument :recommended_for_2, String,  required: false
+    argument :image_url, String,          required: false
+    argument :nearest_station, String,    required: false
+    argument :parking_available, Boolean, required: false
+    # TODO: ここも中間テーブルの回収が必要
+    # argument :instagram_embeds, String,  required: false
 
+    # 関連項目の引数を追加
+    argument :hashtags,       [ID], required: false
+    argument :purposes,       [ID], required: false
+    argument :spot_ambiances, [ID], required: false
+    argument :categories,     [ID], required: false
+    argument :menus,          [ID], required: false
+    argument :areas,          [ID], required: false
 
     field :spot,           Types::SpotType, null: true
     field :errors,         [String],        null: false
 
-    def resolve(input:)
+    def resolve(**args)
       # 管理者権限チェック
       # unless context[:current_user]&.admin?
       #   return { spot: nil, errors: ["管理者権限が必要です"] }
       # end
 
-      spot = Spot.new(input.to_h)
+      input = args.compact
+
+      # 基本情報から連携項目を分離
+      hashtags       = input.delete(:hashtags)
+      purposes       = input.delete(:purposes)
+      spot_ambiances = input.delete(:spot_ambiances)
+      categories     = input.delete(:categories)
+      menus          = input.delete(:menus)
+      areas          = input.delete(:areas)
+
+      spot = Spot.new(input)
 
       if spot.save
         { spot: spot, errors: [] }

@@ -139,8 +139,10 @@ module Types
     end
 
     # イベント
-    field :events, resolver: Resolvers::EventsResolver
-    field :event, resolver: Resolvers::EventResolver
+    field :events , [Types::EventType], null: false
+    def events
+      Event.all
+    end
 
     # ニュース
     field :news, [Types::NewsType], null: true

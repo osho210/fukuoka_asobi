@@ -16,15 +16,12 @@ module Types
     field :contact_email, String, null: true
     field :contact_phone, String, null: true
     field :capacity, Integer, null: true
-    field :status, String, null: false
+    field :status, Types::StatusEnumType, null: true
     field :is_online, Boolean, null: false
     field :source_url, String, null: true
     field :banner_image, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    def status
-      object.status.upcase
-    end
   end
 end

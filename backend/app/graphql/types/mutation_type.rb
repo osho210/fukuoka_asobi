@@ -13,6 +13,8 @@ module Types
     field :create_play_plan, mutation: Mutations::CreatePlayPlan
     field :update_play_plan, mutation: Mutations::UpdatePlayPlan
     field :generate_plan, mutation: Mutations::GeneratePlan
+    field :update_plan_detail, mutation: Mutations::UpdatePlanDetail
+    field :update_plan_details, mutation: Mutations::UpdatePlanDetails
 
     # ユーザープロフィール関連
     field :update_user_profile, mutation: Mutations::UpdateUserProfile
@@ -30,6 +32,16 @@ module Types
     field :create_area, mutation: Mutations::CreateArea
     field :update_area, mutation: Mutations::UpdateArea
     field :delete_area, mutation: Mutations::DeleteArea
+
+    # メニュー関連
+    field :create_menu, mutation: Mutations::CreateMenu
+    field :update_menu, mutation: Mutations::UpdateMenu
+    field :delete_menu, mutation: Mutations::DeleteMenu
+
+    # イベント関連
+    field :create_event, mutation: Mutations::CreateEvent
+    field :update_event, mutation: Mutations::UpdateEvent
+    # field :delete_event, mutation: Mutations::DeleteEvent
 
     # カテゴリー関連
     field :create_category, mutation: Mutations::CreateCategory
@@ -50,6 +62,11 @@ module Types
     field :create_purpose, mutation: Mutations::CreatePurpose
     field :update_purpose, mutation: Mutations::UpdatePurpose
     field :delete_purpose, mutation: Mutations::DeletePurpose
+
+    # news関連
+    field :create_news, mutation: Mutations::CreateNews
+    field :update_news, mutation: Mutations::UpdateNews
+    # field :delete_news, mutation: Mutations::DeleteNews
 
     # 雰囲気関連
     field :create_spot_ambiance, mutation: Mutations::CreateSpotAmbiance
