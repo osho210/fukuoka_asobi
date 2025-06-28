@@ -31,10 +31,6 @@ module Mutations
       id           = args.delete(:id)
       update_attrs = args.compact # nil を除外
 
-      pp '----------'
-      pp update_attrs
-      pp '----------'
-
       event = Event.find_by(id: id)
       return { event: nil, errors: ["イベントが見つかりません"] } unless event
 
