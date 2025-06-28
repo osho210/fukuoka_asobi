@@ -1,6 +1,7 @@
 import { client } from '@/lib/apolloClient';
 import { getModelNameFromRoute } from './modelRouteMap';
 import { toCamelCase } from '@/app/utils/stringUtils';
+import { omitTypename } from '@/app/utils/omitTypename';
 
 // クエリのインポート
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -29,6 +30,9 @@ import { CREATE_RECOMMENDED_FOR, UPDATE_RECOMMENDED_FOR, DELETE_RECOMMENDED_FOR 
 import { CREATE_SPOT_AMBIANCE, UPDATE_SPOT_AMBIANCE, DELETE_SPOT_AMBIANCE } from '@/graphql/mutations/spotAmbiances';
 import { UPDATE_EVENT, CREATE_EVENT } from '@/graphql/mutations/events';
 import { UPDATE_NEWS, CREATE_NEWS } from '@/graphql/mutations/news';
+import { UPDATE_PLAN_DETAILS } from '@/graphql/mutations/updatePlanDetails';
+import { UPDATE_PLAY_PLAN, processPlanDetailsForInput, PlanDetailWithSpot } from '@/graphql/mutations/planPlans';
+
 import {
   CREATE_SPOT,
   UPDATE_SPOT,
@@ -50,7 +54,7 @@ import {
 /**
  * モデル入力データの型定義
  */
-export type ModelInput = Record<string, string | number | boolean | null | string[] | number[]>;
+export type ModelInput = Record<string, string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[]>;
 
 // GraphQLクエリの型定義
 import { DocumentNode } from 'graphql';
@@ -71,7 +75,7 @@ const listQueries: Record<string, DocumentNode> = {
   events: GET_EVENTS,
   eventCategories: GET_EVENT_CATEGORIES,
   news: GET_NEWS,
-  stations: GET_STATIONS
+  stations: GET_STATIONS,
 };
 
 // ミューテーションマッピング
@@ -101,7 +105,8 @@ const updateMutations: Record<string, DocumentNode> = {
   spots: UPDATE_SPOT,
   stations: UPDATE_STATION,
   events: UPDATE_EVENT,
-  news: UPDATE_NEWS
+  news: UPDATE_NEWS,
+  play_plans: UPDATE_PLAY_PLAN
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
@@ -119,7 +124,6 @@ const deleteMutations: Record<string, DocumentNode> = {
 
 /**
  * モデル一覧を取得するためのGraphQLクエリを実行
- *
  * @param modelRoute モデルのルート名（例: 'areas', 'categories'）
  * @param variables クエリ変数（limit, sortField, sortDirection）
  * @returns クエリ結果
@@ -175,9 +179,11 @@ export const createModel = async (modelRoute: string, input: ModelInput) => {
   const mutationName = `create${modelName}`;
 
   try {
+    // __typename を削除
+    const cleanedInput = omitTypename(input);
     const { data } = await client.mutate({
       mutation,
-      variables: { input },
+      variables: { cleanedInput },
     });
 
     return data[mutationName] || null;
@@ -205,9 +211,20 @@ export const updateModel = async (modelRoute: string, id: string, input: ModelIn
   const mutationName = `update${modelName}`;
 
   try {
+    // __typename を削除
+    const cleanedInput = omitTypename(input);
+
+    // play_plansモデルの場合、planDetailsフィールドがあれば処理
+    if (modelRoute === 'play_plans' && cleanedInput.planDetails) {
+
+      // planDetailsフィールドをspotオブジェクトからspotIdに変換
+      const processedPlanDetails = processPlanDetailsForInput(cleanedInput.planDetails as PlanDetailWithSpot[]);
+      cleanedInput.planDetails = processedPlanDetails;
+    }
+
     const { data } = await client.mutate({
       mutation,
-      variables: { input: { id, ...input } },
+      variables: { input: { id, ...cleanedInput } },
     });
 
     return data[mutationName] || null;
@@ -434,6 +451,82 @@ export const removeSpotAmbiance = async (spotId: string, ambianceId: string) => 
     return data.removeSpotAmbiance;
   } catch (error) {
     console.error('スポットから雰囲気を削除できませんでした:', error);
+    throw error;
+  }
+};
+
+// PlanDetailInputの型定義
+export interface PlanDetailInput {
+  id: string;
+  stepNumber?: number;
+  stepName?: string;
+  stepDescription?: string;
+  startDatetime?: string;
+  endDatetime?: string;
+  budget?: number;
+  spotId?: number | null;
+  comment?: string;
+  notes?: string;
+}
+
+// spotフィールドを含むPlanDetailInputの拡張型
+export interface PlanDetailInputWithSpot extends PlanDetailInput {
+  spot?: {
+    id: string;
+    spotName?: string;
+    [key: string]: unknown;
+  };
+}
+
+/**
+ * プラン詳細を更新するためのGraphQLミューテーションを実行
+ *
+ * @param planId プランID
+ * @param planDetails 更新するプラン詳細の配列
+ * @returns ミューテーション結果
+ */
+export const updatePlanDetails = async (planId: string, planDetails: (PlanDetailInput | PlanDetailInputWithSpot)[]) => {
+  try {
+    // planDetailsの各項目からspotフィールドを削除し、spotIdを設定
+    const processedPlanDetails = planDetails.map(detail => {
+      // 新しいオブジェクトを作成
+      const processedDetail: PlanDetailInput = { ...detail };
+
+      // spotフィールドがある場合は削除
+      const detailWithSpot = detail as PlanDetailInputWithSpot;
+      if (detailWithSpot.spot) {
+        // spotオブジェクトからspotIdを抽出（まだ設定されていない場合）
+        if (detailWithSpot.spot.id && !processedDetail.spotId) {
+          processedDetail.spotId = parseInt(detailWithSpot.spot.id, 10);
+        }
+
+        // spotフィールドを除外した新しいオブジェクトを作成
+        const newDetail = { ...processedDetail };
+        // Record<string, unknown>型として扱い、spotプロパティを削除
+        const detailRecord = newDetail as Record<string, unknown>;
+        if ('spot' in detailRecord) {
+          delete detailRecord.spot;
+        }
+        return newDetail;
+      }
+
+      return processedDetail;
+    });
+
+    console.log('プラン詳細データの処理後:', processedPlanDetails);
+
+    const { data } = await client.mutate({
+      mutation: UPDATE_PLAN_DETAILS,
+      variables: {
+        input: {
+          planId,
+          planDetails: processedPlanDetails
+        }
+      },
+    });
+    return data.updatePlanDetails;
+  } catch (error) {
+    console.error('プラン詳細の更新に失敗しました:', error);
     throw error;
   }
 };

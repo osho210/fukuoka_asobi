@@ -23,6 +23,8 @@ export interface ModelField {
   type: string;
   required?: boolean;
   enumKey?: string;
+  childModel?: string;
+  fields?: ModelField[];
 }
 
 // モデル名の日本語表示
@@ -230,7 +232,42 @@ export const modelFields: Record<string, ModelField[]> = {
     // { name: 'areas', type: 'multiSelect', required: false }, //エリア
     // { name: 'themes', type: 'multiSelect', required: false }, //TODO: マスタ登録必要 (CRUD)
     // { name: 'instagramEmbeds', type: 'multiSelect', required: false }, //Instagram 埋め込み
+  ],
+  play_plans: [
+    { name: 'planName', type: 'text', required: true },
+    { name: 'description', type: 'textarea', required: false },
+    { name: 'imageUrl', type: 'text', required: false },
+    { name: 'location', type: 'text', required: false },
+    { name: 'tripType', type: 'select', required: false, enumKey: 'TripTypeEnum' },
+    { name: 'totalBudget', type: 'number', required: false },
+    { name: 'rating', type: 'number', required: false },
+    { name: 'reviewCount', type: 'number', required: false },
+    { name: 'favoriteCount', type: 'number', required: false },
+    { name: 'rating', type: 'number', required: false },
+    { name: 'plannerDescription', type: 'textarea', required: false },
+    { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
+    { name: 'publishedAt', type: 'datetime', required: false },
+    { name: 'startDatetime', type: 'datetime', required: false },
+    { name: 'endDatetime', type: 'datetime', required: false },
+    // { name: 'tags', type: 'multiSelect', required: false }, //タグ
+    {
+      name: 'planDetails',
+      type: 'childModel',
+      childModel: 'planDetail',
+      fields: [
+        { name: 'stepNumber', type: 'number', required: true },
+        { name: 'stepName', type: 'text', required: true },
+        { name: 'stepDescription', type: 'textarea', required: false },
+        { name: 'startDatetime', type: 'datetime', required: false },
+        { name: 'endDatetime', type: 'datetime', required: false },
+        { name: 'budget', type: 'number', required: false },
+        { name: 'comment', type: 'textarea', required: false },
+        { name: 'notes', type: 'textarea', required: false },
+        { name: 'spot', type: 'relation', required: false }, //スポット
+      ]
+    }
   ]
+
 };
 
 // フィールド名の日本語表示
@@ -286,4 +323,13 @@ export const fieldDisplayNames: Record<string, string> = {
   organizer: '主催者',
   contactEmail: '連絡先メールアドレス',
   contactPhone: '連絡先電話番号',
+  // PlanDetail関連のフィールド
+  planDetails: 'プラン詳細',
+  stepNumber: 'ステップ番号',
+  stepName: 'ステップ名',
+  stepDescription: 'ステップ説明',
+  budget: '予算',
+  spotId: 'スポット',
+  comment: 'コメント',
+  notes: 'メモ',
 };

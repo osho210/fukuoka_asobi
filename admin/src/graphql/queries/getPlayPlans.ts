@@ -14,11 +14,36 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       status
-      user {
+      startDatetime
+      endDatetime
+      tags
+      recommendedForString
+      planDetails {
         id
-        username
-        profileImageUrl
-        role
+        stepNumber
+        stepName
+        stepDescription
+        comment
+        startDatetime
+        endDatetime
+        budget
+        notes
+        spot {
+          id
+          spotName
+          address
+          phoneNumber
+          budgetRange
+          isRainyOk
+          imageUrl
+          catchphrase
+          categories{
+            name
+          }
+          district{
+            districtName
+          }
+        }
       }
     }
   }

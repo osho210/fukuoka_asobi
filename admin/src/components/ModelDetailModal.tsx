@@ -10,10 +10,10 @@ import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
 import { Save, Trash2 } from 'lucide-react';
-import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
-import { ModelInput } from '@/lib/modelGraphQL';
+import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
+import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
-import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM } from '@/graphql/queries/getEnumTypes';
+import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM, GET_TRIP_TYPE_ENUM } from '@/graphql/queries/getEnumTypes';
 import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
 import { GET_CATEGORIES } from '@/graphql/queries/getCategories';
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -63,13 +63,15 @@ export function ModelDetailModal({
 }: ModelDetailModalProps) {
   const isNew = !modelId || modelId === 'new';
   const [formData, setFormData] = useState<ModelData | null>(initialData || { id: '' });
+  // 子モデルの状態管理を追加
+  const [childModels, setChildModels] = useState<Record<string, ModelData[]>>({});
   // isLoadingは現在使用していないため削除
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
-  const fields = modelFields[modelRoute] || [];
+  const fields = useMemo(() => modelFields[modelRoute] || [], [modelRoute]);
 
   // Enumデータの取得
   const { data: spotTypeData } = useQuery(GET_SPOT_TYPE_ENUM, {
@@ -83,6 +85,9 @@ export function ModelDetailModal({
   });
   const { data: statusData } = useQuery(GET_STATUS_ENUM, {
     variables: { enumName: "StatusEnum" },
+  });
+  const { data: tripTypeData } = useQuery(GET_TRIP_TYPE_ENUM, {
+    variables: { enumName: "TripTypeEnum" },
   });
 
   // マスタデータの取得
@@ -117,7 +122,11 @@ export function ModelDetailModal({
       value: ev.name,
       label: ev.description ?? ev.name,
     })) ?? [],
-  }), [spotTypeData, budgetData, trainLineData, statusData]);
+    TripTypeEnum: tripTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
+      value: ev.name,
+      label: ev.description ?? ev.name,
+    })) ?? [],
+  }), [spotTypeData, budgetData, trainLineData, statusData, tripTypeData]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
@@ -161,7 +170,6 @@ export function ModelDetailModal({
     })) ?? [],
   }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, eventCategoriesData]);
 
-  console.log(eventCategoriesData);
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
     if (isOpen && initialData) {
@@ -170,19 +178,38 @@ export function ModelDetailModal({
 
       // eventsモデルの場合の特別処理
       if (modelRoute === 'events') {
-          // eventCategoryIdをオブジェクト形式に変換
-          if (processedData.eventCategoryId) {
-            const categoryId = processedData.eventCategoryId;
-            processedData.eventCategoryId = { id: categoryId };
+        // eventCategoryIdをオブジェクト形式に変換
+        if (processedData.eventCategoryId) {
+          const categoryId = processedData.eventCategoryId;
+          processedData.eventCategoryId = { id: categoryId };
 
-            // eventCategoryフィールドも同様に設定（districtのように表示するため）
-            processedData.eventCategory = { id: categoryId };
-          }
+          // eventCategoryフィールドも同様に設定（districtのように表示するため）
+          processedData.eventCategory = { id: categoryId };
+        }
       }
 
       setFormData(processedData);
+
+      // 子モデルのデータを設定
+      const newChildModels: Record<string, ModelData[]> = {};
+
+      // モデルフィールドから子モデルを探す
+      fields.forEach(field => {
+        if (field.type === 'childModel' && field.name && initialData[field.name]) {
+          // 子モデルのデータを取得
+          const childModelData = initialData[field.name] as ModelData[];
+          if (Array.isArray(childModelData)) {
+            newChildModels[field.name] = childModelData;
+          }
+        }
+      });
+
+      // 子モデルのデータがあれば状態を更新
+      if (Object.keys(newChildModels).length > 0) {
+        setChildModels(newChildModels);
+      }
     }
-  }, [isOpen, initialData, modelRoute]);
+  }, [isOpen, initialData, modelRoute, fields]);
 
   const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
@@ -289,6 +316,35 @@ export function ModelDetailModal({
       } else {
         // 更新
         await updateModel(modelRoute, modelId!, input);
+
+        // 子モデルの更新（play_plansの場合のみ）
+        if (modelRoute === 'play_plans' && childModels.planDetails && childModels.planDetails.length > 0) {
+          // PlanDetailInputの形式に変換
+          const planDetailInputs: PlanDetailInput[] = childModels.planDetails.map(detail => {
+            // spotフィールドがある場合はspotIdに変換し、spotフィールドを削除
+            let spotId = detail.spotId as number | null;
+            if (detail.spot && typeof detail.spot === 'object' && 'id' in detail.spot) {
+              spotId = parseInt(detail.spot.id as string, 10);
+            }
+
+            // 新しいオブジェクトを作成（spotフィールドを含まない）
+            return {
+              id: detail.id,
+              stepNumber: detail.stepNumber as number,
+              stepName: detail.stepName as string,
+              stepDescription: detail.stepDescription as string,
+              startDatetime: detail.startDatetime as string,
+              endDatetime: detail.endDatetime as string,
+              budget: detail.budget as number,
+              spotId: spotId,
+              comment: detail.comment as string,
+              notes: detail.notes as string
+            };
+          });
+
+          // PlanDetailsの更新
+          await updatePlanDetails(modelId!, planDetailInputs);
+        }
       }
 
       // 成功したらモーダルを閉じて一覧を更新
@@ -340,6 +396,180 @@ export function ModelDetailModal({
             const error = errors[fieldName];
 
             switch (field.type) {
+              case 'childModel':
+                return (
+                  <div key={fieldName} className="admin-child-model admin-col-span-2">
+                    <h3 className="admin-text-lg admin-font-semibold admin-mb-4">{fieldLabel}</h3>
+
+                    {childModels[fieldName]?.map((item, index) => (
+                      <div key={item.id || index} className="admin-child-model-item admin-mb-6 admin-p-4 admin-bg-gray-50 admin-rounded-md">
+                        <h4 className="admin-text-md admin-font-medium admin-mb-3">
+                          {fieldName === 'planDetails' ? `ステップ ${item.stepNumber || index + 1}` : `項目 ${index + 1}`}
+                        </h4>
+
+                        <div className="admin-grid admin-grid-cols-2 admin-gap-4">
+                          {field.fields?.map((childField) => {
+                            const childFieldName = childField.name;
+                            const childFieldLabel = fieldDisplayNames[childFieldName] || childFieldName;
+                            const childValue = item[childFieldName];
+
+                            switch (childField.type) {
+                              case 'text':
+                                return (
+                                  <TextField
+                                    key={`${fieldName}-${index}-${childFieldName}`}
+                                    id={`${fieldName}-${index}-${childFieldName}`}
+                                    name={`${fieldName}-${index}-${childFieldName}`}
+                                    label={childFieldLabel}
+                                    value={childValue as string || ''}
+                                    onChange={(e) => {
+                                      const updatedModels = [...childModels[fieldName]];
+                                      updatedModels[index] = {
+                                        ...updatedModels[index],
+                                        [childFieldName]: e.target.value
+                                      };
+                                      setChildModels({
+                                        ...childModels,
+                                        [fieldName]: updatedModels
+                                      });
+                                    }}
+                                    required={childField.required}
+                                    fullWidth
+                                  />
+                                );
+                              case 'textarea':
+                                return (
+                                  <TextArea
+                                    key={`${fieldName}-${index}-${childFieldName}`}
+                                    id={`${fieldName}-${index}-${childFieldName}`}
+                                    name={`${fieldName}-${index}-${childFieldName}`}
+                                    label={childFieldLabel}
+                                    value={childValue as string || ''}
+                                    onChange={(e) => {
+                                      const updatedModels = [...childModels[fieldName]];
+                                      updatedModels[index] = {
+                                        ...updatedModels[index],
+                                        [childFieldName]: e.target.value
+                                      };
+                                      setChildModels({
+                                        ...childModels,
+                                        [fieldName]: updatedModels
+                                      });
+                                    }}
+                                    required={childField.required}
+                                    fullWidth
+                                  />
+                                );
+                              case 'number':
+                                return (
+                                  <TextField
+                                    key={`${fieldName}-${index}-${childFieldName}`}
+                                    id={`${fieldName}-${index}-${childFieldName}`}
+                                    name={`${fieldName}-${index}-${childFieldName}`}
+                                    label={childFieldLabel}
+                                    value={childValue as string || ''}
+                                    onChange={(e) => {
+                                      const updatedModels = [...childModels[fieldName]];
+                                      updatedModels[index] = {
+                                        ...updatedModels[index],
+                                        [childFieldName]: e.target.value ? Number(e.target.value) : null
+                                      };
+                                      setChildModels({
+                                        ...childModels,
+                                        [fieldName]: updatedModels
+                                      });
+                                    }}
+                                    type="number"
+                                    required={childField.required}
+                                    fullWidth
+                                  />
+                                );
+                              case 'datetime':
+                                return (
+                                  <DateTimePicker
+                                    key={`${fieldName}-${index}-${childFieldName}`}
+                                    id={`${fieldName}-${index}-${childFieldName}`}
+                                    name={`${fieldName}-${index}-${childFieldName}`}
+                                    label={childFieldLabel}
+                                    value={childValue as string || ''}
+                                    onChange={(val) => {
+                                      const updatedModels = [...childModels[fieldName]];
+                                      updatedModels[index] = {
+                                        ...updatedModels[index],
+                                        [childFieldName]: val
+                                      };
+                                      setChildModels({
+                                        ...childModels,
+                                        [fieldName]: updatedModels
+                                      });
+                                    }}
+                                    required={childField.required}
+                                    fullWidth
+                                  />
+                                );
+                              case 'relation':
+                                // スポット選択などのリレーションフィールド
+                                // TODO: 実装が必要
+                                return (
+                                  <div key={`${fieldName}-${index}-${childFieldName}`} className="admin-col-span-2">
+                                    <p className="admin-text-sm admin-text-gray-500">
+                                      {childFieldLabel}のリレーション選択は現在実装中です
+                                    </p>
+                                  </div>
+                                );
+                              default:
+                                return null;
+                            }
+                          })}
+                        </div>
+
+                        <div className="admin-mt-3 admin-flex admin-justify-end">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const updatedModels = [...childModels[fieldName]];
+                              updatedModels.splice(index, 1);
+                              setChildModels({
+                                ...childModels,
+                                [fieldName]: updatedModels
+                              });
+                            }}
+                            size="sm"
+                          >
+                            <Trash2 className="h-4 w-4 admin-mr-1" />
+                            削除
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        // 新しい子モデル項目を追加
+                        const newItem: ModelData = {
+                          id: `temp-${Date.now()}`,
+                          // PlanDetailの場合は初期値を設定
+                          ...(fieldName === 'planDetails' ? {
+                            stepNumber: (childModels[fieldName]?.length || 0) + 1,
+                            stepName: '',
+                            stepDescription: ''
+                          } : {})
+                        };
+
+                        setChildModels({
+                          ...childModels,
+                          [fieldName]: [...(childModels[fieldName] || []), newItem]
+                        });
+                      }}
+                      className="admin-mt-2"
+                    >
+                      {fieldName === 'planDetails' ? 'ステップを追加' : '項目を追加'}
+                    </Button>
+                  </div>
+                );
               case 'text':
                 return (
                   <TextField

@@ -44,3 +44,14 @@ export const GET_STATUS_ENUM = gql`
   }
 `;
 
+export const GET_TRIP_TYPE_ENUM = gql`
+  query GetTripTypeEnum {
+    __type(name: "TripTypeEnum") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
