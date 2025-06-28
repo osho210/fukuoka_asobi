@@ -13,6 +13,8 @@ module Types
     field :create_play_plan, mutation: Mutations::CreatePlayPlan
     field :update_play_plan, mutation: Mutations::UpdatePlayPlan
     field :generate_plan, mutation: Mutations::GeneratePlan
+    field :update_plan_detail, mutation: Mutations::UpdatePlanDetail
+    field :update_plan_details, mutation: Mutations::UpdatePlanDetails
 
     # ユーザープロフィール関連
     field :update_user_profile, mutation: Mutations::UpdateUserProfile

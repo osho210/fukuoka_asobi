@@ -1,8 +1,7 @@
 module Types
   class PlanDetailType < Types::BaseObject
     implements GraphQL::Types::Relay::Node
-    global_id_field :id
-
+    field :id, ID, null: false
     field :plan_id, Integer, null: false
     field :step_number, Integer, null: false
     field :step_name, String, null: false
