@@ -87,5 +87,8 @@ module Types
     field :create_recommended_for, mutation: Mutations::CreateRecommendedFor
     field :update_recommended_for, mutation: Mutations::UpdateRecommendedFor
     field :delete_recommended_for, mutation: Mutations::DeleteRecommendedFor
+
+    # Google Places API関連
+    field :sync_spot_with_google_places, mutation: Mutations::SyncSpotWithGooglePlaces
   end
 end

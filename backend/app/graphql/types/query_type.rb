@@ -233,5 +233,100 @@ module Types
     def spot_ambiance(id:)
       SpotAmbiance.find_by(id: id)
     end
+
+    # --------------------------------------------
+    # Google Places API関連
+    # --------------------------------------------
+    field :search_google_places, [Types::GooglePlaceType], null: false, description: "Google Places APIでスポットを検索する" do
+      argument :query, String, required: true, description: "検索クエリ"
+      argument :latitude, Float, required: false, description: "検索中心の緯度"
+      argument :longitude, Float, required: false, description: "検索中心の経度"
+      argument :radius, Integer, required: false, description: "検索半径（メートル）"
+    end
+
+    def search_google_places(query:, latitude: nil, longitude: nil, radius: nil)
+      places_service = GooglePlacesService.new
+
+      location = nil
+      if latitude && longitude
+        location = { lat: latitude, lng: longitude }
+      end
+
+      search_results = places_service.search_places(query, location: location, radius: radius)
+
+      if search_results.key?('error')
+        raise GraphQL::ExecutionError, "Google Places API Error: #{search_results['error']}"
+      end
+
+      places = search_results['places'] || []
+
+
+      places.map do |place|
+        pp 'google_places_search_results'
+        pp place
+        pp '----------------'
+
+        {
+          place_id: place['id'],
+          name: place.dig('displayName', 'text'),
+          formatted_address: place['formattedAddress'],
+          short_formatted_address: place['shortFormattedAddress'],
+          location: place['location'],
+          google_maps_uri: place['googleMapsUri'],
+          website_uri: place['websiteUri'],
+          national_phone_number: place['nationalPhoneNumber'],
+          international_phone_number: place['internationalPhoneNumber'],
+          rating: place['rating'],
+          user_rating_count: place['userRatingCount'],
+          review_summary: place['reviewSummary'],
+          types: place['types'],
+          primary_type: place['primaryType'],
+          primary_type_display_name: place.dig('primaryTypeDisplayName', 'text'),
+          business_status: place['businessStatus'],
+          regular_opening_hours: place['regularOpeningHours'],
+          current_opening_hours: place['currentOpeningHours'],
+          regular_secondary_opening_hours: place['regularSecondaryOpeningHours'],
+          current_secondary_opening_hours: place['currentSecondaryOpeningHours'],
+          time_zone: place['timeZone'],
+          utc_offset_minutes: place['utcOffsetMinutes'],
+          price_level: place['priceLevel'],
+          price_range: place['priceRange'],
+          photos: place['photos'],
+          icon_mask_base_uri: place['iconMaskBaseUri'],
+          icon_background_color: place['iconBackgroundColor'],
+          payment_options: place['paymentOptions'],
+          parking_options: place['parkingOptions'],
+          accessibility_options: place['accessibilityOptions'],
+          generative_summary: place.dig('generativeSummary', 'text'),
+          editorial_summary: place.dig('editorialSummary', 'text'),
+          takeout: place['takeout'],
+          delivery: place['delivery'],
+          dine_in: place['dineIn'],
+          curbside_pickup: place['curbsidePickup'],
+          reservable: place['reservable'],
+          serves_breakfast: place['servesBreakfast'],
+          serves_lunch: place['servesLunch'],
+          serves_dinner: place['servesDinner'],
+          serves_brunch: place['servesBrunch'],
+          serves_beer: place['servesBeer'],
+          serves_wine: place['servesWine'],
+          serves_vegetarian_food: place['servesVegetarianFood'],
+          serves_cocktails: place['servesCocktails'],
+          serves_dessert: place['servesDessert'],
+          serves_coffee: place['servesCoffee'],
+          outdoor_seating: place['outdoorSeating'],
+          live_music: place['liveMusic'],
+          menu_for_children: place['menuForChildren'],
+          good_for_children: place['goodForChildren'],
+          allows_dogs: place['allowsDogs'],
+          restroom: place['restroom'],
+          good_for_groups: place['goodForGroups'],
+          good_for_watching_sports: place['goodForWatchingSports']
+        }
+      end
+    rescue => e
+      Rails.logger.error "Google Places search error: #{e.message}"
+      raise GraphQL::ExecutionError, "検索中にエラーが発生しました: #{e.message}"
+    end
   end
 end

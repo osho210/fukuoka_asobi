@@ -16,6 +16,11 @@ class Spot < ApplicationRecord
   has_many :spot_purposes, dependent: :destroy
   has_many :purposes, through: :spot_purposes
 
+  # Google Places API関連の関連付け
+  has_many :spot_photos, dependent: :destroy
+  has_many :spot_accessibility_options, dependent: :destroy
+  has_many :accessibility_options, through: :spot_accessibility_options
+
   validates :spot_name, presence: true
 
   # 予算感のバリデーション
@@ -29,6 +34,23 @@ class Spot < ApplicationRecord
 
   # スポットタイプのバリデーション
   validates :spot_type, inclusion: { in: %w(STORE TOURIST_SPOT ACTIVITY) }
+
+  # Google Places API関連のENUM定義
+  enum :business_status, {
+    unspecified:         0,  # BUSINESS_STATUS_UNSPECIFIED
+    operational:         1,  # OPERATIONAL
+    closed_temporarily:  2,  # CLOSED_TEMPORARILY
+    closed_permanently:  3   # CLOSED_PERMANENTLY
+  }, prefix: :business_status
+
+  enum :price_level, {
+    unspecified:        0,  # PRICE_LEVEL_UNSPECIFIED
+    free:               1,  # PRICE_LEVEL_FREE
+    inexpensive:        2,  # PRICE_LEVEL_INEXPENSIVE
+    moderate:           3,  # PRICE_LEVEL_MODERATE
+    expensive:          4,  # PRICE_LEVEL_EXPENSIVE
+    very_expensive:     5   # PRICE_LEVEL_VERY_EXPENSIVE
+  }, prefix: :price_level
 
   # 定休日一覧を取得
   def closed_days
@@ -66,6 +88,70 @@ class Spot < ApplicationRecord
   def recommended_fors
     recommended_for_names = [recommended_for_1, recommended_for_2].compact
     RecommendedFor.where(name: recommended_for_names)
+  end
+
+  # 価格帯情報を取得するメソッド
+  def price_range
+    return nil unless price_range_start_amount && price_range_end_amount
+
+    {
+      start_price: {
+        amount: price_range_start_amount,
+        currency: price_range_start_currency
+      },
+      end_price: {
+        amount: price_range_end_amount,
+        currency: price_range_end_currency
+      }
+    }
+  end
+
+  # レビューサマリー情報を取得するメソッド
+  def review_summary
+    return nil unless review_summary_text
+
+    {
+      text: review_summary_text,
+      flag_content_uri: review_summary_flag_content_uri,
+      disclosure_text: review_summary_disclosure_text,
+      reviews_uri: review_summary_reviews_uri
+    }
+  end
+
+  # 決済オプション情報を取得するメソッド
+  def payment_options
+    {
+      accepts_credit_cards: accepts_credit_cards,
+      accepts_debit_cards: accepts_debit_cards,
+      accepts_cash_only: accepts_cash_only,
+      accepts_nfc: accepts_nfc
+    }
+  end
+
+  # 駐車場オプション情報を取得するメソッド
+  def parking_options
+    {
+      free_parking_lot: free_parking_lot,
+      paid_parking_lot: paid_parking_lot,
+      free_street_parking: free_street_parking,
+      paid_street_parking: paid_street_parking,
+      valet_parking: valet_parking,
+      free_garage_parking: free_garage_parking,
+      paid_garage_parking: paid_garage_parking
+    }
+  end
+
+  # Google Typesを配列として取得
+  def google_types_array
+    return [] unless google_types
+    JSON.parse(google_types)
+  rescue JSON::ParserError
+    []
+  end
+
+  # Google Typesを設定
+  def google_types_array=(types)
+    self.google_types = types.to_json
   end
 
   private
