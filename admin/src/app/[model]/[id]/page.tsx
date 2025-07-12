@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -8,6 +8,7 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { MultiSelect } from '@/components/forms/MultiSelect';
+import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
@@ -84,6 +85,47 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'catchphrase', type: 'text' },
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'budgetRange', type: 'select', required: true },
+
+    // Google Places API関連フィールド
+    { name: 'googlePlaceId', type: 'text' },
+    { name: 'latitude', type: 'number' },
+    { name: 'longitude', type: 'number' },
+    { name: 'reviewRating', type: 'number' },
+    { name: 'reviewCount', type: 'number' },
+    { name: 'businessStatus', type: 'select' },
+    { name: 'priceLevel', type: 'select' },
+    { name: 'primaryType', type: 'text' },
+    { name: 'primaryTypeDisplayName', type: 'text' },
+    { name: 'internationalPhoneNumber', type: 'text' },
+    { name: 'shortFormattedAddress', type: 'text' },
+    { name: 'googleMapsUri', type: 'text' },
+    { name: 'timeZoneId', type: 'text' },
+
+    // サービス提供情報
+    { name: 'takeout', type: 'boolean' },
+    { name: 'delivery', type: 'boolean' },
+    { name: 'dineIn', type: 'boolean' },
+    { name: 'reservable', type: 'boolean' },
+    { name: 'servesBreakfast', type: 'boolean' },
+    { name: 'servesLunch', type: 'boolean' },
+    { name: 'servesDinner', type: 'boolean' },
+    { name: 'servesBrunch', type: 'boolean' },
+    { name: 'servesBeer', type: 'boolean' },
+    { name: 'servesWine', type: 'boolean' },
+    { name: 'servesVegetarianFood', type: 'boolean' },
+    { name: 'outdoorSeating', type: 'boolean' },
+    { name: 'liveMusic', type: 'boolean' },
+    { name: 'menuForChildren', type: 'boolean' },
+    { name: 'servesCocktails', type: 'boolean' },
+    { name: 'servesDessert', type: 'boolean' },
+    { name: 'servesCoffee', type: 'boolean' },
+    { name: 'goodForChildren', type: 'boolean' },
+    { name: 'allowsDogs', type: 'boolean' },
+    { name: 'restroom', type: 'boolean' },
+    { name: 'goodForGroups', type: 'boolean' },
+    { name: 'goodForWatchingSports', type: 'boolean' },
+
+    // 関連データ
     { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
     { name: 'hashtag', type: 'relation', modelName: 'Hashtag', labelField: 'hashtagName' },
     { name: 'purpose', type: '', modelName: 'Purpose', labelField: 'purposeName' },
@@ -118,6 +160,45 @@ const fieldDisplayNames: Record<string, string> = {
   isRainyOk: '雨天可否',
   budgetRange: '予算感',
   active: 'アクティブフラグ',
+
+  // Google Places API関連
+  googlePlaceId: 'Google Place ID',
+  latitude: '緯度',
+  longitude: '経度',
+  reviewRating: '評価',
+  reviewCount: 'レビュー数',
+  businessStatus: '営業状況',
+  priceLevel: '価格帯',
+  primaryType: '主要タイプ',
+  primaryTypeDisplayName: '主要タイプ表示名',
+  internationalPhoneNumber: '国際電話番号',
+  shortFormattedAddress: '短縮住所',
+  googleMapsUri: 'Google Maps URI',
+  timeZoneId: 'タイムゾーンID',
+
+  // サービス提供情報
+  takeout: 'テイクアウト',
+  delivery: 'デリバリー',
+  dineIn: '店内飲食',
+  reservable: '予約可能',
+  servesBreakfast: '朝食提供',
+  servesLunch: '昼食提供',
+  servesDinner: '夕食提供',
+  servesBrunch: 'ブランチ提供',
+  servesBeer: 'ビール提供',
+  servesWine: 'ワイン提供',
+  servesVegetarianFood: 'ベジタリアン料理',
+  outdoorSeating: '屋外席',
+  liveMusic: 'ライブ音楽',
+  menuForChildren: '子供向けメニュー',
+  servesCocktails: 'カクテル提供',
+  servesDessert: 'デザート提供',
+  servesCoffee: 'コーヒー提供',
+  goodForChildren: '子供向け',
+  allowsDogs: 'ペット可',
+  restroom: 'トイレ',
+  goodForGroups: 'グループ向け',
+  goodForWatchingSports: 'スポーツ観戦向け',
 };
 
 // 選択肢の定義
@@ -126,6 +207,20 @@ const selectOptions: Record<string, { value: string; label: string }[]> = {
     { value: '安い', label: '安い' },
     { value: '普通', label: '普通' },
     { value: '高い', label: '高い' },
+  ],
+  businessStatus: [
+    { value: 'unspecified', label: '未指定' },
+    { value: 'operational', label: '営業中' },
+    { value: 'closed_temporarily', label: '一時休業' },
+    { value: 'closed_permanently', label: '閉店' },
+  ],
+  priceLevel: [
+    { value: 'unspecified', label: '未指定' },
+    { value: 'free', label: '無料' },
+    { value: 'inexpensive', label: '安価' },
+    { value: 'moderate', label: '普通' },
+    { value: 'expensive', label: '高価' },
+    { value: 'very_expensive', label: '非常に高価' },
   ],
 };
 
@@ -137,7 +232,7 @@ export default function ModelDetailPage() {
   const isNew = id === 'new';
 
   const [formData, setFormData] = useState<ModelData | null>(null);
-  const [isLoading,] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -145,7 +240,31 @@ export default function ModelDetailPage() {
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = modelFields[modelRoute] || [];
 
-  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
+  // 新規作成時の初期データ設定
+  useEffect(() => {
+    if (isNew) {
+      const initialData: ModelData = {
+        id: 'new',
+        ...fields.reduce((acc, field) => {
+          switch (field.type) {
+            case 'boolean':
+              acc[field.name] = false;
+              break;
+            case 'multirelation':
+              acc[field.name] = [];
+              break;
+            default:
+              acc[field.name] = '';
+          }
+          return acc;
+        }, {} as Record<string, string | boolean | RelationItem[]>)
+      };
+      setFormData(initialData);
+      setIsLoading(false);
+    }
+  }, [isNew, fields]);
+
+  const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -364,6 +483,21 @@ export default function ModelDetailPage() {
                     error={error}
                   />
                 );
+              case 'number':
+                return (
+                  <TextField
+                    key={fieldName}
+                    id={fieldName}
+                    name={fieldName}
+                    label={fieldLabel}
+                    type="number"
+                    value={value !== undefined ? String(value) : undefined}
+                    onChange={(e) => handleChange(fieldName, Number(e.target.value))}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
+                );
               case 'select':
                 return (
                   <Select
@@ -446,6 +580,94 @@ export default function ModelDetailPage() {
           </Button>
         </div>
       </form>
+
+      {/* Google Places検索（スポットの場合のみ表示） */}
+      {modelRoute === 'spots' && (
+        <div className="admin-mt-6">
+          <GooglePlacesSearch
+            spotId={isNew ? undefined : id}
+            onPlaceSelect={(place: GooglePlace) => {
+              // 新規作成時・編集時ともに、選択した場所の情報をフォームに自動入力
+              if (formData) {
+                setFormData(prev => {
+                  if (!prev) return null;
+                  const newFormData = { ...prev };
+
+                  // Google Place APIから取得した値でフォームを更新
+                  // 値が存在する場合のみ更新する
+                  const updateField = <K extends keyof ModelData>(key: K, value: ModelData[K]) => {
+                    if (value !== undefined && value !== null) {
+                      newFormData[key] = value;
+                    }
+                  };
+
+                  updateField('spotName', place.name || '');
+                  updateField('address', place.formattedAddress || '');
+                  updateField('phoneNumber', place.nationalPhoneNumber || '');
+                  updateField('website', place.websiteUri || '');
+                  updateField('googlePlaceId', place.placeId || '');
+                  updateField('latitude', place.location?.latitude || null);
+                  updateField('longitude', place.location?.longitude || null);
+                  updateField('reviewRating', place.rating || null);
+                  updateField('reviewCount', place.userRatingCount || null);
+                  updateField('businessStatus', place.businessStatus || '');
+                  updateField('priceLevel', place.priceLevel || '');
+                  updateField('primaryType', place.primaryType || '');
+                  updateField('primaryTypeDisplayName', place.primaryTypeDisplayName || '');
+                  updateField('internationalPhoneNumber', place.internationalPhoneNumber || '');
+                  updateField('shortFormattedAddress', place.shortFormattedAddress || '');
+                  updateField('googleMapsUri', place.googleMapsUri || '');
+
+                  // サービス提供情報 (boolean)
+                  updateField('takeout', place.takeout || false);
+                  updateField('delivery', place.delivery || false);
+                  updateField('dineIn', place.dineIn || false);
+                  updateField('reservable', place.reservable || false);
+                  updateField('servesBreakfast', place.servesBreakfast || false);
+                  updateField('servesLunch', place.servesLunch || false);
+                  updateField('servesDinner', place.servesDinner || false);
+                  updateField('servesBrunch', place.servesBrunch || false);
+                  updateField('servesBeer', place.servesBeer || false);
+                  updateField('servesWine', place.servesWine || false);
+                  updateField('servesCocktails', place.servesCocktails || false);
+                  updateField('servesDessert', place.servesDessert || false);
+                  updateField('servesCoffee', place.servesCoffee || false);
+                  updateField('outdoorSeating', place.outdoorSeating || false);
+                  updateField('liveMusic', place.liveMusic || false);
+                  updateField('menuForChildren', place.menuForChildren || false);
+                  updateField('goodForChildren', place.goodForChildren || false);
+                  updateField('allowsDogs', place.allowsDogs || false);
+                  updateField('restroom', place.restroom || false);
+                  updateField('goodForGroups', place.goodForGroups || false);
+                  updateField('goodForWatchingSports', place.goodForWatchingSports || false);
+
+                  return newFormData;
+                });
+              }
+            }}
+            onSyncComplete={(syncedSpot: SyncedSpot) => {
+              // 編集時：同期完了後にフォームデータを更新
+              if (!isNew) {
+                setFormData(prev => {
+                  if (!prev) return null;
+                  // 同期で返ってきた値でフォームデータを上書きする
+                  // syncedSpotに存在しないキーは元の値を維持する
+                  const updatedData = { ...prev };
+                  for (const key in syncedSpot) {
+                    if (Object.prototype.hasOwnProperty.call(syncedSpot, key)) {
+                      const value = syncedSpot[key as keyof SyncedSpot];
+                      if (value !== null && value !== undefined) {
+                        (updatedData as ModelData)[key] = value;
+                      }
+                    }
+                  }
+                  return updatedData;
+                });
+              }
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
