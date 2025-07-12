@@ -11,6 +11,14 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
+  create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_accessibility_options_on_name", unique: true
+  end
+
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -178,6 +186,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_closed_day", default: false, null: false
+    t.text "google_opening_hours_data"
+    t.string "opening_hours_type", default: "regular"
+    t.index ["opening_hours_type"], name: "index_opening_hours_on_opening_hours_type"
     t.index ["spot_id", "day_of_week"], name: "index_opening_hours_on_spot_id_and_day_of_week", unique: true
     t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
   end
@@ -242,6 +253,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "spot_accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "accessibility_option_id", null: false
+    t.boolean "available", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accessibility_option_id"], name: "index_spot_accessibility_options_on_accessibility_option_id"
+    t.index ["spot_id", "accessibility_option_id"], name: "index_spot_accessibility_unique", unique: true
+    t.index ["spot_id"], name: "index_spot_accessibility_options_on_spot_id"
   end
 
   create_table "spot_ambiance_relations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -311,6 +333,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
     t.index ["spot_id"], name: "index_spot_menus_on_spot_id"
   end
 
+  create_table "spot_photos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.string "photo_reference", limit: 500, null: false
+    t.integer "width"
+    t.integer "height"
+    t.text "html_attributions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_reference"], name: "index_spot_photos_on_photo_reference"
+    t.index ["spot_id", "photo_reference"], name: "index_spot_photos_on_spot_id_and_photo_reference", unique: true
+    t.index ["spot_id"], name: "index_spot_photos_on_spot_id"
+  end
+
   create_table "spot_purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "spot_id", null: false
     t.bigint "purpose_id", null: false
@@ -345,11 +380,82 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
     t.datetime "updated_at", null: false
     t.string "spot_type", default: "STORE", null: false
     t.string "image_url"
+    t.string "google_place_id"
+    t.column "business_status", "enum('BUSINESS_STATUS_UNSPECIFIED','OPERATIONAL','CLOSED_TEMPORARILY','CLOSED_PERMANENTLY')", default: "BUSINESS_STATUS_UNSPECIFIED"
+    t.column "price_level", "enum('PRICE_LEVEL_UNSPECIFIED','PRICE_LEVEL_FREE','PRICE_LEVEL_INEXPENSIVE','PRICE_LEVEL_MODERATE','PRICE_LEVEL_EXPENSIVE','PRICE_LEVEL_VERY_EXPENSIVE')", default: "PRICE_LEVEL_UNSPECIFIED"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.text "google_types"
+    t.string "primary_type"
+    t.string "primary_type_display_name"
+    t.string "international_phone_number"
+    t.string "short_formatted_address"
+    t.text "adr_format_address"
+    t.string "google_maps_uri"
+    t.string "icon_mask_base_uri"
+    t.string "icon_background_color"
+    t.string "time_zone_id"
+    t.string "time_zone_display_name"
+    t.integer "utc_offset_minutes"
+    t.text "generative_summary"
+    t.text "editorial_summary"
+    t.decimal "price_range_start_amount", precision: 10, scale: 2
+    t.string "price_range_start_currency", limit: 3
+    t.decimal "price_range_end_amount", precision: 10, scale: 2
+    t.string "price_range_end_currency", limit: 3
+    t.text "review_summary_text"
+    t.string "review_summary_flag_content_uri", limit: 500
+    t.text "review_summary_disclosure_text"
+    t.string "review_summary_reviews_uri", limit: 500
+    t.boolean "accepts_credit_cards", default: false
+    t.boolean "accepts_debit_cards", default: false
+    t.boolean "accepts_cash_only", default: false
+    t.boolean "accepts_nfc", default: false
+    t.boolean "free_parking_lot", default: false
+    t.boolean "paid_parking_lot", default: false
+    t.boolean "free_street_parking", default: false
+    t.boolean "paid_street_parking", default: false
+    t.boolean "valet_parking", default: false
+    t.boolean "free_garage_parking", default: false
+    t.boolean "paid_garage_parking", default: false
+    t.boolean "takeout", default: false
+    t.boolean "delivery", default: false
+    t.boolean "dine_in", default: false
+    t.boolean "curbside_pickup", default: false
+    t.boolean "reservable", default: false
+    t.boolean "serves_breakfast", default: false
+    t.boolean "serves_lunch", default: false
+    t.boolean "serves_dinner", default: false
+    t.boolean "serves_brunch", default: false
+    t.boolean "serves_beer", default: false
+    t.boolean "serves_wine", default: false
+    t.boolean "serves_vegetarian_food", default: false
+    t.boolean "outdoor_seating", default: false
+    t.boolean "live_music", default: false
+    t.boolean "menu_for_children", default: false
+    t.boolean "serves_cocktails", default: false
+    t.boolean "serves_dessert", default: false
+    t.boolean "serves_coffee", default: false
+    t.boolean "good_for_children", default: false
+    t.boolean "allows_dogs", default: false
+    t.boolean "restroom", default: false
+    t.boolean "good_for_groups", default: false
+    t.boolean "good_for_watching_sports", default: false
+    t.boolean "pure_service_area_business", default: false
+    t.datetime "last_api_sync_at"
+    t.string "api_sync_status", limit: 50, default: "pending"
+    t.index ["api_sync_status"], name: "index_spots_on_api_sync_status"
     t.index ["budget_range"], name: "index_spots_on_budget_range"
+    t.index ["business_status"], name: "index_spots_on_business_status"
     t.index ["district_id"], name: "index_spots_on_district_id"
+    t.index ["google_place_id"], name: "index_spots_on_google_place_id"
+    t.index ["latitude", "longitude"], name: "index_spots_on_latitude_and_longitude"
+    t.index ["price_level"], name: "index_spots_on_price_level"
+    t.index ["primary_type"], name: "index_spots_on_primary_type"
     t.index ["spot_name"], name: "index_spots_on_spot_name"
     t.index ["spot_type"], name: "index_spots_on_spot_type"
     t.index ["theme"], name: "index_spots_on_theme"
+    t.index ["time_zone_id"], name: "index_spots_on_time_zone_id"
   end
 
   create_table "stations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -412,6 +518,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
   add_foreign_key "news", "categories"
   add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"
+  add_foreign_key "spot_accessibility_options", "accessibility_options"
+  add_foreign_key "spot_accessibility_options", "spots"
   add_foreign_key "spot_ambiance_relations", "spot_ambiances"
   add_foreign_key "spot_ambiance_relations", "spots"
   add_foreign_key "spot_areas", "areas"
@@ -424,6 +532,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
   add_foreign_key "spot_instagram_embeds", "spots"
   add_foreign_key "spot_menus", "menus"
   add_foreign_key "spot_menus", "spots"
+  add_foreign_key "spot_photos", "spots"
   add_foreign_key "spot_purposes", "purposes"
   add_foreign_key "spot_purposes", "spots"
   add_foreign_key "spots", "districts"
