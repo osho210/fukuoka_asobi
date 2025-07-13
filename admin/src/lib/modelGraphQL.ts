@@ -181,12 +181,18 @@ export const createModel = async (modelRoute: string, input: ModelInput) => {
   try {
     // __typename を削除
     const cleanedInput = omitTypename(input);
+    console.log('クリーンな入力データ:', cleanedInput);
     const { data } = await client.mutate({
       mutation,
-      variables: { cleanedInput },
+      variables: { input: cleanedInput },
     });
 
-    return data[mutationName] || null;
+    const result = data[mutationName];
+    if (result?.errors && result.errors.length > 0) {
+      throw new Error(result.errors.join(', '));
+    }
+
+    return result || null;
   } catch (error) {
     console.error(`モデル ${modelRoute} の作成に失敗しました:`, error);
     throw error;
@@ -227,7 +233,12 @@ export const updateModel = async (modelRoute: string, id: string, input: ModelIn
       variables: { input: { id, ...cleanedInput } },
     });
 
-    return data[mutationName] || null;
+    const result = data[mutationName];
+    if (result?.errors && result.errors.length > 0) {
+      throw new Error(result.errors.join(', '));
+    }
+
+    return result || null;
   } catch (error) {
     console.error(`モデル ${modelRoute} の更新に失敗しました:`, error);
     throw error;

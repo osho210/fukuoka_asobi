@@ -2,16 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { ApolloError } from '@apollo/client';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
 import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { MultiSelect } from '@/components/forms/MultiSelect';
+import OpeningHoursEditor, { EditableOpeningHour } from '@/components/forms/OpeningHoursEditor';
 import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { ModelInput } from '@/lib/modelGraphQL';
+import { useEnumOptions } from '@/hooks/useEnumOptions';
 
 // 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
 interface RelationItem {
@@ -23,7 +26,8 @@ interface RelationItem {
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null | string[] | number[] | RelationItem[];
+  openingHours?: EditableOpeningHour[];
+  [key: string]: string | number | boolean | object | null | undefined | string[] | number[] | RelationItem[] | EditableOpeningHour[];
 }
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
@@ -50,7 +54,7 @@ const modelDisplayNames: Record<string, string> = {
 };
 
 // 各モデルのフィールド定義
-const modelFields: Record<string, { name: string; type: string; required?: boolean; modelName?: string; labelField?: string }[]> = {
+const modelFields: Record<string, { name: string; type: string; required?: boolean; enumKey?: string, modelName?: string; labelField?: string }[]> = {
   areas: [
     { name: 'areaName', type: 'text', required: true },
     { name: 'district', type: 'relation', required: true },
@@ -79,12 +83,12 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
   spots: [
     { name: 'spotName', type: 'text', required: true },
     { name: 'address', type: 'text', required: true },
-    { name: 'district', type: 'relation', required: true },
     { name: 'phoneNumber', type: 'text' },
     { name: 'website', type: 'text' },
     { name: 'catchphrase', type: 'text' },
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'budgetRange', type: 'select', required: true },
+    { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
 
     // Google Places API関連フィールド
     { name: 'googlePlaceId', type: 'text' },
@@ -125,14 +129,33 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'goodForGroups', type: 'boolean' },
     { name: 'goodForWatchingSports', type: 'boolean' },
 
+    // Payment Options
+    { name: 'acceptsCreditCards', type: 'boolean' },
+    { name: 'acceptsDebitCards', type: 'boolean' },
+    { name: 'acceptsCashOnly', type: 'boolean' },
+    { name: 'acceptsNfc', type: 'boolean' },
+
+    // Parking Options
+    { name: 'freeParkingLot', type: 'boolean' },
+    { name: 'paidParkingLot', type: 'boolean' },
+    { name: 'freeStreetParking', type: 'boolean' },
+    { name: 'paidStreetParking', type: 'boolean' },
+    { name: 'valetParking', type: 'boolean' },
+    { name: 'freeGarageParking', type: 'boolean' },
+    { name: 'paidGarageParking', type: 'boolean' },
+
+    // 営業時間
+    { name: 'openingHours', type: 'opening_hours_editor' },
+
     // 関連データ
+    // { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
+    { name: 'hashtag', type: 'multirelation', modelName: 'Hashtag', labelField: 'hashtagName' },
+    // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
+    { name: 'spotAmbiances', type: 'multirelation', modelName: 'SpotAmbiance', labelField: 'ambianceName' },
+    { name: 'categories', type: 'multirelation', modelName: 'Categorie', labelField: 'name' },
     { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
-    { name: 'hashtag', type: 'relation', modelName: 'Hashtag', labelField: 'hashtagName' },
-    { name: 'purpose', type: '', modelName: 'Purpose', labelField: 'purposeName' },
-    { name: 'spotAmbiance', type: 'multirelation', modelName: 'spotAmbiances', labelField: 'ambianceName' },
-    { name: 'categories', type: 'multirelation', modelName: 'Category', labelField: 'name' },
-    { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
-    { name: 'area', type: 'multirelation', modelName: 'Area', labelField: 'areaName' },
+    { name: 'areas', type: 'multirelation', modelName: 'Area', labelField: 'areaName' },
+    { name: 'district', type: 'relation', modelName: 'District', labelField: 'districtName' },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },
@@ -199,29 +222,22 @@ const fieldDisplayNames: Record<string, string> = {
   restroom: 'トイレ',
   goodForGroups: 'グループ向け',
   goodForWatchingSports: 'スポーツ観戦向け',
-};
 
-// 選択肢の定義
-const selectOptions: Record<string, { value: string; label: string }[]> = {
-  budgetRange: [
-    { value: '安い', label: '安い' },
-    { value: '普通', label: '普通' },
-    { value: '高い', label: '高い' },
-  ],
-  businessStatus: [
-    { value: 'unspecified', label: '未指定' },
-    { value: 'operational', label: '営業中' },
-    { value: 'closed_temporarily', label: '一時休業' },
-    { value: 'closed_permanently', label: '閉店' },
-  ],
-  priceLevel: [
-    { value: 'unspecified', label: '未指定' },
-    { value: 'free', label: '無料' },
-    { value: 'inexpensive', label: '安価' },
-    { value: 'moderate', label: '普通' },
-    { value: 'expensive', label: '高価' },
-    { value: 'very_expensive', label: '非常に高価' },
-  ],
+  // Payment Options
+  acceptsCreditCards: 'クレジットカード可',
+  acceptsDebitCards: 'デビットカード可',
+  acceptsCashOnly: '現金のみ',
+  acceptsNfc: 'NFC決済可',
+
+  // Parking Options
+  freeParkingLot: '無料駐車場あり',
+  paidParkingLot: '有料駐車場あり',
+  freeStreetParking: '無料路上駐車あり',
+  paidStreetParking: '有料路上駐車あり',
+  valetParking: 'バレーパーキングあり',
+  freeGarageParking: '無料ガレージ駐車あり',
+  paidGarageParking: '有料ガレージ駐車あり',
+  openingHours: '営業時間',
 };
 
 export default function ModelDetailPage() {
@@ -230,6 +246,20 @@ export default function ModelDetailPage() {
   const modelRoute = params.model as string;
   const id = params.id as string;
   const isNew = id === 'new';
+
+  // 定義済みのenumを呼び出せるフックを使用
+  const { options: priceLevelOptions } = useEnumOptions('PriceLevel');
+  const { options: spotTypeOptions } = useEnumOptions('SpotTypeEnum');
+  const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
+  const { options: statusOptions } = useEnumOptions("StatusEnum");
+
+  // 選択肢の定義
+  const selectOptions: Record<string, { value: string; label: string }[]> = {
+    budgetRange: budgetOptions,
+    businessStatus: statusOptions,
+    priceLevel: priceLevelOptions,
+    spotType: spotTypeOptions,
+  };
 
   const [formData, setFormData] = useState<ModelData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -250,21 +280,25 @@ export default function ModelDetailPage() {
             case 'boolean':
               acc[field.name] = false;
               break;
+            case 'relation':
             case 'multirelation':
+              acc[field.name] = [];
+              break;
+            case 'opening_hours_editor':
               acc[field.name] = [];
               break;
             default:
               acc[field.name] = '';
           }
           return acc;
-        }, {} as Record<string, string | boolean | RelationItem[]>)
+        }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[]>)
       };
       setFormData(initialData);
       setIsLoading(false);
     }
   }, [isNew, fields]);
 
-  const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[]) => {
+  const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[] | EditableOpeningHour[]) => {
     if (!formData) return;
 
     setFormData({
@@ -285,8 +319,13 @@ export default function ModelDetailPage() {
     const newErrors: Record<string, string> = {};
 
     fields.forEach((field) => {
-      if (field.required && !formData?.[field.name]) {
-        newErrors[field.name] = '必須項目です';
+      if (field.required) {
+        const value = formData?.[field.name];
+        if (Array.isArray(value) && value.length === 0) {
+          newErrors[field.name] = '必須項目です';
+        } else if (!value) {
+          newErrors[field.name] = '必須項目です';
+        }
       }
     });
 
@@ -302,13 +341,34 @@ export default function ModelDetailPage() {
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
-      if (field.type === 'relation' && typeof value === 'object' && value !== null && !Array.isArray(value)) {
-        // リレーションフィールドの場合はIDを取得
-        const relationData = value as RelationData;
-        input[`${fieldName}Id`] = relationData.id;
+      if (fieldName === 'openingHours' && Array.isArray(value)) {
+        input.openingHoursAttributes = value.map(hour => {
+          const { id, dayOfWeek, openTime, closeTime, isClosedDay, _destroy } = hour;
+          const attributes: {
+            id?: number;
+            dayOfWeek: string;
+            openTime: string | null;
+            closeTime: string | null;
+            isClosedDay: boolean;
+            _destroy?: boolean;
+          } = { dayOfWeek, openTime, closeTime, isClosedDay };
+          if (id) {
+            attributes.id = id;
+          }
+          if (_destroy) {
+            attributes._destroy = _destroy;
+          }
+          return attributes;
+        });
+      } else if (field.type === 'relation' && Array.isArray(value) && value.length > 0) {
+        const idFieldName = `${fieldName}Id`;
+        const relationItem = value[0];
+        if (relationItem && relationItem.id) {
+          input[idFieldName] = Number(relationItem.id);
+        }
       } else if (field.type === 'multirelation' && Array.isArray(value)) {
         // 複数関連フィールドの場合はIDの配列を設定
-        const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
+        const idFieldName = `${fieldName.replace(/s$/, '')}s`;
         // 配列の場合は、各要素を適切に処理して数値の配列に変換
         const ids = value.map(item => {
           if (typeof item === 'object' && item !== null && 'id' in item) {
@@ -341,6 +401,7 @@ export default function ModelDetailPage() {
     e.preventDefault();
 
     if (!validateForm() || !formData) {
+      alert('入力内容にエラーがあります。各項目を確認してください。');
       return;
     }
 
@@ -362,7 +423,17 @@ export default function ModelDetailPage() {
       router.push(`/${modelRoute}`);
     } catch (err) {
       console.error('保存に失敗しました:', err);
-      setError('保存に失敗しました');
+      if (err instanceof ApolloError) {
+        // GraphQLのエラーメッセージを優先的に表示
+        const messages = err.graphQLErrors.map((e) => e.message).join('\n');
+        setError(messages || err.message);
+      } else if (err instanceof Error) {
+        // その他のJavaScriptエラー
+        setError(err.message);
+      } else {
+        // 不明なエラー
+        setError('不明なエラーが発生しました');
+      }
     } finally {
       setIsSaving(false);
     }
@@ -514,32 +585,20 @@ export default function ModelDetailPage() {
                   />
                 );
               case 'relation':
-                // 関連データの選択は実際にはSelectAsyncを使用
                 return (
-                  <>
-
-                    <MultiSelect
-                      key={fieldName}
-                      id={fieldName}
-                      label={fieldLabel}
-                      modelName={field.modelName || ''}
-                      labelField={field.labelField || ''}
-                      selectedValues={(value as RelationItem[]) || []}
-                      onChange={(values) => {
-                        // 選択されたIDの配列を更新
-                        handleChange(fieldName, values);
-
-                        // 関連するIDフィールドも更新
-                        const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
-                        handleChange(idFieldName, values);
-                      }}
-                      required={field.required}
-                      error={error}
-                      fullWidth
-                    />
-                    {value}
-
-                  </>
+                  <MultiSelect
+                    key={fieldName}
+                    id={fieldName}
+                    label={fieldLabel}
+                    modelName={field.modelName || ''}
+                    labelField={field.labelField || ''}
+                    selectedValues={(value as RelationItem[]) || []}
+                    onChange={(values) => handleChange(fieldName, values)}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                    maxSelection={1}
+                  />
                 );
               case 'multirelation':
                 // 複数関連データの選択
@@ -551,18 +610,20 @@ export default function ModelDetailPage() {
                     modelName={field.modelName || ''}
                     labelField={field.labelField || ''}
                     selectedValues={(value as RelationItem[]) || []}
-                    onChange={(values) => {
-                      // 選択されたIDの配列を更新
-                      handleChange(fieldName, values);
-
-                      // 関連するIDフィールドも更新
-                      const idFieldName = `${fieldName.replace(/s$/, '')}Ids`;
-                      handleChange(idFieldName, values);
-                    }}
+                    onChange={(values) => handleChange(fieldName, values)}
                     required={field.required}
                     error={error}
                     fullWidth
                   />
+                );
+              case 'opening_hours_editor':
+                return (
+                  <div key={fieldName} className="col-span-2">
+                    <OpeningHoursEditor
+                      openingHours={(value as EditableOpeningHour[]) || []}
+                      onChange={(hours) => handleChange(fieldName, hours)}
+                    />
+                  </div>
                 );
               default:
                 return null;
@@ -641,6 +702,43 @@ export default function ModelDetailPage() {
                   updateField('goodForGroups', place.goodForGroups || false);
                   updateField('goodForWatchingSports', place.goodForWatchingSports || false);
 
+                  // Payment Options
+                  updateField('acceptsCreditCards', place.paymentOptions?.acceptsCreditCards || false);
+                  updateField('acceptsDebitCards', place.paymentOptions?.acceptsDebitCards || false);
+                  updateField('acceptsCashOnly', place.paymentOptions?.acceptsCashOnly || false);
+                  updateField('acceptsNfc', place.paymentOptions?.acceptsNfc || false);
+
+                  // Parking Options
+                  updateField('freeParkingLot', place.parkingOptions?.freeParkingLot || false);
+                  updateField('paidParkingLot', place.parkingOptions?.paidParkingLot || false);
+                  updateField('freeStreetParking', place.parkingOptions?.freeStreetParking || false);
+                  updateField('paidStreetParking', place.parkingOptions?.paidStreetParking || false);
+                  updateField('valetParking', place.parkingOptions?.valetParking || false);
+                  updateField('freeGarageParking', place.parkingOptions?.freeGarageParking || false);
+                  updateField('paidGarageParking', place.parkingOptions?.paidGarageParking || false);
+
+                  // 営業時間を変換して更新
+                  if (place.regularOpeningHours?.periods) {
+                    const dayMapping: { [key: number]: string } = { 0: '日', 1: '月', 2: '火', 3: '水', 4: '木', 5: '金', 6: '土' };
+                    const formattedHours = place.regularOpeningHours.periods.map(period => {
+                      const formatTime = (time: { hour: number; minute: number; }) => {
+                        const hour = String(time.hour).padStart(2, '0');
+                        const minute = String(time.minute).padStart(2, '0');
+                        return `${hour}:${minute}`;
+                      };
+                      return {
+                        dayOfWeek: dayMapping[period.open.day],
+                        openTime: formatTime(period.open),
+                        closeTime: formatTime(period.close),
+                        isClosedDay: false,
+                      };
+                    });
+                    updateField('openingHours', formattedHours);
+                  } else {
+                    // データがない場合は空にする
+                    updateField('openingHours', []);
+                  }
+
                   return newFormData;
                 });
               }
@@ -656,7 +754,24 @@ export default function ModelDetailPage() {
                   for (const key in syncedSpot) {
                     if (Object.prototype.hasOwnProperty.call(syncedSpot, key)) {
                       const value = syncedSpot[key as keyof SyncedSpot];
-                      if (value !== null && value !== undefined) {
+                      if (key === 'openingHours' && Array.isArray(value)) {
+                        // openingHoursはEditableOpeningHour形式に変換
+                        type SyncedOpeningHour = {
+                          id: number;
+                          dayOfWeek: string;
+                          openTime: string | null;
+                          closeTime: string | null;
+                          isClosedDay: boolean;
+                        };
+                        const formattedHours = value.map((hour: SyncedOpeningHour) => ({
+                          id: hour.id,
+                          dayOfWeek: hour.dayOfWeek,
+                          openTime: hour.openTime ? hour.openTime.substring(11, 16) : null,
+                          closeTime: hour.closeTime ? hour.closeTime.substring(11, 16) : null,
+                          isClosedDay: hour.isClosedDay,
+                        }));
+                        (updatedData as ModelData)[key] = formattedHours;
+                      } else if (value !== null && value !== undefined) {
                         (updatedData as ModelData)[key] = value;
                       }
                     }

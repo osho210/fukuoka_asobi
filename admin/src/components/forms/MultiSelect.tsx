@@ -25,6 +25,7 @@ interface MultiSelectProps {
   required?: boolean;
   error?: string;
   fullWidth?: boolean;
+  maxSelection?: number;
 }
 
 // 各モデルのクエリを動的に生成
@@ -34,7 +35,7 @@ const generateQuery = (modelName: string, labelField: string) => {
   const queryName = modelName.charAt(0).toLowerCase() + modelName.slice(1) + 's';
 
   return gql`
-    query Get${modelName}Options {
+    query Get${modelName} {
       ${queryName} {
         id
         ${labelField}
@@ -54,10 +55,14 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   required = false,
   error,
   fullWidth = false,
+  maxSelection,
 }) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [localSelectedValues, setLocalSelectedValues] = useState<RelationItem[]>(selectedValues || []);
+
+  console.log('localSelectedValues')
+  console.log(localSelectedValues);
 
   // モデル名からクエリを生成
   const query = generateQuery(modelName, labelField);
@@ -98,17 +103,38 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
       // 選択済みの場合は削除
       newValues = localSelectedValues.filter(item => item.id !== value);
     } else {
-      // 未選択の場合は追加
-      const option = options.find(opt => opt.value === value);
-      if (option) {
-        const newItem: RelationItem = {
-          __typename: modelName,
-          id: value,
-          [labelField]: option.label
-        };
-        newValues = [...localSelectedValues, newItem];
+      // 上限チェック
+      if (maxSelection && localSelectedValues.length >= maxSelection) {
+        if (maxSelection === 1) {
+          // 1つの場合、既存のものを置き換える
+          const option = options.find(opt => opt.value === value);
+          if (option) {
+            const newItem: RelationItem = {
+              __typename: modelName,
+              id: value,
+              [labelField]: option.label
+            };
+            newValues = [newItem];
+          } else {
+            newValues = [...localSelectedValues];
+          }
+        } else {
+          // 上限に達している場合は何もしない
+          return;
+        }
       } else {
-        newValues = [...localSelectedValues];
+        // 未選択の場合は追加
+        const option = options.find(opt => opt.value === value);
+        if (option) {
+          const newItem: RelationItem = {
+            __typename: modelName,
+            id: value,
+            [labelField]: option.label
+          };
+          newValues = [...localSelectedValues, newItem];
+        } else {
+          newValues = [...localSelectedValues];
+        }
       }
     }
 

@@ -13,7 +13,7 @@ import { Save, Trash2 } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
-import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM, GET_TRIP_TYPE_ENUM } from '@/graphql/queries/getEnumTypes';
+import { useEnumOptions } from '@/hooks/useEnumOptions';
 import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
 import { GET_CATEGORIES } from '@/graphql/queries/getCategories';
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -74,21 +74,11 @@ export function ModelDetailModal({
   const fields = useMemo(() => modelFields[modelRoute] || [], [modelRoute]);
 
   // Enumデータの取得
-  const { data: spotTypeData } = useQuery(GET_SPOT_TYPE_ENUM, {
-    variables: { enumName: "SpotTypeEnum" },
-  });
-  const { data: budgetData } = useQuery(GET_BUDGET_RANGE_ENUM, {
-    variables: { enumName: "BudgetRangeEnum" },
-  });
-  const { data: trainLineData } = useQuery(GET_TRAIN_LINE_ENUM, {
-    variables: { enumName: "TrainLineTypeEnum" },
-  });
-  const { data: statusData } = useQuery(GET_STATUS_ENUM, {
-    variables: { enumName: "StatusEnum" },
-  });
-  const { data: tripTypeData } = useQuery(GET_TRIP_TYPE_ENUM, {
-    variables: { enumName: "TripTypeEnum" },
-  });
+  const { options: spotTypeOptions } = useEnumOptions("SpotTypeEnum");
+  const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
+  const { options: trainLineOptions } = useEnumOptions("TrainLineEnum");
+  const { options: statusOptions } = useEnumOptions("StatusEnum");
+  const { options: tripTypeOptions } = useEnumOptions("TripTypeEnum");
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -106,27 +96,12 @@ export function ModelDetailModal({
 
   // Enumオプションのマッピング
   const enumOptions = useMemo<OptionsMap>(() => ({
-    SpotTypeEnum: spotTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    BudgetRangeEnum: budgetData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    TrainLineTypeEnum: trainLineData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    StatusEnum: statusData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    TripTypeEnum: tripTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-  }), [spotTypeData, budgetData, trainLineData, statusData, tripTypeData]);
+    SpotTypeEnum: spotTypeOptions,
+    BudgetRangeEnum: budgetOptions,
+    TrainLineTypeEnum: trainLineOptions,
+    StatusEnum: statusOptions,
+    TripTypeEnum: tripTypeOptions,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
