@@ -1,6 +1,7 @@
 class Spot < ApplicationRecord
   belongs_to :district
   has_many :opening_hours, dependent: :destroy
+  accepts_nested_attributes_for :opening_hours, allow_destroy: true
   has_many :spot_areas, dependent: :destroy
   has_many :areas, through: :spot_areas
   has_many :spot_categories, dependent: :destroy
