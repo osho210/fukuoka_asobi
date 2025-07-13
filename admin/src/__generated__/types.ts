@@ -2741,7 +2741,7 @@ export type UpdateSpotMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSpotMutation = { __typename?: 'Mutation', updateSpot?: { __typename?: 'UpdateSpotPayload', errors: Array<string>, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, imageUrl?: string | null, nearestStation?: string | null, district: { __typename?: 'District', id: string, districtName: string }, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }> } | null } | null };
+export type UpdateSpotMutation = { __typename?: 'Mutation', updateSpot?: { __typename?: 'UpdateSpotPayload', errors: Array<string>, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, imageUrl?: string | null, nearestStation?: string | null, parkingAvailable?: boolean | null, googlePlaceId?: string | null, latitude?: number | null, longitude?: number | null, businessStatus?: string | null, priceLevel?: string | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, reservable?: boolean | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBrunch?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesVegetarianFood?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, district: { __typename?: 'District', id: string, districtName: string }, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }> } | null } | null };
 
 export type DeleteSpotMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2846,13 +2846,6 @@ export type RemoveSpotAmbianceMutationVariables = Exact<{
 
 export type RemoveSpotAmbianceMutation = { __typename: 'Mutation' };
 
-export type GetEnumValuesQueryVariables = Exact<{
-  enumName: Scalars['String']['input'];
-}>;
-
-
-export type GetEnumValuesQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string }> | null } | null };
-
 export type CreateStationMutationVariables = Exact<{
   input: CreateStationInput;
 }>;
@@ -2917,30 +2910,12 @@ export type GetDistrictQueryVariables = Exact<{
 
 export type GetDistrictQuery = { __typename?: 'Query', district?: { __typename?: 'District', id: string, districtName: string, createdAt: any, updatedAt: any } | null };
 
-export type GetSpotTypeEnumQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetEnumValuesQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
 
 
-export type GetSpotTypeEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
-
-export type GetBudgetRangeEnumQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetBudgetRangeEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
-
-export type GetTrainLineEnumQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetTrainLineEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
-
-export type GetStatusEnumQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetStatusEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
-
-export type GetTripTypeEnumQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetTripTypeEnumQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
+export type GetEnumValuesQuery = { __typename?: 'Query', __type?: { __typename?: '__Type', name?: string | null, enumValues?: Array<{ __typename?: '__EnumValue', name: string, description?: string | null }> | null } | null };
 
 export type GetEventCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2992,7 +2967,7 @@ export type GetSpotAmbiancesQuery = { __typename?: 'Query', spotAmbiances: Array
 export type GetSpotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, instagramUrl?: string | null, nearestStation?: string | null, isClosed?: boolean | null, imageUrl?: string | null, minPeople?: number | null, maxPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, reviewCount?: number | null, reviewRating?: number | null, spotType: SpotTypeEnum, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }> }> };
+export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, imageUrl?: string | null, nearestStation?: string | null, parkingAvailable?: boolean | null, googlePlaceId?: string | null, latitude?: number | null, longitude?: number | null, businessStatus?: string | null, priceLevel?: string | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, reservable?: boolean | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBrunch?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesVegetarianFood?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }> }> };
 
 export type GetSpotQueryVariables = Exact<{
   id: Scalars['ID']['input'];

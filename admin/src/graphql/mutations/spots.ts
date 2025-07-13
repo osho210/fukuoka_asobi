@@ -145,13 +145,64 @@ export const UPDATE_SPOT = gql`
         recommendedFor2
         imageUrl
         nearestStation
-        # 関連項目を返却する
+        parkingAvailable
+        googlePlaceId
+        latitude
+        longitude
+        businessStatus
+        priceLevel
+        primaryType
+        primaryTypeDisplayName
+        internationalPhoneNumber
+        shortFormattedAddress
+        googleMapsUri
+        takeout
+        delivery
+        dineIn
+        reservable
+        servesBreakfast
+        servesLunch
+        servesDinner
+        servesBrunch
+        servesBeer
+        servesWine
+        servesVegetarianFood
+        outdoorSeating
+        liveMusic
+        menuForChildren
+        servesCocktails
+        servesDessert
+        servesCoffee
+        goodForChildren
+        allowsDogs
+        restroom
+        goodForGroups
+        goodForWatchingSports
+        # acceptsCreditCards
+        # acceptsDebitCards
+        # acceptsCashOnly
+        # acceptsNfc
+        # freeParkingLot
+        # paidParkingLot
+        # freeStreetParking
+        # paidStreetParking
+        # valetParking
+        # freeGarageParking
+        # paidGarageParking
+        openingHours {
+          id
+          dayOfWeek
+          openTime
+          closeTime
+          isClosedDay
+        }
         hashtags {
           id
           hashtagName
         }
         purposes {
           id
+          purposeName
         }
         spotAmbiances {
           id
@@ -169,7 +220,6 @@ export const UPDATE_SPOT = gql`
           id
           areaName
         }
-
       }
       errors
     }
@@ -255,15 +305,5 @@ export const ADD_SPOT_AMBIANCE = gql`
 export const REMOVE_SPOT_AMBIANCE = gql`
   mutation RemoveSpotAmbiance($spotId: ID!, $ambianceId: ID!) {
     __typename
-  }
-`;
-
-export const GET_ENUM_VALUES = gql`
-  query GetEnumValues($enumName: String!) {
-    __type(name: $enumName) {
-      enumValues {
-        name
-      }
-    }
   }
 `;
