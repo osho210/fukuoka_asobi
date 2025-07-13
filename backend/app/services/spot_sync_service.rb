@@ -9,7 +9,10 @@ class SpotSyncService
 
     return false if place_details.nil? || place_details['error'].present?
 
-    update_spot_with_place_details(place_details)
+    ActiveRecord::Base.transaction do
+      update_spot_with_place_details(place_details)
+      update_opening_hours(place_details['regularOpeningHours']) if place_details['regularOpeningHours']
+    end
     true
   rescue => e
     Rails.logger.error "SpotSyncService Error: #{e.message}"
@@ -19,6 +22,9 @@ class SpotSyncService
   private
 
   def update_spot_with_place_details(details)
+    payment_options = details.fetch('paymentOptions', {})
+    parking_options = details.fetch('parkingOptions', {})
+
     @spot.update!(
       google_place_id: details['id'],
       spot_name: details.dig('displayName', 'text') || @spot.spot_name,
@@ -61,8 +67,51 @@ class SpotSyncService
       good_for_groups: details['goodForGroups'],
       good_for_watching_sports: details['goodForWatchingSports'],
 
+      # Payment Options
+      accepts_credit_cards: payment_options['acceptsCreditCards'],
+      accepts_debit_cards: payment_options['acceptsDebitCards'],
+      accepts_cash_only: payment_options['acceptsCashOnly'],
+      accepts_nfc: payment_options['acceptsNfc'],
+
+      # Parking Options
+      free_parking_lot: parking_options['freeParkingLot'],
+      paid_parking_lot: parking_options['paidParkingLot'],
+      free_street_parking: parking_options['freeStreetParking'],
+      paid_street_parking: parking_options['paidStreetParking'],
+      valet_parking: parking_options['valetParking'],
+      free_garage_parking: parking_options['freeGarageParking'],
+      paid_garage_parking: parking_options['paidGarageParking'],
+
       last_api_sync_at: Time.current,
       api_sync_status: 'success'
     )
+  end
+
+  def update_opening_hours(opening_hours_data)
+    @spot.opening_hours.destroy_all
+
+    return unless opening_hours_data['periods']
+
+    day_map = %w[日 月 火 水 木 金 土]
+
+    opening_hours_data['periods'].each do |period|
+      open_time = format_time(period.dig('open', 'hour'), period.dig('open', 'minute'))
+      close_time = format_time(period.dig('close', 'hour'), period.dig('close', 'minute'))
+      day_of_week = day_map[period.dig('open', 'day')]
+
+      next unless open_time && close_time && day_of_week
+
+      @spot.opening_hours.create!(
+        day_of_week: day_of_week,
+        open_time: open_time,
+        close_time: close_time,
+        is_closed_day: false
+      )
+    end
+  end
+
+  def format_time(hour, minute)
+    return nil if hour.nil? || minute.nil?
+    "#{format('%02d', hour)}:#{format('%02d', minute)}:00"
   end
 end
