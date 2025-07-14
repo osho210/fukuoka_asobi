@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useLazyQuery } from '@apollo/client';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
 import { TextArea } from '@/components/forms/TextArea';
@@ -11,8 +11,10 @@ import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { MultiSelect } from '@/components/forms/MultiSelect';
 import OpeningHoursEditor, { EditableOpeningHour } from '@/components/forms/OpeningHoursEditor';
 import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
-import { ArrowLeft, Save, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
+import { GET_NEAREST_STATION } from '@/graphql/queries/getNearestStation';
+import { GetNearestStationQuery, GetNearestStationQueryVariables } from '@/__generated__/graphql';
 import { ModelInput } from '@/lib/modelGraphQL';
 import { useEnumOptions } from '@/hooks/useEnumOptions';
 
@@ -147,6 +149,9 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     // 営業時間
     { name: 'openingHours', type: 'opening_hours_editor' },
 
+    // 最寄駅
+    { name: 'nearestStation', type: 'text' },
+
     // 関連データ
     // { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
     { name: 'hashtag', type: 'multirelation', modelName: 'Hashtag', labelField: 'hashtagName' },
@@ -238,6 +243,7 @@ const fieldDisplayNames: Record<string, string> = {
   freeGarageParking: '無料ガレージ駐車あり',
   paidGarageParking: '有料ガレージ駐車あり',
   openingHours: '営業時間',
+  nearestStation: '最寄駅',
 };
 
 export default function ModelDetailPage() {
@@ -248,10 +254,12 @@ export default function ModelDetailPage() {
   const isNew = id === 'new';
 
   // 定義済みのenumを呼び出せるフックを使用
-  const { options: priceLevelOptions } = useEnumOptions('PriceLevel');
+  const { options: priceLevelOptions } = useEnumOptions('PriceLevelEnum');
   const { options: spotTypeOptions } = useEnumOptions('SpotTypeEnum');
   const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
   const { options: statusOptions } = useEnumOptions("StatusEnum");
+
+  const [getNearestStation, { loading: nearestStationLoading, error: nearestStationError }] = useLazyQuery<GetNearestStationQuery, GetNearestStationQueryVariables>(GET_NEAREST_STATION);
 
   // 選択肢の定義
   const selectOptions: Record<string, { value: string; label: string }[]> = {
@@ -269,6 +277,37 @@ export default function ModelDetailPage() {
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = modelFields[modelRoute] || [];
+
+  useEffect(() => {
+    if (nearestStationError) {
+      alert(`最寄駅の取得に失敗しました: ${nearestStationError.message}`);
+    }
+  }, [nearestStationError]);
+
+  const handleFetchNearestStation = async () => {
+    if (!formData?.latitude || !formData?.longitude) {
+      alert('緯度と経度を入力してください。');
+      return;
+    }
+
+    try {
+      const { data } = await getNearestStation({
+        variables: {
+          latitude: parseFloat(formData.latitude as string),
+          longitude: parseFloat(formData.longitude as string),
+        },
+      });
+
+      if (data?.nearestStation) {
+        handleChange('nearestStation', data.nearestStation);
+      } else {
+        alert('最寄駅が見つかりませんでした。');
+      }
+    } catch (err) {
+      // useEffectでエラーをハンドルするので、ここではログ出力のみ
+      console.error('最寄駅の取得に失敗しました:', err);
+    }
+  };
 
   // 新規作成時の初期データ設定
   useEffect(() => {
@@ -555,19 +594,32 @@ export default function ModelDetailPage() {
                   />
                 );
               case 'number':
+                const isLongitudeField = fieldName === 'longitude';
                 return (
-                  <TextField
-                    key={fieldName}
-                    id={fieldName}
-                    name={fieldName}
-                    label={fieldLabel}
-                    type="number"
-                    value={value !== undefined ? String(value) : undefined}
-                    onChange={(e) => handleChange(fieldName, Number(e.target.value))}
-                    required={field.required}
-                    error={error}
-                    fullWidth
-                  />
+                  <div key={fieldName} className={isLongitudeField ? "admin-flex admin-items-end admin-gap-2" : ""}>
+                    <TextField
+                      id={fieldName}
+                      name={fieldName}
+                      label={fieldLabel}
+                      type="number"
+                      value={value !== undefined ? String(value) : ''}
+                      onChange={(e) => handleChange(fieldName, e.target.value ? Number(e.target.value) : '')}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                    />
+                    {isLongitudeField && modelRoute === 'spots' && (
+                      <Button
+                        type="button"
+                        onClick={handleFetchNearestStation}
+                        disabled={nearestStationLoading}
+                        className="admin-mb-1"
+                      >
+                        <Search className="h-4 w-4 admin-mr-1" />
+                        {nearestStationLoading ? '検索中...' : '最寄駅を検索'}
+                      </Button>
+                    )}
+                  </div>
                 );
               case 'select':
                 return (

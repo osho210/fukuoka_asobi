@@ -328,5 +328,21 @@ module Types
       Rails.logger.error "Google Places search error: #{e.message}"
       raise GraphQL::ExecutionError, "検索中にエラーが発生しました: #{e.message}"
     end
+    
+    # --------------------------------------------
+    # HeartRails Express API関連
+    # --------------------------------------------
+    field :nearest_station, String, null: true, description: "指定された緯度・経度から最寄駅を取得します。" do
+      argument :latitude, Float, required: true, description: "緯度"
+      argument :longitude, Float, required: true, description: "経度"
+    end
+
+    def nearest_station(latitude:, longitude:)
+      station_service = HeartRails::StationService.new(latitude, longitude)
+      station_service.fetch_nearest_station
+    rescue => e
+      Rails.logger.error "HeartRails Station search error: #{e.message}"
+      raise GraphQL::ExecutionError, "最寄駅の取得中にエラーが発生しました: #{e.message}"
+    end
   end
 end

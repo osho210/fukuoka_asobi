@@ -1428,6 +1428,8 @@ export type Query = {
   /** 指定したプランがお気に入りに登録されているかを確認 */
   isFavorite: Scalars['Boolean']['output'];
   menus: Array<Menu>;
+  /** 指定された緯度・経度から最寄駅を取得します。 */
+  nearestStation?: Maybe<Scalars['String']['output']>;
   news?: Maybe<Array<News>>;
   /** ニュースの総数 */
   newsCount: Scalars['Int']['output'];
@@ -1488,6 +1490,12 @@ export type QueryHashtagArgs = {
 
 export type QueryIsFavoriteArgs = {
   playPlanId: Scalars['ID']['input'];
+};
+
+
+export type QueryNearestStationArgs = {
+  latitude: Scalars['Float']['input'];
+  longitude: Scalars['Float']['input'];
 };
 
 
@@ -2939,6 +2947,14 @@ export type GetMenusQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, createdAt: any, updatedAt: any }> };
+
+export type GetNearestStationQueryVariables = Exact<{
+  latitude: Scalars['Float']['input'];
+  longitude: Scalars['Float']['input'];
+}>;
+
+
+export type GetNearestStationQuery = { __typename?: 'Query', nearestStation?: string | null };
 
 export type GetNewsQueryVariables = Exact<{ [key: string]: never; }>;
 
