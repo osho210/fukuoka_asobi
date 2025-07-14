@@ -88,6 +88,9 @@ module Mutations
     # 営業時間
     argument :opening_hours_attributes, [Types::Input::OpeningHourAttributes], required: false
 
+    argument :opening_hours, [Types::Input::OpeningHourAttributes], required: false,
+       as: :opening_hours_attributes
+
     field :spot,           Types::SpotType, null: true
     field :errors,         [String],        null: false
 
@@ -117,10 +120,10 @@ module Mutations
       categories     = update_attrs.delete(:categories)
       menus          = update_attrs.delete(:menus)
       areas          = update_attrs.delete(:areas)
+      opening_hours_attributes = update_attrs.delete(:opening_hours_attributes)
 
       ActiveRecord::Base.transaction do
         # 基本情報とネストした属性（営業時間）を更新
-        # `opening_hours_attributes` は `accepts_nested_attributes_for` によって処理される
         spot.assign_attributes(update_attrs)
 
         # 中間テーブルの更新 (引数が渡された場合のみ)
@@ -132,6 +135,28 @@ module Mutations
         spot.menus          = Menu.where(id: menus) if args.key?(:menus)
         spot.areas          = Area.where(id: areas) if args.key?(:areas)
 
+        # 営業時間の処理
+        if opening_hours_attributes
+          opening_hours_attributes.each do |oh_attrs|
+            attrs = oh_attrs.to_h.symbolize_keys
+            if attrs[:id].present?
+              # 既存レコードを取得
+              record = spot.opening_hours.find_by(id: attrs[:id])
+              if attrs[:_destroy]
+                # _destroy フラグ付きなら削除
+                record&.destroy
+              else
+                # 存在すれば更新
+                record&.update!(attrs.except(:id, :_destroy))
+              end
+            else
+              # IDなしは新規作成
+              spot.opening_hours.create!(attrs.except(:_destroy))
+            end
+          end
+        end
+
+        # 全ての情報を一度に保存
         spot.save!
       end
 

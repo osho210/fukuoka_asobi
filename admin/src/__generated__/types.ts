@@ -1779,6 +1779,8 @@ export enum TrainLineEnum {
   HeichikuMojikoSen = 'heichiku_mojiko_sen',
   /** 平成筑豊鉄道田川線 */
   HeichikuTagawaSen = 'heichiku_tagawa_sen',
+  /** JR筑肥線 */
+  JrChikuhisen = 'jr_chikuhisen',
   /** JR筑豊本線 */
   JrChikuhoHonsen = 'jr_chikuho_honsen',
   /** JR後藤寺線 */
@@ -2194,6 +2196,7 @@ export type UpdateSpotInput = {
   menus?: InputMaybe<Array<Scalars['ID']['input']>>;
   minPeople?: InputMaybe<Scalars['Int']['input']>;
   nearestStation?: InputMaybe<Scalars['String']['input']>;
+  openingHours?: InputMaybe<Array<OpeningHourAttributes>>;
   openingHoursAttributes?: InputMaybe<Array<OpeningHourAttributes>>;
   outdoorSeating?: InputMaybe<Scalars['Boolean']['input']>;
   paidGarageParking?: InputMaybe<Scalars['Boolean']['input']>;

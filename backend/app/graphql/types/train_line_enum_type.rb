@@ -17,6 +17,7 @@ module Types
         value "jr_sanyou_shinkansen" ,"JR山陽新幹線"
         value "jr_hakataminami_sen" ,"JR博多南線"
         value "jr_sanyou_honsen" ,"JR山陽本線"
+        value "jr_chikuhisen","JR筑肥線"
 
         # 平成筑豊鉄道
         value "heichiku_tagawa_sen" ,"平成筑豊鉄道田川線"
