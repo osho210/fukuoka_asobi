@@ -30,6 +30,10 @@
 2. **モデル**
    - `Category`: カテゴリー情報を管理
      - 属性: id, name, created_at, updated_at
+   - `MenuCategory`: メニューのカテゴリー情報を管理
+     - 属性: id, name, created_at, updated_at
+   - `Menu`: メニュー情報を管理
+     - 属性: id, menu_name, price, description, menu_category_id, created_at, updated_at
    - `Place`: 場所情報を管理（将来実装）
      - 属性: id, name, description, address, category_id, created_at, updated_at
 

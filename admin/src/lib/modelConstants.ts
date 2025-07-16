@@ -206,9 +206,7 @@ export const modelFields: Record<string, ModelField[]> = {
     { name: 'generativeSummary', type: 'textarea' },
     { name: 'editorialSummary', type: 'textarea' },
     { name: 'priceRangeStartAmount', type: 'number' },
-    { name: 'priceRangeStartCurrency', type: 'text' },
     { name: 'priceRangeEndAmount', type: 'number' },
-    { name: 'priceRangeEndCurrency', type: 'text' },
     { name: 'pureServiceAreaBusiness', type: 'boolean' },
 
     // サービス提供情報
@@ -255,12 +253,7 @@ export const modelFields: Record<string, ModelField[]> = {
 
     // 関連データ
     // { name: 'menu', type: 'multirelation', labelField: 'menuName' },
-    { name: 'hashtag', type: 'multirelation' },
     // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
-    { name: 'spotAmbiances', type: 'multirelation' },
-    { name: 'categories', type: 'multirelation' },
-    { name: 'menu', type: 'multirelation' },
-    { name: 'areas', type: 'multirelation' },
     { name: 'district', type: 'relation' },
   ],
   news: [
@@ -459,9 +452,7 @@ export const fieldDisplayNames: Record<string, string> = {
   generativeSummary: 'AI要約',
   editorialSummary: '編集者要約',
   priceRangeStartAmount: '価格下限',
-  priceRangeStartCurrency: '通過単位',
   priceRangeEndAmount: '価格上限',
-  priceRangeEndCurrency: '通過単位',
   lastApiSyncAt: '最終API同期日時',
   apiSyncStatus: 'API同期ステータス',
 };

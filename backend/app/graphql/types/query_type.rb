@@ -58,6 +58,12 @@ module Types
       Category.all
     end
 
+    # メニューカテゴリー
+    # field :menu_categories, [Types::MenuCategoryType], null: false
+    # def menu_categories
+    #   MenuCategory.all
+    # end
+
     # 地区
     field :districts, [Types::DistrictType], null: false
     def districts

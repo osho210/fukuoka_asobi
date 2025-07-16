@@ -98,11 +98,9 @@ class Spot < ApplicationRecord
     {
       start_price: {
         amount: price_range_start_amount,
-        currency: price_range_start_currency
       },
       end_price: {
         amount: price_range_end_amount,
-        currency: price_range_end_currency
       }
     }
   end

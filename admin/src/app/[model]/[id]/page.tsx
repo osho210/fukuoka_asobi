@@ -109,9 +109,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'generativeSummary', type: 'textarea' },
     { name: 'editorialSummary', type: 'textarea' },
     { name: 'priceRangeStartAmount', type: 'number' },
-    { name: 'priceRangeStartCurrency', type: 'text' },
     { name: 'priceRangeEndAmount', type: 'number' },
-    { name: 'priceRangeEndCurrency', type: 'text' },
     { name: 'pureServiceAreaBusiness', type: 'boolean' },
 
     // サービス提供情報
@@ -257,9 +255,7 @@ const fieldDisplayNames: Record<string, string> = {
   generativeSummary: 'AI要約',
   editorialSummary: '編集者要約',
   priceRangeStartAmount: '価格下限',
-  priceRangeStartCurrency: '価格単位',
   priceRangeEndAmount: '価格上限',
-  priceRangeEndCurrency: '価格単位',
 };
 
 export default function ModelDetailPage() {
@@ -488,24 +484,15 @@ export default function ModelDetailPage() {
     // priceRange関連のフィールドをフラットな構造でinputに追加
     const {
       priceRangeStartAmount,
-      priceRangeStartCurrency,
       priceRangeEndAmount,
-      priceRangeEndCurrency
     } = formData;
 
     if (priceRangeStartAmount) {
       input.priceRangeStartAmount = Number(priceRangeStartAmount);
     }
-    if (priceRangeStartCurrency) {
-      input.priceRangeStartCurrency = priceRangeStartCurrency as string;
-    }
     if (priceRangeEndAmount) {
       input.priceRangeEndAmount = Number(priceRangeEndAmount);
     }
-    if (priceRangeEndCurrency) {
-      input.priceRangeEndCurrency = priceRangeEndCurrency as string;
-    }
-
     return input;
   };
 
@@ -808,9 +795,7 @@ export default function ModelDetailPage() {
                   // 価格帯
                   if (place.priceRange) {
                     updateField('priceRangeStartAmount', place.priceRange.startPrice?.amount || null);
-                    updateField('priceRangeStartCurrency', place.priceRange.startPrice?.currency || '');
                     updateField('priceRangeEndAmount', place.priceRange.endPrice?.amount || null);
-                    updateField('priceRangeEndCurrency', place.priceRange.endPrice?.currency || '');
                   }
 
                   // サービス提供情報 (boolean)

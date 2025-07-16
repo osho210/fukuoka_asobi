@@ -387,9 +387,7 @@ export type CreateSpotInput = {
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   priceLevel?: InputMaybe<Scalars['String']['input']>;
   priceRangeEndAmount?: InputMaybe<Scalars['Float']['input']>;
-  priceRangeEndCurrency?: InputMaybe<Scalars['String']['input']>;
   priceRangeStartAmount?: InputMaybe<Scalars['Float']['input']>;
-  priceRangeStartCurrency?: InputMaybe<Scalars['String']['input']>;
   primaryType?: InputMaybe<Scalars['String']['input']>;
   primaryTypeDisplayName?: InputMaybe<Scalars['String']['input']>;
   pureServiceAreaBusiness?: InputMaybe<Scalars['Boolean']['input']>;
@@ -902,6 +900,7 @@ export type Menu = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  menuCategory?: Maybe<Scalars['Int']['output']>;
   menuName: Scalars['String']['output'];
   price?: Maybe<Scalars['Float']['output']>;
   spots: Array<Spot>;
@@ -2244,9 +2243,7 @@ export type UpdateSpotInput = {
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   priceLevel?: InputMaybe<Scalars['String']['input']>;
   priceRangeEndAmount?: InputMaybe<Scalars['Float']['input']>;
-  priceRangeEndCurrency?: InputMaybe<Scalars['String']['input']>;
   priceRangeStartAmount?: InputMaybe<Scalars['Float']['input']>;
-  priceRangeStartCurrency?: InputMaybe<Scalars['String']['input']>;
   primaryType?: InputMaybe<Scalars['String']['input']>;
   primaryTypeDisplayName?: InputMaybe<Scalars['String']['input']>;
   pureServiceAreaBusiness?: InputMaybe<Scalars['Boolean']['input']>;

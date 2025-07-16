@@ -41,9 +41,7 @@ module Mutations
     argument :generative_summary,       String,  required: false
     argument :editorial_summary,        String,  required: false
     argument :price_range_start_amount, Float,   required: false
-    argument :price_range_start_currency, String, required: false
     argument :price_range_end_amount,   Float,   required: false
-    argument :price_range_end_currency, String,  required: false
     argument :review_summary_text,      String,  required: false
     argument :review_summary_flag_content_uri, String, required: false
     argument :review_summary_disclosure_text, String, required: false
@@ -119,7 +117,7 @@ module Mutations
         input[:price_level] = input[:price_level].downcase.gsub('price_level_', '')
       end
 
-     
+
       # 基本情報から連携項目を分離
       hashtags       = input.delete(:hashtags)
       purposes       = input.delete(:purposes)

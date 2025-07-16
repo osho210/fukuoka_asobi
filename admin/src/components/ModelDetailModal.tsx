@@ -9,7 +9,7 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
-import { Save, Trash2 } from 'lucide-react';
+import { Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
@@ -69,6 +69,16 @@ export function ModelDetailModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nearestStationLoading, setNearestStationLoading] = useState(false);
+
+  const handleFetchNearestStation = async () => {
+    setNearestStationLoading(true);
+    // TODO: Implement station search logic
+    console.log("Fetching nearest station...");
+    // Simulating an API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setNearestStationLoading(false);
+  };
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
   const fields = useMemo(() => modelFields[modelRoute] || [], [modelRoute]);
@@ -188,7 +198,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData, modelRoute, fields]);
 
-  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
+  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -261,6 +271,13 @@ export function ModelDetailModal({
             }
           } catch (e) {
             console.error(`日付変換エラー (${fieldName}):`, e);
+          }
+        }
+      } else if (field.type === 'number') {
+        if (value !== undefined && value !== null && value !== '') {
+          const num = parseFloat(value as string);
+          if (!isNaN(num)) {
+            input[fieldName] = num;
           }
         }
       } else {
@@ -678,6 +695,34 @@ export function ModelDetailModal({
                     error={error}
                     fullWidth
                   />
+                );
+              case 'number':
+                const isLongitudeField = fieldName === 'longitude';
+                return (
+                  <div key={fieldName} className={isLongitudeField ? "admin-flex admin-items-end admin-gap-2" : ""}>
+                    <TextField
+                      id={fieldName}
+                      name={fieldName}
+                      label={fieldLabel}
+                      type="number"
+                      value={value !== undefined && value !== null ? String(value) : ''}
+                      onChange={(e) => handleChange(fieldName, e.target.value ? Number(e.target.value) : null)}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                    />
+                    {isLongitudeField && modelRoute === 'spots' && (
+                      <Button
+                        type="button"
+                        onClick={handleFetchNearestStation}
+                        disabled={nearestStationLoading}
+                        className="admin-mb-1"
+                      >
+                        <Search className="h-4 w-4 admin-mr-1" />
+                        {nearestStationLoading ? '検索中...' : '最寄駅を検索'}
+                      </Button>
+                    )}
+                  </div>
                 );
               default:
                 return null;
