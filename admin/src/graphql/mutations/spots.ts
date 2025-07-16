@@ -66,17 +66,17 @@ export const CREATE_SPOT = gql`
         restroom
         goodForGroups
         goodForWatchingSports
-        # acceptsCreditCards
-        # acceptsDebitCards
-        # acceptsCashOnly
-        # acceptsNfc
-        # freeParkingLot
-        # paidParkingLot
-        # freeStreetParking
-        # paidStreetParking
-        # valetParking
-        # freeGarageParking
-        # paidGarageParking
+        acceptsCreditCards
+        acceptsDebitCards
+        acceptsCashOnly
+        acceptsNfc
+        freeParkingLot
+        paidParkingLot
+        freeStreetParking
+        paidStreetParking
+        valetParking
+        freeGarageParking
+        paidGarageParking
         openingHours {
           id
           dayOfWeek
@@ -178,17 +178,17 @@ export const UPDATE_SPOT = gql`
         restroom
         goodForGroups
         goodForWatchingSports
-        # acceptsCreditCards
-        # acceptsDebitCards
-        # acceptsCashOnly
-        # acceptsNfc
-        # freeParkingLot
-        # paidParkingLot
-        # freeStreetParking
-        # paidStreetParking
-        # valetParking
-        # freeGarageParking
-        # paidGarageParking
+        acceptsCreditCards
+        acceptsDebitCards
+        acceptsCashOnly
+        acceptsNfc
+        freeParkingLot
+        paidParkingLot
+        freeStreetParking
+        paidStreetParking
+        valetParking
+        freeGarageParking
+        paidGarageParking
         openingHours {
           id
           dayOfWeek

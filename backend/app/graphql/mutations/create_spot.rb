@@ -37,6 +37,18 @@ module Mutations
     argument :short_formatted_address,  String,  required: false
     argument :google_maps_uri,          String,  required: false
     argument :time_zone_id,             String,  required: false
+    argument :google_types,             [String], required: false
+    argument :generative_summary,       String,  required: false
+    argument :editorial_summary,        String,  required: false
+    argument :price_range_start_amount, Float,   required: false
+    argument :price_range_start_currency, String, required: false
+    argument :price_range_end_amount,   Float,   required: false
+    argument :price_range_end_currency, String,  required: false
+    argument :review_summary_text,      String,  required: false
+    argument :review_summary_flag_content_uri, String, required: false
+    argument :review_summary_disclosure_text, String, required: false
+    argument :review_summary_reviews_uri, String, required: false
+    argument :pure_service_area_business, Boolean, required: false
 
     # サービス提供情報
     argument :takeout,                  Boolean, required: false
@@ -104,9 +116,10 @@ module Mutations
         input[:business_status] = input[:business_status].downcase
       end
       if input[:price_level]
-        input[:price_level] = input[:price_level].downcase
+        input[:price_level] = input[:price_level].downcase.gsub('price_level_', '')
       end
 
+     
       # 基本情報から連携項目を分離
       hashtags       = input.delete(:hashtags)
       purposes       = input.delete(:purposes)

@@ -54,7 +54,19 @@ import {
 /**
  * モデル入力データの型定義
  */
-export type ModelInput = Record<string, string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[]>;
+interface MoneyInput {
+  amount: number | null;
+  currency: string | null;
+}
+
+interface PriceRangeInput {
+  startPrice: MoneyInput;
+  endPrice: MoneyInput;
+}
+
+export type ModelInput = {
+  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[] | PriceRangeInput;
+};
 
 // GraphQLクエリの型定義
 import { DocumentNode } from 'graphql';

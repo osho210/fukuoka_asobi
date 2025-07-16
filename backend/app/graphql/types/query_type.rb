@@ -262,7 +262,8 @@ module Types
 
 
       places.map do |place|
-        pp 'google_places_search_results'
+        # 各場所の詳細情報を取得して生成概要を取得
+        pp 'google_places_details_results'
         pp place
         pp '----------------'
 
@@ -328,7 +329,7 @@ module Types
       Rails.logger.error "Google Places search error: #{e.message}"
       raise GraphQL::ExecutionError, "検索中にエラーが発生しました: #{e.message}"
     end
-    
+
     # --------------------------------------------
     # HeartRails Express API関連
     # --------------------------------------------

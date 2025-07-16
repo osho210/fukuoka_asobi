@@ -79,6 +79,7 @@ export function ModelDetailModal({
   const { options: trainLineOptions } = useEnumOptions("TrainLineEnum");
   const { options: statusOptions } = useEnumOptions("StatusEnum");
   const { options: tripTypeOptions } = useEnumOptions("TripTypeEnum");
+  const { options: priceLevelOptions } = useEnumOptions("PriceLevelEnum");
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -101,7 +102,8 @@ export function ModelDetailModal({
     TrainLineTypeEnum: trainLineOptions,
     StatusEnum: statusOptions,
     TripTypeEnum: tripTypeOptions,
-  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions]);
+    PriceLevelEnum: priceLevelOptions,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成

@@ -71,6 +71,24 @@ const SEARCH_GOOGLE_PLACES = gql`
       restroom
       goodForGroups
       goodForWatchingSports
+      generativeSummary
+      editorialSummary
+      priceRange {
+        startPrice {
+          amount
+          currency
+        }
+        endPrice {
+          amount
+          currency
+        }
+      }
+      reviewSummary {
+        text
+        flagContentUri
+        disclosureText
+        reviewsUri
+      }
     }
   }
 `;
@@ -182,6 +200,24 @@ export interface GooglePlace {
   restroom?: boolean;
   goodForGroups?: boolean;
   goodForWatchingSports?: boolean;
+  generativeSummary?: string;
+  editorialSummary?: string;
+  priceRange?: {
+    startPrice?: {
+      amount?: number;
+      currency?: string;
+    };
+    endPrice?: {
+      amount?: number;
+      currency?: string;
+    };
+  };
+  reviewSummary?: {
+    text?: string;
+    flagContentUri?: string;
+    disclosureText?: string;
+    reviewsUri?: string;
+  };
 }
 
 export interface SyncedSpot {
@@ -372,8 +408,8 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
               <div
                 key={place.placeId}
                 className={`p-4 border rounded-lg cursor-pointer transition-colors ${selectedPlace?.placeId === place.placeId
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-200 hover:border-gray-300'
                   }`}
                 onClick={() => handlePlaceSelect(place)}
               >
@@ -395,8 +431,8 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
                       )}
                       {place.businessStatus && (
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${place.businessStatus === 'OPERATIONAL'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
                           }`}>
                           {place.businessStatus === 'OPERATIONAL' ? '営業中' : '休業中'}
                         </span>

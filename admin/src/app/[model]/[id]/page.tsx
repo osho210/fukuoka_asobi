@@ -99,13 +99,20 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'reviewRating', type: 'number' },
     { name: 'reviewCount', type: 'number' },
     { name: 'businessStatus', type: 'select' },
-    { name: 'priceLevel', type: 'select' },
+    { name: 'priceLevel', type: 'select',enumKey: 'PriceLevelEnum' },
     { name: 'primaryType', type: 'text' },
     { name: 'primaryTypeDisplayName', type: 'text' },
     { name: 'internationalPhoneNumber', type: 'text' },
     { name: 'shortFormattedAddress', type: 'text' },
     { name: 'googleMapsUri', type: 'text' },
-    { name: 'timeZoneId', type: 'text' },
+    { name: 'googleTypes', type: 'textarea' },
+    { name: 'generativeSummary', type: 'textarea' },
+    { name: 'editorialSummary', type: 'textarea' },
+    { name: 'priceRangeStartAmount', type: 'number' },
+    { name: 'priceRangeStartCurrency', type: 'text' },
+    { name: 'priceRangeEndAmount', type: 'number' },
+    { name: 'priceRangeEndCurrency', type: 'text' },
+    { name: 'pureServiceAreaBusiness', type: 'boolean' },
 
     // サービス提供情報
     { name: 'takeout', type: 'boolean' },
@@ -244,6 +251,15 @@ const fieldDisplayNames: Record<string, string> = {
   paidGarageParking: '有料ガレージ駐車あり',
   openingHours: '営業時間',
   nearestStation: '最寄駅',
+
+  // Google Places API 詳細フィールド
+  googleTypes: 'Google業種リスト',
+  generativeSummary: 'AI要約',
+  editorialSummary: '編集者要約',
+  priceRangeStartAmount: '価格下限',
+  priceRangeStartCurrency: '価格単位',
+  priceRangeEndAmount: '価格上限',
+  priceRangeEndCurrency: '価格単位',
 };
 
 export default function ModelDetailPage() {
@@ -276,6 +292,7 @@ export default function ModelDetailPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fields = modelFields[modelRoute] || [];
 
   useEffect(() => {
@@ -373,12 +390,19 @@ export default function ModelDetailPage() {
   };
 
   const prepareFormData = (): ModelInput => {
+    if (!formData) return {};
+
     const input: ModelInput = {};
 
     // フォームデータからGraphQLミューテーション用のデータを作成
     fields.forEach((field) => {
       const fieldName = field.name;
       const value = formData?.[fieldName];
+
+      // priceRange関連のフィールドは別途処理するためスキップ
+      if (fieldName.startsWith('priceRange')) {
+        return;
+      }
 
       if (fieldName === 'openingHours' && Array.isArray(value)) {
         input.openingHoursAttributes = value.map(hour => {
@@ -409,29 +433,78 @@ export default function ModelDetailPage() {
         // 複数関連フィールドの場合はIDの配列を設定
         const idFieldName = `${fieldName.replace(/s$/, '')}s`;
         // 配列の場合は、各要素を適切に処理して数値の配列に変換
-        const ids = value.map(item => {
-          if (typeof item === 'object' && item !== null && 'id' in item) {
-            // RelationItemの場合はidプロパティを数値に変換
-            return Number((item as RelationItem).id);
-          } else if (typeof item === 'string') {
-            // 文字列の場合は数値に変換
-            return Number(item);
-          } else if (typeof item === 'number') {
-            // 数値の場合はそのまま
-            return item;
-          }
-          // その他の場合は0（エラー防止）
-          return 0;
-        });
+        const ids = value
+          .map(item => {
+            if (typeof item === 'object' && item !== null && 'id' in item && typeof item.id === 'string') {
+              return parseInt(item.id, 10);
+            }
+            if (typeof item === 'string') {
+              return parseInt(item, 10);
+            }
+            if (typeof item === 'number') {
+              return item;
+            }
+            return null; // 不正な値はnullにする
+          })
+          .filter((id): id is number => id !== null); // nullを除外
 
         input[idFieldName] = ids;
       } else {
-        // 通常のフィールドの場合はそのまま設定
+        // 通常のフィールド
         if (value !== undefined && value !== null) {
-          input[fieldName] = value as string | number | boolean;
+          switch (field.type) {
+            case 'number':
+              // 空文字列の場合はnull、それ以外は数値に変換
+              input[fieldName] = value === '' ? null : Number(value);
+              break;
+            case 'datetime':
+              // 空文字列の場合はnull、それ以外は文字列として扱う
+              input[fieldName] = value === '' ? null : (typeof value === 'object' && value !== null ? JSON.stringify(value) : value);
+              break;
+            case 'boolean':
+              input[fieldName] = Boolean(value);
+              break;
+            case 'text':
+            case 'textarea':
+            case 'select':
+              // 文字列に変換
+              if (typeof value !== 'string') {
+                input[fieldName] = String(value);
+              } else {
+                input[fieldName] = value;
+              }
+              break;
+            default:
+              // その他の型は、そのまま代入を試みる（relation, multirelationなどはここで処理されない）
+              if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null) {
+                input[fieldName] = value;
+              }
+              break;
+          }
         }
       }
     });
+
+    // priceRange関連のフィールドをフラットな構造でinputに追加
+    const {
+      priceRangeStartAmount,
+      priceRangeStartCurrency,
+      priceRangeEndAmount,
+      priceRangeEndCurrency
+    } = formData;
+
+    if (priceRangeStartAmount) {
+      input.priceRangeStartAmount = Number(priceRangeStartAmount);
+    }
+    if (priceRangeStartCurrency) {
+      input.priceRangeStartCurrency = priceRangeStartCurrency as string;
+    }
+    if (priceRangeEndAmount) {
+      input.priceRangeEndAmount = Number(priceRangeEndAmount);
+    }
+    if (priceRangeEndCurrency) {
+      input.priceRangeEndCurrency = priceRangeEndCurrency as string;
+    }
 
     return input;
   };
@@ -730,6 +803,15 @@ export default function ModelDetailPage() {
                   updateField('internationalPhoneNumber', place.internationalPhoneNumber || '');
                   updateField('shortFormattedAddress', place.shortFormattedAddress || '');
                   updateField('googleMapsUri', place.googleMapsUri || '');
+                  updateField('editorialSummary', place.editorialSummary || '');
+
+                  // 価格帯
+                  if (place.priceRange) {
+                    updateField('priceRangeStartAmount', place.priceRange.startPrice?.amount || null);
+                    updateField('priceRangeStartCurrency', place.priceRange.startPrice?.currency || '');
+                    updateField('priceRangeEndAmount', place.priceRange.endPrice?.amount || null);
+                    updateField('priceRangeEndCurrency', place.priceRange.endPrice?.currency || '');
+                  }
 
                   // サービス提供情報 (boolean)
                   updateField('takeout', place.takeout || false);

@@ -61,17 +61,37 @@ export const GET_SPOTS = gql`
         restroom
         goodForGroups
         goodForWatchingSports
-        # acceptsCreditCards
-        # acceptsDebitCards
-        # acceptsCashOnly
-        # acceptsNfc
-        # freeParkingLot
-        # paidParkingLot
-        # freeStreetParking
-        # paidStreetParking
-        # valetParking
-        # freeGarageParking
-        # paidGarageParking
+        acceptsCreditCards
+        acceptsDebitCards
+        acceptsCashOnly
+        acceptsNfc
+        freeParkingLot
+        paidParkingLot
+        freeStreetParking
+        paidStreetParking
+        valetParking
+        freeGarageParking
+        paidGarageParking
+        googleTypes,
+        adrFormatAddress,
+        generativeSummary,
+        editorialSummary,
+        priceRange {
+          startPrice {
+            amount
+            currency
+          }
+          endPrice {
+            amount
+            currency
+          }
+        }
+        reviewSummary {
+          text
+          flagContentUri
+          disclosureText
+          reviewsUri
+        }
         openingHours {
           id
           dayOfWeek

@@ -66,7 +66,18 @@ module Types
     field :price_range, Types::PriceRangeType, null: true
     field :review_summary, Types::ReviewSummaryType, null: true
     field :payment_options, Types::PaymentOptionsType, null: true
+    field :accepts_credit_cards, Boolean, null: true
+    field :accepts_debit_cards, Boolean, null: true
+    field :accepts_cash_only, Boolean, null: true
+    field :accepts_nfc, Boolean, null: true
     field :parking_options, Types::ParkingOptionsType, null: true
+    field :free_parking_lot, Boolean, null: true
+    field :paid_parking_lot, Boolean, null: true
+    field :free_street_parking, Boolean, null: true
+    field :paid_street_parking, Boolean, null: true
+    field :valet_parking, Boolean, null: true
+    field :free_garage_parking, Boolean, null: true
+    field :paid_garage_parking, Boolean, null: true
     field :spot_photos, [Types::SpotPhotoType], null: true
     field :accessibility_options, [Types::AccessibilityOptionType], null: true
 
@@ -120,8 +131,52 @@ module Types
       object.payment_options
     end
 
+    def accepts_credit_cards
+      object.payment_options&.[]('accepts_credit_cards')
+    end
+
+    def accepts_debit_cards
+      object.payment_options&.[]('accepts_debit_cards')
+    end
+
+    def accepts_cash_only
+      object.payment_options&.[]('accepts_cash_only')
+    end
+
+    def accepts_nfc
+      object.payment_options&.[]('accepts_nfc')
+    end
+
     def parking_options
       object.parking_options
+    end
+
+    def free_parking_lot
+      object.parking_options&.[]('free_parking_lot')
+    end
+
+    def paid_parking_lot
+      object.parking_options&.[]('paid_parking_lot')
+    end
+
+    def free_street_parking
+      object.parking_options&.[]('free_street_parking')
+    end
+
+    def paid_street_parking
+      object.parking_options&.[]('paid_street_parking')
+    end
+
+    def valet_parking
+      object.parking_options&.[]('valet_parking')
+    end
+
+    def free_garage_parking
+      object.parking_options&.[]('free_garage_parking')
+    end
+
+    def paid_garage_parking
+      object.parking_options&.[]('paid_garage_parking')
     end
 
     def spot_photos
