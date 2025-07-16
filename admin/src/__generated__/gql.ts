@@ -75,6 +75,7 @@ type Documents = {
     "\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n": typeof types.GetEventCategoriesDocument,
     "\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetEventsDocument,
     "\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n": typeof types.GetHashtagsDocument,
+    "\n  query GetMenuCategories {\n    menuCategories {\n      id\n      name\n    }\n  }\n": typeof types.GetMenuCategoriesDocument,
     "\n  query GetMenus {\n    menus {\n      id\n      menuName\n      price\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetMenusDocument,
     "\n  query GetNearestStation($latitude: Float!, $longitude: Float!) {\n    nearestStation(latitude: $latitude, longitude: $longitude)\n  }\n": typeof types.GetNearestStationDocument,
     "\n  query GetNews {\n    news {\n      id\n      title\n      body\n      publishedAt\n      status\n      imageUrl\n      category {\n        id\n        name\n      }\n      author {\n        id\n        username\n        profileImageUrl\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetNewsDocument,
@@ -148,6 +149,7 @@ const documents: Documents = {
     "\n    query GetEventCategories {\n        eventCategories {\n            id\n            name\n            description\n            createdAt\n            updatedAt\n        }\n    }\n": types.GetEventCategoriesDocument,
     "\n  query GetEvents {\n    events {\n      id\n      title\n      description\n      startDatetime\n      endDatetime\n      location\n      isOnline\n      recurringRule\n      eventCategoryId\n      price\n      organizer\n      contactEmail\n      contactPhone\n      capacity\n      status\n      isOnline\n      sourceUrl\n      bannerImage\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetEventsDocument,
     "\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n": types.GetHashtagsDocument,
+    "\n  query GetMenuCategories {\n    menuCategories {\n      id\n      name\n    }\n  }\n": types.GetMenuCategoriesDocument,
     "\n  query GetMenus {\n    menus {\n      id\n      menuName\n      price\n      description\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetMenusDocument,
     "\n  query GetNearestStation($latitude: Float!, $longitude: Float!) {\n    nearestStation(latitude: $latitude, longitude: $longitude)\n  }\n": types.GetNearestStationDocument,
     "\n  query GetNews {\n    news {\n      id\n      title\n      body\n      publishedAt\n      status\n      imageUrl\n      category {\n        id\n        name\n      }\n      author {\n        id\n        username\n        profileImageUrl\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetNewsDocument,
@@ -418,6 +420,10 @@ export function gql(source: "\n  query GetEvents {\n    events {\n      id\n    
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n"): (typeof documents)["\n  query GetHashtags {\n    hashtags {\n      id\n      hashtagName\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMenuCategories {\n    menuCategories {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetMenuCategories {\n    menuCategories {\n      id\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

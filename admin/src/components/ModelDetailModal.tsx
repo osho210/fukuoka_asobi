@@ -21,6 +21,7 @@ import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
 import { GET_PURPOSES } from '@/graphql/queries/getPurposes';
 import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
+import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
 
@@ -99,6 +100,7 @@ export function ModelDetailModal({
   const { data: purposesData } = useQuery(GET_PURPOSES);
   const { data: spotAmbiancesData } = useQuery(GET_SPOT_AMBIANCES);
   const { data: menusData } = useQuery(GET_MENUS);
+  const { data: menuCategoriesData } = useQuery(GET_MENU_CATEGORIES);
   const { data: eventCategoriesData } = useQuery(GET_EVENT_CATEGORIES);
 
   // useMemo でマッピングをキャッシュ
@@ -146,6 +148,10 @@ export function ModelDetailModal({
       value: menu.id,
       label: menu.menuName,
     })) ?? [],
+    menuCategory: menuCategoriesData?.menuCategories.map((category: { id: string, name: string }) => ({
+      value: category.id,
+      label: category.name,
+    })) ?? [],
     eventCategory: eventCategoriesData?.eventCategories.map((eventCategory: { id: string, name: string }) => ({
       value: eventCategory.id,
       label: eventCategory.name,
@@ -155,7 +161,7 @@ export function ModelDetailModal({
       value: eventCategory.id,
       label: eventCategory.name,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, eventCategoriesData]);
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, menuCategoriesData, eventCategoriesData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {

@@ -150,6 +150,9 @@ export const modelFields: Record<string, ModelField[]> = {
   ],
   menus: [
     { name: 'menuName', type: 'text', required: true },
+    { name: 'price', type: 'number' },
+    { name: 'description', type: 'textarea' },
+    { name: 'menuCategory', type: 'relation', required: false },
   ],
   purposes: [
     { name: 'purposeName', type: 'text', required: true },
@@ -381,6 +384,7 @@ export const fieldDisplayNames: Record<string, string> = {
   spotAmbiances: '雰囲気',
   menus: 'メニュー',
   purposes: '目的',
+  menuCategory: 'メニューカテゴリー',
   eventCategoryId: 'イベントカテゴリー',
   isOnline: 'オンラインイベント',
   sourceUrl: '外部リンク',
