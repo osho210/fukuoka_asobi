@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_124057) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -155,12 +155,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_152644) do
     t.index ["instagram_embed_name"], name: "index_instagram_embeds_on_instagram_embed_name", unique: true
   end
 
+  create_table "menu_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_menu_categories_on_name", unique: true
+  end
+
   create_table "menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "menu_name", null: false
     t.decimal "price", precision: 10, scale: 2
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "menu_category_id", null: false
+    t.index ["menu_category_id"], name: "index_menus_on_menu_category_id"
     t.index ["menu_name"], name: "index_menus_on_menu_name"
   end
 
