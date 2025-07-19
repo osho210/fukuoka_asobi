@@ -159,10 +159,10 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
 
     // 関連データ
     // { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
-    { name: 'hashtag', type: 'multirelation', modelName: 'Hashtag', labelField: 'hashtagName' },
+    { name: 'hashtag', type: 'multirelation', modelName: 'Hashtags', labelField: 'hashtagName' },
     // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
-    { name: 'spotAmbiances', type: 'multirelation', modelName: 'SpotAmbiance', labelField: 'ambianceName' },
-    { name: 'categories', type: 'multirelation', modelName: 'Categorie', labelField: 'name' },
+    { name: 'spotAmbiances', type: 'multirelation', modelName: 'SpotAmbiances', labelField: 'ambianceName' },
+    { name: 'categories', type: 'multirelation', modelName: 'Categories', labelField: 'name' },
     { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
     { name: 'areas', type: 'multirelation', modelName: 'Area', labelField: 'areaName' },
     { name: 'district', type: 'relation', modelName: 'District', labelField: 'districtName' },

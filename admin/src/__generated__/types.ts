@@ -1516,6 +1516,11 @@ export type QueryIsFavoriteArgs = {
 };
 
 
+export type QueryMenusArgs = {
+  menuCategoryId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
 export type QueryNearestStationArgs = {
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
@@ -2998,7 +3003,7 @@ export type GetMenuCategoriesQuery = { __typename?: 'Query', menuCategories: Arr
 export type GetMenusQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, createdAt: any, updatedAt: any }> };
+export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, createdAt: any, updatedAt: any, menuCategory?: { __typename?: 'MenuCategory', id: string, name: string } | null }> };
 
 export type GetNearestStationQueryVariables = Exact<{
   latitude: Scalars['Float']['input'];

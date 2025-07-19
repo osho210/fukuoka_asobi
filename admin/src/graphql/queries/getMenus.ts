@@ -9,6 +9,10 @@ export const GET_MENUS = gql`
       menuName
       price
       description
+      menuCategory {
+        id
+        name
+      }
       createdAt
       updatedAt
     }

@@ -18,6 +18,8 @@ import { GET_EVENTS } from '@/graphql/queries/getEvents';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { GET_NEWS } from '@/graphql/queries/getNews';
 import { GET_STATIONS } from '@/graphql/queries/getStations';
+import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
+import { FilterField } from './modelConstants';
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -88,6 +90,7 @@ const listQueries: Record<string, DocumentNode> = {
   eventCategories: GET_EVENT_CATEGORIES,
   news: GET_NEWS,
   stations: GET_STATIONS,
+  menuCategories: GET_MENU_CATEGORIES,
 };
 
 // ミューテーションマッピング
@@ -173,6 +176,43 @@ export const fetchModelList = async (
     console.error(`モデル ${modelRoute} のリスト取得に失敗しました:`, error);
     throw error;
   }
+};
+
+/**
+ * フィルター用の関連モデルの選択肢を取得
+ * @param filterFields フィルターフィールド定義の配列
+ * @returns モデル名をキーとした選択肢のオブジェクト
+ */
+export const fetchRelationOptions = async (
+  filterFields: FilterField[]
+): Promise<Record<string, { value: string; label: string }[]>> => {
+  const options: Record<string, { value: string; label: string }[]> = {};
+
+  for (const field of filterFields) {
+    const query = listQueries[field.model];
+    if (!query) {
+      console.warn(`モデル ${field.model} のリストクエリが見つかりません`);
+      continue;
+    }
+
+    try {
+      const response = await client.query({
+        query,
+        fetchPolicy: 'cache-first',
+      });
+
+      if (response.data && response.data[field.model]) {
+        options[field.model] = response.data[field.model].map((item: any) => ({
+          value: item.id,
+          label: item[field.labelField],
+        }));
+      }
+    } catch (error) {
+      console.error(`モデル ${field.model} の選択肢取得に失敗しました:`, error);
+    }
+  }
+
+  return options;
 };
 /**
  * モデルを作成するためのGraphQLミューテーションを実行

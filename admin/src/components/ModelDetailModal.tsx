@@ -23,7 +23,7 @@ import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
-import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
+import { modelDisplayNames, fieldDisplayNames, modelConfigs } from '@/lib/modelConstants';
 
 // 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
 interface RelationItem {
@@ -71,6 +71,7 @@ export function ModelDetailModal({
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [nearestStationLoading, setNearestStationLoading] = useState(false);
+  const [selectedMenuCategories, setSelectedMenuCategories] = useState<RelationItem[]>([]);
 
   const handleFetchNearestStation = async () => {
     setNearestStationLoading(true);
@@ -82,7 +83,7 @@ export function ModelDetailModal({
   };
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
-  const fields = useMemo(() => modelFields[modelRoute] || [], [modelRoute]);
+  const fields = useMemo(() => modelConfigs[modelRoute]?.fields || [], [modelRoute]);
 
   // Enumデータの取得
   const { options: spotTypeOptions } = useEnumOptions("SpotTypeEnum");
@@ -662,32 +663,55 @@ export function ModelDetailModal({
                     fullWidth
                   />
                 );
-              case 'multiSelect':
-                const multiRelationName = fieldName.endsWith('s') ? fieldName.slice(0, -1) : fieldName;
+              case 'multiSelect': {
+                const getSingularName = (name: string) => {
+                  if (name.endsWith('ies')) {
+                    return name.slice(0, -3) + 'y';
+                  }
+                  if (name.endsWith('s')) {
+                    return name.slice(0, -1);
+                  }
+                  return name;
+                }
+                const multiRelationName = getSingularName(fieldName);
+                const isMenuField = fieldName === 'menus';
 
                 return (
-                  <MultiSelect
-                    key={fieldName}
-                    id={fieldName}
-                    label={fieldLabel}
-                    // ここではデータ一覧を取得するためにマスタ取得用のモデル名を渡す必要がある
-                    // 例えばspotAmbianceのような
-                    modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
-                    labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
-                      multiRelationName === 'area' ? 'areaName' :
-                        multiRelationName === 'spotAmbiance' ? 'ambianceName' :
-                          multiRelationName === 'purpose' ? 'purposeName' :
-                            multiRelationName === 'menu' ? 'menuName' : 'name'}
-                    selectedValues={(value as RelationItem[]) || []}
-                    onChange={(values: RelationItem[]) => {
-                      // graphqlで更新する再はfield名で更新する必要がある
-                      handleChange(fieldName, values);
-                    }}
-                    required={field.required}
-                    error={error}
-                    fullWidth
-                  />
+                  <div key={fieldName} className="admin-col-span-2">
+                    {isMenuField && (
+                      <div className="admin-mb-4">
+                        <MultiSelect
+                          id="menu-category-filter"
+                          label="メニューカテゴリーで絞り込む"
+                          modelName="menuCategories"
+                          labelField="name"
+                          selectedValues={selectedMenuCategories}
+                          onChange={(values) => setSelectedMenuCategories(values)}
+                          fullWidth
+                        />
+                      </div>
+                    )}
+                    <MultiSelect
+                      id={fieldName}
+                      label={fieldLabel}
+                      modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
+                      labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
+                        multiRelationName === 'area' ? 'areaName' :
+                          multiRelationName === 'spotAmbiance' ? 'ambianceName' :
+                            multiRelationName === 'purpose' ? 'purposeName' :
+                              multiRelationName === 'menu' ? 'menuName' : 'name'}
+                      selectedValues={(value as RelationItem[]) || []}
+                      onChange={(values: RelationItem[]) => {
+                        handleChange(fieldName, values);
+                      }}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                      filter={isMenuField && selectedMenuCategories.length > 0 ? { field: 'menuCategory.id', values: selectedMenuCategories.map(c => c.id) } : undefined}
+                    />
+                  </div>
                 );
+              }
               case 'datetime':
                 return (
                   <DateTimePicker
