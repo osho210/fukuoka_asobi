@@ -6,7 +6,7 @@ import { formatDateTimeToJapanese } from '@/lib/utils';
 // モデルデータの型定義
 export interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null | undefined;
+  [key: string]: unknown;
 }
 
 // 各モデルの列定義
@@ -33,6 +33,7 @@ export interface ModelField {
   enumKey?: string;
   childModel?: string;
   fields?: ModelField[];
+  relationModel?: string;
 }
 
 // モデルごとの設定をまとめる型
@@ -112,9 +113,6 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'description', type: 'textarea' },
       { name: 'menuCategory', type: 'relation', required: false },
     ],
-    filters: [
-      { name: 'menuCategory', label: 'メニューカテゴリー', model: 'menuCategories', labelField: 'name' },
-    ],
   },
   purposes: {
     columns: [
@@ -156,26 +154,26 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'phoneNumber', type: 'text' },
       { name: 'website', type: 'text' },
       { name: 'catchphrase', type: 'text' },
-      { name: 'nearestStation', type: 'text' },
+      { name: 'nearestStation', type: 'text', required: true },
       { name: 'imageUrl', type: 'text' },
-      { name: 'minPeople', type: 'number' },
-      { name: 'maxPeople', type: 'number' },
+      { name: 'minPeople', type: 'number', required: true },
+      { name: 'maxPeople', type: 'number', required: true },
       { name: 'recommendedFor1', type: 'text' },
       { name: 'recommendedFor2', type: 'text' },
-      { name: 'instagramUrl', type: 'text' },
+      { name: 'instagramUrl', type: 'text', required: true },
       //  TODO: ここも中間テーブルの回収が必要
       // { name: 'instagramEmbeds', type: 'text' },
       { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
       { name: 'budgetRange', type: 'select', required: true, enumKey: 'BudgetRangeEnum' },
-      { name: 'themes', type: 'multiSelect', required: false }, //TODO: マスタ登録必要 (CRUD)
-      { name: 'categories', type: 'multiSelect', required: false },
-      { name: 'hashtags', type: 'multiSelect', required: false },
-      { name: 'spotAmbiances', type: 'multiSelect', required: false },
-      { name: 'purposes', type: 'multiSelect', required: false },
-      { name: 'menus', type: 'multiSelect', required: false },
-      { name: 'areas', type: 'multiSelect', required: false },
-      { name: 'isRainyOk', type: 'boolean' },
-      { name: 'isClosed', type: 'boolean' },
+      { name: 'themes', type: 'multiSelect', required: false, relationModel: 'themes' }, //TODO: マスタ登録必要 (CRUD)
+      { name: 'categories', type: 'multiSelect', required: true, relationModel: 'categories' },
+      { name: 'hashtags', type: 'multiSelect', required: true, relationModel: 'hashtags' },
+      { name: 'spotAmbiances', type: 'multiSelect', required: true, relationModel: 'spot_ambiances' },
+      { name: 'purposes', type: 'multiSelect', required: true, relationModel: 'purposes' },
+      { name: 'menus', type: 'multiSelect', required: true, relationModel: 'menus' },
+      { name: 'areas', type: 'multiSelect', required: true, relationModel: 'areas' },
+      { name: 'isRainyOk', type: 'boolean', required: true },
+      { name: 'isClosed', type: 'boolean', required: true },
       { name: 'parkingAvailable', type: 'boolean' },
       // Google Places API関連フィールド
       { name: 'googlePlaceId', type: 'text' },
@@ -372,10 +370,13 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { header: '有効', accessorKey: 'active', sortable: true },
     ],
     fields: [
-      { name: 'name', type: 'text', required: true },
-      { name: 'trainLine', type: 'select', required: true, enumKey: 'TrainLineTypeEnum' },
+      { name: 'menuName', type: 'text', required: true },
+      { name: 'price', type: 'number' },
       { name: 'description', type: 'textarea' },
-      { name: 'active', type: 'boolean' },
+      { name: 'menuCategory', type: 'relation', required: false },
+    ],
+    filters: [
+      { name: 'menuCategory', label: 'メニューカテゴリー', model: 'menuCategories', labelField: 'name' },
     ],
   },
   menuCategories: {

@@ -76,6 +76,8 @@ export const GET_SPOTS = gql`
         adrFormatAddress,
         generativeSummary,
         editorialSummary,
+        priceRangeStartAmount,
+        priceRangeEndAmount,
         priceRange {
           startPrice {
             amount

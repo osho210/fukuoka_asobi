@@ -26,7 +26,7 @@ module Types
     field :google_place_id, String, null: true
     field :latitude,        Float,  null: true
     field :longitude,       Float,  null: true
-    field :business_status, String, null: true
+    field :business_status, Types::BusinessStatusEnumType, null: true
     field :price_level,     String, null: true
     field :last_api_sync_at, GraphQL::Types::ISO8601DateTime, null: true
     field :api_sync_status, String, null: true
@@ -78,6 +78,8 @@ module Types
     field :valet_parking, Boolean, null: true
     field :free_garage_parking, Boolean, null: true
     field :paid_garage_parking, Boolean, null: true
+    field :price_range_start_amount, Float, null: true
+    field :price_range_end_amount, Float, null: true
     field :spot_photos, [Types::SpotPhotoType], null: true
     field :accessibility_options, [Types::AccessibilityOptionType], null: true
 

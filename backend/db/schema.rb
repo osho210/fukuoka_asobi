@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_16_124057) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_19_075129) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -198,7 +198,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_124057) do
     t.text "google_opening_hours_data"
     t.string "opening_hours_type", default: "regular"
     t.index ["opening_hours_type"], name: "index_opening_hours_on_opening_hours_type"
-    t.index ["spot_id", "day_of_week"], name: "index_opening_hours_on_spot_id_and_day_of_week", unique: true
+    t.index ["spot_id", "day_of_week", "open_time"], name: "index_opening_hours_on_spot_day_and_open_time", unique: true
     t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
   end
 

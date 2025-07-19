@@ -91,15 +91,20 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'isRainyOk', type: 'boolean' },
     { name: 'budgetRange', type: 'select', required: true },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
+    { name: 'minPeople', type: 'number', required: true },
+    { name: 'maxPeople', type: 'number', required: true },
+    { name: 'recommendedFor1', type: 'text' },
+    { name: 'recommendedFor2', type: 'text' },
+    { name: 'instagramUrl', type: 'text', required: true },
 
     // Google Places API関連フィールド
-    { name: 'googlePlaceId', type: 'text' },
-    { name: 'latitude', type: 'number' },
-    { name: 'longitude', type: 'number' },
+    { name: 'googlePlaceId', type: 'text', required: true },
+    { name: 'latitude', type: 'number', required: true },
+    { name: 'longitude', type: 'number', required: true },
     { name: 'reviewRating', type: 'number' },
     { name: 'reviewCount', type: 'number' },
     { name: 'businessStatus', type: 'select' },
-    { name: 'priceLevel', type: 'select',enumKey: 'PriceLevelEnum' },
+    { name: 'priceLevel', type: 'select', enumKey: 'PriceLevelEnum' },
     { name: 'primaryType', type: 'text' },
     { name: 'primaryTypeDisplayName', type: 'text' },
     { name: 'internationalPhoneNumber', type: 'text' },
@@ -158,14 +163,13 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'nearestStation', type: 'text' },
 
     // 関連データ
-    // { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
-    { name: 'hashtag', type: 'multirelation', modelName: 'Hashtags', labelField: 'hashtagName' },
-    // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
-    { name: 'spotAmbiances', type: 'multirelation', modelName: 'SpotAmbiances', labelField: 'ambianceName' },
-    { name: 'categories', type: 'multirelation', modelName: 'Categories', labelField: 'name' },
+    { name: 'hashtag', type: 'multirelation', modelName: 'hashtags', labelField: 'hashtagName', required: true },
+    { name: 'purpose', type: 'multirelation', modelName: 'Purpose', labelField: 'purposeName', required: true },
+    { name: 'spotAmbiances', type: 'multirelation', modelName: 'spotAmbiances', labelField: 'ambianceName', required: true },
+    { name: 'categories', type: 'multirelation', modelName: 'categories', labelField: 'name', required: true },
     { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
-    { name: 'areas', type: 'multirelation', modelName: 'Area', labelField: 'areaName' },
-    { name: 'district', type: 'relation', modelName: 'District', labelField: 'districtName' },
+    { name: 'areas', type: 'multirelation', modelName: 'Area', labelField: 'areaName', required: true },
+    { name: 'district', type: 'relation', modelName: 'District', labelField: 'districtName', required: true },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },
@@ -269,14 +273,15 @@ export default function ModelDetailPage() {
   const { options: priceLevelOptions } = useEnumOptions('PriceLevelEnum');
   const { options: spotTypeOptions } = useEnumOptions('SpotTypeEnum');
   const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
-  const { options: statusOptions } = useEnumOptions("StatusEnum");
+  // const { options: statusOptions } = useEnumOptions("StatusEnum");
+  const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
 
   const [getNearestStation, { loading: nearestStationLoading, error: nearestStationError }] = useLazyQuery<GetNearestStationQuery, GetNearestStationQueryVariables>(GET_NEAREST_STATION);
 
   // 選択肢の定義
   const selectOptions: Record<string, { value: string; label: string }[]> = {
     budgetRange: budgetOptions,
-    businessStatus: statusOptions,
+    businessStatus: businessStatusOptions,
     priceLevel: priceLevelOptions,
     spotType: spotTypeOptions,
   };
@@ -570,6 +575,154 @@ export default function ModelDetailPage() {
 
   return (
     <div>
+      {/* Google Places検索（スポットの場合のみ表示） */}
+      {modelRoute === 'spots' && (
+        <div className="admin-mt-6">
+          <GooglePlacesSearch
+            spotId={isNew ? undefined : id}
+            onPlaceSelect={(place: GooglePlace) => {
+              // 新規作成時・編集時ともに、選択した場所の情報をフォームに自動入力
+              if (formData) {
+                setFormData(prev => {
+                  if (!prev) return null;
+                  const newFormData = { ...prev };
+
+                  // Google Place APIから取得した値でフォームを更新
+                  // 値が存在する場合のみ更新する
+                  const updateField = <K extends keyof ModelData>(key: K, value: ModelData[K]) => {
+                    if (value !== undefined && value !== null) {
+                      newFormData[key] = value;
+                    }
+                  };
+
+                  updateField('spotName', place.name || '');
+                  updateField('address', place.formattedAddress || '');
+                  updateField('phoneNumber', place.nationalPhoneNumber || '');
+                  updateField('website', place.websiteUri || '');
+                  updateField('googlePlaceId', place.placeId || '');
+                  updateField('latitude', place.location?.latitude || null);
+                  updateField('longitude', place.location?.longitude || null);
+                  updateField('reviewRating', place.rating || null);
+                  updateField('reviewCount', place.userRatingCount || null);
+                  updateField('businessStatus', place.businessStatus || '');
+                  updateField('priceLevel', place.priceLevel || '');
+                  updateField('primaryType', place.primaryType || '');
+                  updateField('primaryTypeDisplayName', place.primaryTypeDisplayName || '');
+                  updateField('internationalPhoneNumber', place.internationalPhoneNumber || '');
+                  updateField('shortFormattedAddress', place.shortFormattedAddress || '');
+                  updateField('googleMapsUri', place.googleMapsUri || '');
+                  updateField('editorialSummary', place.editorialSummary || '');
+
+                  // 価格帯
+                  if (place.priceRange) {
+                    updateField('priceRangeStartAmount', place.priceRange.startPrice?.amount || null);
+                    updateField('priceRangeEndAmount', place.priceRange.endPrice?.amount || null);
+                  }
+
+                  // サービス提供情報 (boolean)
+                  updateField('takeout', place.takeout || false);
+                  updateField('delivery', place.delivery || false);
+                  updateField('dineIn', place.dineIn || false);
+                  updateField('reservable', place.reservable || false);
+                  updateField('servesBreakfast', place.servesBreakfast || false);
+                  updateField('servesLunch', place.servesLunch || false);
+                  updateField('servesDinner', place.servesDinner || false);
+                  updateField('servesBrunch', place.servesBrunch || false);
+                  updateField('servesBeer', place.servesBeer || false);
+                  updateField('servesWine', place.servesWine || false);
+                  updateField('servesCocktails', place.servesCocktails || false);
+                  updateField('servesDessert', place.servesDessert || false);
+                  updateField('servesCoffee', place.servesCoffee || false);
+                  updateField('outdoorSeating', place.outdoorSeating || false);
+                  updateField('liveMusic', place.liveMusic || false);
+                  updateField('menuForChildren', place.menuForChildren || false);
+                  updateField('goodForChildren', place.goodForChildren || false);
+                  updateField('allowsDogs', place.allowsDogs || false);
+                  updateField('restroom', place.restroom || false);
+                  updateField('goodForGroups', place.goodForGroups || false);
+                  updateField('goodForWatchingSports', place.goodForWatchingSports || false);
+
+                  // Payment Options
+                  updateField('acceptsCreditCards', place.paymentOptions?.acceptsCreditCards || false);
+                  updateField('acceptsDebitCards', place.paymentOptions?.acceptsDebitCards || false);
+                  updateField('acceptsCashOnly', place.paymentOptions?.acceptsCashOnly || false);
+                  updateField('acceptsNfc', place.paymentOptions?.acceptsNfc || false);
+
+                  // Parking Options
+                  updateField('freeParkingLot', place.parkingOptions?.freeParkingLot || false);
+                  updateField('paidParkingLot', place.parkingOptions?.paidParkingLot || false);
+                  updateField('freeStreetParking', place.parkingOptions?.freeStreetParking || false);
+                  updateField('paidStreetParking', place.parkingOptions?.paidStreetParking || false);
+                  updateField('valetParking', place.parkingOptions?.valetParking || false);
+                  updateField('freeGarageParking', place.parkingOptions?.freeGarageParking || false);
+                  updateField('paidGarageParking', place.parkingOptions?.paidGarageParking || false);
+
+                  // 営業時間を変換して更新
+                  if (place.regularOpeningHours?.periods) {
+                    const dayMapping: { [key: number]: string } = { 0: '日', 1: '月', 2: '火', 3: '水', 4: '木', 5: '金', 6: '土' };
+                    const formattedHours = place.regularOpeningHours.periods.map(period => {
+                      const formatTime = (time: { hour: number; minute: number; }) => {
+                        const hour = String(time.hour).padStart(2, '0');
+                        const minute = String(time.minute).padStart(2, '0');
+                        return `${hour}:${minute}`;
+                      };
+                      return {
+                        dayOfWeek: dayMapping[period.open.day],
+                        openTime: formatTime(period.open),
+                        closeTime: formatTime(period.close),
+                        isClosedDay: false,
+                      };
+                    });
+                    updateField('openingHours', formattedHours);
+                  } else {
+                    // データがない場合は空にする
+                    updateField('openingHours', []);
+                  }
+
+                  return newFormData;
+                });
+              }
+            }}
+            onSyncComplete={(syncedSpot: SyncedSpot) => {
+              // 編集時：同期完了後にフォームデータを更新
+              if (!isNew) {
+                setFormData(prev => {
+                  if (!prev) return null;
+                  // 同期で返ってきた値でフォームデータを上書きする
+                  // syncedSpotに存在しないキーは元の値を維持する
+                  const updatedData = { ...prev };
+                  for (const key in syncedSpot) {
+                    if (Object.prototype.hasOwnProperty.call(syncedSpot, key)) {
+                      const value = syncedSpot[key as keyof SyncedSpot];
+                      if (key === 'openingHours' && Array.isArray(value)) {
+                        // openingHoursはEditableOpeningHour形式に変換
+                        type SyncedOpeningHour = {
+                          id: number;
+                          dayOfWeek: string;
+                          openTime: string | null;
+                          closeTime: string | null;
+                          isClosedDay: boolean;
+                        };
+                        const formattedHours = value.map((hour: SyncedOpeningHour) => ({
+                          id: hour.id,
+                          dayOfWeek: hour.dayOfWeek,
+                          openTime: hour.openTime ? hour.openTime.substring(11, 16) : null,
+                          closeTime: hour.closeTime ? hour.closeTime.substring(11, 16) : null,
+                          isClosedDay: hour.isClosedDay,
+                        }));
+                        (updatedData as ModelData)[key] = formattedHours;
+                      } else if (value !== null && value !== undefined) {
+                        (updatedData as ModelData)[key] = value;
+                      }
+                    }
+                  }
+                  return updatedData;
+                });
+              }
+            }}
+          />
+        </div>
+      )}
       <div className="admin-header">
         <div className="admin-flex admin-items-center">
           <Button
@@ -753,155 +906,6 @@ export default function ModelDetailPage() {
           </Button>
         </div>
       </form>
-
-      {/* Google Places検索（スポットの場合のみ表示） */}
-      {modelRoute === 'spots' && (
-        <div className="admin-mt-6">
-          <GooglePlacesSearch
-            spotId={isNew ? undefined : id}
-            onPlaceSelect={(place: GooglePlace) => {
-              // 新規作成時・編集時ともに、選択した場所の情報をフォームに自動入力
-              if (formData) {
-                setFormData(prev => {
-                  if (!prev) return null;
-                  const newFormData = { ...prev };
-
-                  // Google Place APIから取得した値でフォームを更新
-                  // 値が存在する場合のみ更新する
-                  const updateField = <K extends keyof ModelData>(key: K, value: ModelData[K]) => {
-                    if (value !== undefined && value !== null) {
-                      newFormData[key] = value;
-                    }
-                  };
-
-                  updateField('spotName', place.name || '');
-                  updateField('address', place.formattedAddress || '');
-                  updateField('phoneNumber', place.nationalPhoneNumber || '');
-                  updateField('website', place.websiteUri || '');
-                  updateField('googlePlaceId', place.placeId || '');
-                  updateField('latitude', place.location?.latitude || null);
-                  updateField('longitude', place.location?.longitude || null);
-                  updateField('reviewRating', place.rating || null);
-                  updateField('reviewCount', place.userRatingCount || null);
-                  updateField('businessStatus', place.businessStatus || '');
-                  updateField('priceLevel', place.priceLevel || '');
-                  updateField('primaryType', place.primaryType || '');
-                  updateField('primaryTypeDisplayName', place.primaryTypeDisplayName || '');
-                  updateField('internationalPhoneNumber', place.internationalPhoneNumber || '');
-                  updateField('shortFormattedAddress', place.shortFormattedAddress || '');
-                  updateField('googleMapsUri', place.googleMapsUri || '');
-                  updateField('editorialSummary', place.editorialSummary || '');
-
-                  // 価格帯
-                  if (place.priceRange) {
-                    updateField('priceRangeStartAmount', place.priceRange.startPrice?.amount || null);
-                    updateField('priceRangeEndAmount', place.priceRange.endPrice?.amount || null);
-                  }
-
-                  // サービス提供情報 (boolean)
-                  updateField('takeout', place.takeout || false);
-                  updateField('delivery', place.delivery || false);
-                  updateField('dineIn', place.dineIn || false);
-                  updateField('reservable', place.reservable || false);
-                  updateField('servesBreakfast', place.servesBreakfast || false);
-                  updateField('servesLunch', place.servesLunch || false);
-                  updateField('servesDinner', place.servesDinner || false);
-                  updateField('servesBrunch', place.servesBrunch || false);
-                  updateField('servesBeer', place.servesBeer || false);
-                  updateField('servesWine', place.servesWine || false);
-                  updateField('servesCocktails', place.servesCocktails || false);
-                  updateField('servesDessert', place.servesDessert || false);
-                  updateField('servesCoffee', place.servesCoffee || false);
-                  updateField('outdoorSeating', place.outdoorSeating || false);
-                  updateField('liveMusic', place.liveMusic || false);
-                  updateField('menuForChildren', place.menuForChildren || false);
-                  updateField('goodForChildren', place.goodForChildren || false);
-                  updateField('allowsDogs', place.allowsDogs || false);
-                  updateField('restroom', place.restroom || false);
-                  updateField('goodForGroups', place.goodForGroups || false);
-                  updateField('goodForWatchingSports', place.goodForWatchingSports || false);
-
-                  // Payment Options
-                  updateField('acceptsCreditCards', place.paymentOptions?.acceptsCreditCards || false);
-                  updateField('acceptsDebitCards', place.paymentOptions?.acceptsDebitCards || false);
-                  updateField('acceptsCashOnly', place.paymentOptions?.acceptsCashOnly || false);
-                  updateField('acceptsNfc', place.paymentOptions?.acceptsNfc || false);
-
-                  // Parking Options
-                  updateField('freeParkingLot', place.parkingOptions?.freeParkingLot || false);
-                  updateField('paidParkingLot', place.parkingOptions?.paidParkingLot || false);
-                  updateField('freeStreetParking', place.parkingOptions?.freeStreetParking || false);
-                  updateField('paidStreetParking', place.parkingOptions?.paidStreetParking || false);
-                  updateField('valetParking', place.parkingOptions?.valetParking || false);
-                  updateField('freeGarageParking', place.parkingOptions?.freeGarageParking || false);
-                  updateField('paidGarageParking', place.parkingOptions?.paidGarageParking || false);
-
-                  // 営業時間を変換して更新
-                  if (place.regularOpeningHours?.periods) {
-                    const dayMapping: { [key: number]: string } = { 0: '日', 1: '月', 2: '火', 3: '水', 4: '木', 5: '金', 6: '土' };
-                    const formattedHours = place.regularOpeningHours.periods.map(period => {
-                      const formatTime = (time: { hour: number; minute: number; }) => {
-                        const hour = String(time.hour).padStart(2, '0');
-                        const minute = String(time.minute).padStart(2, '0');
-                        return `${hour}:${minute}`;
-                      };
-                      return {
-                        dayOfWeek: dayMapping[period.open.day],
-                        openTime: formatTime(period.open),
-                        closeTime: formatTime(period.close),
-                        isClosedDay: false,
-                      };
-                    });
-                    updateField('openingHours', formattedHours);
-                  } else {
-                    // データがない場合は空にする
-                    updateField('openingHours', []);
-                  }
-
-                  return newFormData;
-                });
-              }
-            }}
-            onSyncComplete={(syncedSpot: SyncedSpot) => {
-              // 編集時：同期完了後にフォームデータを更新
-              if (!isNew) {
-                setFormData(prev => {
-                  if (!prev) return null;
-                  // 同期で返ってきた値でフォームデータを上書きする
-                  // syncedSpotに存在しないキーは元の値を維持する
-                  const updatedData = { ...prev };
-                  for (const key in syncedSpot) {
-                    if (Object.prototype.hasOwnProperty.call(syncedSpot, key)) {
-                      const value = syncedSpot[key as keyof SyncedSpot];
-                      if (key === 'openingHours' && Array.isArray(value)) {
-                        // openingHoursはEditableOpeningHour形式に変換
-                        type SyncedOpeningHour = {
-                          id: number;
-                          dayOfWeek: string;
-                          openTime: string | null;
-                          closeTime: string | null;
-                          isClosedDay: boolean;
-                        };
-                        const formattedHours = value.map((hour: SyncedOpeningHour) => ({
-                          id: hour.id,
-                          dayOfWeek: hour.dayOfWeek,
-                          openTime: hour.openTime ? hour.openTime.substring(11, 16) : null,
-                          closeTime: hour.closeTime ? hour.closeTime.substring(11, 16) : null,
-                          isClosedDay: hour.isClosedDay,
-                        }));
-                        (updatedData as ModelData)[key] = formattedHours;
-                      } else if (value !== null && value !== undefined) {
-                        (updatedData as ModelData)[key] = value;
-                      }
-                    }
-                  }
-                  return updatedData;
-                });
-              }
-            }}
-          />
-        </div>
-      )}
     </div>
   );
 }

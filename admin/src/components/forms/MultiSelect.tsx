@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import { modelRouteMap } from '@/lib/modelRouteMap';
 
 // 選択項目の型定義
-interface RelationItem {
+export interface RelationItem {
   __typename?: string;
   id: string;
   [key: string]: string | number | boolean | null | undefined;

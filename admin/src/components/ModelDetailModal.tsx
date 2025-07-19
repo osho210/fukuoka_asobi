@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { MultiSelect } from '@/components/forms/MultiSelect';
+import { MultiSelect, RelationItem } from '@/components/forms/MultiSelect';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -23,20 +23,7 @@ import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
-import { modelDisplayNames, fieldDisplayNames, modelConfigs } from '@/lib/modelConstants';
-
-// 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
-interface RelationItem {
-  __typename?: string;
-  id: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-// モデルデータの型定義
-interface ModelData {
-  id: string;
-  [key: string]: string | number | boolean | object | null | number[] | RelationItem[];
-}
+import { modelDisplayNames, fieldDisplayNames, modelConfigs, ModelData } from '@/lib/modelConstants';
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
@@ -92,6 +79,7 @@ export function ModelDetailModal({
   const { options: statusOptions } = useEnumOptions("StatusEnum");
   const { options: tripTypeOptions } = useEnumOptions("TripTypeEnum");
   const { options: priceLevelOptions } = useEnumOptions("PriceLevelEnum");
+  const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -116,7 +104,8 @@ export function ModelDetailModal({
     StatusEnum: statusOptions,
     TripTypeEnum: tripTypeOptions,
     PriceLevelEnum: priceLevelOptions,
-  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions]);
+    BusinessStatusTypeEnum: businessStatusOptions,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
@@ -664,17 +653,14 @@ export function ModelDetailModal({
                   />
                 );
               case 'multiSelect': {
-                const getSingularName = (name: string) => {
-                  if (name.endsWith('ies')) {
-                    return name.slice(0, -3) + 'y';
-                  }
-                  if (name.endsWith('s')) {
-                    return name.slice(0, -1);
-                  }
-                  return name;
-                }
-                const multiRelationName = getSingularName(fieldName);
-                const isMenuField = fieldName === 'menus';
+                const relationModelName = field.relationModel;
+                if (!relationModelName) return null;
+
+                const relationConfig = modelConfigs[relationModelName];
+                if (!relationConfig) return null;
+
+                const labelField = relationConfig.fields.find(f => f.name === 'name' || f.name.endsWith('Name'))?.name || 'id';
+                const isMenuField = modelRoute === 'spots' && fieldName === 'menus';
 
                 return (
                   <div key={fieldName} className="admin-col-span-2">
@@ -683,7 +669,7 @@ export function ModelDetailModal({
                         <MultiSelect
                           id="menu-category-filter"
                           label="メニューカテゴリーで絞り込む"
-                          modelName="menuCategories"
+                          modelName="menu_categories"
                           labelField="name"
                           selectedValues={selectedMenuCategories}
                           onChange={(values) => setSelectedMenuCategories(values)}
@@ -694,12 +680,8 @@ export function ModelDetailModal({
                     <MultiSelect
                       id={fieldName}
                       label={fieldLabel}
-                      modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
-                      labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
-                        multiRelationName === 'area' ? 'areaName' :
-                          multiRelationName === 'spotAmbiance' ? 'ambianceName' :
-                            multiRelationName === 'purpose' ? 'purposeName' :
-                              multiRelationName === 'menu' ? 'menuName' : 'name'}
+                      modelName={relationModelName}
+                      labelField={labelField}
                       selectedValues={(value as RelationItem[]) || []}
                       onChange={(values: RelationItem[]) => {
                         handleChange(fieldName, values);
