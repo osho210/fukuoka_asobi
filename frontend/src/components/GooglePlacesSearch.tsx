@@ -117,7 +117,7 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="例: 福岡 カフェ"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
         </div>
 
