@@ -10,7 +10,7 @@ module Mutations
     argument :website,           String,  required: false
     argument :catchphrase,       String,  required: false
     argument :is_rainy_ok,       Boolean, required: false
-    argument :budget_range,      String,  required: false
+    argument :budget_range,      Types::BudgetTypeRangeEnumType,  required: false
     argument :spot_type,         String,  required: true
     argument :theme,             String,  required: false
     argument :review_rating,     Float,   required: false
@@ -24,16 +24,79 @@ module Mutations
     argument :image_url, String,          required: false
     argument :nearest_station, String,    required: false
     argument :parking_available, Boolean, required: false
-    # TODO: ここも中間テーブルの回収が必要
-    # argument :instagram_embeds, String,  required: false
+
+    # Google Places API関連フィールド
+    argument :google_place_id,          String,  required: false
+    argument :latitude,                 Float,   required: false
+    argument :longitude,                Float,   required: false
+    argument :business_status,          String,  required: false
+    argument :price_level,              String,  required: false
+    argument :primary_type,             String,  required: false
+    argument :primary_type_display_name, String,  required: false
+    argument :international_phone_number, String,  required: false
+    argument :short_formatted_address,  String,  required: false
+    argument :google_maps_uri,          String,  required: false
+    argument :time_zone_id,             String,  required: false
+    argument :google_types,             [String], required: false
+    argument :generative_summary,       String,  required: false
+    argument :editorial_summary,        String,  required: false
+    argument :price_range_start_amount, Float,   required: false
+    argument :price_range_end_amount,   Float,   required: false
+    argument :review_summary_text,      String,  required: false
+    argument :review_summary_flag_content_uri, String, required: false
+    argument :review_summary_disclosure_text, String, required: false
+    argument :review_summary_reviews_uri, String, required: false
+    argument :pure_service_area_business, Boolean, required: false
+
+    # サービス提供情報
+    argument :takeout,                  Boolean, required: false
+    argument :delivery,                 Boolean, required: false
+    argument :dine_in,                  Boolean, required: false
+    argument :reservable,               Boolean, required: false
+    argument :serves_breakfast,         Boolean, required: false
+    argument :serves_lunch,             Boolean, required: false
+    argument :serves_dinner,            Boolean, required: false
+    argument :serves_brunch,            Boolean, required: false
+    argument :serves_beer,              Boolean, required: false
+    argument :serves_wine,              Boolean, required: false
+    argument :serves_vegetarian_food,   Boolean, required: false
+    argument :outdoor_seating,          Boolean, required: false
+    argument :live_music,               Boolean, required: false
+    argument :menu_for_children,        Boolean, required: false
+    argument :serves_cocktails,         Boolean, required: false
+    argument :serves_dessert,           Boolean, required: false
+    argument :serves_coffee,            Boolean, required: false
+    argument :good_for_children,        Boolean, required: false
+    argument :allows_dogs,              Boolean, required: false
+    argument :restroom,                 Boolean, required: false
+    argument :good_for_groups,          Boolean, required: false
+    argument :good_for_watching_sports, Boolean, required: false
+
+    # Payment Options
+    argument :accepts_credit_cards,     Boolean, required: false
+    argument :accepts_debit_cards,      Boolean, required: false
+    argument :accepts_cash_only,        Boolean, required: false
+    argument :accepts_nfc,              Boolean, required: false
+
+    # Parking Options
+    argument :free_parking_lot,         Boolean, required: false
+    argument :paid_parking_lot,         Boolean, required: false
+    argument :free_street_parking,      Boolean, required: false
+    argument :paid_street_parking,      Boolean, required: false
+    argument :valet_parking,            Boolean, required: false
+    argument :free_garage_parking,      Boolean, required: false
+    argument :paid_garage_parking,      Boolean, required: false
 
     # 関連項目の引数を追加
-    argument :hashtags,       [ID], required: false
-    argument :purposes,       [ID], required: false
-    argument :spot_ambiances, [ID], required: false
-    argument :categories,     [ID], required: false
-    argument :menus,          [ID], required: false
-    argument :areas,          [ID], required: false
+    argument :hashtags,                 [ID], required: false
+    argument :purposes,                 [ID], required: false
+    argument :spot_ambiances,           [ID], required: false
+    argument :categories,               [ID], required: false
+    argument :menus,                    [ID], required: false
+    argument :areas,                    [ID], required: false
+
+    # 営業時間
+    argument :opening_hours_attributes, [Types::Input::OpeningHourAttributes], required: false
 
     field :spot,           Types::SpotType, null: true
     field :errors,         [String],        null: false
@@ -46,6 +109,24 @@ module Mutations
 
       input = args.compact
 
+      # すべての値を半角に変換（文字列のみ）
+      input.each do |k, v|
+        if v.is_a?(String)
+          input[k] = v.unicode_normalize(:nfkc)
+        elsif v.is_a?(Array)
+          input[k] = v.map { |e| e.is_a?(String) ? e.unicode_normalize(:nfkc) : e }
+        end
+      end
+
+      # Google Places APIからのenum値を小文字に変換
+      if input[:business_status]
+        input[:business_status] = input[:business_status].downcase
+      end
+      if input[:price_level]
+        input[:price_level] = input[:price_level].downcase.gsub('price_level_', '')
+      end
+
+
       # 基本情報から連携項目を分離
       hashtags       = input.delete(:hashtags)
       purposes       = input.delete(:purposes)
@@ -53,14 +134,38 @@ module Mutations
       categories     = input.delete(:categories)
       menus          = input.delete(:menus)
       areas          = input.delete(:areas)
+      opening_hours_attributes = input.delete(:opening_hours_attributes)
 
       spot = Spot.new(input)
 
-      if spot.save
-        { spot: spot, errors: [] }
-      else
-        { spot: nil, errors: spot.errors.full_messages }
+      ActiveRecord::Base.transaction do
+        # 関連オブジェクトを割り当て
+        spot.hashtags       = Hashtag.where(id: hashtags) if hashtags
+        spot.purposes       = Purpose.where(id: purposes) if purposes
+        spot.spot_ambiances = SpotAmbiance.where(id: spot_ambiances) if spot_ambiances
+        spot.categories     = Category.where(id: categories) if categories
+        spot.menus          = Menu.where(id: menus) if menus
+        spot.areas          = Area.where(id: areas) if areas
+
+        # 営業時間の処理
+        if opening_hours_attributes
+          opening_hours_attributes.each do |attrs|
+            # 新しい営業時間レコードをビルド（まだ保存はしない）
+            spot.opening_hours.build(attrs.to_h)
+          end
+        end
+
+        # 全ての情報を一度に保存
+        spot.save!
       end
+
+      { spot: spot, errors: [] }
+    rescue ActiveRecord::RecordInvalid => e
+      # バリデーションエラーが発生した場合、エラーメッセージを返す
+      { spot: nil, errors: e.record.errors.full_messages }
+    rescue => e
+      # その他の予期せぬエラー
+      { spot: nil, errors: [e.message] }
     end
   end
 end

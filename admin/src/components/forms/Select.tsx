@@ -18,12 +18,14 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className = '', label, helperText, error, fullWidth = false, options, onChange, placeholder, ...props }, ref) => {
+  ({ className = '', label, helperText, error, fullWidth = false, options, onChange, placeholder, value, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       if (onChange) {
         onChange(e.target.value);
       }
     };
+
+    const selectValue = value ?? '';
 
     return (
       <div className={`admin-form-group ${fullWidth ? 'admin-w-full' : ''} ${className}`}>
@@ -39,6 +41,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           className={`admin-form-control admin-form-select ${error ? 'admin-form-control-error' : ''}`}
           ref={ref}
           onChange={handleChange}
+          value={selectValue}
           {...props}
         >
           {placeholder && (

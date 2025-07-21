@@ -83,6 +83,9 @@ gem 'rack-cors'
 
 gem "graphiql-rails"
 
+# HTTP client for Google Places API
+gem 'httparty'
+
 group :development do
   gem "graphiql-rails"
 end

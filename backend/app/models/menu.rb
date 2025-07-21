@@ -1,4 +1,5 @@
 class Menu < ApplicationRecord
+  belongs_to :menu_category, optional: true
   has_many :spot_menus, dependent: :destroy
   has_many :spots, through: :spot_menus
 

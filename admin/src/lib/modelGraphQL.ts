@@ -18,6 +18,8 @@ import { GET_EVENTS } from '@/graphql/queries/getEvents';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { GET_NEWS } from '@/graphql/queries/getNews';
 import { GET_STATIONS } from '@/graphql/queries/getStations';
+import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
+import { FilterField } from './modelConstants';
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -54,7 +56,19 @@ import {
 /**
  * モデル入力データの型定義
  */
-export type ModelInput = Record<string, string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[]>;
+interface MoneyInput {
+  amount: number | null;
+  currency: string | null;
+}
+
+interface PriceRangeInput {
+  startPrice: MoneyInput;
+  endPrice: MoneyInput;
+}
+
+export type ModelInput = {
+  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[] | PriceRangeInput;
+};
 
 // GraphQLクエリの型定義
 import { DocumentNode } from 'graphql';
@@ -76,6 +90,7 @@ const listQueries: Record<string, DocumentNode> = {
   eventCategories: GET_EVENT_CATEGORIES,
   news: GET_NEWS,
   stations: GET_STATIONS,
+  menuCategories: GET_MENU_CATEGORIES,
 };
 
 // ミューテーションマッピング
@@ -162,6 +177,43 @@ export const fetchModelList = async (
     throw error;
   }
 };
+
+/**
+ * フィルター用の関連モデルの選択肢を取得
+ * @param filterFields フィルターフィールド定義の配列
+ * @returns モデル名をキーとした選択肢のオブジェクト
+ */
+export const fetchRelationOptions = async (
+  filterFields: FilterField[]
+): Promise<Record<string, { value: string; label: string }[]>> => {
+  const options: Record<string, { value: string; label: string }[]> = {};
+
+  for (const field of filterFields) {
+    const query = listQueries[field.model];
+    if (!query) {
+      console.warn(`モデル ${field.model} のリストクエリが見つかりません`);
+      continue;
+    }
+
+    try {
+      const response = await client.query({
+        query,
+        fetchPolicy: 'cache-first',
+      });
+
+      if (response.data && response.data[field.model]) {
+        options[field.model] = response.data[field.model].map((item: any) => ({
+          value: item.id,
+          label: item[field.labelField],
+        }));
+      }
+    } catch (error) {
+      console.error(`モデル ${field.model} の選択肢取得に失敗しました:`, error);
+    }
+  }
+
+  return options;
+};
 /**
  * モデルを作成するためのGraphQLミューテーションを実行
  *
@@ -181,12 +233,18 @@ export const createModel = async (modelRoute: string, input: ModelInput) => {
   try {
     // __typename を削除
     const cleanedInput = omitTypename(input);
+    console.log('クリーンな入力データ:', cleanedInput);
     const { data } = await client.mutate({
       mutation,
-      variables: { cleanedInput },
+      variables: { input: cleanedInput },
     });
 
-    return data[mutationName] || null;
+    const result = data[mutationName];
+    if (result?.errors && result.errors.length > 0) {
+      throw new Error(result.errors.join(', '));
+    }
+
+    return result || null;
   } catch (error) {
     console.error(`モデル ${modelRoute} の作成に失敗しました:`, error);
     throw error;
@@ -227,7 +285,12 @@ export const updateModel = async (modelRoute: string, id: string, input: ModelIn
       variables: { input: { id, ...cleanedInput } },
     });
 
-    return data[mutationName] || null;
+    const result = data[mutationName];
+    if (result?.errors && result.errors.length > 0) {
+      throw new Error(result.errors.join(', '));
+    }
+
+    return result || null;
   } catch (error) {
     console.error(`モデル ${modelRoute} の更新に失敗しました:`, error);
     throw error;

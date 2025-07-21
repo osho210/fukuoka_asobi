@@ -6,7 +6,7 @@ export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   error?: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'time';
   fullWidth?: boolean;
 }
 

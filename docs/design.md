@@ -30,6 +30,10 @@
 2. **モデル**
    - `Category`: カテゴリー情報を管理
      - 属性: id, name, created_at, updated_at
+   - `MenuCategory`: メニューのカテゴリー情報を管理
+     - 属性: id, name, created_at, updated_at
+   - `Menu`: メニュー情報を管理
+     - 属性: id, menu_name, price, description, menu_category_id, created_at, updated_at
    - `Place`: 場所情報を管理（将来実装）
      - 属性: id, name, description, address, category_id, created_at, updated_at
 
@@ -67,6 +71,48 @@
 - CSRF対策: GraphQLコントローラーでの認証トークン検証
 - CORS設定: 許可されたオリジンからのリクエストのみ受け付け
 
+## Google Places API連携機能
+
+### 概要
+Google Places APIと連携して、スポット情報を自動的に取得・同期する機能を実装。
+
+### 主要機能
+1. **Google Places検索**
+   - キーワード検索でGoogle Places APIからスポット情報を取得
+   - 位置情報（緯度経度）と検索半径を指定可能
+
+2. **スポット情報同期**
+   - 既存スポットとGoogle Places APIの情報を同期
+   - Google Place IDまたは検索クエリを使用して同期
+
+3. **拡張データ取得**
+   - 基本情報（名前、住所、電話番号、ウェブサイト等）
+   - 営業時間情報
+   - レビュー・評価情報
+   - 決済・駐車場オプション
+   - サービス提供情報（テイクアウト、配達等）
+   - アクセシビリティ情報
+   - 写真情報
+
+### データベース拡張
+- **spotsテーブル**: Google Places API関連フィールドを追加
+- **spot_photos**: Google Places写真情報
+- **accessibility_options**: アクセシビリティオプション
+- **spot_accessibility_options**: スポット-アクセシビリティ中間テーブル
+- **opening_hours**: Google Places営業時間データ統合
+
+### GraphQL API
+- **Query**: `searchGooglePlaces` - Google Places検索
+- **Mutation**: `syncSpotWithGooglePlaces` - スポット同期
+
+### サービスクラス
+- **GooglePlacesService**: Google Places API通信
+- **SpotSyncService**: スポット情報同期処理
+
+### セキュリティ
+- Google Places API キーは Rails credentials で管理
+- APIキーはバックエンドでのみ使用、フロントエンドには露出しない
+
 ## 実装上の注意点
 
 ### GraphQL通信における注意点
@@ -81,3 +127,16 @@
 3. **Next.jsのサーバーコンポーネントとクライアントコンポーネント**
    - Apollo Clientはクライアントコンポーネントでのみ使用可能
    - `use client` ディレクティブの適切な使用
+
+### Google Places API連携における注意点
+1. **API制限とコスト管理**
+   - Google Places APIの使用量制限に注意
+   - 必要なフィールドのみを取得してコストを最適化
+
+2. **データ同期戦略**
+   - 既存データとAPIデータの競合解決
+   - 同期失敗時のエラーハンドリング
+
+3. **レート制限対応**
+   - API呼び出し頻度の制御
+   - リトライ機能の実装

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { MultiSelect } from '@/components/forms/MultiSelect';
+import { MultiSelect, RelationItem } from '@/components/forms/MultiSelect';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
@@ -9,11 +9,11 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
-import { Save, Trash2 } from 'lucide-react';
+import { Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
-import { GET_SPOT_TYPE_ENUM, GET_BUDGET_RANGE_ENUM, GET_TRAIN_LINE_ENUM, GET_STATUS_ENUM, GET_TRIP_TYPE_ENUM } from '@/graphql/queries/getEnumTypes';
+import { useEnumOptions } from '@/hooks/useEnumOptions';
 import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
 import { GET_CATEGORIES } from '@/graphql/queries/getCategories';
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -21,21 +21,9 @@ import { GET_HASHTAGS } from '@/graphql/queries/getHashtags';
 import { GET_PURPOSES } from '@/graphql/queries/getPurposes';
 import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
+import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
-import { modelDisplayNames, fieldDisplayNames, modelFields } from '@/lib/modelConstants';
-
-// 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
-interface RelationItem {
-  __typename?: string;
-  id: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-// モデルデータの型定義
-interface ModelData {
-  id: string;
-  [key: string]: string | number | boolean | object | null | number[] | RelationItem[];
-}
+import { modelDisplayNames, fieldDisplayNames, modelConfigs, ModelData } from '@/lib/modelConstants';
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
@@ -69,26 +57,29 @@ export function ModelDetailModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nearestStationLoading, setNearestStationLoading] = useState(false);
+  const [selectedMenuCategories, setSelectedMenuCategories] = useState<RelationItem[]>([]);
+
+  const handleFetchNearestStation = async () => {
+    setNearestStationLoading(true);
+    // TODO: Implement station search logic
+    console.log("Fetching nearest station...");
+    // Simulating an API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setNearestStationLoading(false);
+  };
 
   const fieldLabel = modelDisplayNames[modelRoute] || modelRoute;
-  const fields = useMemo(() => modelFields[modelRoute] || [], [modelRoute]);
+  const fields = useMemo(() => modelConfigs[modelRoute]?.fields || [], [modelRoute]);
 
   // Enumデータの取得
-  const { data: spotTypeData } = useQuery(GET_SPOT_TYPE_ENUM, {
-    variables: { enumName: "SpotTypeEnum" },
-  });
-  const { data: budgetData } = useQuery(GET_BUDGET_RANGE_ENUM, {
-    variables: { enumName: "BudgetRangeEnum" },
-  });
-  const { data: trainLineData } = useQuery(GET_TRAIN_LINE_ENUM, {
-    variables: { enumName: "TrainLineTypeEnum" },
-  });
-  const { data: statusData } = useQuery(GET_STATUS_ENUM, {
-    variables: { enumName: "StatusEnum" },
-  });
-  const { data: tripTypeData } = useQuery(GET_TRIP_TYPE_ENUM, {
-    variables: { enumName: "TripTypeEnum" },
-  });
+  const { options: spotTypeOptions } = useEnumOptions("SpotTypeEnum");
+  const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
+  const { options: trainLineOptions } = useEnumOptions("TrainLineEnum");
+  const { options: statusOptions } = useEnumOptions("StatusEnum");
+  const { options: tripTypeOptions } = useEnumOptions("TripTypeEnum");
+  const { options: priceLevelOptions } = useEnumOptions("PriceLevelEnum");
+  const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -98,6 +89,7 @@ export function ModelDetailModal({
   const { data: purposesData } = useQuery(GET_PURPOSES);
   const { data: spotAmbiancesData } = useQuery(GET_SPOT_AMBIANCES);
   const { data: menusData } = useQuery(GET_MENUS);
+  const { data: menuCategoriesData } = useQuery(GET_MENU_CATEGORIES);
   const { data: eventCategoriesData } = useQuery(GET_EVENT_CATEGORIES);
 
   // useMemo でマッピングをキャッシュ
@@ -106,27 +98,14 @@ export function ModelDetailModal({
 
   // Enumオプションのマッピング
   const enumOptions = useMemo<OptionsMap>(() => ({
-    SpotTypeEnum: spotTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    BudgetRangeEnum: budgetData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    TrainLineTypeEnum: trainLineData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    StatusEnum: statusData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-    TripTypeEnum: tripTypeData?.__type?.enumValues.map((ev: { name: string, description: string }) => ({
-      value: ev.name,
-      label: ev.description ?? ev.name,
-    })) ?? [],
-  }), [spotTypeData, budgetData, trainLineData, statusData, tripTypeData]);
+    SpotTypeEnum: spotTypeOptions,
+    BudgetRangeEnum: budgetOptions,
+    TrainLineTypeEnum: trainLineOptions,
+    StatusEnum: statusOptions,
+    TripTypeEnum: tripTypeOptions,
+    PriceLevelEnum: priceLevelOptions,
+    BusinessStatusTypeEnum: businessStatusOptions,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
@@ -159,6 +138,10 @@ export function ModelDetailModal({
       value: menu.id,
       label: menu.menuName,
     })) ?? [],
+    menuCategory: menuCategoriesData?.menuCategories.map((category: { id: string, name: string }) => ({
+      value: category.id,
+      label: category.name,
+    })) ?? [],
     eventCategory: eventCategoriesData?.eventCategories.map((eventCategory: { id: string, name: string }) => ({
       value: eventCategory.id,
       label: eventCategory.name,
@@ -168,7 +151,7 @@ export function ModelDetailModal({
       value: eventCategory.id,
       label: eventCategory.name,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, eventCategoriesData]);
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, menuCategoriesData, eventCategoriesData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
@@ -211,7 +194,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData, modelRoute, fields]);
 
-  const handleChange = (name: string, value: string | boolean | RelationData | string[] | number[] | RelationItem[]) => {
+  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -284,6 +267,13 @@ export function ModelDetailModal({
             }
           } catch (e) {
             console.error(`日付変換エラー (${fieldName}):`, e);
+          }
+        }
+      } else if (field.type === 'number') {
+        if (value !== undefined && value !== null && value !== '') {
+          const num = parseFloat(value as string);
+          if (!isNaN(num)) {
+            input[fieldName] = num;
           }
         }
       } else {
@@ -662,32 +652,48 @@ export function ModelDetailModal({
                     fullWidth
                   />
                 );
-              case 'multiSelect':
-                const multiRelationName = fieldName.endsWith('s') ? fieldName.slice(0, -1) : fieldName;
+              case 'multiSelect': {
+                const relationModelName = field.relationModel;
+                if (!relationModelName) return null;
+
+                const relationConfig = modelConfigs[relationModelName];
+                if (!relationConfig) return null;
+
+                const labelField = relationConfig.fields.find(f => f.name === 'name' || f.name.endsWith('Name'))?.name || 'id';
+                const isMenuField = modelRoute === 'spots' && fieldName === 'menus';
 
                 return (
-                  <MultiSelect
-                    key={fieldName}
-                    id={fieldName}
-                    label={fieldLabel}
-                    // ここではデータ一覧を取得するためにマスタ取得用のモデル名を渡す必要がある
-                    // 例えばspotAmbianceのような
-                    modelName={multiRelationName.charAt(0).toUpperCase() + multiRelationName.slice(1)}
-                    labelField={multiRelationName === 'hashtag' ? 'hashtagName' :
-                      multiRelationName === 'area' ? 'areaName' :
-                        multiRelationName === 'spotAmbiance' ? 'ambianceName' :
-                          multiRelationName === 'purpose' ? 'purposeName' :
-                            multiRelationName === 'menu' ? 'menuName' : 'name'}
-                    selectedValues={(value as RelationItem[]) || []}
-                    onChange={(values: RelationItem[]) => {
-                      // graphqlで更新する再はfield名で更新する必要がある
-                      handleChange(fieldName, values);
-                    }}
-                    required={field.required}
-                    error={error}
-                    fullWidth
-                  />
+                  <div key={fieldName} className="admin-col-span-2">
+                    {isMenuField && (
+                      <div className="admin-mb-4">
+                        <MultiSelect
+                          id="menu-category-filter"
+                          label="メニューカテゴリーで絞り込む"
+                          modelName="menu_categories"
+                          labelField="name"
+                          selectedValues={selectedMenuCategories}
+                          onChange={(values) => setSelectedMenuCategories(values)}
+                          fullWidth
+                        />
+                      </div>
+                    )}
+                    <MultiSelect
+                      id={fieldName}
+                      label={fieldLabel}
+                      modelName={relationModelName}
+                      labelField={labelField}
+                      selectedValues={(value as RelationItem[]) || []}
+                      onChange={(values: RelationItem[]) => {
+                        handleChange(fieldName, values);
+                      }}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                      filter={isMenuField && selectedMenuCategories.length > 0 ? { field: 'menuCategory.id', values: selectedMenuCategories.map(c => c.id) } : undefined}
+                    />
+                  </div>
                 );
+              }
               case 'datetime':
                 return (
                   <DateTimePicker
@@ -701,6 +707,34 @@ export function ModelDetailModal({
                     error={error}
                     fullWidth
                   />
+                );
+              case 'number':
+                const isLongitudeField = fieldName === 'longitude';
+                return (
+                  <div key={fieldName} className={isLongitudeField ? "admin-flex admin-items-end admin-gap-2" : ""}>
+                    <TextField
+                      id={fieldName}
+                      name={fieldName}
+                      label={fieldLabel}
+                      type="number"
+                      value={value !== undefined && value !== null ? String(value) : ''}
+                      onChange={(e) => handleChange(fieldName, e.target.value ? Number(e.target.value) : null)}
+                      required={field.required}
+                      error={error}
+                      fullWidth
+                    />
+                    {isLongitudeField && modelRoute === 'spots' && (
+                      <Button
+                        type="button"
+                        onClick={handleFetchNearestStation}
+                        disabled={nearestStationLoading}
+                        className="admin-mb-1"
+                      >
+                        <Search className="h-4 w-4 admin-mr-1" />
+                        {nearestStationLoading ? '検索中...' : '最寄駅を検索'}
+                      </Button>
+                    )}
+                  </div>
                 );
               default:
                 return null;
