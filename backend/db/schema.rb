@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_21_030937) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_21_042850) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -159,10 +159,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_21_030937) do
     t.string "name", null: false
     t.date "release_date"
     t.string "sales_info"
-    t.string "sales_url"
+    t.text "sales_url"
     t.string "publisher"
     t.string "issue_number"
-    t.string "cover_image_url"
+    t.text "cover_image_url"
     t.text "description"
     t.string "status", default: "draft", null: false
     t.datetime "created_at", null: false
