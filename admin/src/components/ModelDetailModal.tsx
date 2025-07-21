@@ -23,6 +23,7 @@ import { GET_SPOT_AMBIANCES } from '@/graphql/queries/getSpotAmbiances';
 import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
+import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
 import { modelDisplayNames, fieldDisplayNames, modelConfigs, ModelData } from '@/lib/modelConstants';
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
@@ -31,6 +32,26 @@ interface RelationData {
   [key: string]: string | number | boolean | object | null | undefined;
 }
 
+interface SpotMagazine {
+  id?: string;
+  magazine: {
+    id: string;
+    name?: string;
+  };
+  publicationFeature?: string;
+  pageNumber?: number | null;
+  notes?: string;
+  _destroy?: boolean;
+}
+
+interface OpeningHour {
+  id?: string;
+  dayOfWeek: string;
+  openTime?: string | null;
+  closeTime?: string | null;
+  isClosedDay: boolean;
+  _destroy?: boolean;
+}
 
 interface ModelDetailModalProps {
   isOpen: boolean;
@@ -53,6 +74,8 @@ export function ModelDetailModal({
   const [formData, setFormData] = useState<ModelData | null>(initialData || { id: '' });
   // 子モデルの状態管理を追加
   const [childModels, setChildModels] = useState<Record<string, ModelData[]>>({});
+  const [spotMagazines, setSpotMagazines] = useState<SpotMagazine[]>([]);
+  const [openingHours, setOpeningHours] = useState<OpeningHour[]>([]);
   // isLoadingは現在使用していないため削除
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +115,7 @@ export function ModelDetailModal({
   const { data: menusData } = useQuery(GET_MENUS);
   const { data: menuCategoriesData } = useQuery(GET_MENU_CATEGORIES);
   const { data: eventCategoriesData } = useQuery(GET_EVENT_CATEGORIES);
+  const { data: magazinesData } = useQuery(GET_MAGAZINES);
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
@@ -153,7 +177,11 @@ export function ModelDetailModal({
       value: eventCategory.id,
       label: eventCategory.name,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, menuCategoriesData, eventCategoriesData]);
+    magazines: magazinesData?.magazines.map((magazine: { id: string, name: string }) => ({
+      value: magazine.id,
+      label: magazine.name,
+    })) ?? [],
+  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, menuCategoriesData, eventCategoriesData, magazinesData]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
@@ -193,6 +221,31 @@ export function ModelDetailModal({
       if (Object.keys(newChildModels).length > 0) {
         setChildModels(newChildModels);
       }
+
+      // 雑誌掲載情報のデータを設定
+      if (modelRoute === 'spots' && initialData?.spotMagazines) {
+        setSpotMagazines(initialData.spotMagazines as SpotMagazine[]);
+      }
+      // 営業時間のデータを設定
+      if (modelRoute === 'spots' && initialData?.openingHours) {
+        const dayOfWeekMap: { [key: string]: string } = {
+          '日': 'Sunday',
+          '月': 'Monday',
+          '火': 'Tuesday',
+          '水': 'Wednesday',
+          '木': 'Thursday',
+          '金': 'Friday',
+          '土': 'Saturday',
+        };
+
+        const formattedOpeningHours = (initialData.openingHours as OpeningHour[]).map(oh => ({
+          ...oh,
+          dayOfWeek: dayOfWeekMap[oh.dayOfWeek] || oh.dayOfWeek,
+          openTime: oh.openTime ? new Date(oh.openTime).toTimeString().slice(0, 5) : null,
+          closeTime: oh.closeTime ? new Date(oh.closeTime).toTimeString().slice(0, 5) : null,
+        }));
+        setOpeningHours(formattedOpeningHours);
+      }
     }
   }, [isOpen, initialData, modelRoute, fields]);
 
@@ -230,7 +283,9 @@ export function ModelDetailModal({
     const input: ModelInput = {};
 
     // フォームデータからGraphQLミューテーション用のデータを作成
-    fields.forEach((field) => {
+    fields
+      .filter(field => field.type !== 'opening_hours_editor' && field.type !== 'spot_magazines_editor')
+      .forEach((field) => {
       const fieldName = field.name;
       const value = formData?.[fieldName];
 
@@ -285,6 +340,27 @@ export function ModelDetailModal({
         }
       }
     });
+
+    // 雑誌掲載情報のデータを追加
+    if (modelRoute === 'spots') {
+      input.spotMagazinesAttributes = spotMagazines.map(sm => ({
+        id: sm.id,
+        magazineId: sm.magazine.id,
+        publicationFeature: sm.publicationFeature,
+        pageNumber: sm.pageNumber,
+        notes: sm.notes,
+        _destroy: sm._destroy
+      }));
+
+      input.openingHoursAttributes = openingHours.map(oh => ({
+        id: oh.id,
+        dayOfWeek: oh.dayOfWeek,
+        openTime: oh.openTime,
+        closeTime: oh.closeTime,
+        isClosedDay: oh.isClosedDay,
+        _destroy: oh._destroy
+      }));
+    }
 
     return input;
   };
@@ -709,6 +785,205 @@ export function ModelDetailModal({
                     error={error}
                     fullWidth
                   />
+                );
+              case 'opening_hours_editor': {
+                const dayOfWeekOptions = [
+                  { value: 'Monday', label: '月曜日' },
+                  { value: 'Tuesday', label: '火曜日' },
+                  { value: 'Wednesday', label: '水曜日' },
+                  { value: 'Thursday', label: '木曜日' },
+                  { value: 'Friday', label: '金曜日' },
+                  { value: 'Saturday', label: '土曜日' },
+                  { value: 'Sunday', label: '日曜日' },
+                ];
+
+                return (
+                  <div key={fieldName} className="admin-col-span-2">
+                    <h3 className="admin-text-lg admin-font-semibold admin-mb-4">{fieldLabel}</h3>
+                    {openingHours.map((hour, index) => !hour._destroy && (
+                      <div key={hour.id || `new-${index}`} className="admin-child-model-item admin-mb-6 admin-p-4 admin-bg-gray-50 admin-rounded-md">
+                        <div className="admin-grid admin-grid-cols-2 admin-gap-4">
+                          <Select
+                            id={`opening-hour-${index}-day`}
+                            name={`opening-hour-${index}-day`}
+                            label="曜日"
+                            value={hour.dayOfWeek}
+                            onChange={(val) => {
+                              const newOpeningHours = [...openingHours];
+                              newOpeningHours[index] = { ...newOpeningHours[index], dayOfWeek: val };
+                              setOpeningHours(newOpeningHours);
+                            }}
+                            options={dayOfWeekOptions}
+                            required
+                            fullWidth
+                          />
+                          <ToggleSwitch
+                            id={`opening-hour-${index}-is-closed`}
+                            name={`opening-hour-${index}-is-closed`}
+                            label="定休日"
+                            checked={hour.isClosedDay}
+                            onChange={(checked) => {
+                              const newOpeningHours = [...openingHours];
+                              newOpeningHours[index] = { ...newOpeningHours[index], isClosedDay: checked };
+                              setOpeningHours(newOpeningHours);
+                            }}
+                          />
+                          {!hour.isClosedDay && (
+                            <>
+                              <TextField
+                                id={`opening-hour-${index}-open-time`}
+                                name={`opening-hour-${index}-open-time`}
+                                label="開始時間"
+                                type="time"
+                                value={hour.openTime || ''}
+                                onChange={(e) => {
+                                  const newOpeningHours = [...openingHours];
+                                  newOpeningHours[index] = { ...newOpeningHours[index], openTime: e.target.value };
+                                  setOpeningHours(newOpeningHours);
+                                }}
+                                fullWidth
+                              />
+                              <TextField
+                                id={`opening-hour-${index}-close-time`}
+                                name={`opening-hour-${index}-close-time`}
+                                label="終了時間"
+                                type="time"
+                                value={hour.closeTime || ''}
+                                onChange={(e) => {
+                                  const newOpeningHours = [...openingHours];
+                                  newOpeningHours[index] = { ...newOpeningHours[index], closeTime: e.target.value };
+                                  setOpeningHours(newOpeningHours);
+                                }}
+                                fullWidth
+                              />
+                            </>
+                          )}
+                        </div>
+                        <div className="admin-mt-3 admin-flex admin-justify-end">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const newOpeningHours = [...openingHours];
+                              if (hour.id) {
+                                newOpeningHours[index]._destroy = true;
+                              } else {
+                                newOpeningHours.splice(index, 1);
+                              }
+                              setOpeningHours(newOpeningHours);
+                            }}
+                            size="sm"
+                          >
+                            <Trash2 className="h-4 w-4 admin-mr-1" />
+                            削除
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setOpeningHours([...openingHours, { dayOfWeek: 'Monday', isClosedDay: false }]);
+                      }}
+                      className="admin-mt-2"
+                    >
+                      営業時間を追加
+                    </Button>
+                  </div>
+                );
+              }
+              case 'spot_magazines_editor':
+                return (
+                  <div key={fieldName} className="admin-col-span-2">
+                    <h3 className="admin-text-lg admin-font-semibold admin-mb-4">{fieldLabel}</h3>
+                    {spotMagazines.map((spotMagazine, index) => !spotMagazine._destroy && (
+                      <div key={spotMagazine.id || `new-${index}`} className="admin-child-model-item admin-mb-6 admin-p-4 admin-bg-gray-50 admin-rounded-md">
+                        <div className="admin-grid admin-grid-cols-2 admin-gap-4">
+                          <Select
+                            id={`spot-magazine-${index}-magazine`}
+                            name={`spot-magazine-${index}-magazine`}
+                            label="雑誌"
+                            value={spotMagazine.magazine?.id || ''}
+                            onChange={(val) => {
+                              const newSpotMagazines = [...spotMagazines];
+                              newSpotMagazines[index] = { ...newSpotMagazines[index], magazine: { id: val } };
+                              setSpotMagazines(newSpotMagazines);
+                            }}
+                            options={relationOptions['magazines'] || []}
+                            required
+                            fullWidth
+                          />
+                          <TextField
+                            id={`spot-magazine-${index}-publication-feature`}
+                            name={`spot-magazine-${index}-publication-feature`}
+                            label="掲載特集"
+                            value={spotMagazine.publicationFeature || ''}
+                            onChange={(e) => {
+                              const newSpotMagazines = [...spotMagazines];
+                              newSpotMagazines[index] = { ...newSpotMagazines[index], publicationFeature: e.target.value };
+                              setSpotMagazines(newSpotMagazines);
+                            }}
+                            fullWidth
+                          />
+                          <TextField
+                            id={`spot-magazine-${index}-page-number`}
+                            name={`spot-magazine-${index}-page-number`}
+                            label="掲載ページ"
+                            type="number"
+                            value={spotMagazine.pageNumber || ''}
+                            onChange={(e) => {
+                              const newSpotMagazines = [...spotMagazines];
+                              newSpotMagazines[index] = { ...newSpotMagazines[index], pageNumber: e.target.value ? parseInt(e.target.value, 10) : null };
+                              setSpotMagazines(newSpotMagazines);
+                            }}
+                            fullWidth
+                          />
+                          <TextArea
+                            id={`spot-magazine-${index}-notes`}
+                            name={`spot-magazine-${index}-notes`}
+                            label="備考"
+                            value={spotMagazine.notes || ''}
+                            onChange={(e) => {
+                              const newSpotMagazines = [...spotMagazines];
+                              newSpotMagazines[index] = { ...newSpotMagazines[index], notes: e.target.value };
+                              setSpotMagazines(newSpotMagazines);
+                            }}
+                            fullWidth
+                          />
+                        </div>
+                        <div className="admin-mt-3 admin-flex admin-justify-end">
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const newSpotMagazines = [...spotMagazines];
+                              if (spotMagazine.id) {
+                                newSpotMagazines[index]._destroy = true;
+                              } else {
+                                newSpotMagazines.splice(index, 1);
+                              }
+                              setSpotMagazines(newSpotMagazines);
+                            }}
+                            size="sm"
+                          >
+                            <Trash2 className="h-4 w-4 admin-mr-1" />
+                            削除
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setSpotMagazines([...spotMagazines, { magazine: { id: '' } }]);
+                      }}
+                      className="admin-mt-2"
+                    >
+                      雑誌を追加
+                    </Button>
+                  </div>
                 );
               case 'number':
                 const isLongitudeField = fieldName === 'longitude';

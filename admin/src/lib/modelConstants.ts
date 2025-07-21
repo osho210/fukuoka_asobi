@@ -238,6 +238,9 @@ export const modelConfigs: Record<string, ModelConfig> = {
       // 営業時間
       { name: 'openingHours', type: 'opening_hours_editor' },
 
+      // 雑誌掲載情報
+      { name: 'spotMagazines', type: 'spot_magazines_editor' },
+
       // 関連データ
       // { name: 'menu', type: 'multirelation', labelField: 'menuName' },
       // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
@@ -539,6 +542,9 @@ export const fieldDisplayNames: Record<string, string> = {
   lastApiSyncAt: '最終API同期日時',
   apiSyncStatus: 'API同期ステータス',
   // Magazine
+  spotMagazines: '雑誌掲載情報',
+  publicationFeature: '掲載特集',
+  pageNumber: '掲載ページ',
   publisher: '出版社',
   issueNumber: '号数',
   releaseDate: '発売日',

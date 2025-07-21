@@ -98,6 +98,9 @@ module Mutations
     # 営業時間
     argument :opening_hours_attributes, [Types::Input::OpeningHourAttributes], required: false
 
+    # 雑誌掲載情報
+    argument :spot_magazines_attributes, [Types::Input::SpotMagazineAttributes], required: false
+
     field :spot,           Types::SpotType, null: true
     field :errors,         [String],        null: false
 
@@ -134,7 +137,11 @@ module Mutations
       categories     = input.delete(:categories)
       menus          = input.delete(:menus)
       areas          = input.delete(:areas)
-      opening_hours_attributes = input.delete(:opening_hours_attributes)
+
+      # spot_magazines_attributes をハッシュの配列に変換
+      if input[:spot_magazines_attributes]
+        input[:spot_magazines_attributes] = input[:spot_magazines_attributes].map(&:to_h)
+      end
 
       spot = Spot.new(input)
 
@@ -147,19 +154,11 @@ module Mutations
         spot.menus          = Menu.where(id: menus) if menus
         spot.areas          = Area.where(id: areas) if areas
 
-        # 営業時間の処理
-        if opening_hours_attributes
-          opening_hours_attributes.each do |attrs|
-            # 新しい営業時間レコードをビルド（まだ保存はしない）
-            spot.opening_hours.build(attrs.to_h)
-          end
-        end
-
         # 全ての情報を一度に保存
         spot.save!
       end
 
-      { spot: spot, errors: [] }
+      { spot: spot.reload, errors: [] }
     rescue ActiveRecord::RecordInvalid => e
       # バリデーションエラーが発生した場合、エラーメッセージを返す
       { spot: nil, errors: e.record.errors.full_messages }

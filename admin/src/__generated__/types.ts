@@ -449,6 +449,7 @@ export type CreateSpotInput = {
   servesWine?: InputMaybe<Scalars['Boolean']['input']>;
   shortFormattedAddress?: InputMaybe<Scalars['String']['input']>;
   spotAmbiances?: InputMaybe<Array<Scalars['ID']['input']>>;
+  spotMagazinesAttributes?: InputMaybe<Array<SpotMagazineAttributes>>;
   spotName: Scalars['String']['input'];
   spotType: Scalars['String']['input'];
   takeout?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1787,6 +1788,8 @@ export type Spot = {
   servesWine?: Maybe<Scalars['Boolean']['output']>;
   shortFormattedAddress?: Maybe<Scalars['String']['output']>;
   spotAmbiances: Array<SpotAmbiance>;
+  /** 掲載雑誌の中間テーブル情報 */
+  spotMagazines?: Maybe<Array<SpotMagazine>>;
   spotName: Scalars['String']['output'];
   spotPhotos?: Maybe<Array<SpotPhoto>>;
   spotType: SpotTypeEnum;
@@ -1807,6 +1810,29 @@ export type SpotAmbiance = {
   id: Scalars['ID']['output'];
   spots: Array<Spot>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type SpotMagazine = {
+  __typename?: 'SpotMagazine';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
+  magazine: Magazine;
+  magazineId: Scalars['Int']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  pageNumber?: Maybe<Scalars['Int']['output']>;
+  publicationFeature?: Maybe<Scalars['String']['output']>;
+  spotId: Scalars['Int']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+/** Attributes for creating or updating a spot magazine */
+export type SpotMagazineAttributes = {
+  _destroy?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  magazineId: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  pageNumber?: InputMaybe<Scalars['Int']['input']>;
+  publicationFeature?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SpotPhoto = {
@@ -2389,6 +2415,7 @@ export type UpdateSpotInput = {
   servesWine?: InputMaybe<Scalars['Boolean']['input']>;
   shortFormattedAddress?: InputMaybe<Scalars['String']['input']>;
   spotAmbiances?: InputMaybe<Array<Scalars['ID']['input']>>;
+  spotMagazinesAttributes?: InputMaybe<Array<SpotMagazineAttributes>>;
   spotName?: InputMaybe<Scalars['String']['input']>;
   spotType?: InputMaybe<Scalars['String']['input']>;
   takeout?: InputMaybe<Scalars['Boolean']['input']>;
@@ -3172,7 +3199,7 @@ export type GetSpotAmbiancesQuery = { __typename?: 'Query', spotAmbiances: Array
 export type GetSpotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, imageUrl?: string | null, nearestStation?: string | null, parkingAvailable?: boolean | null, googlePlaceId?: string | null, latitude?: number | null, longitude?: number | null, businessStatus?: BusinessStatusEnum | null, priceLevel?: string | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, reservable?: boolean | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBrunch?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesVegetarianFood?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, acceptsCreditCards?: boolean | null, acceptsDebitCards?: boolean | null, acceptsCashOnly?: boolean | null, acceptsNfc?: boolean | null, freeParkingLot?: boolean | null, paidParkingLot?: boolean | null, freeStreetParking?: boolean | null, paidStreetParking?: boolean | null, valetParking?: boolean | null, freeGarageParking?: boolean | null, paidGarageParking?: boolean | null, googleTypes?: Array<string> | null, adrFormatAddress?: string | null, generativeSummary?: string | null, editorialSummary?: string | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, priceRange?: { __typename?: 'PriceRange', startPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null, endPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, magazines?: Array<{ __typename?: 'Magazine', id: string, name: string, releaseDate?: any | null, salesInfo?: string | null, salesUrl?: string | null, publisher?: string | null, issueNumber?: string | null, coverImageUrl?: string | null, description?: string | null, status: string }> | null }> };
+export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, imageUrl?: string | null, nearestStation?: string | null, parkingAvailable?: boolean | null, googlePlaceId?: string | null, latitude?: number | null, longitude?: number | null, businessStatus?: BusinessStatusEnum | null, priceLevel?: string | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, reservable?: boolean | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBrunch?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesVegetarianFood?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, acceptsCreditCards?: boolean | null, acceptsDebitCards?: boolean | null, acceptsCashOnly?: boolean | null, acceptsNfc?: boolean | null, freeParkingLot?: boolean | null, paidParkingLot?: boolean | null, freeStreetParking?: boolean | null, paidStreetParking?: boolean | null, valetParking?: boolean | null, freeGarageParking?: boolean | null, paidGarageParking?: boolean | null, googleTypes?: Array<string> | null, adrFormatAddress?: string | null, generativeSummary?: string | null, editorialSummary?: string | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, priceRange?: { __typename?: 'PriceRange', startPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null, endPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, spotMagazines?: Array<{ __typename?: 'SpotMagazine', id?: string | null, publicationFeature?: string | null, pageNumber?: number | null, notes?: string | null, magazine: { __typename?: 'Magazine', id: string, name: string } }> | null, magazines?: Array<{ __typename?: 'Magazine', id: string, name: string, releaseDate?: any | null, salesInfo?: string | null, salesUrl?: string | null, publisher?: string | null, issueNumber?: string | null, coverImageUrl?: string | null, description?: string | null, status: string }> | null }> };
 
 export type GetSpotQueryVariables = Exact<{
   id: Scalars['ID']['input'];
