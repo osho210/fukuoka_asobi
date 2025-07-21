@@ -45,6 +45,7 @@ module Types
     field :menus, [Types::MenuType], null: false
     field :spot_ambiances, [Types::SpotAmbianceType], null: false
     field :purposes, [Types::PurposeType], null: false
+    field :magazines, [Types::MagazineType], null: true, description: '掲載雑誌リスト'
 
     # Google Places API関連フィールド
     field :google_types, [String], null: true

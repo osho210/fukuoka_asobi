@@ -78,6 +78,10 @@ module Types
     field :update_spot, mutation: Mutations::UpdateSpot
     field :delete_spot, mutation: Mutations::DeleteSpot
 
+    # Magazine関連
+    field :create_magazine, mutation: Mutations::CreateMagazine
+    field :update_magazine, mutation: Mutations::UpdateMagazine
+
     # 駅関連
     field :create_station, mutation: Mutations::CreateStation
     field :update_station, mutation: Mutations::UpdateStation

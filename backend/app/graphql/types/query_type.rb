@@ -103,6 +103,19 @@ module Types
       Spot.find_by(id: id)
     end
 
+    # 雑誌
+    field :magazines, [Types::MagazineType], null: false
+    def magazines
+      Magazine.all
+    end
+
+    field :magazine, Types::MagazineType, null: true do
+      argument :id, ID, required: true
+    end
+    def magazine(id:)
+      Magazine.find_by(id: id)
+    end
+
     field :stations, [Types::StationType], null: true
     def stations
       Station.all
