@@ -140,3 +140,52 @@ Google Places APIと連携して、スポット情報を自動的に取得・同
 3. **レート制限対応**
    - API呼び出し頻度の制御
    - リトライ機能の実装
+
+## 雑誌連携機能
+
+### 概要
+雑誌掲載情報を管理し、スポット情報と連携する機能。
+
+### データベース拡張
+
+```mermaid
+erDiagram
+    spots ||--o{ spot_magazines : "掲載"
+    spot_magazines }o--|| magazines : "掲載"
+
+    spots {
+        bigint id PK
+        varchar spot_name
+        -- 他カラムは省略 --
+    }
+
+    magazines {
+        bigint id PK
+        varchar name "雑誌名"
+        date release_date "発売日"
+        varchar sales_info "販売情報"
+        varchar sales_url "販売URL"
+        string publisher "出版社名"
+        string issue_number "号数"
+        string cover_image_url "表紙画像URL"
+        text description "概要"
+        enum status "公開ステータス"
+        datetime created_at
+        datetime updated_at
+    }
+
+    spot_magazines {
+        bigint spot_id PK, FK
+        bigint magazine_id PK, FK
+        string publication_feature "掲載特集名"
+        integer page_number "掲載ページ"
+        text notes "備考"
+        datetime created_at
+        datetime updated_at
+    }
+```
+
+### GraphQL API
+- **Query**: `magazines`, `magazine`
+- **Mutation**: `createMagazine`, `updateMagazine`, `deleteMagazine` (管理者向け)
+- **Types**: `MagazineType`, `SpotMagazineType`

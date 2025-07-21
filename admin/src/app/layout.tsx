@@ -77,6 +77,9 @@ export default function RootLayout({
                   <li className="admin-sidebar-nav-item">
                     <Link href="/stations" className="admin-sidebar-nav-link">駅マスタ</Link>
                   </li>
+                  <li className="admin-sidebar-nav-item">
+                    <Link href="/magazines" className="admin-sidebar-nav-link">雑誌マスタ</Link>
+                  </li>
                 </ul>
               </nav>
             </aside>
