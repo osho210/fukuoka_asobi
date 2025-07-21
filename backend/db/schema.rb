@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_19_075129) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_21_030937) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -153,6 +153,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_075129) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["instagram_embed_name"], name: "index_instagram_embeds_on_instagram_embed_name", unique: true
+  end
+
+  create_table "magazines", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.date "release_date"
+    t.string "sales_info"
+    t.string "sales_url"
+    t.string "publisher"
+    t.string "issue_number"
+    t.string "cover_image_url"
+    t.text "description"
+    t.string "status", default: "draft", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "menu_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -330,6 +344,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_075129) do
     t.index ["instagram_embed_id"], name: "index_spot_instagram_embeds_on_instagram_embed_id"
     t.index ["spot_id", "instagram_embed_id"], name: "index_store_instagram_embeds_on_store_and_instagram_embed", unique: true
     t.index ["spot_id"], name: "index_spot_instagram_embeds_on_spot_id"
+  end
+
+  create_table "spot_magazines", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "magazine_id", null: false
+    t.string "publication_feature"
+    t.integer "page_number"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["magazine_id"], name: "index_spot_magazines_on_magazine_id"
+    t.index ["spot_id", "magazine_id"], name: "index_spot_magazines_on_spot_id_and_magazine_id", unique: true
+    t.index ["spot_id"], name: "index_spot_magazines_on_spot_id"
   end
 
   create_table "spot_menus", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -539,6 +566,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_075129) do
   add_foreign_key "spot_hashtags", "spots"
   add_foreign_key "spot_instagram_embeds", "instagram_embeds"
   add_foreign_key "spot_instagram_embeds", "spots"
+  add_foreign_key "spot_magazines", "magazines"
+  add_foreign_key "spot_magazines", "spots"
   add_foreign_key "spot_menus", "menus"
   add_foreign_key "spot_menus", "spots"
   add_foreign_key "spot_photos", "spots"
