@@ -57,6 +57,7 @@ export const modelDisplayNames: Record<string, string> = {
   play_plans: '遊びプラン',
   events: 'イベント',
   news: 'ニュース',
+  magazines: '雑誌',
   stations: '駅',
   eventCategories: 'イベントカテゴリー',
   menuCategories: 'メニューカテゴリー',
@@ -237,6 +238,9 @@ export const modelConfigs: Record<string, ModelConfig> = {
       // 営業時間
       { name: 'openingHours', type: 'opening_hours_editor' },
 
+      // 雑誌掲載情報
+      { name: 'spotMagazines', type: 'spot_magazines_editor' },
+
       // 関連データ
       // { name: 'menu', type: 'multirelation', labelField: 'menuName' },
       // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
@@ -388,6 +392,32 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'name', type: 'text', required: true },
     ],
   },
+  magazines: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: '雑誌名', accessorKey: 'name', sortable: true },
+      { header: '出版社', accessorKey: 'publisher', sortable: true },
+      { header: '号数', accessorKey: 'issueNumber', sortable: false },
+      { header: 'ステータス', accessorKey: 'status', sortable: true },
+      {
+        header: '発売日',
+        accessorKey: 'releaseDate',
+        sortable: true,
+        cell: (item) => formatDateTimeToJapanese(item.releaseDate as string)
+      },
+    ],
+    fields: [
+      { name: 'name', type: 'text', required: true },
+      { name: 'publisher', type: 'text' },
+      { name: 'issueNumber', type: 'text' },
+      { name: 'releaseDate', type: 'datetime' },
+      { name: 'salesInfo', type: 'text' },
+      { name: 'salesUrl', type: 'text' },
+      { name: 'coverImageUrl', type: 'text' },
+      { name: 'description', type: 'textarea' },
+      { name: 'status', type: 'select', required: true, enumKey: 'MagazineStatusEnum' },
+    ],
+  },
 };
 
 // フィールド名の日本語表示
@@ -511,4 +541,15 @@ export const fieldDisplayNames: Record<string, string> = {
   priceRangeEndAmount: '価格上限',
   lastApiSyncAt: '最終API同期日時',
   apiSyncStatus: 'API同期ステータス',
+  // Magazine
+  spotMagazines: '雑誌掲載情報',
+  publicationFeature: '掲載特集',
+  pageNumber: '掲載ページ',
+  publisher: '出版社',
+  issueNumber: '号数',
+  releaseDate: '発売日',
+  salesInfo: '販売情報',
+  salesUrl: '販売URL',
+  coverImageUrl: '表紙画像URL',
+  description: '概要',
 };

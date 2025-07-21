@@ -53,6 +53,7 @@ const modelDisplayNames: Record<string, string> = {
   events: 'イベント',
   news: 'ニュース',
   station: '駅マスタ',
+  magazines: '雑誌マスタ',
 };
 
 // 各モデルのフィールド定義

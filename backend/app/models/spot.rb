@@ -1,4 +1,7 @@
 class Spot < ApplicationRecord
+  has_many :spot_magazines, dependent: :destroy
+  has_many :magazines, through: :spot_magazines
+  accepts_nested_attributes_for :spot_magazines, allow_destroy: true
   belongs_to :district
   has_many :opening_hours, dependent: :destroy
   accepts_nested_attributes_for :opening_hours, allow_destroy: true

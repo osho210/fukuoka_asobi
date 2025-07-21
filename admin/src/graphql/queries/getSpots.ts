@@ -125,6 +125,28 @@ export const GET_SPOTS = gql`
           id
           areaName
         }
+        spotMagazines {
+          id
+          publicationFeature
+          pageNumber
+          notes
+          magazine {
+            id
+            name
+          }
+        }
+        magazines {
+          id
+          name
+          releaseDate
+          salesInfo
+          salesUrl
+          publisher
+          issueNumber
+          coverImageUrl
+          description
+          status
+        }
       createdAt
       updatedAt
     }
