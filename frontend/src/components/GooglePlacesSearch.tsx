@@ -95,7 +95,22 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
           setLongitude(position.coords.longitude);
         },
         (error) => {
-          console.error('位置情報の取得に失敗しました:', error);
+          let errorMessage = '位置情報の取得に失敗しました。';
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage += ' ユーザーが位置情報の利用を許可しませんでした。';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage += ' 位置情報が利用できません。';
+              break;
+            case error.TIMEOUT:
+              errorMessage += ' 位置情報の取得がタイムアウトしました。';
+              break;
+            default:
+              errorMessage += ' 不明なエラーが発生しました。';
+          }
+          setGeoError(errorMessage);
+          console.error(errorMessage, error);
         }
       );
     }
