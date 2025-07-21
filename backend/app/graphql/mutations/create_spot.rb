@@ -109,6 +109,15 @@ module Mutations
 
       input = args.compact
 
+      # すべての値を半角に変換（文字列のみ）
+      input.each do |k, v|
+        if v.is_a?(String)
+          input[k] = v.unicode_normalize(:nfkc)
+        elsif v.is_a?(Array)
+          input[k] = v.map { |e| e.is_a?(String) ? e.unicode_normalize(:nfkc) : e }
+        end
+      end
+
       # Google Places APIからのenum値を小文字に変換
       if input[:business_status]
         input[:business_status] = input[:business_status].downcase

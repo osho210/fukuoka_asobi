@@ -92,7 +92,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'budgetRange', type: 'select', required: true },
     { name: 'spotType', type: 'select', required: true, enumKey: 'SpotTypeEnum' },
     { name: 'minPeople', type: 'number', required: true },
-    { name: 'maxPeople', type: 'number', required: true },
+    { name: 'maxPeople', type: 'number' },
     { name: 'recommendedFor1', type: 'text' },
     { name: 'recommendedFor2', type: 'text' },
     { name: 'instagramUrl', type: 'text', required: true },

@@ -10,7 +10,7 @@ class GooglePlacesService
   # テキスト検索でスポットを検索
   def search_places(query, location: nil, radius: nil)
     body = {
-      textQuery: query,
+      textQuery: query + ' 福岡',
       maxResultCount: 20
     }
 

@@ -9,6 +9,7 @@ import { fetchModelList, fetchRelationOptions } from '@/lib/modelGraphQL';
 import { ModelDetailModal } from '@/components/ModelDetailModal';
 import { modelConfigs, modelDisplayNames } from '@/lib/modelConstants';
 import { Select } from '@/components/forms/Select';
+import { useRouter } from 'next/navigation';
 
 // モデルデータの型定義
 interface ModelData {
@@ -211,11 +212,17 @@ export default function ModelListPage() {
     setIsModalOpen(true);
   };
 
+  const router = useRouter();
+
   // 新規作成ボタンクリック時
   const handleCreateClick = () => {
     setSelectedItem(null);
     setIsNewItem(true);
     setIsModalOpen(true);
+  };
+
+  const handleSpotCreateClick = () => {
+    router.push(`/${modelRoute}/new`);
   };
 
   // モーダルが閉じられたとき
@@ -239,7 +246,9 @@ export default function ModelListPage() {
     <div>
       <div className="admin-header">
         <h1 className="admin-page-title">{displayName}一覧</h1>
-        <Button onClick={handleCreateClick}>
+        <Button
+          onClick={modelRoute === 'spots' ? handleSpotCreateClick : handleCreateClick}
+        >
           <PlusIcon className="admin-mr-2 h-4 w-4" />
           新規作成
         </Button>

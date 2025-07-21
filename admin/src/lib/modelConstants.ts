@@ -157,7 +157,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'nearestStation', type: 'text', required: true },
       { name: 'imageUrl', type: 'text' },
       { name: 'minPeople', type: 'number', required: true },
-      { name: 'maxPeople', type: 'number', required: true },
+      { name: 'maxPeople', type: 'number' },
       { name: 'recommendedFor1', type: 'text' },
       { name: 'recommendedFor2', type: 'text' },
       { name: 'instagramUrl', type: 'text', required: true },
