@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Resolvers
-  class EventResolver < Resolvers::BaseResolver
+  class EventResolver < BaseResolver
     type Types::EventType, null: true
 
     argument :id, ID, required: true

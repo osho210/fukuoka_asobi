@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const GET_NEWS = gql`
+export const GET_NEWS_LIST = gql`
   query GetNewsList($categoryId: ID, $limit: Int) {
     news(categoryId: $categoryId, limit: $limit) {
       id

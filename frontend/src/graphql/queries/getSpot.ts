@@ -6,62 +6,146 @@ export const GET_SPOT = gql`
       id
       spotName
       address
-      phoneNumber
-      website
-      catchphrase
-      parkingAvailable
-      nearestStation
-      reviewRating
-      reviewCount
-      instagramUrl
-      isClosed
-      budgetRange
-      maxPeople
-      minPeople
-      isRainyOk
-      theme
-      imageUrl
-      spotType
-      createdAt
-      updatedAt
       district {
         id
         districtName
       }
-      openingHourList {
+      districtId
+      phoneNumber
+      website
+      catchphrase
+      isRainyOk
+      budgetRange
+      spotType
+      theme
+      reviewRating
+      reviewCount
+      instagramUrl
+      isClosed
+      maxPeople
+      minPeople
+      recommendedFor1
+      recommendedFor2
+      imageUrl
+      nearestStation
+      parkingAvailable
+      googlePlaceId
+      latitude
+      longitude
+      businessStatus
+      priceLevel
+      primaryType
+      primaryTypeDisplayName
+      internationalPhoneNumber
+      shortFormattedAddress
+      googleMapsUri
+      takeout
+      delivery
+      dineIn
+      reservable
+      servesBreakfast
+      servesLunch
+      servesDinner
+      servesBrunch
+      servesBeer
+      servesWine
+      servesVegetarianFood
+      outdoorSeating
+      liveMusic
+      menuForChildren
+      servesCocktails
+      servesDessert
+      servesCoffee
+      goodForChildren
+      allowsDogs
+      restroom
+      goodForGroups
+      goodForWatchingSports
+      acceptsCreditCards
+      acceptsDebitCards
+      acceptsCashOnly
+      acceptsNfc
+      freeParkingLot
+      paidParkingLot
+      freeStreetParking
+      paidStreetParking
+      valetParking
+      freeGarageParking
+      paidGarageParking
+      googleTypes,
+      adrFormatAddress,
+      generativeSummary,
+      editorialSummary,
+      priceRangeStartAmount,
+      priceRangeEndAmount,
+      priceRange {
+        startPrice {
+          amount
+          currency
+        }
+        endPrice {
+          amount
+          currency
+        }
+      }
+      reviewSummary {
+        text
+        flagContentUri
+        disclosureText
+        reviewsUri
+      }
+      openingHours {
+        id
         dayOfWeek
-      }
-      areas {
-        id
-        areaName
-      }
-      categories {
-        id
-        name
+        openTime
+        closeTime
+        isClosedDay
       }
       hashtags {
         id
         hashtagName
       }
-      instagramEmbeds {
+      purposes {
         id
-        instagramEmbedName
-        embedCode
-        embedUrl
-      }
-      menus {
-        id
-        menuName
-        price
-        description
+        purposeName
       }
       spotAmbiances {
         id
         ambianceName
       }
-      purposes {
+      categories {
         id
-        purposeName
+        name
+      }
+      menus {
+        id
+        menuName
+      }
+      areas {
+        id
+        areaName
+      }
+      spotMagazines {
+        id
+        publicationFeature
+        pageNumber
+        notes
+        magazine {
+          id
+          name
+        }
+      }
+      magazines {
+        id
+        name
+        releaseDate
+        salesInfo
+        salesUrl
+        publisher
+        issueNumber
+        coverImageUrl
+        description
+        status
       }
     }
   }

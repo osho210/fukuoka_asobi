@@ -158,16 +158,12 @@ module Types
     end
 
     # イベント
-    field :events , [Types::EventType], null: false
-    def events
-      Event.all
-    end
+    field :events, resolver: Resolvers::EventsResolver
+    field :event, resolver: Resolvers::EventResolver
 
     # ニュース
-    field :news, [Types::NewsType], null: true
-    def news
-      News.all
-    end
+    field :news, resolver: Resolvers::NewsResolver
+    field :newsDetail, resolver: Resolvers::NewsDetailResolver
 
     # おすすめ対象
     field :recommended_fors, [Types::RecommendedForType], null: false
