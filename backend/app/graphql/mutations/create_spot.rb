@@ -143,6 +143,11 @@ module Mutations
         input[:spot_magazines_attributes] = input[:spot_magazines_attributes].map(&:to_h)
       end
 
+      # opening_hours_attributes をハッシュの配列に変換
+      if input[:opening_hours_attributes]
+        input[:opening_hours_attributes] = input[:opening_hours_attributes].map(&:to_h)
+      end
+
       spot = Spot.new(input)
 
       ActiveRecord::Base.transaction do
