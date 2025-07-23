@@ -151,6 +151,11 @@ module Mutations
         update_attrs[:spot_magazines_attributes] = update_attrs[:spot_magazines_attributes].map(&:to_h)
       end
 
+      # opening_hours_attributes をハッシュの配列に変換
+      if update_attrs[:opening_hours_attributes]
+        update_attrs[:opening_hours_attributes] = update_attrs[:opening_hours_attributes].map(&:to_h)
+      end
+
       # ネストした属性を含む更新
       spot.update!(update_attrs)
       end

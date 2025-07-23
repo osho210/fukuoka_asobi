@@ -27,7 +27,7 @@ module Types
     field :latitude,        Float,  null: true
     field :longitude,       Float,  null: true
     field :business_status, Types::BusinessStatusEnumType, null: true
-    field :price_level,     String, null: true
+    field :price_level,     Types::PriceLevelEnumType, null: true
     field :last_api_sync_at, GraphQL::Types::ISO8601DateTime, null: true
     field :api_sync_status, String, null: true
     field :spot_type, Types::SpotTypeEnumType, null: false
