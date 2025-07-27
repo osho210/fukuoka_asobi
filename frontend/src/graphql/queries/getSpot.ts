@@ -120,6 +120,7 @@ export const GET_SPOT = gql`
       menus {
         id
         menuName
+        imageFilename
       }
       areas {
         id

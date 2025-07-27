@@ -77,6 +77,7 @@ export interface Spot {
     embedUrl?: string | null;
   }>;
   menus: Array<{
+    imageFilename: string | null;
     id: string;
     menuName: string;
     price?: number | null;
