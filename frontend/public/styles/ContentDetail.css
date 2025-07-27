@@ -190,6 +190,17 @@
   color: #cb6b52;
 }
 
+.content-detail-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.content-detail-menu-text {
+  display: flex;
+  flex-direction: column;
+}
+
 /* タグ */
 .content-detail-tags {
   display: flex;
