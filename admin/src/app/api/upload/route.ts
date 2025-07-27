@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // ファイル名を一意にするためにタイムスタンプを付与
-    const fileName = `${Date.now()}-${file.name}`;
+    const sanitizedFileName = path.basename(file.name);
+    const fileName = `${Date.now()}-${sanitizedFileName}`;
     const path = join(process.cwd(), '..', 'frontend', 'public', 'images', 'foods', fileName);
 
     try {
