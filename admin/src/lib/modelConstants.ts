@@ -112,6 +112,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'menuName', type: 'text', required: true },
       { name: 'price', type: 'number' },
       { name: 'description', type: 'textarea' },
+      { name: 'imageFilename', type: 'file' },
       { name: 'menuCategory', type: 'relation', required: false },
     ],
   },
@@ -422,6 +423,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
 
 // フィールド名の日本語表示
 export const fieldDisplayNames: Record<string, string> = {
+  imageFilename: '画像',
   areaName: 'エリア名',
   district: '地区',
   name: '名前',

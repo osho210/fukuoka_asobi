@@ -5,6 +5,7 @@ import { Spot } from '../../types/spot';
 import ContentDetail from '../ContentDetail';
 import BusinessHours from '../BusinessHours';
 import '@styles/ContentDetail.css';
+import Image from 'next/image';
 
 type SpotDetailAdapterProps = {
   spot: Spot;
@@ -81,7 +82,14 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
       content: (
         <ul className="content-detail-list">
           {spot.menus.map(menu => (
-            <li key={menu.id}>
+            <li key={menu.id} className="content-detail-menu-item">
+              <Image
+                src={menu.imageFilename ? `/images/foods/${menu.imageFilename}` : '/no-image.png'}
+                alt={menu.menuName}
+                width={30}
+                height={30}
+                className="content-detail-menu-image"
+              />
               <strong>{menu.menuName}</strong>
               {menu.price && <span> - ¥{menu.price.toLocaleString()}</span>}
               {menu.description && <p>{menu.description}</p>}
