@@ -1,23 +1,17 @@
+# frozen_string_literal: true
+
 module Resolvers
-  class NewsResolver < Resolvers::BaseResolver
+  class NewsResolver < BaseResolver
     type [Types::NewsType], null: false
 
     argument :category_id, ID, required: false
-    argument :limit, Integer, required: false, default_value: 10
-    argument :id, ID, required: false
+    argument :limit, Integer, required: false
 
-    def resolve(category_id: nil, limit: nil, id: nil)
-      if id.present?
-        # IDが指定された場合は単一のニュース記事を返す
-        news = News.published.where(id: id)
-        news = news.limit(limit) if limit.present?
-      else
-        # IDが指定されていない場合は複数のニュース記事を返す
-        news = News.published.recent.limit(limit)
-        news = news.by_category(category_id) if category_id.present?
-      end
-
-      news
+    def resolve(category_id: nil, limit: nil)
+      scope = News.all
+      scope = scope.where(news_category_id: category_id) if category_id.present?
+      scope = scope.limit(limit) if limit.present?
+      scope.order(created_at: :desc)
     end
   end
 end

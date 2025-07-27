@@ -9,6 +9,7 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
+import { FileUpload } from '@/components/forms/FileUpload';
 import { Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
@@ -82,6 +83,32 @@ export function ModelDetailModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [nearestStationLoading, setNearestStationLoading] = useState(false);
   const [selectedMenuCategories, setSelectedMenuCategories] = useState<RelationItem[]>([]);
+
+  const handleImageUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('ファイルのアップロードに失敗しました');
+      }
+
+      const { fileName } = await response.json();
+      handleChange('imageFilename', fileName);
+    } catch (error) {
+      console.error(error);
+      setError('ファイルのアップロードに失敗しました');
+    }
+  };
+
+  const handleImageRemove = () => {
+    handleChange('imageFilename', null);
+  };
 
   const handleFetchNearestStation = async () => {
     setNearestStationLoading(true);
@@ -637,6 +664,18 @@ export function ModelDetailModal({
                       {fieldName === 'planDetails' ? 'ステップを追加' : '項目を追加'}
                     </Button>
                   </div>
+                );
+              case 'file':
+                return (
+                  <FileUpload
+                    key={fieldName}
+                    label={fieldLabel}
+                    fileName={value as string || null}
+                    onUpload={handleImageUpload}
+                    onRemove={handleImageRemove}
+                    required={field.required}
+                    error={error}
+                  />
                 );
               case 'text':
                 return (

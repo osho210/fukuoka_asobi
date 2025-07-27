@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Resolvers
-  class NewsDetailResolver < Resolvers::BaseResolver
+  class NewsDetailResolver < BaseResolver
     type Types::NewsType, null: true
 
     argument :id, ID, required: true
 
     def resolve(id:)
-      News.published.find_by(id: id)
+      News.find_by(id: id)
     end
   end
 end

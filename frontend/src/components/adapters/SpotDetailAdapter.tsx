@@ -5,6 +5,7 @@ import { Spot } from '../../types/spot';
 import ContentDetail from '../ContentDetail';
 import BusinessHours from '../BusinessHours';
 import '@styles/ContentDetail.css';
+import Image from 'next/image';
 
 type SpotDetailAdapterProps = {
   spot: Spot;
@@ -81,7 +82,14 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
       content: (
         <ul className="content-detail-list">
           {spot.menus.map(menu => (
-            <li key={menu.id}>
+            <li key={menu.id} className="content-detail-menu-item">
+              <Image
+                src={menu.imageFilename ? `/images/foods/${menu.imageFilename}` : '/no-image.png'}
+                alt={menu.menuName}
+                width={30}
+                height={30}
+                className="content-detail-menu-image"
+              />
               <strong>{menu.menuName}</strong>
               {menu.price && <span> - ¥{menu.price.toLocaleString()}</span>}
               {menu.description && <p>{menu.description}</p>}
@@ -100,7 +108,39 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
         <div className="content-detail-tags">
           {spot.hashtags.map(tag => (
             <span key={tag.id} className="content-detail-tag">
-              {tag.hashtagName}
+              #{tag.hashtagName}
+            </span>
+          ))}
+        </div>
+      )
+    });
+  }
+
+  // 目的
+  if (spot.purposes && spot.purposes.length > 0) {
+    mainSections.push({
+      title: '目的',
+      content: (
+        <div className="content-detail-tags">
+          {spot.purposes.map(purpose => (
+            <span key={purpose.id} className="content-detail-tag">
+              {purpose.purposeName}
+            </span>
+          ))}
+        </div>
+      )
+    });
+  }
+
+  // 雰囲気
+  if (spot.spotAmbiances && spot.spotAmbiances.length > 0) {
+    mainSections.push({
+      title: '雰囲気',
+      content: (
+        <div className="content-detail-tags">
+          {spot.spotAmbiances.map(ambiance => (
+            <span key={ambiance.id} className="content-detail-tag">
+              {ambiance.ambianceName}
             </span>
           ))}
         </div>
@@ -171,6 +211,49 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
         <ul className="content-detail-list">
           {features.map((feature, index) => (
             <li key={index}>{feature}</li>
+          ))}
+        </ul>
+      )
+    });
+  }
+
+  // 設備・サービス
+  const services = [];
+  if (spot.takeout) services.push('テイクアウト');
+  if (spot.delivery) services.push('デリバリー');
+  if (spot.reservable) services.push('予約可');
+  if (spot.goodForChildren) services.push('子供連れOK');
+  if (spot.allowsDogs) services.push('ペット同伴可');
+  if (spot.outdoorSeating) services.push('屋外席あり');
+  if (spot.liveMusic) services.push('ライブ演奏あり');
+
+  if (services.length > 0) {
+    sidebarItems.push({
+      label: '設備・サービス',
+      content: (
+        <ul className="content-detail-list">
+          {services.map((service, index) => (
+            <li key={index}>{service}</li>
+          ))}
+        </ul>
+      )
+    });
+  }
+
+  // 支払い方法
+  const paymentMethods = [];
+  if (spot.acceptsCreditCards) paymentMethods.push('クレジットカード');
+  if (spot.acceptsDebitCards) paymentMethods.push('デビットカード');
+  if (spot.acceptsNfc) paymentMethods.push('電子マネー');
+  if (spot.acceptsCashOnly) paymentMethods.push('現金のみ');
+
+  if (paymentMethods.length > 0) {
+    sidebarItems.push({
+      label: '支払い方法',
+      content: (
+        <ul className="content-detail-list">
+          {paymentMethods.map((method, index) => (
+            <li key={index}>{method}</li>
           ))}
         </ul>
       )

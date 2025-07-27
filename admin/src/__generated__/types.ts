@@ -260,6 +260,8 @@ export type CreateMenuInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  /** メニューの画像ファイル名 */
+  imageFilename?: InputMaybe<Scalars['String']['input']>;
   menuCategoryId?: InputMaybe<Scalars['ID']['input']>;
   menuName: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -960,6 +962,8 @@ export type Menu = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  /** メニューの画像ファイル名 */
+  imageFilename?: Maybe<Scalars['String']['output']>;
   menuCategory?: Maybe<MenuCategory>;
   menuName: Scalars['String']['output'];
   price?: Maybe<Scalars['Float']['output']>;
@@ -1527,6 +1531,7 @@ export type Query = {
   dashboardStats: DashboardStats;
   district?: Maybe<District>;
   districts: Array<District>;
+  event?: Maybe<Event>;
   eventCategories: Array<EventCategory>;
   eventCategory?: Maybe<EventCategory>;
   events: Array<Event>;
@@ -1544,9 +1549,10 @@ export type Query = {
   menus: Array<Menu>;
   /** 指定された緯度・経度から最寄駅を取得します。 */
   nearestStation?: Maybe<Scalars['String']['output']>;
-  news?: Maybe<Array<News>>;
+  news: Array<News>;
   /** ニュースの総数 */
   newsCount: Scalars['Int']['output'];
+  newsDetail?: Maybe<News>;
   playPlan?: Maybe<PlayPlan>;
   playPlans: Array<PlayPlan>;
   /** 遊びプランの総数 */
@@ -1592,8 +1598,19 @@ export type QueryDistrictArgs = {
 };
 
 
+export type QueryEventArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryEventCategoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  upcoming?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1615,6 +1632,17 @@ export type QueryMagazineArgs = {
 export type QueryNearestStationArgs = {
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
+};
+
+
+export type QueryNewsArgs = {
+  categoryId?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryNewsDetailArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -2184,6 +2212,7 @@ export type UpdateMenuInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  imageFilename?: InputMaybe<Scalars['String']['input']>;
   menuCategoryId?: InputMaybe<Scalars['ID']['input']>;
   menuName?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -2852,14 +2881,14 @@ export type CreateMenuMutationVariables = Exact<{
 }>;
 
 
-export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', menuName: string } | null } | null };
+export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', menuName: string, imageFilename?: string | null } | null } | null };
 
 export type UpdateMenuMutationVariables = Exact<{
   input: UpdateMenuInput;
 }>;
 
 
-export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string } | null } | null };
+export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string, imageFilename?: string | null } | null } | null };
 
 export type DeleteMenuMutationVariables = Exact<{
   input: DeleteMenuInput;
@@ -3175,7 +3204,7 @@ export type GetMenuCategoriesQuery = { __typename?: 'Query', menuCategories: Arr
 export type GetMenusQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, createdAt: any, updatedAt: any, menuCategory?: { __typename?: 'MenuCategory', id: string, name: string } | null }> };
+export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, imageFilename?: string | null, createdAt: any, updatedAt: any, menuCategory?: { __typename?: 'MenuCategory', id: string, name: string } | null }> };
 
 export type GetNearestStationQueryVariables = Exact<{
   latitude: Scalars['Float']['input'];
@@ -3188,7 +3217,7 @@ export type GetNearestStationQuery = { __typename?: 'Query', nearestStation?: st
 export type GetNewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNewsQuery = { __typename?: 'Query', news?: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }> | null };
+export type GetNewsQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }> };
 
 export type GetPlayPlansQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;

@@ -1,6 +1,7 @@
 /**
  * モデル関連の定数を定義するファイル
  */
+import React from 'react';
 import { formatDateTimeToJapanese } from '@/lib/utils';
 
 // モデルデータの型定義
@@ -107,11 +108,31 @@ export const modelConfigs: Record<string, ModelConfig> = {
     columns: [
       { header: 'ID', accessorKey: 'id', sortable: true },
       { header: '名前', accessorKey: 'menuName', sortable: true },
+      {
+        header: '画像',
+        accessorKey: 'imageFilename',
+        sortable: false,
+        cell: (item: ModelData) => {
+          if (item.imageFilename) {
+            const filename = item.imageFilename as string;
+            const imageUrl = filename.startsWith('/images/foods/')
+              ? `${process.env.NEXT_PUBLIC_FRONTEND_URL}${filename}`
+              : `${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/foods/${filename}`;
+            return React.createElement('img', {
+              src: imageUrl,
+              alt: item.menuName as string,
+              style: { width: '40px', height: 'auto' },
+            });
+          }
+          return '画像なし';
+        },
+      },
     ],
     fields: [
       { name: 'menuName', type: 'text', required: true },
       { name: 'price', type: 'number' },
       { name: 'description', type: 'textarea' },
+      { name: 'imageFilename', type: 'file' },
       { name: 'menuCategory', type: 'relation', required: false },
     ],
   },
@@ -422,6 +443,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
 
 // フィールド名の日本語表示
 export const fieldDisplayNames: Record<string, string> = {
+  imageFilename: '画像',
   areaName: 'エリア名',
   district: '地区',
   name: '名前',

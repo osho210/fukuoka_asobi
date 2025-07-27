@@ -9,9 +9,12 @@ export interface Spot {
   recommendedFor2?: string | null;
   parkingAvailable?: boolean | null;
   nearestStation?: string | null;
-  openingHourList?: Array<{
+  openingHours?: Array<{
+    id: string;
     dayOfWeek: string;
-    businessHour: string;
+    openTime: string;
+    closeTime: string;
+    isClosedDay: boolean;
   }> | null;
   closedDays?: string[] | null;
   reviewRating?: number | null;
@@ -25,6 +28,32 @@ export interface Spot {
   theme?: string | null;
   imageUrl?: string | null;
   spotType: 'STORE' | 'TOURIST_SPOT' | 'ACTIVITY';
+  // Google Places API fields
+  takeout?: boolean | null;
+  delivery?: boolean | null;
+  reservable?: boolean | null;
+  servesBreakfast?: boolean | null;
+  servesLunch?: boolean | null;
+  servesDinner?: boolean | null;
+  servesBrunch?: boolean | null;
+  servesBeer?: boolean | null;
+  servesWine?: boolean | null;
+  servesVegetarianFood?: boolean | null;
+  outdoorSeating?: boolean | null;
+  liveMusic?: boolean | null;
+  menuForChildren?: boolean | null;
+  servesCocktails?: boolean | null;
+  servesDessert?: boolean | null;
+  servesCoffee?: boolean | null;
+  goodForChildren?: boolean | null;
+  allowsDogs?: boolean | null;
+  restroom?: boolean | null;
+  goodForGroups?: boolean | null;
+  goodForWatchingSports?: boolean | null;
+  acceptsCreditCards?: boolean | null;
+  acceptsDebitCards?: boolean | null;
+  acceptsCashOnly?: boolean | null;
+  acceptsNfc?: boolean | null;
   district: {
     id: string;
     districtName: string;
@@ -48,6 +77,7 @@ export interface Spot {
     embedUrl?: string | null;
   }>;
   menus: Array<{
+    imageFilename: string | null;
     id: string;
     menuName: string;
     price?: number | null;

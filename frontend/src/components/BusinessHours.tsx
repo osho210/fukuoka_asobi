@@ -1,22 +1,19 @@
 'use client';
 import '@styles/BusinessHour.css';
-
-interface OpeningHourList {
-  dayOfWeek: string;
-  businessHour: string;
-}
+import { formatTimeFromIso } from '../lib/dateUtils';
+import { Spot } from '@/types/spot'; // Spot 型をインポート
 
 interface BusinessHoursProps {
-  spot: {
-    openingHourList?: OpeningHourList[] | null;
-  };
+  spot: Spot; // spotプロップの型をSpotに修正
 }
 
 export default function BusinessHours({ spot }: BusinessHoursProps) {
-  if (!spot.openingHourList || spot.openingHourList.length === 0) {
+  // getSpot クエリから返される openingHours を使用
+  const openingHours = spot.openingHours;
+
+  if (!openingHours || openingHours.length === 0) {
     return (
       <div className="business-hours">
-        <h3>営業時間</h3>
         <p>営業時間の情報がありません。</p>
       </div>
     );
@@ -24,12 +21,15 @@ export default function BusinessHours({ spot }: BusinessHoursProps) {
 
   return (
     <div className="business-hours">
-      <p>営業時間</p>
       <ul className="business-hours-list">
-        {spot.openingHourList.map((hour, index) => (
-          <li key={index} className="business-hour-item">
+        {openingHours.map((hour) => (
+          <li key={hour.id} className="business-hour-item">
             <span className="day-of-week">{hour.dayOfWeek}:</span>
-            <span className="hours">{hour.businessHour}</span>
+            {hour.isClosedDay ? (
+              <span className="hours">定休日</span>
+            ) : (
+              <span className="hours">{formatTimeFromIso(hour.openTime)} ~ {formatTimeFromIso(hour.closeTime)}</span>
+            )}
           </li>
         ))}
       </ul>
