@@ -112,3 +112,17 @@ export function getRelativeTimeString(date: Date): string {
   // 1ヶ月以上前の場合は通常のフォーマットを使用
   return formatDate(date);
 }
+
+
+/**
+ * ISO 8601形式の日時文字列から時刻部分のみをフォーマットして返す関数
+ * @param isoString フォーマットするISO日時文字列 (例: "2000-01-01T10:00:00+09:00")
+ * @returns フォーマットされた時間文字列 (例: "10:00")
+ */
+export function formatTimeFromIso(isoString: string): string {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid ISO date string: ${isoString}`);
+  }
+  return formatTime(date);
+}

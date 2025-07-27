@@ -92,7 +92,7 @@ export default function ContentDetail({
 
             {/* セクション */}
             {mainSections.map((section, index) => (
-              <div key={index} className="content-detail-section">
+              <div key={index} className="content-detail-section" data-section-title={section.title}>
                 <h2 className="content-detail-section-title">{section.title}</h2>
                 <div className="content-detail-section-content">{section.content}</div>
               </div>
