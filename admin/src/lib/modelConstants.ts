@@ -266,6 +266,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       // { name: 'menu', type: 'multirelation', labelField: 'menuName' },
       // { name: 'purpose', type: 'relation', modelName: 'Purpose', labelField: 'purposeName' },
       { name: 'district', type: 'relation' },
+      { name: 'images', type: 'image_upload' },
     ],
     filters: [
       { name: 'district', label: '地区', model: 'districts', labelField: 'districtName' },

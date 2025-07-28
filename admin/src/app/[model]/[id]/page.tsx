@@ -10,6 +10,7 @@ import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { MultiSelect } from '@/components/forms/MultiSelect';
 import OpeningHoursEditor, { EditableOpeningHour } from '@/components/forms/OpeningHoursEditor';
+import ImageUpload from '@/components/forms/ImageUpload';
 import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
 import { ArrowLeft, Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
@@ -171,6 +172,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'menu', type: 'multirelation', modelName: 'Menu', labelField: 'menuName' },
     { name: 'areas', type: 'multirelation', modelName: 'Area', labelField: 'areaName', required: true },
     { name: 'district', type: 'relation', modelName: 'District', labelField: 'districtName', required: true },
+    { name: 'images', type: 'image_upload' },
   ],
   stations: [
     { name: 'name', type: 'text', required: true },
@@ -261,6 +263,7 @@ const fieldDisplayNames: Record<string, string> = {
   editorialSummary: '編集者要約',
   priceRangeStartAmount: '価格下限',
   priceRangeEndAmount: '価格上限',
+  images: '画像',
 };
 
 export default function ModelDetailPage() {
@@ -288,6 +291,7 @@ export default function ModelDetailPage() {
   };
 
   const [formData, setFormData] = useState<ModelData | null>(null);
+  const [newImages, setNewImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -395,6 +399,10 @@ export default function ModelDetailPage() {
     if (!formData) return {};
 
     const input: ModelInput = {};
+
+    if (newImages.length > 0) {
+      input.images = newImages;
+    }
 
     // フォームデータからGraphQLミューテーション用のデータを作成
     fields.forEach((field) => {
@@ -891,6 +899,19 @@ export default function ModelDetailPage() {
                     />
                   </div>
                 );
+              case 'image_upload': {
+                // formDataから 'images' ではなく 'image_urls' を参照
+                const existingImageUrls = (formData?.image_urls as string[] | undefined) || [];
+                return (
+                  <div key={fieldName} className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
+                    <ImageUpload
+                      onImagesChange={setNewImages}
+                      existingImages={existingImageUrls}
+                    />
+                  </div>
+                );
+              }
               default:
                 return null;
             }

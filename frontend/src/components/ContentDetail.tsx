@@ -22,7 +22,7 @@ type SidebarItem = {
 type ContentDetailProps = {
   // 基本情報
   title: string;
-  imageUrl?: string | null;
+  imageUrls?: string[] | null;
   badges?: ReactNode;
 
   // メインコンテンツ
@@ -45,7 +45,7 @@ type ContentDetailProps = {
  */
 export default function ContentDetail({
   title,
-  imageUrl,
+  imageUrls,
   badges,
   mainSections,
   sidebarItems,
@@ -53,6 +53,8 @@ export default function ContentDetail({
   backLinkText,
   actions
 }: ContentDetailProps) {
+
+  const baseMinioUrl = 'http://localhost:9000/fukuoka-asobi-dev';
   return (
     <div className="content-detail-container">
       <div className="mb-4">
@@ -72,16 +74,19 @@ export default function ContentDetail({
           {/* メインコンテンツ */}
           <div className="content-detail-main">
             {/* 画像 */}
-            {(imageUrl || true) && (
+            {(imageUrls || true) && (
               <div className="content-detail-image">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`}
-                    alt={title}
-                    width={800}
-                    height={400}
-                    className="content-detail-image-content"
-                  />
+                {Array.isArray(imageUrls) && imageUrls.length > 0 ? (
+                  imageUrls.map((url, idx) => (
+                    <Image
+                      key={idx}
+                      src={`${baseMinioUrl}/${url}`}
+                      alt={title}
+                      width={800}
+                      height={400}
+                      className="content-detail-image-content"
+                    />
+                  ))
                 ) : (
                   <div className="content-detail-no-image">
                     <span className="image-placeholder">No Image</span>

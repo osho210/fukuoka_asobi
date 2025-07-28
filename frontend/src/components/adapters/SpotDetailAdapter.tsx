@@ -288,7 +288,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
   return (
     <ContentDetail
       title={spot.spotName}
-      imageUrl={spot.imageUrl}
+      imageUrls={spot.imageUrls}
       badges={badges}
       mainSections={mainSections}
       sidebarItems={sidebarItems}

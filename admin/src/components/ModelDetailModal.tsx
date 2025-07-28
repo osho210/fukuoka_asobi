@@ -10,6 +10,7 @@ import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
 import { FileUpload } from '@/components/forms/FileUpload';
+import ImageUpload from '@/components/forms/ImageUpload';
 import { Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
@@ -77,6 +78,7 @@ export function ModelDetailModal({
   const [childModels, setChildModels] = useState<Record<string, ModelData[]>>({});
   const [spotMagazines, setSpotMagazines] = useState<SpotMagazine[]>([]);
   const [openingHours, setOpeningHours] = useState<OpeningHour[]>([]);
+  const [newImages, setNewImages] = useState<string[]>([]);
   // isLoadingは現在使用していないため削除
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -308,6 +310,10 @@ export function ModelDetailModal({
 
   const prepareFormData = (): ModelInput => {
     const input: ModelInput = {};
+
+    if (newImages.length > 0) {
+      input.images = newImages;
+    }
 
     // フォームデータからGraphQLミューテーション用のデータを作成
     fields
@@ -665,6 +671,18 @@ export function ModelDetailModal({
                     </Button>
                   </div>
                 );
+              case 'image_upload': {
+                const existingImageUrls = (formData?.imageUrls as string[] | undefined) || [];
+                return (
+                  <div key={fieldName} className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
+                    <ImageUpload
+                      onImagesChange={setNewImages}
+                      existingImages={existingImageUrls}
+                    />
+                  </div>
+                );
+              }
               case 'file':
                 return (
                   <FileUpload
