@@ -147,6 +147,7 @@ export const GET_SPOTS = gql`
           description
           status
         }
+        imageUrls
       createdAt
       updatedAt
     }

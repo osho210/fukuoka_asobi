@@ -26,7 +26,7 @@ export interface Spot {
   minPeople?: number | null;
   isRainyOk?: boolean | null;
   theme?: string | null;
-  imageUrl?: string | null;
+  imageUrls?: [string] | null;
   spotType: 'STORE' | 'TOURIST_SPOT' | 'ACTIVITY';
   // Google Places API fields
   takeout?: boolean | null;
