@@ -63,6 +63,10 @@ module Mutations
           temp_file.write(decoded_data)
           temp_file.rewind
 
+          pp 'アップロードするファイル情報:'
+          pp "  ファイル名: #{filename}"
+          pp "  コンテンツタイプ: #{content_type}" 
+
           current_user.avatar.purge if current_user.avatar.attached?
           current_user.avatar.attach(
             io:           temp_file,

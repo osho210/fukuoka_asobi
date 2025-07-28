@@ -33,6 +33,7 @@ module Types
     field :spot_type, Types::SpotTypeEnumType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :image_urls, [String], null: true, description: "スポットに紐づく画像のURLリスト"
 
     field :district, Types::DistrictType, null: false
     field :opening_hours, [Types::OpeningHourType], null: false
@@ -110,6 +111,8 @@ module Types
     field :good_for_groups, Boolean, null: true
     field :good_for_watching_sports, Boolean, null: true
     field :pure_service_area_business, Boolean, null: true
+
+    field :images, [String], null: true, description: "スポットに紐づく画像のURLリスト"
 
     def opening_hour_list
       object.opening_hour_list
@@ -189,6 +192,13 @@ module Types
 
     def accessibility_options
       object.accessibility_options
+    end
+
+    def image_urls
+      return [] unless object.images.attached?
+      object.images.map do |image|
+        image.blob.key
+      end
     end
   end
 end

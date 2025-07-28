@@ -21,7 +21,8 @@ module Mutations
     argument :max_people,        Int,     required: false
     argument :recommended_for_1, String,  required: false
     argument :recommended_for_2, String,  required: false
-    argument :image_url, String,          required: false
+    # 画像アップロード
+    argument :images, [String], required: false, description: "Base64エンコードされた画像の配列"
     argument :nearest_station, String,    required: false
     argument :parking_available, Boolean, required: false
 
@@ -118,6 +119,8 @@ module Mutations
       update_attrs = args.compact
       update_attrs.delete(:id)
 
+      images = update_attrs.delete(:images)
+
       # Google Places APIからのenum値を小文字に変換
       if update_attrs[:business_status]
         update_attrs[:business_status] = update_attrs[:business_status].downcase
@@ -158,6 +161,28 @@ module Mutations
 
       # ネストした属性を含む更新
       spot.update!(update_attrs)
+
+      # 画像の更新処理
+      if images.present?
+        # 既存の画像をすべて削除
+        spot.images.purge
+
+        # 新しい画像を添付
+        images.each_with_index do |base64_image, index|
+          # Base64データからファイル形式を判別
+          content_type = base64_image.match(/data:(.*?);/)[1]
+          # Base64データ部分のみを抽出
+          encoded_image = base64_image.split(",")[1]
+          # デコード
+          decoded_image = Base64.decode64(encoded_image)
+
+          spot.images.attach(
+            io: StringIO.new(decoded_image),
+            filename: "spot_#{spot.id}_#{Time.current.to_i}_#{index}.#{content_type.split('/')[1]}",
+            content_type: content_type
+          )
+        end
+      end
       end
 
       { spot: spot.reload, errors: [] }
