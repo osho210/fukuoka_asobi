@@ -148,7 +148,10 @@ export const GET_SPOT = gql`
         description
         status
       }
-      imageUrls
+      imageUrls {
+        id
+        url
+      }
     }
   }
 `;
