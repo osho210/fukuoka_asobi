@@ -9,7 +9,6 @@ export const CREATE_MENU = gql`
     createMenu(input: $input) {
       menu {
         menuName
-        imageFilename
       }
       errors
     }
@@ -22,7 +21,6 @@ mutation UpdateMenu($input: UpdateMenuInput!) {
       menu {
         id
         menuName
-        imageFilename
       }
       errors
     }

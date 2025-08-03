@@ -12,7 +12,10 @@ export const GET_SPOTS = gql`
       reviewCount
       budgetRange
       theme
-      imageUrl
+      imageUrl{
+        id
+        url
+      }
       district {
         id
         districtName

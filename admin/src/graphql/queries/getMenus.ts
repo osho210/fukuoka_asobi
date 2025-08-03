@@ -9,7 +9,10 @@ export const GET_MENUS = gql`
       menuName
       price
       description
-      imageFilename
+      imageUrl{
+        id
+        url
+      }
       menuCategory {
         id
         name

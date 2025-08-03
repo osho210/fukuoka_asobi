@@ -41,7 +41,10 @@ export const GENERATE_PLAN = gql`
             spotName
             address
             catchphrase
-            imageUrl
+            imageUrl {
+              id
+              url
+            }
           }
           travelDetails {
             sequenceNumber

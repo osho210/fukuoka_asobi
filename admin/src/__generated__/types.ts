@@ -260,8 +260,8 @@ export type CreateMenuInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  /** メニューの画像ファイル名 */
-  imageFilename?: InputMaybe<Scalars['String']['input']>;
+  /** Base64エンコードされた画像データ */
+  image?: InputMaybe<Scalars['String']['input']>;
   menuCategoryId?: InputMaybe<Scalars['ID']['input']>;
   menuName: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -909,7 +909,6 @@ export type Hashtag = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
-/** An image attached to a model */
 export type Image = {
   __typename?: 'Image';
   id: Scalars['ID']['output'];
@@ -971,8 +970,8 @@ export type Menu = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  /** メニューの画像ファイル名 */
-  imageFilename?: Maybe<Scalars['String']['output']>;
+  /** メニューの画像URL */
+  imageUrl?: Maybe<Image>;
   menuCategory?: Maybe<MenuCategory>;
   menuName: Scalars['String']['output'];
   price?: Maybe<Scalars['Float']['output']>;
@@ -2221,9 +2220,12 @@ export type UpdateMagazinePayload = {
 export type UpdateMenuInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** 既存の画像を削除するかどうか */
+  deleteImage?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  imageFilename?: InputMaybe<Scalars['String']['input']>;
+  /** Base64エンコードされた画像データ */
+  image?: InputMaybe<Scalars['String']['input']>;
   menuCategoryId?: InputMaybe<Scalars['ID']['input']>;
   menuName?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -2895,14 +2897,14 @@ export type CreateMenuMutationVariables = Exact<{
 }>;
 
 
-export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', menuName: string, imageFilename?: string | null } | null } | null };
+export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', menuName: string } | null } | null };
 
 export type UpdateMenuMutationVariables = Exact<{
   input: UpdateMenuInput;
 }>;
 
 
-export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string, imageFilename?: string | null } | null } | null };
+export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string } | null } | null };
 
 export type DeleteMenuMutationVariables = Exact<{
   input: DeleteMenuInput;
@@ -3218,7 +3220,7 @@ export type GetMenuCategoriesQuery = { __typename?: 'Query', menuCategories: Arr
 export type GetMenusQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, imageFilename?: string | null, createdAt: any, updatedAt: any, menuCategory?: { __typename?: 'MenuCategory', id: string, name: string } | null }> };
+export type GetMenusQuery = { __typename?: 'Query', menus: Array<{ __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, createdAt: any, updatedAt: any, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, menuCategory?: { __typename?: 'MenuCategory', id: string, name: string } | null }> };
 
 export type GetNearestStationQueryVariables = Exact<{
   latitude: Scalars['Float']['input'];

@@ -11,7 +11,10 @@ export const GET_RECOMMENDED_SPOTS = gql`
       address
       reviewRating
       reviewCount
-      imageUrl
+      imageUrl{
+        id
+        url
+      }
       district {
         districtName
       }
