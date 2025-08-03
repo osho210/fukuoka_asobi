@@ -89,25 +89,37 @@ export default function ContentDetail({
           {/* メインコンテンツ */}
           <div className="content-detail-main">
             {/* 画像 */}
+            {/* 登録されている画像が2枚以上ならスライド表示、1枚の場合は単体表示 */}
             {imageUrls && imageUrls.length > 0 ? (
               <div className="content-detail-image">
-                <Slider {...sliderSettings}>
-                  {imageUrls.map((imageUrl, idx) => (
-                    <div key={idx} className="content-detail-slide">
-                      <Image
-                        src={imageUrl.url}
-                        alt={`${title} ${idx + 1}`}
-                        width={800}
-                        height={400}
-                        className="content-detail-image-content"
-                        priority={idx === 0}
-                      />
-                    </div>
-                  ))}
-                </Slider>
-
+                {imageUrls.length > 1 ? (
+                  <Slider {...sliderSettings}>
+                    {imageUrls.map((imageUrl, idx) => (
+                      <div key={idx} className="content-detail-slide">
+                        <Image
+                          src={imageUrl.url}
+                          alt={`${title} ${idx + 1}`}
+                          width={800}
+                          height={400}
+                          className="content-detail-image-content"
+                          priority={idx === 0}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                ) : (
+                  <Image
+                    src={imageUrls[0].url}
+                    alt={title}
+                    width={800}
+                    height={400}
+                    className="content-detail-image-content"
+                    priority
+                  />
+                )}
               </div>
             ) : (
+              // 画像が設定されていない場合はプレースホルダーを表示
               <div className="content-detail-no-image">
                 <span className="image-placeholder">No Image</span>
               </div>
