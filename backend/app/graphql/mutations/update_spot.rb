@@ -23,6 +23,7 @@ module Mutations
     argument :recommended_for_2, String,  required: false
     # 画像アップロード
     argument :images, [String], required: false, description: "Base64エンコードされた画像の配列"
+    argument :delete_image_ids, [ID], required: false, description: "削除する画像のIDの配列"
     argument :nearest_station, String,    required: false
     argument :parking_available, Boolean, required: false
 
@@ -120,6 +121,7 @@ module Mutations
       update_attrs.delete(:id)
 
       images = update_attrs.delete(:images)
+      delete_image_ids = update_attrs.delete(:delete_image_ids)
 
       # Google Places APIからのenum値を小文字に変換
       if update_attrs[:business_status]
@@ -162,11 +164,16 @@ module Mutations
       # ネストした属性を含む更新
       spot.update!(update_attrs)
 
-      # 画像の更新処理
-      if images.present?
-        # 既存の画像をすべて削除
-        spot.images.purge
+      # 画像の削除処理
+      if delete_image_ids.present?
+        delete_image_ids.each do |image_id|
+          image_to_delete = spot.images.find_by(id: image_id)
+          image_to_delete&.purge
+        end
+      end
 
+      # 画像の追加処理
+      if images.present?
         # 新しい画像を添付
         images.each_with_index do |base64_image, index|
           # Base64データからファイル形式を判別
