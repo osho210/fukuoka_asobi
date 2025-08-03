@@ -110,16 +110,12 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { header: '名前', accessorKey: 'menuName', sortable: true },
       {
         header: '画像',
-        accessorKey: 'imageFilename',
+        accessorKey: 'imageUrl',
         sortable: false,
         cell: (item: ModelData) => {
-          if (item.imageFilename) {
-            const filename = item.imageFilename as string;
-            const imageUrl = filename.startsWith('/images/foods/')
-              ? `${process.env.NEXT_PUBLIC_FRONTEND_URL}${filename}`
-              : `${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/foods/${filename}`;
+          if (item.imageUrl) {
             return React.createElement('img', {
-              src: imageUrl,
+              src: item.imageUrl.url as string,
               alt: item.menuName as string,
               style: { width: '40px', height: 'auto' },
             });
@@ -132,7 +128,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'menuName', type: 'text', required: true },
       { name: 'price', type: 'number' },
       { name: 'description', type: 'textarea' },
-      { name: 'imageFilename', type: 'file' },
+      { name: 'image', type: 'image_upload' },
       { name: 'menuCategory', type: 'relation', required: false },
     ],
   },
@@ -443,6 +439,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
 
 // フィールド名の日本語表示
 export const fieldDisplayNames: Record<string, string> = {
+  image: '画像',
   imageFilename: '画像',
   areaName: 'エリア名',
   district: '地区',

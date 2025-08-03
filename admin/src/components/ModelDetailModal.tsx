@@ -11,6 +11,7 @@ import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
 import { FileUpload } from '@/components/forms/FileUpload';
 import ImageUpload from '@/components/forms/ImageUpload';
+import SingleImageUpload from '@/components/forms/SingleImageUpload';
 import { Save, Trash2, Search } from 'lucide-react';
 import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
@@ -680,10 +681,28 @@ export function ModelDetailModal({
                   </div>
                 );
               case 'image_upload': {
-                const existingImages = (formData?.image_urls as ImageType[] | undefined) || [];
-                console.log('Existing images:', existingImages);
+                // Menuモデルの場合は単一画像アップロード
+                if (modelRoute === 'menus') {
+                  return (
+                    <div key={fieldName} className="admin-col-span-2">
+                      <SingleImageUpload
+                        label={fieldLabel}
+                        existingImageUrl={formData?.imageUrl as string || null}
+                        onImageChange={(base64Image) => {
+                          handleChange('image', base64Image);
+                        }}
+                        onDeleteImage={() => {
+                          handleChange('deleteImage', true);
+                        }}
+                      />
+                    </div>
+                  );
+                }
+
+                // Spotモデルなどの複数画像アップロード
+                const existingImages = (formData?.image_urls as { id: string; url: string }[] | undefined) || [];
                 return (
-                  <div key={fieldName} className="col-span-2">
+                  <div key={fieldName} className="admin-col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
                     <ImageUpload
                       onImagesChange={setNewImages}

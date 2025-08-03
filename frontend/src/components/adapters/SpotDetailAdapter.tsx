@@ -84,7 +84,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
           {spot.menus.map(menu => (
             <li key={menu.id} className="content-detail-menu-item">
               <Image
-                src={menu.imageFilename ? `/images/foods/${menu.imageFilename}` : '/no-image.png'}
+                src={menu.imageUrl ? menu.imageUrl.url : '/no-image.png'}
                 alt={menu.menuName}
                 width={30}
                 height={30}
