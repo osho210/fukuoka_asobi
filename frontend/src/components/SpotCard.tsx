@@ -35,7 +35,7 @@ export default function SpotCard({
         <div className="spot-card-image-container">
           {imageUrl ? (
             <Image
-              src={imageUrl ? imageUrl.url : `/${imageUrl}`}
+              src={imageUrl ? imageUrl.url : '/no-image.png'}
               alt={spotName}
               fill
               className="spot-card-image"

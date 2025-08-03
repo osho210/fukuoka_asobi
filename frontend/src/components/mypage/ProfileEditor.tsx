@@ -94,8 +94,6 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
     };
     const baseMinioUrl = 'http://localhost:9000/fukuoka-asobi-dev';
     const fullAvatarUrl = `${baseMinioUrl}/${user.avatarUrl}`;
-    console.log(fullAvatarUrl)
-
 
     // 画像アップロード時の処理（Base64変換用）
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

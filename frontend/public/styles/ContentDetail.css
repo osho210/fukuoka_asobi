@@ -79,12 +79,6 @@
   overflow: hidden;
 }
 
-.content-detail-image-content {
-  width: 300px;
-  height: auto;
-  object-fit: cover;
-}
-
 .content-detail-no-image {
   display: flex;
   justify-content: center;

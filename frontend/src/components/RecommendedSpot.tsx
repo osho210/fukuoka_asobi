@@ -19,7 +19,7 @@ const RecommendedSpot = () => {
             <div className="spot-image">
               {spot.imageUrl ? (
                 <Image
-                  src={spot.imageUrl ? spot.imageUrl.url : `/${spot.imageUrl}`}
+                  src={spot.imageUrl ? spot.imageUrl.url : '/no-image.png'}
                   alt={spot.spotName}
                   width={300}
                   height={200}
