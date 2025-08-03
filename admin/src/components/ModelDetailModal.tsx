@@ -79,6 +79,7 @@ export function ModelDetailModal({
   const [spotMagazines, setSpotMagazines] = useState<SpotMagazine[]>([]);
   const [openingHours, setOpeningHours] = useState<OpeningHour[]>([]);
   const [newImages, setNewImages] = useState<string[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
   // isLoadingは現在使用していないため削除
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -110,6 +111,10 @@ export function ModelDetailModal({
 
   const handleImageRemove = () => {
     handleChange('imageFilename', null);
+  };
+
+  const handleDeleteImage = (id: string) => {
+    setDeletedImageIds(prev => [...prev, id]);
   };
 
   const handleFetchNearestStation = async () => {
@@ -313,6 +318,9 @@ export function ModelDetailModal({
 
     if (newImages.length > 0) {
       input.images = newImages;
+    }
+    if (deletedImageIds.length > 0) {
+      input.deleteImageIds = deletedImageIds;
     }
 
     // フォームデータからGraphQLミューテーション用のデータを作成
@@ -672,13 +680,15 @@ export function ModelDetailModal({
                   </div>
                 );
               case 'image_upload': {
-                const existingImageUrls = (formData?.imageUrls as string[] | undefined) || [];
+                const existingImages = (formData?.image_urls as ImageType[] | undefined) || [];
+                console.log('Existing images:', existingImages);
                 return (
                   <div key={fieldName} className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
                     <ImageUpload
                       onImagesChange={setNewImages}
-                      existingImages={existingImageUrls}
+                      onDeleteImage={handleDeleteImage}
+                      existingImages={existingImages}
                     />
                   </div>
                 );

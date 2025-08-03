@@ -3,6 +3,9 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import '@styles/EventsPage.css';
 import '@styles/RecommendedSpot.css';
 
@@ -18,11 +21,16 @@ type SidebarItem = {
   content: ReactNode;
 };
 
+type ImageUrl = {
+  id: string;
+  url: string;
+};
+
 // 詳細ページの共通プロパティ
 type ContentDetailProps = {
   // 基本情報
   title: string;
-  imageUrls?: string[] | null;
+  imageUrls?: ImageUrl[] | null;
   badges?: ReactNode;
 
   // メインコンテンツ
@@ -53,8 +61,15 @@ export default function ContentDetail({
   backLinkText,
   actions
 }: ContentDetailProps) {
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: false,
+  };
 
-  const baseMinioUrl = 'http://localhost:9000/fukuoka-asobi-dev';
   return (
     <div className="content-detail-container">
       <div className="mb-4">
@@ -74,24 +89,27 @@ export default function ContentDetail({
           {/* メインコンテンツ */}
           <div className="content-detail-main">
             {/* 画像 */}
-            {(imageUrls || true) && (
+            {imageUrls && imageUrls.length > 0 ? (
               <div className="content-detail-image">
-                {Array.isArray(imageUrls) && imageUrls.length > 0 ? (
-                  imageUrls.map((url, idx) => (
-                    <Image
-                      key={idx}
-                      src={`${baseMinioUrl}/${url}`}
-                      alt={title}
-                      width={800}
-                      height={400}
-                      className="content-detail-image-content"
-                    />
-                  ))
-                ) : (
-                  <div className="content-detail-no-image">
-                    <span className="image-placeholder">No Image</span>
-                  </div>
-                )}
+                <Slider {...sliderSettings}>
+                  {imageUrls.map((imageUrl, idx) => (
+                    <div key={idx} className="content-detail-slide">
+                      <Image
+                        src={imageUrl.url}
+                        alt={`${title} ${idx + 1}`}
+                        width={800}
+                        height={400}
+                        className="content-detail-image-content"
+                        priority={idx === 0}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+
+              </div>
+            ) : (
+              <div className="content-detail-no-image">
+                <span className="image-placeholder">No Image</span>
               </div>
             )}
 
