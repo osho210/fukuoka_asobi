@@ -6,7 +6,7 @@ type SpotCardProps = {
   spotName: string;
   address?: string | null;
   catchphrase?: string | null;
-  imageUrl?: string | null;
+  imageUrl?: { id: number, url: string } | null;
   reviewRating?: number | null;
   reviewCount?: number | null;
   budgetRange?: string | null;
@@ -35,7 +35,7 @@ export default function SpotCard({
         <div className="spot-card-image-container">
           {imageUrl ? (
             <Image
-              src={imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`}
+              src={imageUrl ? imageUrl.url : '/no-image.png'}
               alt={spotName}
               fill
               className="spot-card-image"

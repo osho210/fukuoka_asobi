@@ -11,6 +11,7 @@ import { modelConfigs, modelDisplayNames } from '@/lib/modelConstants';
 import { Select } from '@/components/forms/Select';
 import { useRouter } from 'next/navigation';
 
+
 // モデルデータの型定義
 interface ModelData {
   id: string;
@@ -211,7 +212,6 @@ export default function ModelListPage() {
     setIsNewItem(false);
     setIsModalOpen(true);
   };
-
   const router = useRouter();
 
   // 新規作成ボタンクリック時
@@ -224,7 +224,6 @@ export default function ModelListPage() {
   const handleSpotCreateClick = () => {
     router.push(`/${modelRoute}/new`);
   };
-
   // モーダルが閉じられたとき
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -247,6 +246,7 @@ export default function ModelListPage() {
       <div className="admin-header">
         <h1 className="admin-page-title">{displayName}一覧</h1>
         <Button
+          // 項目数が多いspotモデルの場合は別ページで作成
           onClick={modelRoute === 'spots' ? handleSpotCreateClick : handleCreateClick}
         >
           <PlusIcon className="admin-mr-2 h-4 w-4" />

@@ -3,6 +3,9 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import '@styles/EventsPage.css';
 import '@styles/RecommendedSpot.css';
 
@@ -18,11 +21,16 @@ type SidebarItem = {
   content: ReactNode;
 };
 
+type ImageUrl = {
+  id: string;
+  url: string;
+};
+
 // 詳細ページの共通プロパティ
 type ContentDetailProps = {
   // 基本情報
   title: string;
-  imageUrl?: string | null;
+  imageUrls?: ImageUrl[] | null;
   badges?: ReactNode;
 
   // メインコンテンツ
@@ -45,7 +53,7 @@ type ContentDetailProps = {
  */
 export default function ContentDetail({
   title,
-  imageUrl,
+  imageUrls,
   badges,
   mainSections,
   sidebarItems,
@@ -53,6 +61,15 @@ export default function ContentDetail({
   backLinkText,
   actions
 }: ContentDetailProps) {
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: false,
+  };
+
   return (
     <div className="content-detail-container">
       <div className="mb-4">
@@ -72,21 +89,39 @@ export default function ContentDetail({
           {/* メインコンテンツ */}
           <div className="content-detail-main">
             {/* 画像 */}
-            {(imageUrl || true) && (
+            {/* 登録されている画像が2枚以上ならスライド表示、1枚の場合は単体表示 */}
+            {imageUrls && imageUrls.length > 0 ? (
               <div className="content-detail-image">
-                {imageUrl ? (
+                {imageUrls.length > 1 ? (
+                  <Slider {...sliderSettings}>
+                    {imageUrls.map((imageUrl, idx) => (
+                      <div key={idx} className="content-detail-slide">
+                        <Image
+                          src={imageUrl.url}
+                          alt={`${title} ${idx + 1}`}
+                          width={800}
+                          height={400}
+                          className="content-detail-image-content"
+                          priority={idx === 0}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                ) : (
                   <Image
-                    src={imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`}
+                    src={imageUrls[0].url}
                     alt={title}
                     width={800}
                     height={400}
                     className="content-detail-image-content"
+                    priority
                   />
-                ) : (
-                  <div className="content-detail-no-image">
-                    <span className="image-placeholder">No Image</span>
-                  </div>
                 )}
+              </div>
+            ) : (
+              // 画像が設定されていない場合はプレースホルダーを表示
+              <div className="content-detail-no-image">
+                <span className="image-placeholder">No Image</span>
               </div>
             )}
 

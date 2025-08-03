@@ -22,7 +22,18 @@ module Types
     field :min_people, Integer, null: true
     field :is_rainy_ok, Boolean, null: true
     field :theme, String, null: true
-    field :image_url, String, null: true
+    field :image_url, Types::ImageType, null: true
+
+    def image_url
+      return nil unless object.images.attached?
+
+      first_image = object.images.first
+      {
+        id: first_image.id,
+        url: first_image.url.gsub("http://minio:9000", "http://localhost:9000")
+      }
+    end
+
     field :google_place_id, String, null: true
     field :latitude,        Float,  null: true
     field :longitude,       Float,  null: true
@@ -33,6 +44,7 @@ module Types
     field :spot_type, Types::SpotTypeEnumType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :image_urls, [Types::ImageType], null: true, description: "スポットに紐づく画像のURLリスト"
 
     field :district, Types::DistrictType, null: false
     field :opening_hours, [Types::OpeningHourType], null: false
@@ -189,6 +201,16 @@ module Types
 
     def accessibility_options
       object.accessibility_options
+    end
+
+    # TODO: 開発環境ではMinIOのURLをローカルに置き換える
+    def image_urls
+      object.images.map do |image|
+        {
+          id: image.id,
+          url: image.url.gsub("http://minio:9000", "http://localhost:9000")
+        }
+      end
     end
   end
 end

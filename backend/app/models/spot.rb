@@ -1,4 +1,5 @@
 class Spot < ApplicationRecord
+  has_many_attached :images
   has_many :spot_magazines, dependent: :destroy
   has_many :magazines, through: :spot_magazines
   accepts_nested_attributes_for :spot_magazines, allow_destroy: true

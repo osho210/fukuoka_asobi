@@ -21,7 +21,9 @@ module Mutations
     argument :max_people,        Int,     required: false
     argument :recommended_for_1, String,  required: false
     argument :recommended_for_2, String,  required: false
-    argument :image_url, String,          required: false
+    # 画像アップロード
+    argument :images, [String], required: false, description: "Base64エンコードされた画像の配列"
+    argument :delete_image_ids, [ID], required: false, description: "削除する画像のIDの配列"
     argument :nearest_station, String,    required: false
     argument :parking_available, Boolean, required: false
 
@@ -118,6 +120,9 @@ module Mutations
       update_attrs = args.compact
       update_attrs.delete(:id)
 
+      images = update_attrs.delete(:images)
+      delete_image_ids = update_attrs.delete(:delete_image_ids)
+
       # Google Places APIからのenum値を小文字に変換
       if update_attrs[:business_status]
         update_attrs[:business_status] = update_attrs[:business_status].downcase
@@ -158,6 +163,16 @@ module Mutations
 
       # ネストした属性を含む更新
       spot.update!(update_attrs)
+
+      # 画像の削除処理
+      if delete_image_ids.present?
+        ImageUploadService.delete_images(spot, delete_image_ids, attachment_name: :images)
+      end
+
+      # 画像の追加処理
+      if images.present?
+        ImageUploadService.attach_base64_images(spot, images, prefix: 'spot', attachment_name: :images)
+      end
       end
 
       { spot: spot.reload, errors: [] }

@@ -147,6 +147,10 @@ export const GET_SPOTS = gql`
           description
           status
         }
+        imageUrls {
+          id
+          url
+        }
       createdAt
       updatedAt
     }
@@ -188,6 +192,10 @@ export const GET_SPOT = gql`
       spotAmbiances {
         id
         ambianceName
+      }
+      imageUrls {
+        id
+        url
       }
       createdAt
       updatedAt

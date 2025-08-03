@@ -10,8 +10,14 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ["example.com"], // 外部画像のホスト名を追加
+    domains: ["localhost"], // 外部画像のホスト名を追加
     remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/rails/active_storage/**',
+      },
       {
         protocol: 'http',
         hostname: 'localhost',
@@ -20,9 +26,9 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'localhost',
+        hostname: 'minio',
         port: '9000',
-        pathname: '/fukuoka-asobi-dev/**',
+        pathname: '/**',
       },
     ],
   },

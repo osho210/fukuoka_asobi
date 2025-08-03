@@ -26,7 +26,6 @@ export const GET_SPOT = gql`
       minPeople
       recommendedFor1
       recommendedFor2
-      imageUrl
       nearestStation
       parkingAvailable
       googlePlaceId
@@ -120,7 +119,10 @@ export const GET_SPOT = gql`
       menus {
         id
         menuName
-        imageFilename
+        imageUrl {
+          id
+          url
+        }
       }
       areas {
         id
@@ -147,6 +149,14 @@ export const GET_SPOT = gql`
         coverImageUrl
         description
         status
+      }
+      imageUrls {
+        id
+        url
+      }
+      imageUrl {
+        id
+        url
       }
     }
   }

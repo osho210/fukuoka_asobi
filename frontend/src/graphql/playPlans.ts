@@ -63,7 +63,10 @@ export const GET_PLAY_PLAN = gql`
           phoneNumber
           budgetRange
           isRainyOk
-          imageUrl
+          imageUrl{
+            id
+            url
+          }
           catchphrase
           categories{
             name

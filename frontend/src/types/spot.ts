@@ -26,7 +26,8 @@ export interface Spot {
   minPeople?: number | null;
   isRainyOk?: boolean | null;
   theme?: string | null;
-  imageUrl?: string | null;
+  imageUrls?: {id:number, url:string}[] | null;
+  imageUrl?: { id: number, url: string } | null;
   spotType: 'STORE' | 'TOURIST_SPOT' | 'ACTIVITY';
   // Google Places API fields
   takeout?: boolean | null;
@@ -77,7 +78,10 @@ export interface Spot {
     embedUrl?: string | null;
   }>;
   menus: Array<{
-    imageFilename: string | null;
+    imageUrl: {
+      id: string;
+      url: string;
+    } | null;
     id: string;
     menuName: string;
     price?: number | null;

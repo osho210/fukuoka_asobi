@@ -15,8 +15,13 @@ minio:
   endpoint: 'http://minio:9000'
   force_path_style: true
   bucket: fukuoka-asobi-dev
+  public: true
 
 # 本番環境用S3設定
+# TODO: 本番環境では、S3バケットを公開設定にし、CDN（CloudFrontなど）を経由して画像を配信する
+# その際、以下の `public: true` のコメントアウトを解除し、
+# `config/environments/production.rb` で `config.asset_host` にCDNのドメインを設定する必要があります。
+# public: true
 amazon:
   service: S3
   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>

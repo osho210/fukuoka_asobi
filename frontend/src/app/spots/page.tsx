@@ -19,7 +19,7 @@ type Spot = {
     catchphrase: string | null;
     reviewRating: number | null;
     reviewCount: number | null;
-    imageUrl: string | null;
+    imageUrl: { id: number, url: string } | null;
     budgetRange: string | null;
     spotType: string;
     district: {

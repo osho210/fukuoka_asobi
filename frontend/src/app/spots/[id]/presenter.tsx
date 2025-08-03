@@ -28,7 +28,7 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
             {/* 画像があれば表示、なければプレースホルダー */}
             {spot.imageUrl ? (
               <Image
-                src={spot.imageUrl.startsWith('http') ? spot.imageUrl : `/${spot.imageUrl}`}
+                src={spot.imageUrl.url}
                 alt={spot.spotName}
                 className="spot-detail-image"
               />

@@ -19,6 +19,10 @@ Rails.application.configure do
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # TODO: 本番環境でCDNを利用する場合、以下のコメントアウトを解除し、CDNのドメインを設定する。
+  # 例: "https://cdn.your-service.com"
+  # これにより、Active Storageが生成するURLがCDN経由になります。
+  # 詳細は `config/storage.yml` のTODOコメントも参照してください。
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).

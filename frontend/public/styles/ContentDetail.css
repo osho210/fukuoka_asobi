@@ -79,12 +79,6 @@
   overflow: hidden;
 }
 
-.content-detail-image-content {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
 .content-detail-no-image {
   display: flex;
   justify-content: center;
@@ -257,4 +251,23 @@
   padding: 32px 16px;
   font-size: 18px;
   color: #666;
+}
+
+/* Slider 内の画像をレスポンシブに拡大縮小 */
+.content-detail-image .slick-slide div {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-detail-image-content {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Slick dots が下に埋まるのを防止 */
+.slick-dots {
+  bottom: 10px !important;
 }

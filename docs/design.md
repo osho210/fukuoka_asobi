@@ -104,6 +104,17 @@ Google Places APIと連携して、スポット情報を自動的に取得・同
 ### GraphQL API
 - **Query**: `searchGooglePlaces` - Google Places検索
 - **Mutation**: `syncSpotWithGooglePlaces` - スポット同期
+- **Mutation**: `createStore`, `updateStore` - スポットの作成・更新（画像アップロード対応）
+
+### ActiveStorageによる画像管理
+- **概要**: `stores` テーブルに紐づく複数の画像を `ActiveStorage` を利用して管理します。
+- **モデル**: `Store` モデルに `has_many_attached :images` を追加します。
+- **GraphQL**:
+    - `StoreType` に、紐づく画像のURLリストを返す `image_urls` フィールドを追加します。
+    - `createStore` および `updateStore` ミューテーションに、Base64エンコードされた画像の配列を受け取る `images: [String!]` 引数を追加します。
+- **アップロード処理**:
+    - フロントエンドから送信されたBase64形式の画像データ配列を、バックエンドでデコードします。
+    - デコードしたデータを `ActiveStorage` を使ってストレージに保存し、`Store` レコードに紐付けます。
 
 ### サービスクラス
 - **GooglePlacesService**: Google Places API通信
