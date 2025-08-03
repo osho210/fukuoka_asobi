@@ -22,16 +22,18 @@ module Types
     field :min_people, Integer, null: true
     field :is_rainy_ok, Boolean, null: true
     field :theme, String, null: true
-    field :image_url, String, null: true
+    field :image_url, Types::ImageType, null: true
 
     def image_url
       return nil unless object.images.attached?
 
       first_image = object.images.first
-      return nil unless first_image&.blob
-
-      first_image.blob.url
+      {
+        id: first_image.id,
+        url: first_image.url.gsub("http://minio:9000", "http://localhost:9000")
+      }
     end
+
     field :google_place_id, String, null: true
     field :latitude,        Float,  null: true
     field :longitude,       Float,  null: true

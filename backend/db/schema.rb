@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_26_040129) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_03_031932) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -183,7 +183,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_040129) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "menu_category_id", null: false
-    t.string "image_filename"
     t.index ["menu_category_id"], name: "index_menus_on_menu_category_id"
     t.index ["menu_name"], name: "index_menus_on_menu_name"
   end

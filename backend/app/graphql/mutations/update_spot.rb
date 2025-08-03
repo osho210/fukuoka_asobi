@@ -166,29 +166,12 @@ module Mutations
 
       # 画像の削除処理
       if delete_image_ids.present?
-        delete_image_ids.each do |image_id|
-          image_to_delete = spot.images.find_by(id: image_id)
-          image_to_delete&.purge
-        end
+        ImageUploadService.delete_images(spot, delete_image_ids, attachment_name: :images)
       end
 
       # 画像の追加処理
       if images.present?
-        # 新しい画像を添付
-        images.each_with_index do |base64_image, index|
-          # Base64データからファイル形式を判別
-          content_type = base64_image.match(/data:(.*?);/)[1]
-          # Base64データ部分のみを抽出
-          encoded_image = base64_image.split(",")[1]
-          # デコード
-          decoded_image = Base64.decode64(encoded_image)
-
-          spot.images.attach(
-            io: StringIO.new(decoded_image),
-            filename: "spot_#{spot.id}_#{Time.current.to_i}_#{index}.#{content_type.split('/')[1]}",
-            content_type: content_type
-          )
-        end
+        ImageUploadService.attach_base64_images(spot, images, prefix: 'spot', attachment_name: :images)
       end
       end
 
