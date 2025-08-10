@@ -45,7 +45,11 @@ export const GET_PLAY_PLAN = gql`
       startDatetime
       endDatetime
       tags
-      recommendedForString
+      recommendUsers
+      recommendedFors {
+        id
+        name
+      }
       planDetails {
         id
         stepNumber

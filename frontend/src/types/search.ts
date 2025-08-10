@@ -2,7 +2,7 @@
 
 // 利用メンバー情報
 export interface MemberInfo {
-  recommendedForIds: string[];
+  recommendUsers: string[];
 }
 
 // 予算範囲の入力

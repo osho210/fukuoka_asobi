@@ -1907,6 +1907,8 @@ export type Spot = {
   phoneNumber?: Maybe<Scalars['String']['output']>;
   priceLevel?: Maybe<PriceLevelEnum>;
   priceRange?: Maybe<PriceRange>;
+  /** 価格帯の平均値 */
+  priceRangeAverage?: Maybe<Scalars['Float']['output']>;
   priceRangeEndAmount?: Maybe<Scalars['Float']['output']>;
   priceRangeStartAmount?: Maybe<Scalars['Float']['output']>;
   primaryType?: Maybe<Scalars['String']['output']>;
@@ -3409,11 +3411,6 @@ export type GetPlayPlansQueryVariables = Exact<{
 
 export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, recommendUsers?: Array<string> | null, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, budgetRange?: BudgetTypeRangeEnum | null, isRainyOk?: boolean | null, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', url: string } | null, categories: Array<{ __typename?: 'Category', name: string }>, district: { __typename?: 'District', districtName: string } } | null, travelDetails: Array<{ __typename?: 'TravelDetail', id: string, sequenceNumber: number, travelMethod: string, travelTime?: number | null, notes?: string | null }> }> | null }> };
 
-export type GetFormOptionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetFormOptionsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string }>, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> };
-
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3440,6 +3437,11 @@ export type GetSpotQueryVariables = Exact<{
 
 
 export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null } | null };
+
+export type GetFormOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetFormOptionsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, priceRangeAverage?: number | null }>, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }>, districts: Array<{ __typename?: 'District', id: string, districtName: string }> };
 
 export type GetStationsQueryVariables = Exact<{ [key: string]: never; }>;
 

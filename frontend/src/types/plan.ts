@@ -92,7 +92,7 @@ export interface PlayPlan {
   updatedAt?: string;
   tags?: string;
   recommendedFors?: RecommendedFor[];
-  recommendedForString?: string;
+  recommendUsers?: string;
   plannerTitle?: string;
   plannerDescription?: string;
   user?: User;

@@ -1562,7 +1562,7 @@ export type PlayPlan = {
   plannerTitle?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   rating: Scalars['Float']['output'];
-  recommendUsers?: Maybe<Scalars['String']['output']>;
+  recommendUsers?: Maybe<Array<Scalars['String']['output']>>;
   recommendedFors?: Maybe<Array<RecommendedFor>>;
   reviewCount: Scalars['Int']['output'];
   startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1907,6 +1907,8 @@ export type Spot = {
   phoneNumber?: Maybe<Scalars['String']['output']>;
   priceLevel?: Maybe<PriceLevelEnum>;
   priceRange?: Maybe<PriceRange>;
+  /** 価格帯の平均値 */
+  priceRangeAverage?: Maybe<Scalars['Float']['output']>;
   priceRangeEndAmount?: Maybe<Scalars['Float']['output']>;
   priceRangeStartAmount?: Maybe<Scalars['Float']['output']>;
   primaryType?: Maybe<Scalars['String']['output']>;
@@ -2953,7 +2955,7 @@ export type GetPlayPlanQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, recommendUsers?: string | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, budgetRange?: BudgetTypeRangeEnum | null, isRainyOk?: boolean | null, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, categories: Array<{ __typename?: 'Category', name: string }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
+export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startDatetime?: any | null, endDatetime?: any | null, tags?: string | null, recommendUsers?: Array<string> | null, recommendedFors?: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startDatetime?: any | null, endDatetime?: any | null, budget?: number | null, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, budgetRange?: BudgetTypeRangeEnum | null, isRainyOk?: boolean | null, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, categories: Array<{ __typename?: 'Category', name: string }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
