@@ -31,7 +31,10 @@ export const CREATE_SPOT = gql`
         minPeople
         recommendedFor1
         recommendedFor2
-        imageUrl
+        imageUrl{
+          id
+          url
+        }
         nearestStation
         parkingAvailable
         googlePlaceId
@@ -143,7 +146,10 @@ export const UPDATE_SPOT = gql`
         minPeople
         recommendedFor1
         recommendedFor2
-        imageUrl
+        imageUrl {
+          id
+          url
+        }
         nearestStation
         parkingAvailable
         googlePlaceId

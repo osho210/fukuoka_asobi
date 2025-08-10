@@ -14,6 +14,10 @@ export const UPDATE_PLAY_PLAN = gql`
         startDatetime
         endDatetime
         imageUrl
+        imageUrls {
+          id
+          url
+        }
         tags
         favoriteCount
         publishedAt

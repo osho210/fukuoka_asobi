@@ -6,6 +6,10 @@ export const GET_PLAY_PLANS = gql`
       planName
       description
       imageUrl
+      imageUrls {
+        id
+        url
+      }
       location
       tripType
       totalBudget
@@ -35,7 +39,9 @@ export const GET_PLAY_PLANS = gql`
           phoneNumber
           budgetRange
           isRainyOk
-          imageUrl
+          imageUrl {
+            url
+          }
           catchphrase
           categories{
             name
@@ -44,7 +50,28 @@ export const GET_PLAY_PLANS = gql`
             districtName
           }
         }
+        travelDetails {
+          id
+          sequenceNumber
+          travelMethod
+          travelTime
+          notes
+        }
       }
+    }
+  }
+`;
+
+
+export const GET_FORM_OPTIONS = gql`
+  query GetFormOptions {
+    spots {
+      id
+      spotName
+    }
+    recommendedFors {
+      id
+      name
     }
   }
 `;

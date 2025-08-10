@@ -25,32 +25,35 @@ export const UPDATE_PLAN_DETAILS = gql`
 `;
 
 export const UPDATE_PLAY_PLAN_WITH_DETAILS = gql`
-  mutation UpdatePlayPlanWithDetails($input: UpdatePlayPlanInput!) {
-    updatePlayPlan(input: $input) {
-      playPlan {
+mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDetailsInput!) {
+  createOrUpdatePlayPlanWithDetails(input: $input) {
+    playPlan {
+      id
+      planName
+      description
+      status
+      tripType
+      totalBudget
+      location
+      startDatetime
+      endDatetime
+      imageUrl
+      imageUrls {
         id
-        planName
-        description
-        status
-        tripType
-        totalBudget
-        location
-        startDatetime
-        endDatetime
-        imageUrl
-        tags
-        favoriteCount
-        publishedAt
-        plannerDescription
-        rating
-        reviewCount
-        recommendedFors {
-          id
-          name
-        }
+        url
+      }
+      tags
+      favoriteCount
+      publishedAt
+      plannerDescription
+      rating
+      reviewCount
+      recommendedFors {
+        id
+        name
       }
       planDetails {
-        planId
+        id
         stepNumber
         stepName
         stepDescription
@@ -63,8 +66,20 @@ export const UPDATE_PLAY_PLAN_WITH_DETAILS = gql`
           id
           spotName
         }
+        travelDetails {
+          id
+          sequenceNumber
+          travelMethod
+          travelTime
+          notes
+        }
       }
-      errors
     }
+    errors {
+      field
+      message
+    }
+    success
   }
+}
 `;
