@@ -41,7 +41,7 @@ RSpec.describe Mutations::GeneratePlan, type: :request do
       districts: [district.id.to_s],
       date: Date.today.to_s,
       memberInfo: {
-        recommendedForIds: [1]
+        recommendUsers: [1]
       },
       budget: {
         min: 0,

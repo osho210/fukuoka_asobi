@@ -21,7 +21,7 @@ module Mutations
     argument :planner_description, String, required: false
     argument :rating, Float, required: false
     argument :tags, String, required: false
-    argument :recommended_for_ids, [ID], required: false
+    argument :recommend_users, [ID], required: false
     argument :plan_details, [Types::PlanDetailInputType], required: false
 
     # 出力フィールド

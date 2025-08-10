@@ -49,7 +49,7 @@ class UpdatePlayPlanWithDetailsService
       :id,
       :plan_details,
       :deleted_plan_detail_ids,
-      :recommended_for_ids,
+      :recommend_users,
       :images,
       :delete_image_ids
     ).compact
@@ -66,7 +66,7 @@ class UpdatePlayPlanWithDetailsService
     process_images!
 
     # おすすめ対象の関連付け
-    process_recommended_fors! if @params[:recommended_for_ids].present?
+    process_recommended_fors! if @params[:recommend_users].present?
   end
 
   def process_images!
@@ -124,13 +124,13 @@ class UpdatePlayPlanWithDetailsService
 
   def process_recommended_fors!
     @play_plan.play_plan_recommended_fors.destroy_all
-    @params[:recommended_for_ids].each do |recommended_for_id|
+    @params[:recommend_users].each do |recommended_for_id|
       recommended_for = RecommendedFor.find_by(id: recommended_for_id)
       if recommended_for
         @play_plan.recommended_fors << recommended_for
       else
         @errors << {
-          field: "recommended_for_ids",
+          field: "recommend_users",
           message: "ID #{recommended_for_id} のおすすめ対象が見つかりません"
         }
       end

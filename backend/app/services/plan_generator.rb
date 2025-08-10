@@ -128,9 +128,9 @@ module Services
         score += budget_score
 
         # 利用メンバー適合度
-        if @member_info[:recommended_for_ids].present?
+        if @member_info[:recommend_users].present?
           spot_recommended_fors = spot.recommended_fors.pluck(:id)
-          matching_recommended_fors = spot_recommended_fors & @member_info[:recommended_for_ids]
+          matching_recommended_fors = spot_recommended_fors & @member_info[:recommend_users]
           score += matching_recommended_fors.size * 25 # マッチするおすすめ対象ごとに加点
         end
 

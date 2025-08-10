@@ -12,7 +12,7 @@ module Mutations
     argument :image_url, String, required: false
     argument :images, [String], required: false
     argument :tags, String, required: false
-    argument :recommended_for_ids, [ID], required: false
+    argument :recommend_users, [ID], required: false
 
     # 出力フィールド
     field :play_plan, Types::PlayPlanType, null: true
@@ -30,7 +30,7 @@ module Mutations
       image_url: nil,
       images: nil,
       tags: nil,
-      recommended_for_ids: []
+      recommend_users: []
     )
       # 現在のユーザーを取得
       user = context[:current_user]
@@ -51,8 +51,8 @@ module Mutations
       )
 
       # おすすめ対象の関連付け
-      if recommended_for_ids.present?
-        recommended_for_ids.each do |id|
+      if recommend_users.present?
+        recommend_users.each do |id|
           recommended_for = RecommendedFor.find_by(id: id)
           play_plan.recommended_fors << recommended_for if recommended_for
         end

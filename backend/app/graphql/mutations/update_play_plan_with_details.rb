@@ -16,7 +16,7 @@ module Mutations
     argument :images, [String], required: false, description: "画像リスト（Base64形式）"
     argument :delete_image_ids, [ID], required: false, description: "削除する画像IDリスト"
     argument :tags, String, required: false, description: "タグ"
-    argument :recommended_for_ids, [ID], required: false, description: "おすすめ対象IDリスト"
+    argument :recommend_users, [ID], required: false, description: "おすすめ対象IDリスト"
     argument :plan_details, [Types::PlanDetailInputType], required: false, description: "プラン詳細リスト"
     argument :deleted_plan_detail_ids, [ID], required: false, description: "削除するプラン詳細IDリスト"
 

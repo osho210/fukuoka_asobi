@@ -38,7 +38,7 @@ class PlayPlanWithDetailsService
   private
 
   def process_play_plan!
-    plan_attrs = @params.except(:id, :plan_details, :recommended_for_ids)
+    plan_attrs = @params.except(:id, :plan_details, :recommend_users)
     plan_attrs[:user_id] = @current_user&.id
 
     if @params[:id].present?
@@ -69,15 +69,15 @@ class PlayPlanWithDetailsService
   end
 
   def process_recommended_fors!
-    return unless @params[:recommended_for_ids].present?
+    return unless @params[:recommend_users].present?
 
     @play_plan.play_plan_recommended_fors.destroy_all
-    @params[:recommended_for_ids].each do |recommended_for_id|
+    @params[:recommend_users].each do |recommended_for_id|
       recommended_for = RecommendedFor.find_by(id: recommended_for_id)
       if recommended_for
         @play_plan.recommended_fors << recommended_for
       else
-        @errors << { field: "recommended_for_ids", message: "ID #{recommended_for_id} のおすすめ対象が見つかりません" }
+        @errors << { field: "recommend_users", message: "ID #{recommended_for_id} のおすすめ対象が見つかりません" }
       end
     end
   end

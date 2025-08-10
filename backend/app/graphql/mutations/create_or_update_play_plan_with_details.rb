@@ -15,7 +15,7 @@ module Mutations
     argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false, description: "終了日時"
     argument :image_url, String, required: false, description: "画像URL"
     argument :tags, String, required: false, description: "タグ"
-    argument :recommended_for_ids, [ID], required: false, description: "おすすめ対象IDリスト"
+    argument :recommend_users, [ID], required: false, description: "おすすめ対象IDリスト"
     argument :plan_details, [Types::PlanDetailInputType], required: true, description: "プラン詳細リスト"
 
     # 出力フィールド

@@ -44,8 +44,8 @@ class PlayPlan < ApplicationRecord
     end
   end
 
-  # RecommendedForオブジェクトからカンマ区切りの文字列を生成するメソッド
-  def recommended_for_string
-    recommended_fors.map(&:name).join(', ')
+  # おすすめ対象の一覧を取得
+  def recommend_users
+    recommended_fors.map(&:id)
   end
 end

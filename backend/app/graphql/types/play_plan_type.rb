@@ -38,7 +38,7 @@ module Types
     field :recommended_fors, [Types::RecommendedForType], null: true
 
     # おすすめ対象の文字列表現を取得
-    field :recommended_for_string, String, null: true
+    field :recommend_users, [String], null: true
 
     # 現在のユーザーがお気に入り登録しているかどうか
     field :is_favorite, Boolean, null: false
