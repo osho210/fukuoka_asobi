@@ -52,7 +52,7 @@ const PlayPlanList = () => {
               <div className="play-plan-image">
                 {plan.imageUrl ? (
                   <Image
-                    src={plan.imageUrl.startsWith('/') ? plan.imageUrl : `/${plan.imageUrl}`}
+                    src={plan.imageUrl.url}
                     alt={plan.planName}
                     width={300}
                     height={200}

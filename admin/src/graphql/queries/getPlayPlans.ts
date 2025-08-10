@@ -21,7 +21,8 @@ export const GET_PLAY_PLANS = gql`
       startDatetime
       endDatetime
       tags
-      recommendedForString
+      # TODO: nameも取得して渡す
+      recommendUsers
       planDetails {
         id
         stepNumber
@@ -58,20 +59,6 @@ export const GET_PLAY_PLANS = gql`
           notes
         }
       }
-    }
-  }
-`;
-
-
-export const GET_FORM_OPTIONS = gql`
-  query GetFormOptions {
-    spots {
-      id
-      spotName
-    }
-    recommendedFors {
-      id
-      name
     }
   }
 `;

@@ -211,10 +211,15 @@ export const GET_FORM_OPTIONS = gql`
     spots {
       id
       spotName
+      priceRangeAverage
     }
     recommendedFors {
       id
       name
+    }
+    districts {
+      id
+      districtName
     }
   }
 `;

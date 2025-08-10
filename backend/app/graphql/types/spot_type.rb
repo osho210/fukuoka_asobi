@@ -94,6 +94,7 @@ module Types
     field :paid_garage_parking, Boolean, null: true
     field :price_range_start_amount, Float, null: true
     field :price_range_end_amount, Float, null: true
+    field :price_range_average, Float, null: true, description: "価格帯の平均値"
     field :spot_photos, [Types::SpotPhotoType], null: true
     field :accessibility_options, [Types::AccessibilityOptionType], null: true
 
@@ -201,6 +202,19 @@ module Types
 
     def accessibility_options
       object.accessibility_options
+    end
+
+    # 価格帯の平均値を計算するメソッド
+    def price_range_average
+      start_amount = object.price_range_start_amount
+      end_amount = object.price_range_end_amount
+
+      # 値が両方とも値が存在する場合は平均値を計算
+      # 厳密な予算が知りたいわけではないので、10の位は四捨五入 ¥765 → ¥800
+      return ((start_amount + end_amount) / 2.0).round(-2) if start_amount.present? && end_amount.present?
+
+      # 片方がnilの場合はもう一方の値を返す
+      start_amount.present? ? start_amount : end_amount
     end
 
     # TODO: 開発環境ではMinIOのURLをローカルに置き換える

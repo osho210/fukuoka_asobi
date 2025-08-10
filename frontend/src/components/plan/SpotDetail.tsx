@@ -52,7 +52,7 @@ const SpotDetail: React.FC<SpotDetailProps> = ({ spot }) => {
       {spot.imageUrl && (
         <div className="plan-step-spot-image">
           <Image
-            src={spot.imageUrl.startsWith('/') ? spot.imageUrl : `/${spot.imageUrl}`}
+            src={spot.imageUrl.url}
             alt={spot.spotName}
             fill
             className="spot-image"

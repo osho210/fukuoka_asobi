@@ -7,7 +7,7 @@ interface PlanRecommendationProps {
 }
 
 const PlanRecommendation: React.FC<PlanRecommendationProps> = ({ plan }) => {
-  if ((!plan.recommendedFors || plan.recommendedFors.length === 0) && !plan.recommendedForString) {
+  if ((!plan.recommendedFors || plan.recommendedFors.length === 0) && !plan.recommendUsers) {
     return null;
   }
 
@@ -19,8 +19,8 @@ const PlanRecommendation: React.FC<PlanRecommendationProps> = ({ plan }) => {
           plan.recommendedFors.map(item => (
             <span key={item.id} className="plan-recommended-for-tag">{item.name}</span>
           ))
-        ) : plan.recommendedForString ? (
-          plan.recommendedForString.split(',').map((item, index) => (
+        ) : plan.recommendUsers ? (
+          plan.recommendUsers.split(',').map((item, index) => (
             <span key={index} className="plan-recommended-for-tag">{item.trim()}</span>
           ))
         ) : null}

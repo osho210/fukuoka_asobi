@@ -88,7 +88,7 @@ const SearchContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     districts: [],
     date: '',
-    memberInfo: { recommendedForIds: [] },
+    memberInfo: { recommendUsers: [] },
     budget: { min: 0, max: 20000 },
   });
 
@@ -122,7 +122,7 @@ const SearchContainer: React.FC = () => {
       return;
     }
 
-    if (searchParams.memberInfo.recommendedForIds.length === 0) {
+    if (searchParams.memberInfo.recommendUsers.length === 0) {
       setErrorMessage('利用メンバーを選択してください');
       return;
     }
