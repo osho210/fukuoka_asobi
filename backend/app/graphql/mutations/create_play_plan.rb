@@ -10,6 +10,7 @@ module Mutations
     argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :image_url, String, required: false
+    argument :images, [String], required: false
     argument :tags, String, required: false
     argument :recommended_for_ids, [ID], required: false
 
@@ -27,6 +28,7 @@ module Mutations
       start_datetime: nil,
       end_datetime: nil,
       image_url: nil,
+      images: nil,
       tags: nil,
       recommended_for_ids: []
     )
@@ -57,6 +59,19 @@ module Mutations
       end
 
       if play_plan.save
+        # 画像の処理
+        if images.present?
+          images.each do |base64_image|
+            # Base64画像をデコードしてActiveStorageに保存
+            decoded_image = Base64.decode64(base64_image.split(',').last)
+            play_plan.images.attach(
+              io: StringIO.new(decoded_image),
+              filename: "play_plan_#{play_plan.id}_#{Time.current.to_i}.jpg",
+              content_type: 'image/jpeg'
+            )
+          end
+        end
+
         {
           play_plan: play_plan,
           errors: []

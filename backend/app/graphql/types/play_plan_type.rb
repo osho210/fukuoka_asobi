@@ -17,6 +17,7 @@ module Types
     field :rating, Float, null: false
     field :review_count, Integer, null: false
     field :image_url, String, null: true
+    field :image_urls, [Types::ImageType], null: true, description: "プランに紐づく画像のURLリスト"
     field :tags, String, null: true
     field :location, String, null: true
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
@@ -51,6 +52,16 @@ module Types
     # お気に入り数を取得
     def favorite_count
       object.favorites.count
+    end
+
+    # 画像URLリストを取得
+    def image_urls
+      object.images.map do |image|
+        {
+          id: image.id,
+          url: image.url.gsub("http://minio:9000", "http://localhost:9000")
+        }
+      end
     end
   end
 end

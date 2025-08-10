@@ -7,6 +7,9 @@ class PlayPlan < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :favorited_by_users, through: :favorites, source: :user
 
+  # Active Storage関連付け
+  has_many_attached :images
+
   validates :plan_name, presence: true
 
   # ステータスの定義

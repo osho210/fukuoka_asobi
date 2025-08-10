@@ -12,6 +12,8 @@ module Mutations
     argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :image_url, String, required: false
+    argument :images, [String], required: false
+    argument :delete_image_ids, [ID], required: false
     argument :review_count, Integer, required: false
     argument :favorite_count, Integer, required: false
     argument :published_at, GraphQL::Types::ISO8601DateTime, required: false
@@ -89,12 +91,41 @@ module Mutations
     private
 
     def update_play_plan!(play_plan, attrs, errors)
-      return true if attrs.empty?
+      # 画像関連の処理を分離
+      images = attrs.delete(:images)
+      delete_image_ids = attrs.delete(:delete_image_ids)
 
-      unless play_plan.update(attrs)
-        errors.concat(play_plan.errors.full_messages)
-        return false
+      return true if attrs.empty? && images.blank? && delete_image_ids.blank?
+
+      # 通常の属性更新
+      if attrs.present?
+        unless play_plan.update(attrs)
+          errors.concat(play_plan.errors.full_messages)
+          return false
+        end
       end
+
+      # 画像削除処理
+      if delete_image_ids.present?
+        delete_image_ids.each do |image_id|
+          image = play_plan.images.find_by(id: image_id)
+          image&.purge
+        end
+      end
+
+      # 新しい画像の追加
+      if images.present?
+        images.each do |base64_image|
+          # Base64画像をデコードしてActiveStorageに保存
+          decoded_image = Base64.decode64(base64_image.split(',').last)
+          play_plan.images.attach(
+            io: StringIO.new(decoded_image),
+            filename: "play_plan_#{play_plan.id}_#{Time.current.to_i}.jpg",
+            content_type: 'image/jpeg'
+          )
+        end
+      end
+
       true
     end
 

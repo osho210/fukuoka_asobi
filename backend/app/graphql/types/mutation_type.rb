@@ -12,6 +12,8 @@ module Types
     # プラン関連
     field :create_play_plan, mutation: Mutations::CreatePlayPlan
     field :update_play_plan, mutation: Mutations::UpdatePlayPlan
+    field :create_or_update_play_plan_with_details, mutation: Mutations::CreateOrUpdatePlayPlanWithDetails
+    field :update_play_plan_with_details, mutation: Mutations::UpdatePlayPlanWithDetails
     field :generate_plan, mutation: Mutations::GeneratePlan
     field :update_plan_detail, mutation: Mutations::UpdatePlanDetail
     field :update_plan_details, mutation: Mutations::UpdatePlanDetails
