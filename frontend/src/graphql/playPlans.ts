@@ -17,6 +17,10 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       status
+      imageUrls {
+        id
+        url
+      }
       user {
         id
         username
@@ -34,6 +38,10 @@ export const GET_PLAY_PLAN = gql`
       planName
       description
       imageUrl
+      imageUrls {
+        id
+        url
+      }
       location
       tripType
       totalBudget
@@ -42,8 +50,8 @@ export const GET_PLAY_PLAN = gql`
       favoriteCount
       isFavorite
       status
-      startDatetime
-      endDatetime
+      startTime
+      endTime
       tags
       recommendUsers
       recommendedFors {
@@ -56,8 +64,8 @@ export const GET_PLAY_PLAN = gql`
         stepName
         stepDescription
         comment
-        startDatetime
-        endDatetime
+        startTime
+        durationMinutes
         budget
         notes
         spot {

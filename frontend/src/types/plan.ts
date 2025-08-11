@@ -51,8 +51,8 @@ export interface PlanDetail {
   comment?: string;
   createdAt?: string;
   updatedAt?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   notes?: string;
   plannerTitle?: string;
@@ -86,8 +86,8 @@ export interface PlayPlan {
   favoriteCount: number;
   isFavorite?: boolean;
   status: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  endTime?: string;
   createdAt?: string;
   updatedAt?: string;
   tags?: string;
