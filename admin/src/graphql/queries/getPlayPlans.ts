@@ -18,8 +18,8 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       status
-      startDatetime
-      endDatetime
+      startTime
+      endTime
       tags
       # TODO: nameも取得して渡す
       recommendUsers
@@ -29,8 +29,9 @@ export const GET_PLAY_PLANS = gql`
         stepName
         stepDescription
         comment
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
         budget
         notes
         spot {

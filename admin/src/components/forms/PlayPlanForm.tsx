@@ -31,8 +31,9 @@ interface PlanDetail {
   stepDescription?: string;
   spotId?: string;
   comment?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  endTime?: string;
+  durationMinutes?: number;
   budget?: string;
   notes?: string;
   travelDetails: TravelDetail[];
@@ -50,8 +51,8 @@ interface PlayPlanFormData {
   tripType: string;
   totalBudget?: string;
   location?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  endTime?: string;
   imageUrl?: string;
   imageUrls?: ExistingImage[];
   newImages?: string[];
@@ -136,6 +137,14 @@ export default function PlayPlanForm({
     }));
   };
 
+  // 最後のステップの終了時刻を受け取ってプランの終了時刻を更新
+  const handlePlanEndTimeChange = (endTime: string) => {
+    setFormData(prev => ({
+      ...prev,
+      endTime,
+    }));
+  };
+
   // 総予算の手動入力処理
   const handleTotalBudgetChange = (value: string) => {
     setIsManualBudget(true);
@@ -181,10 +190,10 @@ export default function PlayPlanForm({
       }
     });
 
-    // 日時の整合性チェック
-    if (formData.startDatetime && formData.endDatetime) {
-      if (new Date(formData.startDatetime) >= new Date(formData.endDatetime)) {
-        newErrors.endDatetime = '終了日時は開始日時より後である必要があります';
+    // 日付の整合性チェック
+    if (formData.startTime && formData.endTime) {
+      if (new Date(formData.startTime) >= new Date(formData.endTime)) {
+        newErrors.endTime = '終了日は開始日より後である必要があります';
       }
     }
 
@@ -355,32 +364,32 @@ export default function PlayPlanForm({
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="startDatetime" className="play-plan-form__label">
-              開始日時
+            <label htmlFor="startTime" className="play-plan-form__label">
+              開始時刻
             </label>
             <input
-              type="datetime-local"
-              id="startDatetime"
-              value={formData.startDatetime || ''}
-              onChange={(e) => handleInputChange('startDatetime', e.target.value)}
+              type="time"
+              id="startTime"
+              value={formData.startTime || ''}
+              onChange={(e) => handleInputChange('startTime', e.target.value)}
               className="play-plan-form__input"
             />
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="endDatetime" className="play-plan-form__label">
-              終了日時
+            <label htmlFor="endTime" className="play-plan-form__label">
+              終了時刻
             </label>
             <input
-              type="datetime-local"
-              id="endDatetime"
-              value={formData.endDatetime || ''}
-              onChange={(e) => handleInputChange('endDatetime', e.target.value)}
-              className={`play-plan-form__input ${errors.endDatetime ? 'play-plan-form__input--error' : ''
+              type="time"
+              id="endTime"
+              value={formData.endTime || ''}
+              onChange={(e) => handleInputChange('endTime', e.target.value)}
+              className={`play-plan-form__input ${errors.endTime ? 'play-plan-form__input--error' : ''
                 }`}
             />
-            {errors.endDatetime && (
-              <p className="play-plan-form__error">{errors.endDatetime}</p>
+            {errors.endTime && (
+              <p className="play-plan-form__error">{errors.endTime}</p>
             )}
           </div>
         </div>
@@ -446,6 +455,7 @@ export default function PlayPlanForm({
           planDetails={formData.planDetails}
           spots={spots}
           onChange={handlePlanDetailsChange}
+          onEndTimeChange={handlePlanEndTimeChange}
           errors={errors}
         />
 

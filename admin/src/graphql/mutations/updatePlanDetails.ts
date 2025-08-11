@@ -9,8 +9,9 @@ export const UPDATE_PLAN_DETAILS = gql`
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
         budget
         comment
         notes
@@ -35,8 +36,8 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
       tripType
       totalBudget
       location
-      startDatetime
-      endDatetime
+      startTime
+      endTime
       imageUrl
       imageUrls {
         id
@@ -57,8 +58,9 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
         budget
         comment
         notes

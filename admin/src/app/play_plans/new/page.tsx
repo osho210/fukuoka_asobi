@@ -14,10 +14,6 @@ export default function NewPlayPlanPage() {
 
   const [upsertPlayPlan] = useMutation(UPDATE_PLAY_PLAN_WITH_DETAILS);
 
-  const formatDatetimeForSubmit = (datetime: string): string | null => {
-    if (!datetime) return null;
-    return `${datetime}:00+00:00`;
-  };
 
   const { data: optionsData, loading: optionsLoading } = useQuery(GET_FORM_OPTIONS);
 
@@ -35,8 +31,8 @@ export default function NewPlayPlanPage() {
             tripType: formData.tripType?.toUpperCase(),
             totalBudget: formData.totalBudget ? parseFloat(formData.totalBudget) : null,
             location: formData.location,
-            startDatetime: formatDatetimeForSubmit(formData.startDatetime),
-            endDatetime: formatDatetimeForSubmit(formData.endDatetime),
+            startTime: formData.startTime,
+            endTime: formData.endTime,
             imageUrl: formData.imageUrl,
             images: formData.newImages,
             tags: formData.tags,
@@ -47,8 +43,9 @@ export default function NewPlayPlanPage() {
               stepDescription: detail.stepDescription,
               spotId: detail.spotId || null,
               comment: detail.comment,
-              startDatetime: formatDatetimeForSubmit(detail.startDatetime),
-              endDatetime: formatDatetimeForSubmit(detail.endDatetime),
+              startTime: detail.startTime,
+              endTime: detail.endTime,
+              durationMinutes: detail.durationMinutes,
               budget: detail.budget ? parseFloat(detail.budget) : null,
               notes: detail.notes,
               travelDetails:
@@ -106,8 +103,8 @@ export default function NewPlayPlanPage() {
           tripType: 'day_trip',
           totalBudget: '',
           location: '',
-          startDatetime: '',
-          endDatetime: '',
+          startTime: '',
+          endTime: '',
           imageUrl: '',
           tags: '',
           recommendUsers: [],
@@ -118,8 +115,8 @@ export default function NewPlayPlanPage() {
               stepDescription: '',
               spotId: '',
               comment: '',
-              startDatetime: '',
-              endDatetime: '',
+              startTime: '',
+              durationMinutes: 60,
               budget: '',
               notes: '',
               travelDetails: [],

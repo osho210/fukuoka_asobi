@@ -25,8 +25,9 @@ interface PlanDetail {
   stepDescription?: string;
   spotId?: string;
   comment?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  endTime?: string;
+  durationMinutes?: number;
   budget?: string;
   notes?: string;
   travelDetails: TravelDetail[];
@@ -36,18 +37,54 @@ interface PlanDetailFormProps {
   planDetails: PlanDetail[];
   spots: Spot[];
   onChange: (planDetails: PlanDetail[]) => void;
+  onEndTimeChange?: (endTime: string) => void;
   errors: Record<string, string>;
 }
 
-const formatDatetimeForInput = (datetime?: string): string => {
-  if (!datetime) return '';
-  return new Date(datetime).toISOString().slice(0, 16);
+
+// 時刻文字列を分に変換する関数
+const timeToMinutes = (timeString: string): number => {
+  if (!timeString) return 0;
+  const [hours, minutes] = timeString.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+// 分を時刻文字列に変換する関数
+const minutesToTime = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
+
+// 開始時刻と滞在時間から終了時刻を計算
+const calculateEndTime = (startTime: string, durationMinutes: number): string => {
+  if (!startTime || !durationMinutes) return '';
+  const startMinutes = timeToMinutes(startTime);
+  const endMinutes = startMinutes + durationMinutes;
+  return minutesToTime(endMinutes);
+};
+
+// 開始時刻と終了時刻から滞在時間を計算
+const calculateDuration = (startTime: string, endTime: string): number => {
+  if (!startTime || !endTime) return 0;
+  const startMinutes = timeToMinutes(startTime);
+  const endMinutes = timeToMinutes(endTime);
+  return Math.max(0, endMinutes - startMinutes);
+};
+
+// 移動詳細の移動時間の合計を計算
+const calculateTotalTravelTime = (travelDetails: TravelDetail[]): number => {
+  return travelDetails.reduce((total, detail) => {
+    const travelTime = parseInt(detail.travelTime || '0', 10);
+    return total + (isNaN(travelTime) ? 0 : travelTime);
+  }, 0);
 };
 
 export default function PlanDetailForm({
   planDetails,
   spots,
   onChange,
+  onEndTimeChange,
   errors,
 }: PlanDetailFormProps) {
   const [expandedSteps, setExpandedSteps] = useState<Set<number>>(new Set([0]));
@@ -69,15 +106,19 @@ export default function PlanDetailForm({
       stepDescription: '',
       spotId: '',
       comment: '',
-      startDatetime: '',
-      endDatetime: '',
+      startTime: '',
+      endTime: '',
+      durationMinutes: 60,
       budget: '',
       notes: '',
       travelDetails: [],
     };
 
     const newPlanDetails = [...planDetails, newStep];
-    onChange(newPlanDetails);
+
+    // 新しいステップの時刻を再計算
+    const recalculatedPlanDetails = recalculateAllStepTimes(newPlanDetails);
+    onChange(recalculatedPlanDetails);
 
     // 新しいステップを展開
     setExpandedSteps(prev => new Set([...prev, planDetails.length]));
@@ -143,7 +184,33 @@ export default function PlanDetailForm({
     setExpandedSteps(newExpanded);
   };
 
-  const updateStep = (index: number, field: keyof PlanDetail, value: string | TravelDetail[]) => {
+  // 全ステップの時刻を再計算する関数
+  const recalculateAllStepTimes = (planDetails: PlanDetail[]): PlanDetail[] => {
+    const updatedPlanDetails = [...planDetails];
+
+    for (let i = 1; i < updatedPlanDetails.length; i++) {
+      const previousStep = updatedPlanDetails[i - 1];
+      const currentStep = updatedPlanDetails[i];
+
+      // 前のステップの終了時刻と移動時間から現在のステップの開始時刻を計算
+      if (previousStep.endTime) {
+        const previousEndMinutes = timeToMinutes(previousStep.endTime);
+        const travelTimeMinutes = calculateTotalTravelTime(previousStep.travelDetails);
+        const newStartMinutes = previousEndMinutes + travelTimeMinutes;
+        const newStartTime = minutesToTime(newStartMinutes);
+
+        updatedPlanDetails[i] = {
+          ...currentStep,
+          startTime: newStartTime,
+          endTime: calculateEndTime(newStartTime, currentStep.durationMinutes || 60),
+        };
+      }
+    }
+
+    return updatedPlanDetails;
+  };
+
+  const updateStep = (index: number, field: keyof PlanDetail, value: string | number | TravelDetail[]) => {
     const newPlanDetails = [...planDetails];
     newPlanDetails[index] = {
       ...newPlanDetails[index],
@@ -152,8 +219,90 @@ export default function PlanDetailForm({
     onChange(newPlanDetails);
   };
 
+  // 最後のステップの終了時刻を親コンポーネントに通知
+  const notifyEndTimeChange = (updatedPlanDetails: PlanDetail[]) => {
+    if (onEndTimeChange && updatedPlanDetails.length > 0) {
+      const lastStep = updatedPlanDetails[updatedPlanDetails.length - 1];
+      if (lastStep.endTime) {
+        onEndTimeChange(lastStep.endTime);
+      }
+    }
+  };
+
+  // 開始時刻変更時の処理（終了時刻を自動計算し、後続ステップも更新）
+  const handleStartTimeChange = (index: number, startTime: string) => {
+    const newPlanDetails = [...planDetails];
+    const currentDetail = newPlanDetails[index];
+    const durationMinutes = currentDetail.durationMinutes || 60;
+
+    newPlanDetails[index] = {
+      ...currentDetail,
+      startTime,
+      endTime: calculateEndTime(startTime, durationMinutes),
+    };
+
+    // 後続ステップの時刻を再計算
+    const recalculatedPlanDetails = recalculateAllStepTimes(newPlanDetails);
+    onChange(recalculatedPlanDetails);
+
+    // 最後のステップの終了時刻を親に通知
+    notifyEndTimeChange(recalculatedPlanDetails);
+  };
+
+  // 滞在時間変更時の処理（終了時刻を自動計算し、後続ステップも更新）
+  const handleDurationChange = (index: number, durationMinutes: number) => {
+    const newPlanDetails = [...planDetails];
+    const currentDetail = newPlanDetails[index];
+    const startTime = currentDetail.startTime || '';
+
+    newPlanDetails[index] = {
+      ...currentDetail,
+      durationMinutes,
+      endTime: calculateEndTime(startTime, durationMinutes),
+    };
+
+    // 後続ステップの時刻を再計算
+    const recalculatedPlanDetails = recalculateAllStepTimes(newPlanDetails);
+    onChange(recalculatedPlanDetails);
+
+    // 最後のステップの終了時刻を親に通知
+    notifyEndTimeChange(recalculatedPlanDetails);
+  };
+
+  // 終了時刻変更時の処理（滞在時間を自動計算し、後続ステップも更新）
+  const handleEndTimeChange = (index: number, endTime: string) => {
+    const newPlanDetails = [...planDetails];
+    const currentDetail = newPlanDetails[index];
+    const startTime = currentDetail.startTime || '';
+
+    newPlanDetails[index] = {
+      ...currentDetail,
+      endTime,
+      durationMinutes: calculateDuration(startTime, endTime),
+    };
+
+    // 後続ステップの時刻を再計算
+    const recalculatedPlanDetails = recalculateAllStepTimes(newPlanDetails);
+    onChange(recalculatedPlanDetails);
+
+    // 最後のステップの終了時刻を親に通知
+    notifyEndTimeChange(recalculatedPlanDetails);
+  };
+
+  // 移動詳細更新時の処理（後続ステップの時刻も更新）
   const updateTravelDetails = (stepIndex: number, travelDetails: TravelDetail[]) => {
-    updateStep(stepIndex, 'travelDetails', travelDetails);
+    const newPlanDetails = [...planDetails];
+    newPlanDetails[stepIndex] = {
+      ...newPlanDetails[stepIndex],
+      travelDetails,
+    };
+
+    // 後続ステップの時刻を再計算
+    const recalculatedPlanDetails = recalculateAllStepTimes(newPlanDetails);
+    onChange(recalculatedPlanDetails);
+
+    // 最後のステップの終了時刻を親に通知
+    notifyEndTimeChange(recalculatedPlanDetails);
   };
 
   const handleSpotChange = (index: number, spotId: string) => {
@@ -277,28 +426,46 @@ export default function PlanDetailForm({
 
                 <div className="play-plan-form__field">
                   <label className="play-plan-form__label">
-                    開始日時
+                    開始時刻
+                    {index > 0 && <span className="play-plan-form__label-note">（自動計算）</span>}
                   </label>
                   <input
-                    type="datetime-local"
-                    value={formatDatetimeForInput(detail.startDatetime) || ''}
-                    onChange={(e) => updateStep(index, 'startDatetime', e.target.value)}
+                    type="time"
+                    value={detail.startTime || ''}
+                    onChange={(e) => handleStartTimeChange(index, e.target.value)}
                     className="play-plan-form__input"
+                    placeholder="例: 10:00"
+                    readOnly={index > 0}
+                    disabled={index > 0}
                   />
                 </div>
 
                 <div className="play-plan-form__field">
                   <label className="play-plan-form__label">
-                    終了日時
+                    滞在時間（分）
                   </label>
                   <input
-                    type="datetime-local"
-                    value={formatDatetimeForInput(detail.endDatetime) || ''}
-                    onChange={(e) => updateStep(index, 'endDatetime', e.target.value)}
+                    type="number"
+                    value={detail.durationMinutes}
+                    onChange={(e) => handleDurationChange(index, Number(e.target.value))}
                     className="play-plan-form__input"
+                    placeholder="例: 60"
+                    min="1"
                   />
                 </div>
 
+                <div className="play-plan-form__field">
+                  <label className="play-plan-form__label">
+                    終了時刻
+                  </label>
+                  <input
+                    type="time"
+                    value={detail.endTime || ''}
+                    onChange={(e) => handleEndTimeChange(index, e.target.value)}
+                    className="play-plan-form__input"
+                    placeholder="例: 12:00"
+                  />
+                </div>
                 <div className="play-plan-form__field">
                   <label className="play-plan-form__label">
                     予算

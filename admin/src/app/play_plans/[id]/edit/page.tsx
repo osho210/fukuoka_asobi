@@ -25,16 +25,6 @@ export default function EditPlayPlanPage() {
   // ID の比較を文字列同士に
   const currentPlan = planData?.playPlans?.find((plan: any) => plan.id.toString() === planId);
 
-  const formatDatetimeForInput = (datetime?: string): string => {
-    if (!datetime) return '';
-    return new Date(datetime).toISOString().slice(0, 16);
-  };
-
-  const formatDatetimeForSubmit = (datetime: string): string | null => {
-    if (!datetime) return null;
-    return `${datetime}:00+00:00`;
-  };
-
   const transformPlanDataForForm = (plan: any) => {
     if (!plan) return null;
 
@@ -45,12 +35,12 @@ export default function EditPlayPlanPage() {
       tripType: plan.tripType || 'day_trip',
       totalBudget: plan.totalBudget?.toString() || '',
       location: plan.location || '',
-      startDatetime: formatDatetimeForInput(plan.startDatetime),
-      endDatetime: formatDatetimeForInput(plan.endDatetime),
+      startTime: plan.startTime,
+      endTime: plan.endTime,
       imageUrl: plan.imageUrl || '',
       imageUrls: plan.imageUrls || [],
       tags: plan.tags || '',
-      recommendUsers: plan.recommendUsers || [],
+      recommendUsers: plan.recommendedFors?.map((user: any) => user.id) || [],
       planDetails: plan.planDetails?.map((detail: any, index: number) => ({
         id: detail.id,
         stepNumber: detail.stepNumber || index + 1,
@@ -58,8 +48,9 @@ export default function EditPlayPlanPage() {
         stepDescription: detail.stepDescription || '',
         spotId: detail.spot?.id || '',
         comment: detail.comment || '',
-        startDatetime: formatDatetimeForInput(detail.startDatetime),
-        endDatetime: formatDatetimeForInput(detail.endDatetime),
+        endTime: detail.endTime,
+        startTime: detail.startTime,
+        durationMinutes: detail.durationMinutes,
         budget: detail.budget?.toString() || '',
         notes: detail.notes || '',
         travelDetails: detail.travelDetails?.map((travel: any) => ({
@@ -76,8 +67,8 @@ export default function EditPlayPlanPage() {
             stepDescription: '',
             spotId: '',
             comment: '',
-            startDatetime: '',
-            endDatetime: '',
+            startTime: '',
+            durationMinutes: undefined,
             budget: '',
             notes: '',
             travelDetails: [],
@@ -100,8 +91,8 @@ export default function EditPlayPlanPage() {
             tripType: formData.tripType?.toUpperCase(),
             totalBudget: formData.totalBudget ? parseFloat(formData.totalBudget) : null,
             location: formData.location,
-            startDatetime: formatDatetimeForSubmit(formData.startDatetime),
-            endDatetime: formatDatetimeForSubmit(formData.endDatetime),
+            startTime: formData.startTime,
+            endTime: formData.endTime,
             imageUrl: formData.imageUrl,
             images: formData.newImages,
             deleteImageIds: formData.deleteImageIds,
@@ -114,8 +105,9 @@ export default function EditPlayPlanPage() {
               stepDescription: detail.stepDescription,
               spotId: detail.spotId || null,
               comment: detail.comment,
-              startDatetime: formatDatetimeForSubmit(detail.startDatetime),
-              endDatetime: formatDatetimeForSubmit(detail.endDatetime),
+              startTime: detail.startTime,
+              endTime: detail.endTime,
+              durationMinutes: detail.durationMinutes,
               budget: detail.budget ? parseFloat(detail.budget) : null,
               notes: detail.notes,
               travelDetails: detail.travelDetails?.map((travel: any) => ({

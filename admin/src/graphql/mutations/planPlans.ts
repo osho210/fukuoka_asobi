@@ -11,8 +11,8 @@ export const UPDATE_PLAY_PLAN = gql`
         tripType
         totalBudget
         location
-        startDatetime
-        endDatetime
+        startTime
+        endTime
         imageUrl
         imageUrls {
           id
@@ -35,8 +35,9 @@ export const UPDATE_PLAY_PLAN = gql`
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
         budget
         comment
         notes
@@ -57,8 +58,8 @@ export interface PlanDetailWithSpot {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   comment?: string;
   notes?: string;
@@ -86,8 +87,8 @@ export interface ProcessedPlanDetail {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   comment?: string;
   notes?: string;
