@@ -306,6 +306,8 @@ export type CreateNewsPayload = {
 export type CreateOrUpdatePlayPlanWithDetailsInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** 削除対象画像IDリスト */
+  deleteImageIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** プラン説明 */
   description?: InputMaybe<Scalars['String']['input']>;
   /** 終了日時 */
@@ -314,6 +316,8 @@ export type CreateOrUpdatePlayPlanWithDetailsInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   /** 画像URL */
   imageUrl?: InputMaybe<Scalars['String']['input']>;
+  /** 新規画像のBase64エンコード文字列配列 */
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
   /** 場所 */
   location?: InputMaybe<Scalars['String']['input']>;
   /** プラン詳細リスト */
