@@ -50,9 +50,9 @@ const PlayPlanList = () => {
                 )}
               </div>
               <div className="play-plan-image">
-                {plan.imageUrl ? (
+                {plan?.imageUrls[0] ? (
                   <Image
-                    src={plan.imageUrl.url}
+                    src={plan.imageUrls[0].url}
                     alt={plan.planName}
                     width={300}
                     height={200}

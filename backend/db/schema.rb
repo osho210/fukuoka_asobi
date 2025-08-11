@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_03_031932) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -223,14 +223,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_03_031932) do
     t.text "step_description"
     t.integer "spot_id"
     t.text "comment"
-    t.datetime "start_datetime"
-    t.datetime "end_datetime"
     t.decimal "budget", precision: 10, scale: 2
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "planner_title"
     t.text "planner_description"
+    t.time "start_time", comment: "プラン内でのスポットの開始時刻"
+    t.integer "duration_minutes", comment: "そのスポットでの滞在時間（分単位）"
+    t.time "end_time", comment: "プラン内でのスポットの終了時刻"
   end
 
   create_table "play_plan_recommended_fors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -246,8 +247,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_03_031932) do
   create_table "play_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "plan_name", null: false
-    t.datetime "start_datetime"
-    t.datetime "end_datetime"
     t.text "description"
     t.integer "status", default: 0, null: false
     t.integer "favorite_count", default: 0
@@ -263,6 +262,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_03_031932) do
     t.datetime "updated_at", null: false
     t.string "planner_title"
     t.text "planner_description"
+    t.time "start_time", comment: "プランの開始日"
+    t.time "end_time", comment: "プランの終了日"
   end
 
   create_table "purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -11,9 +11,11 @@ module Mutations
     argument :total_budget, Float, required: false, description: "総予算"
     # TODO: ここは地区単位でモーダル変換にしても良いかもしれない
     argument :location, String, required: false, description: "場所"
-    argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false, description: "開始日時"
-    argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false, description: "終了日時"
+    argument :start_time, String, required: false, description: "開始日時"
+    argument :end_time, String, required: false, description: "終了日時"
     argument :image_url, String, required: false, description: "画像URL"
+    argument :images, [String], required: false, description: "新規画像のBase64エンコード文字列配列"
+    argument :delete_image_ids, [ID], required: false, description: "削除対象画像IDリスト"
     argument :tags, String, required: false, description: "タグ"
     argument :recommend_users, [ID], required: false, description: "おすすめ対象IDリスト"
     argument :plan_details, [Types::PlanDetailInputType], required: true, description: "プラン詳細リスト"

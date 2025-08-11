@@ -9,8 +9,8 @@ module Types
     end
     field :plan_name, String, null: false
     field :plan_id, Integer, null: false
-    field :start_datetime, GraphQL::Types::ISO8601DateTime, null: true
-    field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
+    field :start_time, String, null: true
+    field :end_time, String, null: true
     field :description, String, null: true
     field :status, Types::StatusEnumType, null: false
     field :favorite_count, Integer, null: false
@@ -52,6 +52,16 @@ module Types
     # お気に入り数を取得
     def favorite_count
       object.favorites.count
+    end
+
+    # 内部的に日付を保持してしまうため、表示用にフォーマットする
+    def start_time
+      object.start_time&.strftime("%H:%M")
+    end
+
+    # 内部的に日付を保持してしまうため、表示用にフォーマットする
+    def end_time
+      object.end_time&.strftime("%H:%M")
     end
 
     # 画像URLリストを取得

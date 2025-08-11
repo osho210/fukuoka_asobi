@@ -1,7 +1,7 @@
 'use client';
 
 import { PlanDetail } from '@/types/plan';
-import { formatTime, formatTravelTime } from '@/utils/dateUtils';
+import { formatTravelTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
 import styles from '@/styles/GeneratedPlan.module.css';
 import '@styles/PlayPlanDetail.css';
@@ -78,17 +78,14 @@ const PlanStep: React.FC<PlanStepProps> = ({ detail, isLastStep }) => {
             <p className={styles.spotCatchphrase}>{detail.spot?.catchphrase}</p>
             <p className={styles.spotAddress}>{detail.spot?.address}</p>
             <div className={styles.spotSchedule}>
-              <span className={styles.scheduleTime}>
-                {formatTime(detail.startDatetime)} 〜 {formatTime(detail.endDatetime)}
-              </span>
-              {detail.startDatetime && detail.endDatetime && (
+              {detail.startTime && (
+                <span className={styles.scheduleTime}>
+                  開始時刻: {detail.startTime}
+                </span>
+              )}
+              {detail.durationMinutes && (
                 <span className={styles.scheduleDuration}>
-                  （滞在時間: {Math.round(
-                    (new Date(detail.endDatetime).getTime() -
-                      new Date(detail.startDatetime).getTime()) /
-                    60000
-                  )}
-                  分）
+                  （滞在時間: {detail.durationMinutes}分）
                 </span>
               )}
             </div>

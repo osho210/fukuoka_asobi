@@ -38,7 +38,7 @@ class PlayPlanWithDetailsService
   private
 
   def process_play_plan!
-    plan_attrs = @params.except(:id, :plan_details, :recommend_users)
+    plan_attrs = @params.except(:id, :plan_details, :recommend_users, :images, :delete_image_ids)
     plan_attrs[:user_id] = @current_user&.id
 
     if @params[:id].present?
@@ -69,7 +69,7 @@ class PlayPlanWithDetailsService
   end
 
   def process_recommended_fors!
-    return unless @params[:recommend_users].present?
+    return unless @params.key?(:recommend_users)
 
     @play_plan.play_plan_recommended_fors.destroy_all
     @params[:recommend_users].each do |recommended_for_id|
@@ -85,6 +85,7 @@ class PlayPlanWithDetailsService
   def process_plan_details!
     return unless @play_plan&.persisted? && @params[:plan_details].present?
 
+    plan_details_params = @params[:plan_details] || []
     existing_detail_ids = @play_plan.plan_details.pluck(:id)
     input_detail_ids = @params[:plan_details].filter_map { |detail| detail[:id]&.to_i }
 
@@ -104,10 +105,10 @@ class PlayPlanWithDetailsService
     detail_attrs[:plan_id] = @play_plan.id
 
     # 日時バリデーション
-    if detail_attrs[:start_datetime] && detail_attrs[:end_datetime]
-      if detail_attrs[:start_datetime] >= detail_attrs[:end_datetime]
+    if detail_attrs[:start_time] && detail_attrs[:end_time]
+      if detail_attrs[:start_time] >= detail_attrs[:end_time]
         @errors << {
-          field: "plan_details[#{index}].start_datetime",
+          field: "plan_details[#{index}].start_time",
           message: "開始時間は終了時間より前である必要があります"
         }
         return
@@ -244,8 +245,26 @@ class PlayPlanWithDetailsService
   end
 
   def process_images!
-    # 画像処理は後で実装
-    # 現在はimage_urlをそのまま使用
+    return unless @play_plan&.persisted?
+
+    begin
+      # 削除対象の画像を削除
+      if @params[:delete_image_ids].present?
+        ImageUploadService.delete_images(@play_plan, @params[:delete_image_ids], attachment_name: :images)
+      end
+
+      # 新しい画像を添付
+      if @params[:images].present?
+        ImageUploadService.attach_base64_images(
+          @play_plan,
+          @params[:images],
+          prefix: 'play_plan',
+          attachment_name: :images
+        )
+      end
+    rescue StandardError => e
+      @errors << { field: "images", message: e.message }
+    end
   end
 
   def validate_all!
@@ -277,13 +296,16 @@ class PlayPlanWithDetailsService
     sorted_details = @play_plan.plan_details.includes(:travel_details).order(:step_number)
 
     # 詳細が2つ未満の場合は検証をスキップ
-    return if sorted_details.count < 2
+    return if sorted_details.length < 2
 
     sorted_details.each_cons(2) do |prev_detail, next_detail|
-      if next_detail.start_datetime && prev_detail.end_datetime
-        if next_detail.start_datetime < prev_detail.end_datetime
+      # next_detail や prev_detail が nil でないことを保証
+      next unless prev_detail && next_detail
+
+      if next_detail.start_time && prev_detail.end_time
+        if next_detail.start_time < prev_detail.end_time
           @errors << {
-            field: "plan_details[#{next_detail.step_number}].start_datetime",
+            field: "plan_details[#{next_detail.step_number}].start_time",
             message: "開始時間は前のステップの終了時間より後である必要があります"
           }
         end
