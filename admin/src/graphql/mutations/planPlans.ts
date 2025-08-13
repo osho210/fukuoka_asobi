@@ -21,6 +21,7 @@ export const UPDATE_PLAY_PLAN = gql`
         tags
         favoriteCount
         publishedAt
+        plannerTitle
         plannerDescription
         rating
         reviewCount

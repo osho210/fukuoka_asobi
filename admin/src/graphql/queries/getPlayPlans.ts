@@ -10,6 +10,7 @@ export const GET_PLAY_PLANS = gql`
         id
         url
       }
+      userId
       location
       tripType
       totalBudget
@@ -23,6 +24,8 @@ export const GET_PLAY_PLANS = gql`
       tags
       # TODO: nameも取得して渡す
       recommendUsers
+      plannerTitle
+      plannerDescription
       planDetails {
         id
         stepNumber

@@ -37,6 +37,8 @@ export default function NewPlayPlanPage() {
             images: formData.newImages,
             tags: formData.tags,
             recommendUsers: formData.recommendUsers || [],
+            plannerTitle: formData.plannerTitle,
+            plannerDescription: formData.plannerDescription,
             planDetails: formData.planDetails.map((detail: any) => ({
               stepNumber: detail.stepNumber,
               stepName: detail.stepName,
@@ -108,6 +110,8 @@ export default function NewPlayPlanPage() {
           imageUrl: '',
           tags: '',
           recommendUsers: [],
+          plannerTitle: '',
+          plannerDescription: '',
           planDetails: [
             {
               stepNumber: 1,

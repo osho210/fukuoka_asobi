@@ -40,7 +40,9 @@ export default function EditPlayPlanPage() {
       imageUrl: plan.imageUrl || '',
       imageUrls: plan.imageUrls || [],
       tags: plan.tags || '',
-      recommendUsers: plan.recommendedFors?.map((user: any) => user.id) || [],
+      recommendUsers: plan.recommendUsers || [],
+      plannerTitle: plan.plannerTitle || '',
+      plannerDescription: plan.plannerDescription || '',
       planDetails: plan.planDetails?.map((detail: any, index: number) => ({
         id: detail.id,
         stepNumber: detail.stepNumber || index + 1,
@@ -98,6 +100,8 @@ export default function EditPlayPlanPage() {
             deleteImageIds: formData.deleteImageIds,
             tags: formData.tags,
             recommendUsers: formData.recommendUsers || [],
+            plannerTitle: formData.plannerTitle,
+            plannerDescription: formData.plannerDescription,
             planDetails: formData.planDetails.map((detail: any) => ({
               id: detail.id || null,
               stepNumber: detail.stepNumber,

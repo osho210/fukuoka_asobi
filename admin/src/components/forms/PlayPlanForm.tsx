@@ -60,6 +60,8 @@ interface PlayPlanFormData {
   tags?: string;
   recommendUsers: string[];
   planDetails: PlanDetail[];
+  plannerTitle?: string;
+  plannerDescription?: string;
 }
 
 interface PlayPlanFormProps {
@@ -255,6 +257,20 @@ export default function PlayPlanForm({
           </div>
 
           <div className="play-plan-form__field">
+            <label htmlFor="description" className="play-plan-form__label">
+              description
+            </label>
+            <textarea
+              id="description"
+              value={formData.description || ''}
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              rows={4}
+              className="play-plan-form__textarea"
+              placeholder="プランの説明を入力"
+            />
+          </div>
+
+          <div className="play-plan-form__field">
             <label htmlFor="status" className="play-plan-form__label play-plan-form__label--required">
               ステータス
             </label>
@@ -395,20 +411,6 @@ export default function PlayPlanForm({
         </div>
 
         <div className="play-plan-form__field">
-          <label htmlFor="description" className="play-plan-form__label">
-            説明
-          </label>
-          <textarea
-            id="description"
-            value={formData.description || ''}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            rows={4}
-            className="play-plan-form__textarea"
-            placeholder="プランの説明を入力"
-          />
-        </div>
-
-        <div className="play-plan-form__field">
           <label htmlFor="tags" className="play-plan-form__label">
             タグ
           </label>
@@ -444,6 +446,43 @@ export default function PlayPlanForm({
               </label>
             ))}
           </div>
+        </div>
+
+        {/* プランナーコンテンツ */}
+        <div className='play-plan-planner-content'>
+          <h2 className="play-plan-form__section-title">プランナーコンテンツ</h2>
+          <div className="play-plan-form__field">
+            <label htmlFor="plannerTitle" className="play-plan-form__label">
+              プランナータイトル
+            </label>
+            <input
+              type="text"
+              id="plannerTitle"
+              value={formData.plannerTitle || ''}
+              onChange={(e) => handleInputChange('plannerTitle', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="プランナーのタイトルを入力"
+            />
+            {errors.plannerDescription && (
+              <p className="play-plan-form__error">{errors.plannerDescription}</p>
+            )}
+          </div>
+          <div className="play-plan-form__field">
+            <label htmlFor="plannerDescription" className="play-plan-form__label">
+              プランナー説明
+            </label>
+            <textarea
+              id="plannerDescription"
+              value={formData.plannerDescription || ''}
+              onChange={(e) => handleInputChange('plannerDescription', e.target.value)}
+              rows={4}
+              className="play-plan-form__textarea"
+              placeholder="プランナーの説明を入力"
+            />
+          </div>
+          {errors.plannerTitle && (
+            <p className="play-plan-form__error">{errors.plannerTitle}</p>
+          )}
         </div>
       </div>
 

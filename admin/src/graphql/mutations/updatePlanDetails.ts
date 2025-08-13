@@ -39,6 +39,8 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
       startTime
       endTime
       imageUrl
+      plannerTitle
+      plannerDescription
       imageUrls {
         id
         url
