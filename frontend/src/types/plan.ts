@@ -34,6 +34,7 @@ export interface Spot {
   instagramUrl?: string;
   budgetRange?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   theme?: string;
   isRainyOk?: boolean;
   district?: District;
@@ -77,7 +78,7 @@ export interface PlayPlan {
   id: string;
   planName: string;
   description?: string;
-  imageUrl?: string;
+  imageUrls?: { id: number, url: string; }[];
   location?: string;
   tripType: string;
   totalBudget?: number;
@@ -96,6 +97,7 @@ export interface PlayPlan {
   plannerTitle?: string;
   plannerDescription?: string;
   user?: User;
+  userId?: number;
   planDetails: PlanDetail[];
 }
 

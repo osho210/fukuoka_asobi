@@ -54,6 +54,15 @@ export const GET_PLAY_PLAN = gql`
       endTime
       tags
       recommendUsers
+      userId
+      user {
+        id
+        username
+        profileImageUrl
+        role
+      }
+      plannerTitle
+      plannerDescription
       recommendedFors {
         id
         name
