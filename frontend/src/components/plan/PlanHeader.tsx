@@ -13,17 +13,19 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
     <div className="plan-header">
       <span className='plan-header-tag'>{getTripTypeText(plan.tripType)}</span>
       <h1 className="plan-title">{plan.planName}</h1>
-
+      {/* メタ情報 */}
       <div className="plan-meta">
         {plan.location && (
           <div className="plan-meta-item">
-            <span className="plan-meta-icon">📍</span>
+            <span className="plan-meta-icon">
+              <Image src={`/fukuoka_map.svg`} alt="Location Icon" width={24} height={24} />
+            </span>
             <span>{plan.location}</span>
           </div>
         )}
         {plan.totalBudget && (
           <div className="plan-meta-item">
-            <span className="plan-meta-icon">💰</span>
+            <span className="plan-meta-icon"><Image src={`/money-icon.png`} alt="Location Icon" width={24} height={24} /></span>
             <span>予算: ¥{plan.totalBudget.toLocaleString()}</span>
           </div>
         )}
@@ -35,10 +37,12 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
         )}
       </div>
 
-      {plan.imageUrl && (
+      <p className='plan-description'>{plan.description}</p>
+
+      {plan.imageUrls && (
         <div className="plan-image-container">
           <Image
-            src={plan.imageUrl.startsWith('/') ? plan.imageUrl : `/${plan.imageUrl}`}
+            src={plan.imageUrls ? `${plan.imageUrls[0].url}` : '/no-image.png'}
             alt={plan.planName}
             fill
             className="plan-image"
@@ -46,42 +50,44 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
         </div>
       )}
 
-      {plan.user && (
-        <div className="plan-user-info">
-          <Image
-            className="plan-user-image"
-            // TODO: seedにデータを登録していないため、一旦固定の画像を表示
-            src={plan.user.profileImageUrl ? `/${plan.user.profileImageUrl}` : `/${plan.imageUrl}`}
-            alt={`${plan.user.username}のプロフィール画像`}
-            width={50}
-            height={50}
-          />
-          <div className="plan-user-details">
-            <p>プランナー</p>
-            <p>
-              <span className="plan-user-name">{plan.user.username}</span>
-              {plan.user.role === 'editor' && (
-                <span className="plan-user-role">編集部</span>
-              )}
-              {plan.user.role === 'admin' && (
-                <span className="plan-user-role">管理者</span>
-              )}
-            </p>
+      <div className='plan-planner-container'>
+        {plan.user && (
+          <div className="plan-user-info">
+            <Image
+              className="plan-user-image"
+              // TODO: seedにデータを登録していないため、一旦固定の画像を表示
+              src={plan.user.profileImageUrl ? `/${plan.user.profileImageUrl}` : `/${plan.imageUrls}`}
+              alt={`${plan.user.username}のプロフィール画像`}
+              width={50}
+              height={50}
+            />
+            <div className="plan-user-details">
+              <p>プランナー</p>
+              <p>
+                <span className="plan-user-name">{plan.user.username}</span>
+                {plan.user.role === 'editor' && (
+                  <span className="plan-user-role">編集部スタッフ</span>
+                )}
+                {plan.user.role === 'admin' && (
+                  <span className="plan-user-role">管理者</span>
+                )}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {plan.plannerTitle && (
-        <div className="plan-planner-title">
-          <h2>{plan.plannerTitle}</h2>
-        </div>
-      )}
+        {plan.plannerTitle && (
+          <div className="plan-planner-title">
+            <h2>{plan.plannerTitle}</h2>
+          </div>
+        )}
 
-      {plan.plannerDescription && (
-        <div className="plan-planner-description">
-          {plan.plannerDescription}
-        </div>
-      )}
+        {plan.plannerDescription && (
+          <div className="plan-planner-description">
+            {plan.plannerDescription}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

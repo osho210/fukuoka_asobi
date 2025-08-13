@@ -9,7 +9,6 @@ module Mutations
     argument :status, Types::StatusEnumType, required: true, description: "ステータス（公開／下書き）"
     argument :trip_type, Types::TripTypeEnum, required: true, description: "旅行タイプ（日帰り／泊まり）"
     argument :total_budget, Float, required: false, description: "総予算"
-    # TODO: ここは地区単位でモーダル変換にしても良いかもしれない
     argument :location, String, required: false, description: "場所"
     argument :start_time, String, required: false, description: "開始日時"
     argument :end_time, String, required: false, description: "終了日時"
@@ -18,6 +17,8 @@ module Mutations
     argument :delete_image_ids, [ID], required: false, description: "削除対象画像IDリスト"
     argument :tags, String, required: false, description: "タグ"
     argument :recommend_users, [ID], required: false, description: "おすすめ対象IDリスト"
+    argument :planner_title, String, required: false, description: "プランナータイトル"
+    argument :planner_description, String, required: false, description: "プランナー説明"
     argument :plan_details, [Types::PlanDetailInputType], required: true, description: "プラン詳細リスト"
 
     # 出力フィールド

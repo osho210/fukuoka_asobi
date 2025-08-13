@@ -64,7 +64,7 @@
 }
 
 .play-plans__table-header-cell {
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem;
   text-align: left;
   font-size: 0.75rem;
   font-weight: 500;
@@ -86,7 +86,7 @@
 }
 
 .play-plans__table-cell {
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   white-space: nowrap;
 }
 
@@ -228,6 +228,11 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+/* プランナーコンテンツ */
+.play-plan-planner-content {
+  margin: 50px 0;
 }
 
 .play-plan-form__section {

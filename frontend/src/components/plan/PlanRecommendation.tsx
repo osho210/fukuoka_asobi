@@ -13,7 +13,7 @@ const PlanRecommendation: React.FC<PlanRecommendationProps> = ({ plan }) => {
 
   return (
     <div className="plan-recommended-for">
-      <h3>こんな方におすすめのプラン</h3>
+      <h3>こんな相手と行きたいプラン</h3>
       <div className="plan-recommended-for-tags">
         {plan.recommendedFors ? (
           plan.recommendedFors.map(item => (
