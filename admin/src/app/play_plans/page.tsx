@@ -102,9 +102,9 @@ export default function PlayPlansPage() {
           <thead className="play-plans__table-header">
             <tr>
               <th className="play-plans__table-header-cell">プラン名</th>
-              <th className="play-plans__table-header-cell">ステータス</th>
-              <th className="play-plans__table-header-cell">タイプ</th>
-              <th className="play-plans__table-header-cell">ステップ数</th>
+              <th className="play-plans__table-header-cell">状態</th>
+              <th className="play-plans__table-header-cell">区分</th>
+              <th className="play-plans__table-header-cell">スポット</th>
               <th className="play-plans__table-header-cell">予算</th>
               <th className="play-plans__table-header-cell">作成者</th>
               <th className="play-plans__table-header-cell">更新日</th>
@@ -131,7 +131,7 @@ export default function PlayPlansPage() {
                 </td>
                 <td className="play-plans__table-cell">
                   <span className={getStatusBadgeClass(plan.status)}>
-                    {plan.status === 'PUBLISHED' ? '公開' : '下書き'}
+                    {plan.status === 'PUBLISHED' ? '公開中' : '下書き'}
                   </span>
                 </td>
                 <td className="play-plans__table-cell">
@@ -140,7 +140,7 @@ export default function PlayPlansPage() {
                   </span>
                 </td>
                 <td className="play-plans__table-cell">
-                  {plan.planDetails.length}ステップ
+                  {plan.planDetails.length}スポット
                 </td>
                 <td className="play-plans__table-cell">
                   {plan.totalBudget ? `¥${plan.totalBudget.toLocaleString()}` : '-'}
