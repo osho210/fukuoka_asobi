@@ -5,6 +5,7 @@ export const GET_SPOTS = gql`
     spots {
       id
         spotName
+        description
         address
         district {
           id

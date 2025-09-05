@@ -4,11 +4,28 @@ export const GET_PLAY_PLANS = gql`
     playPlans(limit: $limit) {
       id
       planName
+      catchCopy
+      subtitle
+      leadText
+      catchCopy
+      subtitle
+      leadText
       description
       imageUrl
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
       imageUrls {
         id
         url
+      }
+      imageProperties {
+        attachmentId
+        url
+        isSelected
+        position
+        comment
       }
       userId
       location
@@ -35,6 +52,7 @@ export const GET_PLAY_PLANS = gql`
         startTime
         endTime
         durationMinutes
+        plannerTitle
         budget
         notes
         spot {

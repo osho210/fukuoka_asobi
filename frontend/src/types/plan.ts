@@ -1,5 +1,3 @@
-// プラン関連の共通型定義
-
 export interface OpeningHour {
   id: string;
   dayOfWeek: string;
@@ -22,6 +20,14 @@ export interface District {
   districtName: string;
 }
 
+export interface Image {
+  id: string;
+  url: string;
+  width?: number;
+  height?: number;
+  fill?: boolean;
+}
+
 export interface Spot {
   id: string;
   spotName: string;
@@ -29,14 +35,16 @@ export interface Spot {
   phoneNumber?: string;
   website?: string;
   catchphrase?: string;
+  editorialSummary?: string;
   reviewRating?: number;
   reviewCount?: number;
   instagramUrl?: string;
   budgetRange?: string;
-  imageUrl?: string;
+  imageUrl?: Image;
   imageUrls?: string[];
   theme?: string;
   isRainyOk?: boolean;
+  nearestStation?: string;
   district?: District;
   categories?: Category[];
   openingHours?: OpeningHour[];
@@ -77,6 +85,13 @@ export interface RecommendedFor {
 export interface PlayPlan {
   id: string;
   planName: string;
+  catchCopy?: string;
+  subtitle?: string;
+  leadText?: string;
+  departure: string;
+  departureTime?: string;
+  travelMethodToFirstSpot?: string;
+  travelTimeToFirstSpot?: number;
   description?: string;
   imageUrls?: { id: number, url: string; }[];
   location?: string;
@@ -98,6 +113,7 @@ export interface PlayPlan {
   plannerDescription?: string;
   user?: User;
   userId?: number;
+  imageProperties?: ImageProperties[];
   planDetails: PlanDetail[];
 }
 
@@ -105,6 +121,14 @@ export interface TravelDetail {
   sequenceNumber: number;
   travelMethod: string;
   travelTime: number;
+}
+
+export interface ImageProperties {
+  attachmentId: string;
+  url: string;
+  isSelected: boolean;
+  position: number;
+  comment?: string;
 }
 
 export interface TravelSegment {

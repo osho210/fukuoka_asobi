@@ -12,6 +12,7 @@ export const UPDATE_PLAN_DETAILS = gql`
         startTime
         endTime
         durationMinutes
+        plannerTitle
         budget
         comment
         notes
@@ -31,10 +32,17 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
     playPlan {
       id
       planName
+      catchCopy
+      subtitle
+      leadText
       description
       status
       tripType
       totalBudget
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
       location
       startTime
       endTime
@@ -44,6 +52,13 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
       imageUrls {
         id
         url
+      }
+      imageProperties {
+        attachmentId
+        url
+        isSelected
+        position
+        comment
       }
       tags
       favoriteCount
@@ -60,6 +75,7 @@ mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDet
         stepNumber
         stepName
         stepDescription
+        plannerTitle
         startTime
         endTime
         durationMinutes

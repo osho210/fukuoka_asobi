@@ -10,6 +10,7 @@ export const CREATE_SPOT = gql`
       spot {
         id
         spotName
+        description
         address
         district {
           id
@@ -125,6 +126,7 @@ export const UPDATE_SPOT = gql`
       spot {
         id
         spotName
+        description
         address
         district {
           id

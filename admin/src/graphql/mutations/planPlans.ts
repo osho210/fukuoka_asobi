@@ -10,6 +10,7 @@ export const UPDATE_PLAY_PLAN = gql`
         status
         tripType
         totalBudget
+        departure
         location
         startTime
         endTime
@@ -36,6 +37,7 @@ export const UPDATE_PLAY_PLAN = gql`
         stepNumber
         stepName
         stepDescription
+        plannerTitle
         startTime
         endTime
         durationMinutes
@@ -59,6 +61,7 @@ export interface PlanDetailWithSpot {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
+  plannerTitle?: string;
   startTime?: string;
   durationMinutes?: number;
   budget?: number;
@@ -88,6 +91,7 @@ export interface ProcessedPlanDetail {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
+  plannerTitle?: string;
   startTime?: string;
   durationMinutes?: number;
   budget?: number;
