@@ -726,6 +726,166 @@
   gap: 0.25rem;
 }
 
+/* Image Properties Editor Styles */
+.image-properties-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.image-properties-editor__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-properties-editor__title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.image-properties-editor__counter {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.image-properties-editor__error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+}
+
+.image-properties-editor__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.image-properties-editor__item {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.image-properties-editor__item--selected {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.image-properties-editor__item--dragging {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.image-properties-editor__item-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.image-properties-editor__drag-handle {
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+  cursor: move;
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.image-properties-editor__drag-handle:hover {
+  color: #6b7280;
+}
+
+.image-properties-editor__drag-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.image-properties-editor__thumbnail {
+  flex-shrink: 0;
+}
+
+.image-properties-editor__image {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.image-properties-editor__controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.image-properties-editor__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.image-properties-editor__checkbox {
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+  color: #2563eb;
+}
+
+.image-properties-editor__checkbox:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.image-properties-editor__toggle-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.image-properties-editor__comment-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-properties-editor__comment-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.image-properties-editor__comment-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+}
+
+.image-properties-editor__comment-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.image-properties-editor__position {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.image-properties-editor__empty {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .play-plans__header {
