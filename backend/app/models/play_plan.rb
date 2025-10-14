@@ -10,6 +10,13 @@ class PlayPlan < ApplicationRecord
   # Active Storage関連付け
   has_many_attached :images
 
+  # 画像プロパティ関連付け
+  has_many :image_properties, -> { order(position: :asc) },
+           class_name: 'PlayPlanImageProperty', dependent: :destroy
+
+  # 定数
+  MAX_SELECTED_IMAGES = 3
+
   validates :plan_name, presence: true
 
   # ステータスの定義

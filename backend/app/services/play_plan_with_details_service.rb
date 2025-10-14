@@ -22,7 +22,10 @@ class PlayPlanWithDetailsService
       # 4. 画像処理
       process_images!
 
-      # 5. バリデーション
+      # 5. 画像プロパティ処理
+      process_image_properties!
+
+      # 6. バリデーション
       validate_all!
 
       raise ActiveRecord::Rollback if @errors.any?
@@ -38,8 +41,10 @@ class PlayPlanWithDetailsService
   private
 
   def process_play_plan!
-    plan_attrs = @params.except(:id, :plan_details, :recommend_users, :images, :delete_image_ids)
-    plan_attrs[:user_id] = @current_user&.id
+    plan_attrs = @params.except(:id, :plan_details, :recommend_users, :images, :delete_image_ids, :image_properties)
+    # TODO:現在は管理画面にログイン機能を設けていないため、暫定的にcurrent_userを2に設定
+    # plan_attrs[:user_id] = @current_user&.id
+    plan_attrs[:user_id] = 2
 
     if @params[:id].present?
       # 更新
@@ -267,6 +272,55 @@ class PlayPlanWithDetailsService
     end
   end
 
+  def process_image_properties!
+    return unless @play_plan&.persisted? && @params[:image_properties].present?
+
+    begin
+      # 上限チェック
+      selected_count = @params[:image_properties].count { |p| p[:is_selected] }
+      if selected_count > PlayPlan::MAX_SELECTED_IMAGES
+        @errors << {
+          field: "image_properties",
+          message: "選択できる画像は#{PlayPlan::MAX_SELECTED_IMAGES}枚までです。"
+        }
+        return
+      end
+
+      # プロパティの一括更新
+      @params[:image_properties].each_with_index do |prop_input, index|
+        # attachmentの所有権を念のため確認
+        attachment = @play_plan.images.find_by(id: prop_input[:attachment_id])
+        unless attachment
+          @errors << {
+            field: "image_properties[#{index}].attachment_id",
+            message: "指定された画像が見つかりません"
+          }
+          next
+        end
+
+        property = PlayPlanImageProperty.find_or_initialize_by(
+          play_plan_id: @play_plan.id,
+          attachment_id: attachment.id
+        )
+
+        unless property.update(
+          is_selected: prop_input[:is_selected],
+          position: prop_input[:position],
+          comment: prop_input[:comment]
+        )
+          property.errors.each do |error|
+            @errors << {
+              field: "image_properties[#{index}].#{error.attribute}",
+              message: error.full_message
+            }
+          end
+        end
+      end
+    rescue StandardError => e
+      @errors << { field: "image_properties", message: e.message }
+    end
+  end
+
   def validate_all!
     return unless @play_plan&.persisted?
 
@@ -319,6 +373,7 @@ class PlayPlanWithDetailsService
       reloaded_play_plan = PlayPlan
         .includes(
           :recommended_fors,
+          :image_properties,
           plan_details: [:spot, :travel_details]
         )
         .find(@play_plan.id)

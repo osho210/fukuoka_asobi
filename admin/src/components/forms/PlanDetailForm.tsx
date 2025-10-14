@@ -24,6 +24,8 @@ interface PlanDetail {
   stepName: string;
   stepDescription?: string;
   spotId?: string;
+  plannerTitle?: string;
+  plannerDescription?: string;
   comment?: string;
   startTime?: string;
   endTime?: string;
@@ -39,6 +41,8 @@ interface PlanDetailFormProps {
   onChange: (planDetails: PlanDetail[]) => void;
   onEndTimeChange?: (endTime: string) => void;
   errors: Record<string, string>;
+  departureTime?: string;
+  travelTimeToFirstSpot?: string;
 }
 
 
@@ -86,6 +90,8 @@ export default function PlanDetailForm({
   onChange,
   onEndTimeChange,
   errors,
+  departureTime,
+  travelTimeToFirstSpot,
 }: PlanDetailFormProps) {
   const [expandedSteps, setExpandedSteps] = useState<Set<number>>(new Set([0]));
 
@@ -106,6 +112,8 @@ export default function PlanDetailForm({
       stepDescription: '',
       spotId: '',
       comment: '',
+      plannerTitle: '',
+      plannerDescription: '',
       startTime: '',
       endTime: '',
       durationMinutes: 60,
@@ -184,10 +192,31 @@ export default function PlanDetailForm({
     setExpandedSteps(newExpanded);
   };
 
+  // 集合時間と移動時間から最初のステップの開始時間を計算
+  const calculateFirstStepStartTime = (): string => {
+    if (!departureTime || !travelTimeToFirstSpot) return '';
+    const departureMinutes = timeToMinutes(departureTime);
+    const travelMinutes = parseInt(travelTimeToFirstSpot, 10) || 0;
+    return minutesToTime(departureMinutes + travelMinutes);
+  };
+
   // 全ステップの時刻を再計算する関数
   const recalculateAllStepTimes = (planDetails: PlanDetail[]): PlanDetail[] => {
     const updatedPlanDetails = [...planDetails];
 
+    // 最初のステップの開始時間を集合時間と移動時間から計算
+    if (updatedPlanDetails.length > 0) {
+      const firstStepStartTime = calculateFirstStepStartTime();
+      if (firstStepStartTime) {
+        updatedPlanDetails[0] = {
+          ...updatedPlanDetails[0],
+          startTime: firstStepStartTime,
+          endTime: calculateEndTime(firstStepStartTime, updatedPlanDetails[0].durationMinutes || 60),
+        };
+      }
+    }
+
+    // 2番目以降のステップの時刻を計算
     for (let i = 1; i < updatedPlanDetails.length; i++) {
       const previousStep = updatedPlanDetails[i - 1];
       const currentStep = updatedPlanDetails[i];
@@ -496,7 +525,19 @@ export default function PlanDetailForm({
 
               <div className="play-plan-form__field">
                 <label className="play-plan-form__label">
-                  コメント
+                  プランナータイトル
+                </label>
+                <input
+                  type="text"
+                  value={detail.plannerTitle || ''}
+                  onChange={(e) => updateStep(index, 'plannerTitle', e.target.value)}
+                  className="play-plan-form__input"
+                  placeholder="プランナーのタイトルを入力"
+                />
+              </div>
+              <div className="play-plan-form__field">
+                <label className="play-plan-form__label">
+                  プランナーコメント
                 </label>
                 <textarea
                   value={detail.comment || ''}
@@ -506,7 +547,6 @@ export default function PlanDetailForm({
                   placeholder="コメントを入力"
                 />
               </div>
-
               <div className="play-plan-form__field">
                 <label className="play-plan-form__label">
                   備考

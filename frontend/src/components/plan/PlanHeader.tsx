@@ -11,10 +11,26 @@ interface PlanHeaderProps {
 const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
   return (
     <div className="plan-header">
-      <span className='plan-header-tag'>{getTripTypeText(plan.tripType)}</span>
+
+      <p className='catch-copy'>{plan.catchCopy}</p>
       <h1 className="plan-title">{plan.planName}</h1>
+      {plan.subtitle && <p className="plan-subtitle">{plan.subtitle}</p>}
+
+
+      {plan.imageUrls && (
+        <div className="plan-image-container">
+          <Image
+            src={plan.imageUrls ? `${plan.imageUrls[0].url}` : '/no-image.png'}
+            alt={plan.planName}
+            fill
+            className="plan-image"
+          />
+        </div>
+      )}
+
       {/* メタ情報 */}
       <div className="plan-meta">
+        <span className='plan-header-tag'>{getTripTypeText(plan.tripType)}</span>
         {plan.location && (
           <div className="plan-meta-item">
             <span className="plan-meta-icon">
@@ -37,18 +53,9 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
         )}
       </div>
 
+      {plan.leadText && <p className='plan-lead-text'>{plan.leadText}</p>}
       <p className='plan-description'>{plan.description}</p>
 
-      {plan.imageUrls && (
-        <div className="plan-image-container">
-          <Image
-            src={plan.imageUrls ? `${plan.imageUrls[0].url}` : '/no-image.png'}
-            alt={plan.planName}
-            fill
-            className="plan-image"
-          />
-        </div>
-      )}
 
       <div className='plan-planner-container'>
         {plan.user && (
@@ -83,9 +90,9 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
         )}
 
         {plan.plannerDescription && (
-          <div className="plan-planner-description">
+          <p className="plan-planner-description">
             {plan.plannerDescription}
-          </div>
+          </p>
         )}
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import PlanDetailForm from './PlanDetailForm';
 import ImageUpload from './ImageUpload';
+import ImagePropertiesEditor from '../ImagePropertiesEditor';
 import '@/styles/play-plans.css';
 
 interface Spot {
@@ -29,6 +30,7 @@ interface PlanDetail {
   stepNumber: number;
   stepName: string;
   stepDescription?: string;
+  plannerTitle?: string;
   spotId?: string;
   comment?: string;
   startTime?: string;
@@ -44,8 +46,23 @@ interface ExistingImage {
   url: string;
 }
 
+interface ImageProperty {
+  attachmentId: string;
+  url: string;
+  isSelected: boolean;
+  position: number;
+  comment?: string;
+}
+
 interface PlayPlanFormData {
   planName: string;
+  catchCopy?: string;
+  subtitle?: string;
+  leadText?: string;
+  departure?: string;
+  departureTime?: string;
+  travelMethodToFirstSpot?: string;
+  travelTimeToFirstSpot?: string;
   description?: string;
   status: string;
   tripType: string;
@@ -55,6 +72,7 @@ interface PlayPlanFormData {
   endTime?: string;
   imageUrl?: string;
   imageUrls?: ExistingImage[];
+  imageProperties?: ImageProperty[];
   newImages?: string[];
   deleteImageIds?: string[];
   tags?: string;
@@ -173,6 +191,10 @@ export default function PlayPlanForm({
       newErrors.status = 'ステータスは必須です';
     }
 
+    if (!formData.departure) {
+      newErrors.departure = '出発地点は必須です';
+    }
+
     if (!formData.tripType) {
       newErrors.tripType = '旅行タイプは必須です';
     }
@@ -238,6 +260,45 @@ export default function PlayPlanForm({
             )}
           </div>
           <div className="play-plan-form__field">
+            <label htmlFor="catchCopy" className="play-plan-form__label">
+              キャッチコピー
+            </label>
+            <input
+              type="text"
+              id="catchCopy"
+              value={formData.catchCopy || ''}
+              onChange={(e) => handleInputChange('catchCopy', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="キャッチコピーを入力"
+            />
+          </div>
+          <div className="play-plan-form__field">
+            <label htmlFor="subtitle" className="play-plan-form__label">
+              サブタイトル
+            </label>
+            <input
+              type="text"
+              id="subtitle"
+              value={formData.subtitle || ''}
+              onChange={(e) => handleInputChange('subtitle', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="サブタイトルを入力"
+            />
+          </div>
+          <div className="play-plan-form__field">
+            <label htmlFor="leadText" className="play-plan-form__label">
+              リードテキスト
+            </label>
+            <textarea
+              id="leadText"
+              rows={4}
+              value={formData.leadText || ''}
+              onChange={(e) => handleInputChange('leadText', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="リードテキストを入力"
+            />
+          </div>
+          <div className="play-plan-form__field">
             <label htmlFor="districts" className="play-plan-form__label">
               エリア選択
             </label>
@@ -258,7 +319,7 @@ export default function PlayPlanForm({
 
           <div className="play-plan-form__field">
             <label htmlFor="description" className="play-plan-form__label">
-              description
+              プラン説明
             </label>
             <textarea
               id="description"
@@ -307,7 +368,69 @@ export default function PlayPlanForm({
               <p className="play-plan-form__error">{errors.tripType}</p>
             )}
           </div>
+          <div className="play-plan-form__field">
+            <label htmlFor="departure" className="play-plan-form__label">
+              集合場所
+            </label>
+            <input
+              type="text"
+              id="departure"
+              value={formData.departure || ''}
+              onChange={(e) => handleInputChange('departure', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="集合場所を入力"
+            />
+            {errors.departure && (
+              <p className="play-plan-form__error">{errors.departure}</p>
+            )}
+          </div>
 
+          <div className="play-plan-form__field">
+            <label htmlFor="departureTime" className="play-plan-form__label">
+              集合時間
+            </label>
+            <input
+              type="time"
+              id="departureTime"
+              value={formData.departureTime || ''}
+              onChange={(e) => handleInputChange('departureTime', e.target.value)}
+              className="play-plan-form__input"
+            />
+          </div>
+
+          <div className="play-plan-form__field">
+            <label htmlFor="travelMethodToFirstSpot" className="play-plan-form__label">
+              最初の目的地までの移動手段
+            </label>
+            <select
+              id="travelMethodToFirstSpot"
+              value={formData.travelMethodToFirstSpot || ''}
+              onChange={(e) => handleInputChange('travelMethodToFirstSpot', e.target.value)}
+              className="play-plan-form__select"
+            >
+              <option value="">選択してください</option>
+              <option value="徒歩">徒歩</option>
+              <option value="電車">電車</option>
+              <option value="車">車</option>
+              <option value="自転車">自転車</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+
+          <div className="play-plan-form__field">
+            <label htmlFor="travelTimeToFirstSpot" className="play-plan-form__label">
+              最初の目的地までの移動時間（分）
+            </label>
+            <input
+              type="number"
+              id="travelTimeToFirstSpot"
+              value={formData.travelTimeToFirstSpot || ''}
+              onChange={(e) => handleInputChange('travelTimeToFirstSpot', e.target.value)}
+              className="play-plan-form__input"
+              placeholder="移動時間を入力"
+              min="0"
+            />
+          </div>
           <div className="play-plan-form__field">
             <label htmlFor="totalBudget" className="play-plan-form__label play-plan-form__label--required">
               総予算
@@ -378,6 +501,22 @@ export default function PlayPlanForm({
               existingImages={formData.imageUrls || []}
             />
           </div>
+
+          {/* 画像プロパティ編集 */}
+          {formData.imageProperties && formData.imageProperties.length > 0 && (
+            <div className="play-plan-form__field play-plan-form__field--full-width">
+              <ImagePropertiesEditor
+                imageProperties={formData.imageProperties}
+                onChange={(properties) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    imageProperties: properties,
+                  }));
+                }}
+                maxSelected={3}
+              />
+            </div>
+          )}
 
           <div className="play-plan-form__field">
             <label htmlFor="startTime" className="play-plan-form__label">
@@ -496,6 +635,8 @@ export default function PlayPlanForm({
           onChange={handlePlanDetailsChange}
           onEndTimeChange={handlePlanEndTimeChange}
           errors={errors}
+          departureTime={formData.departureTime}
+          travelTimeToFirstSpot={formData.travelTimeToFirstSpot}
         />
 
         {errors.planDetails && (

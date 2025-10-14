@@ -86,6 +86,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
   ],
   spots: [
     { name: 'spotName', type: 'text', required: true },
+    { name: 'description', type: 'textarea', required: false },
     { name: 'address', type: 'text', required: true },
     { name: 'phoneNumber', type: 'text' },
     { name: 'website', type: 'text' },
@@ -193,6 +194,7 @@ const fieldDisplayNames: Record<string, string> = {
   purposeName: '目的名',
   ambianceName: '雰囲気名',
   spotName: 'スポット名',
+  description: '説明',
   address: '住所',
   phoneNumber: '電話番号',
   website: 'ウェブサイト',
@@ -260,7 +262,7 @@ const fieldDisplayNames: Record<string, string> = {
   // Google Places API 詳細フィールド
   googleTypes: 'Google業種リスト',
   generativeSummary: 'AI要約',
-  editorialSummary: '編集者要約',
+  editorialSummary: '店舗の紹介(詳細)',
   priceRangeStartAmount: '価格下限',
   priceRangeEndAmount: '価格上限',
   images: '画像',

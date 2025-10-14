@@ -7,6 +7,7 @@ module Types
     argument :step_name, String, required: true, description: "ステップ名"
     argument :step_description, String, required: false, description: "ステップ説明"
     argument :spot_id, ID, required: false, description: "スポットID"
+    argument :planner_title, String, required: false, description: "プランナーのタイトル"
     argument :comment, String, required: false, description: "コメント"
     argument :start_time, String, required: false, description: "開始日時"
     argument :end_time, String, required: false, description: "終了日時"

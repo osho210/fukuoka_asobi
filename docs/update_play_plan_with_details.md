@@ -64,6 +64,10 @@ type Mutation {
     recommendUsers: [ID!]
     planDetails: [PlanDetailInputType!]
     deletedPlanDetailIds: [ID!]
+    departure: String
+    departureTime: ISO8601Time
+    travelMethodToFirstSpot: String
+    travelTimeToFirstSpot: Int
   ): UpdatePlayPlanWithDetailsPayload!
 }
 ```
@@ -95,6 +99,35 @@ mutation {
       planName
       description
       status
+    }
+    errors {
+      field
+      message
+    }
+    success
+  }
+}
+```
+
+### 2. 集合場所・時間・移動情報を含むプラン更新
+
+```graphql
+mutation {
+  updatePlayPlanWithDetails(
+    id: "1"
+    planName: "福岡観光プラン"
+    departure: "博多駅"
+    departureTime: "09:00"
+    travelMethodToFirstSpot: "電車"
+    travelTimeToFirstSpot: 15
+  ) {
+    playPlan {
+      id
+      planName
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
     }
     errors {
       field

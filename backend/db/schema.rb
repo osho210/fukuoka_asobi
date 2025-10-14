@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_31_052545) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -234,6 +234,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
     t.time "end_time", comment: "プラン内でのスポットの終了時刻"
   end
 
+  create_table "play_plan_image_properties", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "play_plan_id", null: false
+    t.bigint "attachment_id", null: false
+    t.boolean "is_selected", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_id"], name: "index_play_plan_image_properties_on_attachment_id"
+    t.index ["is_selected"], name: "index_play_plan_image_properties_on_is_selected"
+    t.index ["play_plan_id", "attachment_id"], name: "index_play_plan_image_properties_on_plan_and_attachment", unique: true
+    t.index ["play_plan_id"], name: "index_play_plan_image_properties_on_play_plan_id"
+    t.index ["position"], name: "index_play_plan_image_properties_on_position"
+  end
+
   create_table "play_plan_recommended_fors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "play_plan_id"
     t.integer "recommended_for_id"
@@ -264,6 +279,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
     t.text "planner_description"
     t.time "start_time", comment: "プランの開始日"
     t.time "end_time", comment: "プランの終了日"
+    t.string "catch_copy"
+    t.string "subtitle"
+    t.text "lead_text"
+    t.string "departure"
+    t.time "departure_time"
+    t.string "travel_method_to_first_spot"
+    t.integer "travel_time_to_first_spot"
   end
 
   create_table "purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -481,6 +503,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
     t.boolean "pure_service_area_business", default: false
     t.datetime "last_api_sync_at"
     t.string "api_sync_status", limit: 50, default: "pending"
+    t.text "description"
     t.index ["api_sync_status"], name: "index_spots_on_api_sync_status"
     t.index ["budget_range"], name: "index_spots_on_budget_range"
     t.index ["business_status"], name: "index_spots_on_business_status"
@@ -555,6 +578,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_10_102104) do
   add_foreign_key "news", "categories"
   add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"
+  add_foreign_key "play_plan_image_properties", "active_storage_attachments", column: "attachment_id"
+  add_foreign_key "play_plan_image_properties", "play_plans"
   add_foreign_key "spot_accessibility_options", "accessibility_options"
   add_foreign_key "spot_accessibility_options", "spots"
   add_foreign_key "spot_ambiance_relations", "spot_ambiances"

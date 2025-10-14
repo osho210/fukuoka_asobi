@@ -4,6 +4,10 @@ module Mutations
     # 入力フィールド
     argument :id, ID, required: true
     argument :plan_name, String, required: false
+    argument :departure, String, required: false
+    argument :catch_copy, String, required: false
+    argument :subtitle, String, required: false
+    argument :lead_text, String, required: false
     argument :description, String, required: false
     argument :status, Types::StatusEnumType, required: false
     argument :trip_type, Types::TripTypeEnum, required: false

@@ -5,6 +5,7 @@ module Types
     field :id, ID, null: false
     field :district_id, Integer, null: false
     field :spot_name, String, null: false
+    field :description, String, null: true
     field :address, String, null: true
     field :phone_number, String, null: true
     field :website, String, null: true

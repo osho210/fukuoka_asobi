@@ -9,6 +9,7 @@ import '@styles/PlayPlanList.css';
 import '@styles/RecommendedSpot.css';
 import '@styles/RecommendedEvent.css';
 import '@styles/RecommendedNews.css';
+import Script from "next/script"; // ←追加
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,22 +26,49 @@ export const metadata: Metadata = {
   description: "福岡の遊び場所を探すアプリ",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
+      <head>
+        {/* Adobe Fonts (Typekit) 読み込み */}
+        <Script id="adobe-typekit" strategy="beforeInteractive">{`
+          (function(d) {
+            var config = {
+              kitId: 'urf7xrq',
+              scriptTimeout: 3000,
+              async: true
+            },
+            h=d.documentElement,
+            t=setTimeout(function(){
+              h.className=h.className.replace(/\\bwf-loading\\b/g,"")+" wf-inactive";
+            }, config.scriptTimeout),
+            tk=d.createElement("script"),
+            f=false,
+            s=d.getElementsByTagName("script")[0], a;
+            h.className+=" wf-loading";
+            tk.src='https://use.typekit.net/'+config.kitId+'.js';
+            tk.async=true;
+            tk.onload=tk.onreadystatechange=function(){
+              a=this.readyState;
+              if(f||a&&a!="complete"&&a!="loaded") return;
+              f=true;clearTimeout(t);
+              try{Typekit.load(config)}catch(e){}
+            };
+            s.parentNode.insertBefore(tk,s)
+          })(document);
+        `}</Script>
+      </head>
+
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ApolloWrapper>
           <div className="container">
             <Header />
             {children}
             <Footer />
-          </div >
+          </div>
         </ApolloWrapper>
       </body>
     </html>
   );
 }
+

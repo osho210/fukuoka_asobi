@@ -4,6 +4,7 @@ module Mutations
   class UpdateSpot < BaseMutation
     argument :id,                ID,      required: true
     argument :spot_name,         String,  required: false
+    argument :description,       String,  required: false
     argument :address,           String,  required: false
     argument :district_id,       ID,      required: false
     argument :phone_number,      String,  required: false

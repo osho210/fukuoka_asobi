@@ -57,12 +57,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
     return (
         <div>
             {/* 既存の画像プレビュー */}
-            {currentImages.map((image) => (
-                <div key={image.id} style={previewStyle}>
-                    <img src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`} alt={`Existing image ${image.id}`} style={imageStyle} />
-                    <button onClick={() => handleRemoveExistingImage(image.id)} style={deleteButtonStyle}>×</button>
-                </div>
-            ))}
+            <div className='preview-image-container'>
+                {currentImages.map((image) => (
+                    <div key={image.id} style={previewStyle}>
+                        <img src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`} alt={`Existing image ${image.id}`} style={imageStyle} />
+                        <button onClick={() => handleRemoveExistingImage(image.id)} style={deleteButtonStyle}>×</button>
+                    </div>
+                ))}
+            </div>
             <div {...getRootProps()} style={dropzoneStyle}>
                 <input {...getInputProps()} />
                 <p>画像をドラッグ＆ドロップするか、クリックしてファイルを選択してください</p>

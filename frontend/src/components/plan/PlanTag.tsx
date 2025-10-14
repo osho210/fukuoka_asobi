@@ -17,7 +17,6 @@ export const PlanTags = (plan: PlayPlanDetailProps) => {
 
     if (!tagsArray) return null;
 
-
     return (
         <div className="plan-tags-container">
             <h2 className="plan-tags-title">こんな方に見ていただきたい</h2>

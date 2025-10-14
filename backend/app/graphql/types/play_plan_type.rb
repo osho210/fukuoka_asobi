@@ -8,16 +8,24 @@ module Types
       object.user
     end
     field :plan_name, String, null: false
+    field :catch_copy, String, null: true
+    field :subtitle, String, null: true
+    field :lead_text, String, null: true
     field :plan_id, Integer, null: false
     field :start_time, String, null: true
     field :end_time, String, null: true
     field :description, String, null: true
+    field :departure, String, null: true
+    field :departure_time, String, null: true
+    field :travel_method_to_first_spot, String, null: true
+    field :travel_time_to_first_spot, Integer, null: true
     field :status, Types::StatusEnumType, null: false
     field :favorite_count, Integer, null: false
     field :rating, Float, null: false
     field :review_count, Integer, null: false
     field :image_url, String, null: true
     field :image_urls, [Types::ImageType], null: true, description: "プランに紐づく画像のURLリスト"
+    field :image_properties, [Types::ImagePropertyType], null: true, description: "プランに紐づく画像とそのプロパティ"
     field :tags, String, null: true
     field :location, String, null: true
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
@@ -64,6 +72,11 @@ module Types
       object.end_time&.strftime("%H:%M")
     end
 
+    # 内部的に日付を保持してしまうため、表示用にフォーマットする
+    def departure_time
+      object.departure_time&.strftime("%H:%M")
+    end
+
     # 画像URLリストを取得
     def image_urls
       object.images.map do |image|
@@ -72,6 +85,27 @@ module Types
           url: image.url.gsub("http://minio:9000", "http://localhost:9000")
         }
       end
+    end
+
+    # 画像プロパティリストを取得
+    def image_properties
+      # N+1問題を回避するため事前読み込み
+      properties = object.image_properties.index_by(&:attachment_id)
+      images = object.images.order('active_storage_attachments.created_at ASC')
+
+      images.map.with_index do |image, index|
+        prop = properties[image.id]
+        {
+          attachment_id: image.id,
+          url: image.url.gsub("http://minio:9000", "http://localhost:9000"),
+          is_selected: prop&.is_selected || false,
+          position: prop&.position || index,
+          comment: prop&.comment
+        }
+      end
+      # 画面上に表示する画像のみを返却する
+      .select { |p| p[:is_selected] }
+      .sort_by { |p| p[:position] }
     end
   end
 end
