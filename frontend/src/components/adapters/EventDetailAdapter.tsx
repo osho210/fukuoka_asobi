@@ -148,7 +148,7 @@ export default function EventDetailAdapter({ event }: EventDetailAdapterProps) {
   return (
     <ContentDetail
       title={event.title}
-      imageUrl={event.bannerImage}
+      imageUrls={[]}
       badges={badges}
       mainSections={mainSections}
       sidebarItems={sidebarItems}

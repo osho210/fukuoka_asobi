@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GET_NEWS } from '../../../graphql/queries/getNews';
+import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
 import { News, NewsStatus } from '../../../types/news';
 import NewsDetailAdapter from '@/components/adapters/NewsDetailAdapter';
 
@@ -14,7 +14,7 @@ interface NewsData {
 }
 
 export default function NewsDetailContainer({ newsId }: NewsDetailContainerProps) {
-  const { loading, error, data } = useQuery<NewsData>(GET_NEWS, {
+  const { loading, error, data } = useQuery<NewsData>(GET_NEWS_LIST, {
     variables: { id: newsId },
   });
 

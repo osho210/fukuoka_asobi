@@ -3,7 +3,7 @@
 import NewsCard from '@/components/NewsCard';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_NEWS } from '@/graphql/queries/getNewsList';
+import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
 import { News } from '@/types/news';
 import '@styles/NewsPage.css';
 
@@ -20,7 +20,7 @@ interface NewsListData {
 export default function NewsPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
-  const { loading, error, data } = useQuery<NewsListData>(GET_NEWS, {
+  const { loading, error, data } = useQuery<NewsListData>(GET_NEWS_LIST, {
     variables: {
       categoryId: selectedCategoryId,
       limit: 20

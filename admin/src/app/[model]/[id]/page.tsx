@@ -270,7 +270,7 @@ export default function ModelDetailPage() {
   const params = useParams();
   const router = useRouter();
   const modelRoute = params.model as string;
-  const id = params.id as string;
+  const id = params?.id as string;
   const isNew = id === 'new';
 
   // 定義済みのenumを呼び出せるフックを使用

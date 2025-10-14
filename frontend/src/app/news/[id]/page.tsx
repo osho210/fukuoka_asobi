@@ -5,7 +5,7 @@ import NewsDetailContainer from './news-detail.container';
 
 export default function NewsDetailPage() {
   const params = useParams();
-  const newsId = params.id as string;
+  const newsId = params?.id as string;
 
   return (
     <>

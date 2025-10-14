@@ -87,6 +87,10 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
     onPlaceSelect?.(place);
   };
 
+  const setGeoError = (message: string) => {
+    console.error(message);
+  }
+
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -210,11 +214,10 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
             {data.searchGooglePlaces.map((place: GooglePlace) => (
               <div
                 key={place.placeId}
-                className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${
-                  selectedPlace?.placeId === place.placeId
+                className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 ${selectedPlace?.placeId === place.placeId
                     ? 'border-blue-500 bg-blue-50 shadow-md'
                     : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
-                }`}
+                  }`}
                 onClick={() => handlePlaceSelect(place)}
               >
                 <div className="flex justify-between items-start">
@@ -234,11 +237,10 @@ export const GooglePlacesSearch: React.FC<GooglePlacesSearchProps> = ({
                         </span>
                       )}
                       {place.businessStatus && (
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          place.businessStatus === 'OPERATIONAL'
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${place.businessStatus === 'OPERATIONAL'
                             ? 'bg-green-100 text-green-800'
                             : 'bg-red-100 text-red-800'
-                        }`}>
+                          }`}>
                           {place.businessStatus === 'OPERATIONAL' ? '営業中' : '休業中'}
                         </span>
                       )}

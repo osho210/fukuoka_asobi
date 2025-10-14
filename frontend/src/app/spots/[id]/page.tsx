@@ -5,7 +5,7 @@ import SpotDetailContainer from './spot-detail.container';
 
 export default function SpotPage() {
   const params = useParams();
-  const spotId = params.id as string;
+  const spotId = params?.id as string;
 
   return (
     <>

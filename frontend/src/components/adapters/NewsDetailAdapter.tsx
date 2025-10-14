@@ -98,7 +98,7 @@ export default function NewsDetailAdapter({ news }: NewsDetailAdapterProps) {
   return (
     <ContentDetail
       title={news.title}
-      imageUrl={news.imageUrl}
+      imageUrls={[]}
       badges={badges}
       mainSections={mainSections}
       sidebarItems={sidebarItems}

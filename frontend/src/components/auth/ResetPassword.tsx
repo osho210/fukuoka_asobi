@@ -14,7 +14,7 @@ import '@styles/Auth.css';
 export default function ResetPassword() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams?.get('token');
 
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');

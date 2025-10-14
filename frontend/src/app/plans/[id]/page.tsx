@@ -11,7 +11,7 @@ import Link from 'next/link';
 export default function PlanDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = parseInt(params.id as string, 10);
+  const id = parseInt(params?.id as string, 10);
 
   const { loading, error, data } = useQuery(GET_PLAY_PLAN, {
     variables: { id },
