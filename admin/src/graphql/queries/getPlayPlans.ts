@@ -4,8 +4,30 @@ export const GET_PLAY_PLANS = gql`
     playPlans(limit: $limit) {
       id
       planName
+      catchCopy
+      subtitle
+      leadText
+      catchCopy
+      subtitle
+      leadText
       description
       imageUrl
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
+      imageUrls {
+        id
+        url
+      }
+      imageProperties {
+        attachmentId
+        url
+        isSelected
+        position
+        comment
+      }
+      userId
       location
       tripType
       totalBudget
@@ -14,18 +36,23 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       status
-      startDatetime
-      endDatetime
+      startTime
+      endTime
       tags
-      recommendedForString
+      # TODO: nameも取得して渡す
+      recommendUsers
+      plannerTitle
+      plannerDescription
       planDetails {
         id
         stepNumber
         stepName
         stepDescription
         comment
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
+        plannerTitle
         budget
         notes
         spot {
@@ -35,7 +62,9 @@ export const GET_PLAY_PLANS = gql`
           phoneNumber
           budgetRange
           isRainyOk
-          imageUrl
+          imageUrl {
+            url
+          }
           catchphrase
           categories{
             name
@@ -43,6 +72,13 @@ export const GET_PLAY_PLANS = gql`
           district{
             districtName
           }
+        }
+        travelDetails {
+          id
+          sequenceNumber
+          travelMethod
+          travelTime
+          notes
         }
       }
     }

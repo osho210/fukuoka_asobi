@@ -1,18 +1,18 @@
 module Types
   class TravelDetailType < Types::BaseObject
-    implements GraphQL::Types::Relay::Node
-    global_id_field :id
+    description "移動詳細情報"
 
-    field :plan_detail_id, Integer, null: false
-    field :sequence_number, Integer, null: false
-    field :travel_method, String, null: false
-    field :travel_time, Integer, null: true
-    field :notes, String, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :id, ID, null: false, description: "移動詳細ID"
+    field :plan_detail_id, Integer, null: false, description: "プラン詳細ID"
+    field :sequence_number, Integer, null: false, description: "移動順序番号"
+    field :travel_method, String, null: false, description: "移動方法"
+    field :travel_time, Integer, null: true, description: "移動時間（分）"
+    field :notes, String, null: true, description: "メモ"
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false, description: "作成日時"
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false, description: "更新日時"
 
-    # 関連するプラン詳細情報を取得
-    field :plan_detail, Types::PlanDetailType, null: false
+    # 関連するプラン詳細を取得
+    field :plan_detail, Types::PlanDetailType, null: false, description: "関連するプラン詳細"
     def plan_detail
       object.plan_detail
     end

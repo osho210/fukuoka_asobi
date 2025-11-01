@@ -7,6 +7,16 @@ class PlayPlan < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :favorited_by_users, through: :favorites, source: :user
 
+  # Active Storage関連付け
+  has_many_attached :images
+
+  # 画像プロパティ関連付け
+  has_many :image_properties, -> { order(position: :asc) },
+           class_name: 'PlayPlanImageProperty', dependent: :destroy
+
+  # 定数
+  MAX_SELECTED_IMAGES = 3
+
   validates :plan_name, presence: true
 
   # ステータスの定義
@@ -41,8 +51,8 @@ class PlayPlan < ApplicationRecord
     end
   end
 
-  # RecommendedForオブジェクトからカンマ区切りの文字列を生成するメソッド
-  def recommended_for_string
-    recommended_fors.map(&:name).join(', ')
+  # おすすめ対象の一覧を取得
+  def recommend_users
+    recommended_fors.map(&:id)
   end
 end

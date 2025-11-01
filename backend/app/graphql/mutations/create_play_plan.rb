@@ -10,8 +10,9 @@ module Mutations
     argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false
     argument :image_url, String, required: false
+    argument :images, [String], required: false
     argument :tags, String, required: false
-    argument :recommended_for_ids, [ID], required: false
+    argument :recommend_users, [ID], required: false
 
     # 出力フィールド
     field :play_plan, Types::PlayPlanType, null: true
@@ -27,8 +28,9 @@ module Mutations
       start_datetime: nil,
       end_datetime: nil,
       image_url: nil,
+      images: nil,
       tags: nil,
-      recommended_for_ids: []
+      recommend_users: []
     )
       # 現在のユーザーを取得
       user = context[:current_user]
@@ -49,14 +51,27 @@ module Mutations
       )
 
       # おすすめ対象の関連付け
-      if recommended_for_ids.present?
-        recommended_for_ids.each do |id|
+      if recommend_users.present?
+        recommend_users.each do |id|
           recommended_for = RecommendedFor.find_by(id: id)
           play_plan.recommended_fors << recommended_for if recommended_for
         end
       end
 
       if play_plan.save
+        # 画像の処理
+        if images.present?
+          images.each do |base64_image|
+            # Base64画像をデコードしてActiveStorageに保存
+            decoded_image = Base64.decode64(base64_image.split(',').last)
+            play_plan.images.attach(
+              io: StringIO.new(decoded_image),
+              filename: "play_plan_#{play_plan.id}_#{Time.current.to_i}.jpg",
+              content_type: 'image/jpeg'
+            )
+          end
+        end
+
         {
           play_plan: play_plan,
           errors: []

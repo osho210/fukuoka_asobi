@@ -8,8 +8,9 @@ module Types
     field :step_description, String, null: true
     field :spot_id, Integer, null: true
     field :comment, String, null: true
-    field :start_datetime, GraphQL::Types::ISO8601DateTime, null: true
-    field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
+    field :start_time, String, null: true
+    field :end_time, String, null: true
+    field :duration_minutes, Integer, null: true
     field :budget, Float, null: true
     field :notes, String, null: true
     field :planner_title, String, null: true
@@ -33,6 +34,15 @@ module Types
     field :travel_details, [Types::TravelDetailType], null: false
     def travel_details
       object.travel_details
+    end
+
+    # 内部的に日付を保持してしまうため、表示用にフォーマットする
+    def start_time
+      object.start_time&.strftime("%H:%M")
+    end
+
+    def end_time
+      object.end_time&.strftime("%H:%M")
     end
   end
 end

@@ -1,5 +1,3 @@
-// プラン関連の共通型定義
-
 export interface OpeningHour {
   id: string;
   dayOfWeek: string;
@@ -22,6 +20,14 @@ export interface District {
   districtName: string;
 }
 
+export interface Image {
+  id: string;
+  url: string;
+  width?: number;
+  height?: number;
+  fill?: boolean;
+}
+
 export interface Spot {
   id: string;
   spotName: string;
@@ -29,13 +35,16 @@ export interface Spot {
   phoneNumber?: string;
   website?: string;
   catchphrase?: string;
+  editorialSummary?: string;
   reviewRating?: number;
   reviewCount?: number;
   instagramUrl?: string;
   budgetRange?: string;
-  imageUrl?: string;
+  imageUrl?: Image;
+  imageUrls?: string[];
   theme?: string;
   isRainyOk?: boolean;
+  nearestStation?: string;
   district?: District;
   categories?: Category[];
   openingHours?: OpeningHour[];
@@ -51,8 +60,8 @@ export interface PlanDetail {
   comment?: string;
   createdAt?: string;
   updatedAt?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   notes?: string;
   plannerTitle?: string;
@@ -76,8 +85,15 @@ export interface RecommendedFor {
 export interface PlayPlan {
   id: string;
   planName: string;
+  catchCopy?: string;
+  subtitle?: string;
+  leadText?: string;
+  departure: string;
+  departureTime?: string;
+  travelMethodToFirstSpot?: string;
+  travelTimeToFirstSpot?: number;
   description?: string;
-  imageUrl?: string;
+  imageUrls?: { id: number, url: string; }[];
   location?: string;
   tripType: string;
   totalBudget?: number;
@@ -86,16 +102,18 @@ export interface PlayPlan {
   favoriteCount: number;
   isFavorite?: boolean;
   status: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startTime?: string;
+  endTime?: string;
   createdAt?: string;
   updatedAt?: string;
   tags?: string;
   recommendedFors?: RecommendedFor[];
-  recommendedForString?: string;
+  recommendUsers?: string;
   plannerTitle?: string;
   plannerDescription?: string;
   user?: User;
+  userId?: number;
+  imageProperties?: ImageProperties[];
   planDetails: PlanDetail[];
 }
 
@@ -103,6 +121,14 @@ export interface TravelDetail {
   sequenceNumber: number;
   travelMethod: string;
   travelTime: number;
+}
+
+export interface ImageProperties {
+  attachmentId: string;
+  url: string;
+  isSelected: boolean;
+  position: number;
+  comment?: string;
 }
 
 export interface TravelSegment {

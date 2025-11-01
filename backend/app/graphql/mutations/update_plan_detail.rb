@@ -5,8 +5,8 @@ module Mutations
     argument :step_number, Integer, required: false
     argument :step_name, String, required: false
     argument :step_description, String, required: false
-    argument :start_datetime, GraphQL::Types::ISO8601DateTime, required: false
-    argument :end_datetime, GraphQL::Types::ISO8601DateTime, required: false
+    argument :start_time, String, required: false
+    argument :end_time, String, required: false
     argument :budget, Float, required: false
     argument :spot_id, Integer, required: false
     argument :comment, String, required: false
@@ -39,8 +39,8 @@ module Mutations
       # end
 
       # 時間の整合性チェック
-      if attributes[:start_datetime] && attributes[:end_datetime]
-        if attributes[:start_datetime] >= attributes[:end_datetime]
+      if attributes[:start_time] && attributes[:end_time]
+        if attributes[:start_time] >= attributes[:end_time]
           return {
             plan_detail: nil,
             errors: ["開始時間は終了時間より前である必要があります"]

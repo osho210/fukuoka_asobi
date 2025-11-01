@@ -17,6 +17,10 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       status
+      imageUrls {
+        id
+        url
+      }
       user {
         id
         username
@@ -32,8 +36,26 @@ export const GET_PLAY_PLAN = gql`
     playPlan(id: $id) {
       id
       planName
+      catchCopy
+      subtitle
+      leadText
       description
       imageUrl
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
+      imageUrls {
+        id
+        url
+      }
+      imageProperties {
+        attachmentId
+        url
+        isSelected
+        position
+        comment
+      }
       location
       tripType
       totalBudget
@@ -42,34 +64,85 @@ export const GET_PLAY_PLAN = gql`
       favoriteCount
       isFavorite
       status
-      startDatetime
-      endDatetime
+      startTime
+      endTime
       tags
-      recommendedForString
+      recommendUsers
+      userId
+      user {
+        id
+        username
+        profileImageUrl
+        role
+      }
+      plannerTitle
+      plannerDescription
+      recommendedFors {
+        id
+        name
+      }
       planDetails {
         id
         stepNumber
         stepName
         stepDescription
         comment
-        startDatetime
-        endDatetime
+        startTime
+        durationMinutes
         budget
         notes
+        plannerTitle
+        plannerDescription
+        travelDetails{
+          sequenceNumber
+          travelMethod
+          travelTime
+          notes
+        }
         spot {
           id
           spotName
+          description
           address
           phoneNumber
           budgetRange
           isRainyOk
+          website
+          nearestStation
+          instagramUrl
+          reviewCount
+          reviewRating
+          acceptsCreditCards
+          priceRangeStartAmount
+          priceRangeEndAmount
+          takeout
+          reservable
+          menus{
+            id
+            menuName
+          }
+          spotAmbiances{
+            id
+            ambianceName
+          }
           imageUrl{
             id
             url
           }
+          hashtags {
+            id
+            hashtagName
+          }
           catchphrase
           categories{
             name
+          }
+          openingHours {
+            id
+            dayOfWeek
+            openTime
+            closeTime
+            isClosedDay
           }
           district{
             districtName

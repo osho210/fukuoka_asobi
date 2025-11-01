@@ -42,7 +42,11 @@ class ImageUploadService
         end
 
         # 添付できているか確認
-        raise "画像の添付に失敗しました" unless model.image.attached? || model.images.attached?
+        if attachment_name == :images
+          raise "画像の添付に失敗しました" unless model.images.attached?
+        else
+          raise "画像の添付に失敗しました" unless model.image.attached?
+        end
       rescue => e
         Rails.logger.error("[ImageUploadService] 画像添付エラー: #{e.message}")
         raise StandardError, "画像の添付に失敗しました: #{e.message}"

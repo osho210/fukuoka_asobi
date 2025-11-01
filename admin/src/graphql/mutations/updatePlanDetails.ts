@@ -9,8 +9,10 @@ export const UPDATE_PLAN_DETAILS = gql`
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        startTime
+        endTime
+        durationMinutes
+        plannerTitle
         budget
         comment
         notes
@@ -25,37 +27,58 @@ export const UPDATE_PLAN_DETAILS = gql`
 `;
 
 export const UPDATE_PLAY_PLAN_WITH_DETAILS = gql`
-  mutation UpdatePlayPlanWithDetails($input: UpdatePlayPlanInput!) {
-    updatePlayPlan(input: $input) {
-      playPlan {
+mutation CreateOrUpdatePlayPlanWithDetails($input: CreateOrUpdatePlayPlanWithDetailsInput!) {
+  createOrUpdatePlayPlanWithDetails(input: $input) {
+    playPlan {
+      id
+      planName
+      catchCopy
+      subtitle
+      leadText
+      description
+      status
+      tripType
+      totalBudget
+      departure
+      departureTime
+      travelMethodToFirstSpot
+      travelTimeToFirstSpot
+      location
+      startTime
+      endTime
+      imageUrl
+      plannerTitle
+      plannerDescription
+      imageUrls {
         id
-        planName
-        description
-        status
-        tripType
-        totalBudget
-        location
-        startDatetime
-        endDatetime
-        imageUrl
-        tags
-        favoriteCount
-        publishedAt
-        plannerDescription
-        rating
-        reviewCount
-        recommendedFors {
-          id
-          name
-        }
+        url
+      }
+      imageProperties {
+        attachmentId
+        url
+        isSelected
+        position
+        comment
+      }
+      tags
+      favoriteCount
+      publishedAt
+      plannerDescription
+      rating
+      reviewCount
+      recommendedFors {
+        id
+        name
       }
       planDetails {
-        planId
+        id
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        plannerTitle
+        startTime
+        endTime
+        durationMinutes
         budget
         comment
         notes
@@ -63,8 +86,20 @@ export const UPDATE_PLAY_PLAN_WITH_DETAILS = gql`
           id
           spotName
         }
+        travelDetails {
+          id
+          sequenceNumber
+          travelMethod
+          travelTime
+          notes
+        }
       }
-      errors
     }
+    errors {
+      field
+      message
+    }
+    success
   }
+}
 `;

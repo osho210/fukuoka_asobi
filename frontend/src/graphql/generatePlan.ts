@@ -26,15 +26,13 @@ export const GENERATE_PLAN = gql`
         planName
         description
         totalBudget
-        startDatetime
-        endDatetime
         planDetails {
           id
           stepNumber
           stepName
           stepDescription
-          startDatetime
-          endDatetime
+          startTime
+          durationMinutes
           budget
           spot {
             id

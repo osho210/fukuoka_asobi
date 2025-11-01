@@ -19,7 +19,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@graphql/*": ["./src/graphql/*"],
-      "@styles/*": ["./public/styles/*"]
+      "@styles/*": ["./public/styles/*"],
+      "@graphql_types/*": ["./src/__generated__/graphql.ts"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/api/proxy-image.js"],

@@ -5,6 +5,7 @@ export const GET_SPOTS = gql`
     spots {
       id
         spotName
+        description
         address
         district {
           id
@@ -26,7 +27,10 @@ export const GET_SPOTS = gql`
         minPeople
         recommendedFor1
         recommendedFor2
-        imageUrl
+        imageUrl {
+          id
+          url
+        }
         nearestStation
         parkingAvailable
         googlePlaceId
@@ -199,6 +203,24 @@ export const GET_SPOT = gql`
       }
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const GET_FORM_OPTIONS = gql`
+  query GetFormOptions {
+    spots {
+      id
+      spotName
+      priceRangeAverage
+    }
+    recommendedFors {
+      id
+      name
+    }
+    districts {
+      id
+      districtName
     }
   }
 `;

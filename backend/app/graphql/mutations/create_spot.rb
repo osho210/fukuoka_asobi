@@ -4,6 +4,7 @@
 module Mutations
   class CreateSpot < BaseMutation
     argument :spot_name,         String,  required: true
+    argument :description,       String,  required: false
     argument :address,           String,  required: true
     argument :district_id,       ID,      required: true
     argument :phone_number,      String,  required: false

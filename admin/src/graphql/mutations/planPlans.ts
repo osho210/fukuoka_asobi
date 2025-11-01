@@ -10,13 +10,19 @@ export const UPDATE_PLAY_PLAN = gql`
         status
         tripType
         totalBudget
+        departure
         location
-        startDatetime
-        endDatetime
+        startTime
+        endTime
         imageUrl
+        imageUrls {
+          id
+          url
+        }
         tags
         favoriteCount
         publishedAt
+        plannerTitle
         plannerDescription
         rating
         reviewCount
@@ -31,8 +37,10 @@ export const UPDATE_PLAY_PLAN = gql`
         stepNumber
         stepName
         stepDescription
-        startDatetime
-        endDatetime
+        plannerTitle
+        startTime
+        endTime
+        durationMinutes
         budget
         comment
         notes
@@ -53,8 +61,9 @@ export interface PlanDetailWithSpot {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  plannerTitle?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   comment?: string;
   notes?: string;
@@ -82,8 +91,9 @@ export interface ProcessedPlanDetail {
   stepNumber?: number;
   stepName?: string;
   stepDescription?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  plannerTitle?: string;
+  startTime?: string;
+  durationMinutes?: number;
   budget?: number;
   comment?: string;
   notes?: string;

@@ -142,7 +142,19 @@ module Types
     # 遊びのプラン
     field :play_plans, resolver: Resolvers::PlayPlansResolver
     field :play_plan, resolver: Resolvers::PlayPlanResolver
+    field :play_plan_with_details, Types::PlayPlanType, null: true, description: "管理画面用：プラン詳細を含むプラン情報を取得" do
+      argument :id, ID, required: true, description: "プランID"
+    end
     field :search_plans, resolver: Resolvers::SearchPlansResolver
+
+    def play_plan_with_details(id:)
+      PlayPlan
+        .includes(
+          :recommended_fors,
+          plan_details: [:spot, :travel_details]
+        )
+        .find_by(id: id)
+    end
 
     # イベントカテゴリ
     field :event_categories, [Types::EventCategoryType], null: false

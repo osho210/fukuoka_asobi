@@ -37,6 +37,7 @@ module Backend
     config.time_zone = 'Tokyo'
 
     # dbのデフォルトタイムゾーンはUTC
+    config.time_zone = 'UTC'
     config.active_record.default_timezone = :utc
   end
 end

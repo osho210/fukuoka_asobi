@@ -71,7 +71,9 @@
   border-bottom: 2px solid #2196F3;
 }
 
-.timelineSection, .mapSection, .detailsSection {
+.timelineSection,
+.mapSection,
+.detailsSection {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -93,7 +95,6 @@
 .spotCard {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -139,6 +140,7 @@
 .spotInfo {
   padding: 15px;
   flex: 1;
+  margin: 10px 0;
 }
 
 .spotName {
@@ -189,9 +191,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed #e0e0e0;
+  justify-content: center;
 }
 
 .travelMethod {
@@ -211,7 +211,8 @@
   margin-top: 30px;
 }
 
-.saveButton, .editButton {
+.saveButton,
+.editButton {
   padding: 12px 24px;
   border-radius: 4px;
   font-size: 16px;

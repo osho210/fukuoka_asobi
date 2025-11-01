@@ -41,7 +41,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
   const updateMemberInfo = (selectedIds: string[]) => {
     updateSearchParams({
       memberInfo: {
-        recommendedForIds: selectedIds,
+        recommendUsers: selectedIds,
       },
     });
   };
@@ -142,8 +142,8 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
         <div className={styles.memberGroup} onClick={() => setIsMemberModalOpen(true)}>
           <Image src="/member_icon.svg" width={'30'} height={'30'} alt='利用メンバー' />
           <span className={styles.selectionText}>
-            {searchParams.memberInfo.recommendedForIds.length > 0
-              ? `${searchParams.memberInfo.recommendedForIds.length}件選択中`
+            {searchParams.memberInfo.recommendUsers.length > 0
+              ? `${searchParams.memberInfo.recommendUsers.length}件選択中`
               : '利用メンバーを選択'}
           </span>
         </div>
@@ -282,10 +282,10 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                       <label className={styles.checkboxLabel}>
                         <input
                           type="checkbox"
-                          checked={searchParams.memberInfo.recommendedForIds.includes(item.id)}
+                          checked={searchParams.memberInfo.recommendUsers.includes(item.id)}
                           onChange={(e) => {
                             const isChecked = e.target.checked;
-                            const currentIds = [...searchParams.memberInfo.recommendedForIds];
+                            const currentIds = [...searchParams.memberInfo.recommendUsers];
 
                             if (isChecked && !currentIds.includes(item.id)) {
                               updateMemberInfo([...currentIds, item.id]);

@@ -1,9 +1,10 @@
 'use client';
 
 import { PlanDetail } from '@/types/plan';
-import { formatTime, formatTravelTime } from '@/utils/dateUtils';
+import { formatTravelTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
-import styles from '@/styles/GeneratedPlan.module.css';
+import '@/styles/GeneratedPlan.css';
+import Image from 'next/image';
 import '@styles/PlayPlanDetail.css';
 
 interface PlanStepProps {
@@ -11,107 +12,108 @@ interface PlanStepProps {
   isLastStep: boolean;
 }
 
-// 移動手段のテキストを取得する関数
-const getTravelMethodText = (method: string): string => {
+interface TravelMethodInfo {
+  name: string;
+  icon: string;
+}
+
+const getTravelMethodInfo = (method: string): TravelMethodInfo => {
+  console.log(method)
   switch (method.toLowerCase()) {
-    case 'walk':
-      return '徒歩';
-    case 'car':
-      return '車';
-    case 'train':
-      return '電車';
-    case 'bus':
-      return 'バス';
-    case 'bicycle':
-      return '自転車';
+    case '徒歩':
+      return { name: '徒歩', icon: '/walk-icon.png' };
+    case '車':
+      return { name: '車', icon: '/car-icon.png' };
+    case '電車':
+      return { name: '電車', icon: '/train-icon.png' };
+    case 'バス':
+      return { name: 'バス', icon: '/bus-icon.png' };
+    case '自転車':
+      return { name: '自転車', icon: '/bicycle-icon.png' };
     default:
-      return method;
+      return { name: method, icon: '/question-icon.png' };
   }
 };
 
 const PlanStep: React.FC<PlanStepProps> = ({ detail, isLastStep }) => {
+  const travelMethodInfo = detail.travelDetails && detail.travelDetails.length > 0
+    ? getTravelMethodInfo(detail.travelDetails[0].travelMethod)
+    : null;
   return (
-    <div className="plan-step">
-      <div className="plan-step-timeline">
-        <div className="plan-step-number">{detail.stepNumber}</div>
-        {!isLastStep && <div className="plan-step-line"></div>}
-      </div>
-      <div key={detail.id} className={styles.spotCard}>
-        <div className="plan-step-content">
-          {detail.stepDescription && (
-            <div className="plan-step-description">
-              {detail.stepDescription}
+    <>
+      <div className="plan-step">
+        <div className="plan-step-header">
+          {detail.startTime && (
+            <div className="plan-step-header-time">
+              <p className="plan-step-header-label">到着時間</p>
+              <Image src="/watch-icon.png" alt="時計アイコン" width={24} height={24} />
+              <p className='plan-step-header-value'>{detail.startTime}</p>
             </div>
           )}
-
-          {detail.plannerTitle && (
-            <div className="plan-step-planner-title">
-              <h4>{detail.plannerTitle}</h4>
+          {detail.durationMinutes && (
+            <div className="plan-step-header-time">
+              <p className="plan-step-header-label">滞在時間</p>
+              <Image src="/stopwatch-icon.png" alt="ストップウォッチアイコン" width={24} height={24} />
+              <p className='plan-step-header-value'>{detail.durationMinutes}分</p>
             </div>
           )}
-
-          {detail.plannerDescription && (
-            <div className="plan-step-planner-description">
-              <p>{detail.plannerDescription}</p>
+          {detail.budget && detail.budget > 0 && (
+            <div className="plan-step-header-time">
+              <p className="plan-step-header-label">予算</p>
+              <Image src="/money-icon.png" alt="予算アイコン" width={24} height={24} />
+              <p className='plan-step-header-value'>¥{detail.budget.toLocaleString()}</p>
             </div>
           )}
+        </div>
+        {detail.spot && <SpotDetail detail={detail} />}
 
-          {detail.comment && (
-            <div className="plan-step-comment">
-              <p>{detail.comment}</p>
-            </div>
-          )}
+        <div key={detail.id} className="spotCard">
+          <div className="plan-step-content">
 
-          {detail.spot && <SpotDetail spot={detail.spot} />}
-
-          {detail.budget && (
-            <div className="plan-step-budget">
-              <span>予算:</span>
-              <span className="plan-step-budget-value">¥{detail.budget.toLocaleString()}</span>
-            </div>
-          )}
-
-          <div className={styles.spotInfo}>
-            <h3 className={styles.spotName}>
-              {detail.stepNumber}. {detail.spot?.spotName}
-            </h3>
-            <p className={styles.spotCatchphrase}>{detail.spot?.catchphrase}</p>
-            <p className={styles.spotAddress}>{detail.spot?.address}</p>
-            <div className={styles.spotSchedule}>
-              <span className={styles.scheduleTime}>
-                {formatTime(detail.startDatetime)} 〜 {formatTime(detail.endDatetime)}
-              </span>
-              {detail.startDatetime && detail.endDatetime && (
-                <span className={styles.scheduleDuration}>
-                  （滞在時間: {Math.round(
-                    (new Date(detail.endDatetime).getTime() -
-                      new Date(detail.startDatetime).getTime()) /
-                    60000
-                  )}
-                  分）
-                </span>
-              )}
-            </div>
-
-            {detail.budget && detail.budget > 0 && (
-              <div className={styles.spotBudget}>
-                予算: {detail.budget.toLocaleString()}円
+            {detail.plannerTitle && (
+              <div className="plan-step-planner-title">
+                <h4>{detail.plannerTitle}</h4>
               </div>
             )}
-            {detail.travelDetails && detail.travelDetails.length > 0 && !isLastStep && (
-              <div className={styles.travelInfo}>
-                <span className={styles.travelMethod}>
-                  次のスポットへ: {getTravelMethodText(detail.travelDetails[0].travelMethod)}
-                </span>
-                <span className={styles.travelTime}>
-                  （{formatTravelTime(detail.travelDetails[0].travelTime)}）
-                </span>
+
+            {detail.plannerDescription && (
+              <div className="plan-step-planner-description">
+                <p>{detail.plannerDescription}</p>
+              </div>
+            )}
+
+            {detail.comment && (
+              <div className="plan-step-comment">
+                <p>{detail.comment}</p>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+      <div className="spotInfo">
+        {detail.travelDetails && detail.travelDetails.length > 0 && !isLastStep && (
+          <div className="travelInfo">
+            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={50} />
+            <span className="travelMethod">
+              {travelMethodInfo?.icon && (
+                <>
+                  <Image
+                    src={travelMethodInfo.icon}
+                    alt={travelMethodInfo.name}
+                    width={30}
+                    height={30}
+                    style={{ verticalAlign: 'middle', marginRight: '5px' }}
+                  />
+                </>
+              )}
+            </span>
+            <span className="travelTime">
+              {travelMethodInfo?.name}で{ formatTravelTime(detail.travelDetails[0].travelTime)}
+            </span>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
