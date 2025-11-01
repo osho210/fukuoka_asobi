@@ -41,6 +41,8 @@ export const UPDATE_PLAY_PLAN = gql`
         startTime
         endTime
         durationMinutes
+        startTime
+        endTime
         budget
         comment
         notes
@@ -94,6 +96,7 @@ export interface ProcessedPlanDetail {
   plannerTitle?: string;
   startTime?: string;
   durationMinutes?: number;
+  endTime?: string;
   budget?: number;
   comment?: string;
   notes?: string;

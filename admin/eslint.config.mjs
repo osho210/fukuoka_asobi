@@ -1,15 +1,8 @@
-import {
-  dirname
-} from "path";
-import {
-  fileURLToPath
-} from "url";
-import {
-  FlatCompat
-} from "@eslint/eslintrc";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-const __filename = fileURLToPath(
-  import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
@@ -22,7 +15,7 @@ const eslintConfig = [
     ignores: [
       "src/__generated__/**" // 自動生成ディレクトリをESLint対象外にする
     ],
-  }
+  },
 ];
 
 export default eslintConfig;

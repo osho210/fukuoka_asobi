@@ -32,7 +32,7 @@ export const CREATE_SPOT = gql`
         minPeople
         recommendedFor1
         recommendedFor2
-        imageUrl{
+        imageUrl {
           id
           url
         }
