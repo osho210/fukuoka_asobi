@@ -54,10 +54,48 @@
 
 ### インフラ
 
-- **開発環境**: Docker Compose
-- **本番環境**: vercel, aws
+#### 開発環境
+- **コンテナ化**: Docker Compose
+- **データベース**: MySQL 8.0
+- **ストレージ**: MinIO（S3互換）
+
+#### 本番環境
+- **バックエンド**: Fly.io
+- **フロントエンド**: Vercel
+- **データベース**: TiDB Cloud (Serverless)
+- **ストレージ**: Cloudflare R2
+- **コスト**: 無料枠内で運用可能（月額 0円〜）
 
 
+
+## 🚀 デプロイ
+
+### クイックスタート
+
+本番環境へのデプロイは以下の手順で行います：
+
+1. **デプロイ前の準備**
+   - [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)を確認
+   - 各サービスのアカウントを作成
+
+2. **デプロイ実行**
+   - [docs/deployment_guide.md](./docs/deployment_guide.md)の詳細な手順に従う
+
+3. **主要サービス**
+   - **TiDB Cloud**: MySQL互換のServerlessデータベース（無料枠: 5GB）
+   - **Cloudflare R2**: S3互換のストレージ（無料枠: 10GB）
+   - **Fly.io**: Railsアプリケーションホスティング（無料枠: 3台のVM）
+   - **Vercel**: Next.jsフロントエンドホスティング（Hobbyプラン無料）
+
+### コスト見積もり
+
+- **無料枠内**: 月額 **0円**
+- **小規模運用**: 月額 **1,000円程度**
+- **中規模運用**: 月額 **3,000〜5,000円程度**
+
+詳細は[デプロイガイド](./docs/deployment_guide.md)を参照してください。
+
+---
 
 ## 💻 開発ワークフロー
 

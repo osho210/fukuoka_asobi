@@ -36,6 +36,9 @@ module Backend
     # デフォルトのタイムゾーンJS(日本時刻に変更)
     config.time_zone = 'Tokyo'
 
+    # デプロイ先の指定
+    config.hosts << "https://fukuoka-asobi.onrender.com"
+
     # dbのデフォルトタイムゾーンはUTC
     config.time_zone = 'UTC'
     config.active_record.default_timezone = :utc

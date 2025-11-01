@@ -4,8 +4,8 @@ module Types
     field :plan_name, String, null: false
     field :description, String, null: true
     field :total_budget, Float, null: true
-    field :start_datetime, GraphQL::Types::ISO8601DateTime, null: true
-    field :end_datetime, GraphQL::Types::ISO8601DateTime, null: true
+    field :start_time, String, null: true
+    field :end_time, String, null: true
     field :plan_details, [Types::PlanDetailType], null: false
     field :travel_route, Types::TravelRouteType, null: false
   end
