@@ -3,7 +3,7 @@ class GooglePlacesService
   base_uri 'https://places.googleapis.com/v1'
 
   def initialize
-    @api_key = Rails.application.credentials.google_places_api_key
+    @api_key = Rails.application.credentials.google[:places_api_key]
     raise 'Google Places API key not found. Please configure it in Rails.application.credentials under :google_places_api_key. Refer to https://guides.rubyonrails.org/security.html#custom-credentials for setup instructions.' unless @api_key
   end
 

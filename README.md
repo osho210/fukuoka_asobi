@@ -448,6 +448,20 @@ fukuoka-asobi/
 - バックエンド: RSpecを使用したテスト
 - フロントエンド: Vitestを使用したテスト
 
+### コマンド
+- コンテナへのアタッチ
+   ```shell
+   docker exec -it fukuoka_asobi_backend bash
+   ```
+- 開発環境のクレデンシャルファイルの更新
+   ```shell
+   EDITOR="vim -f" bin/rails credentials:edit --environment development
+   ```
+- 本番環境のクレデンシャルファイルの更新
+   ```shell
+   EDITOR="vim -f" bin/rails credentials:edit --environment production
+   ```
+
 ### ドキュメント
 
 - 設計書: 各機能の詳細設計を記述
