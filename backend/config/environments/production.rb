@@ -23,10 +23,10 @@ Rails.application.configure do
   # 例: "https://cdn.your-service.com"
   # これにより、Active Storageが生成するURLがCDN経由になります。
   # 詳細は `config/storage.yml` のTODOコメントも参照してください。
-  # config.asset_host = "http://assets.example.com"
+  config.asset_host = ENV["ASSET_HOST"] if ENV["ASSET_HOST"].present?
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :amazon
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "amazon").to_sym
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
@@ -62,10 +62,11 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
-
+  app_host = ENV.fetch("APP_HOST", "example.com")
+  config.action_mailer.default_url_options = { host: app_host, protocol: "https" }
   # ActiveStorageのURLヘルパーのためのホスト設定
-  config.active_storage.default_url_options = { host: "example.com" }
+  asset_host_for_urls = ENV["ASSET_HOST"].presence || app_host
+  config.active_storage.default_url_options = { host: asset_host_for_urls, protocol: "https" }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
