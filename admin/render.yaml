@@ -30,10 +30,6 @@ services:
         fromDatabase:
           name: fukuoka_asobi_staging
           property: connectionString
-      - key: FUKUOKA_ASOBI_DATABASE_PASSWORD
-        sync: false
-      - key: SECRET_KEY_BASE
-        sync: false
       - key: RAILS_MASTER_KEY
         sync: false
       - key: RAILS_ENV
