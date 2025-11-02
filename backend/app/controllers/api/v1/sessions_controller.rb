@@ -54,7 +54,7 @@ module Api
           exp: 1.day.from_now.to_i
         }
 
-        JWT.encode(payload, Rails.application.credentials.secret_key_base)
+        JWT.encode(payload, Rails.application.credentials.dig(:devise, :jwt_secret_key))
       end
     end
   end
