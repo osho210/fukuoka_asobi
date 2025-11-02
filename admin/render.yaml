@@ -24,15 +24,46 @@ services:
     plan: free
     rootDir: backend
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec puma -C config/puma.rb"
+    # ← 起動時に Ridgepole を流す（DB準備は起動時が安全）
+    startCommand: >
+      bundle exec ridgepole -c config/database.yml -E production --apply -f db/schemas/Schemafile
+      && bundle exec puma -C config/puma.rb
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: fukuoka_asobi_staging
           property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
+      - key: CACHE_DATABASE_URL
+        fromDatabase:
+          name: fukuoka_asobi_staging_cache
+          property: connectionString
+      - key: QUEUE_DATABASE_URL
+        fromDatabase:
+          name: fukuoka_asobi_staging_queue
+          property: connectionString
+      - key: CABLE_DATABASE_URL
+        fromDatabase:
+          name: fukuoka_asobi_staging_cable
+          property: connectionString
+
+      # Rails / Build
       - key: RAILS_ENV
         value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: SECRET_KEY_BASE
+        sync: false
       - key: NODE_ENV
         value: production
+      - key: AWS_EC2_METADATA_DISABLED
+        value: "true"
+
+      # Devise / JWT (ENVのみ参照にした場合)
+      - key: DEVISE_SECRET_KEY
+        sync: false
+      - key: DEVISE_JWT_SECRET_KEY
+        sync: false
+
+      # ActiveStorage を一時的にローカルで動かすなら
+      - key: ACTIVE_STORAGE_SERVICE
+        value: local

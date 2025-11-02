@@ -59,25 +59,24 @@ production:
 #
 production:
   primary:
-    <<: *default
-    database: fukuoka_asobi_production
-    username: fukuoka_asobi
-    password: <%= ENV["FUKUOKA_ASOBI_DATABASE_PASSWORD"] %>
+    adapter: postgresql
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
   cache:
-    <<: *default
-    database: fukuoka_asobi_production_cache
-    username: fukuoka_asobi
-    password: <%= ENV["FUKUOKA_ASOBI_DATABASE_PASSWORD"] %>
+    adapter: postgresql
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/cache_migrate
+
   queue:
-    <<: *default
-    database: fukuoka_asobi_production_queue
-    username: fukuoka_asobi
-    password: <%= ENV["FUKUOKA_ASOBI_DATABASE_PASSWORD"] %>
+    adapter: postgresql
+    url: <%= ENV["QUEUE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/queue_migrate
+
   cable:
-    <<: *default
-    database: fukuoka_asobi_production_cable
-    username: fukuoka_asobi
-    password: <%= ENV["FUKUOKA_ASOBI_DATABASE_PASSWORD"] %>
+    adapter: postgresql
+    url: <%= ENV["CABLE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     migrations_paths: db/cable_migrate
