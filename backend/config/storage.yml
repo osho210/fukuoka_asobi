@@ -20,14 +20,14 @@ minio:
 # 本番環境用S3設定
 # TODO: 本番環境では、S3バケットを公開設定にし、CDN（CloudFrontなど）を経由して画像を配信する
 # その際、以下の `public: true` のコメントアウトを解除し、
-# `config/environments/production.rb` で `config.asset_host` にCDNのドメインを設定する必要があります。
+# 一旦コメントアウト
 # public: true
-amazon:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-  region: ap-northeast-1
-  bucket: fukuoka-asobi-<%= Rails.env %>
+# amazon:
+#   service: S3
+#   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
+#   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
+#   region: ap-northeast-1
+#   bucket: fukuoka-asobi-<%= Rails.env %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
