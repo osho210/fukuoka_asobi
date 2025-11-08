@@ -26,7 +26,8 @@ Rails.application.configure do
   config.asset_host = ENV["ASSET_HOST"] if ENV["ASSET_HOST"].present?
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "amazon").to_sym
+  # TODO: 一旦デプロイしたいからlocalにしているが、本番環境ではS3などのクラウドストレージを利用する
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   config.assume_ssl = true
