@@ -25,9 +25,9 @@ module Mutations
       return { plan: nil, errors: ["ログインが必要です"] }
     end
 
-    # プラン生成サービスを呼び出す
-    plan_generator = Services::PlanGenerator.new(
-      districts: districts,
+      # プラン生成サービスを呼び出す
+      plan_generator = PlanGenerator.new(
+        districts: districts,
       date: date,
       member_info: member_info,
       budget: budget,

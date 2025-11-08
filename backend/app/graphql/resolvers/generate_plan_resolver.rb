@@ -5,7 +5,7 @@ module Resolvers
 
     def resolve(input:)
       # プラン生成サービスを呼び出す
-      plan_generator = Services::PlanGenerator.new(
+      plan_generator = PlanGenerator.new(
         areas: input.areas,
         date: input.date,
         member_info: input.member_info,

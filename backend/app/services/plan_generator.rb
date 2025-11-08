@@ -1,8 +1,7 @@
 require 'ostruct'
 require 'securerandom'
 
-module Services
-  class PlanGenerator
+class PlanGenerator
   def initialize(districts:, date:, member_info:, budget:, start_time: nil, end_time: nil, custom_options: nil, user: nil)
     @districts = districts
     @date = Date.parse(date)
@@ -461,4 +460,3 @@ module Services
       )
     end
   end
-end

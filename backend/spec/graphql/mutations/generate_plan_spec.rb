@@ -73,7 +73,7 @@ RSpec.describe Mutations::GeneratePlan, type: :request do
           description: 'テスト用のプラン説明',
           user: user
         )
-        allow_any_instance_of(Services::PlanGenerator).to receive(:generate).and_return(plan)
+        allow_any_instance_of(PlanGenerator).to receive(:generate).and_return(plan)
       end
 
       it 'プランを生成し、ユーザーと関連付ける' do
