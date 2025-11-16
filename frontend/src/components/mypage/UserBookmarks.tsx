@@ -59,7 +59,7 @@ export const UserBookmarks: React.FC = () => {
     );
   }
 
-  if (!data || data.userFavorites.length === 0) {
+  if (!data || !data.userFavorites || data.userFavorites.length === 0) {
     return (
       <div className="user-components-empty">
         <p>お気に入りはありません。</p>
@@ -112,16 +112,16 @@ export const UserBookmarks: React.FC = () => {
                     作成日: {new Date(createdAt).toLocaleDateString('ja-JP')}
                   </p>
                 </div>
-                {playPlan.recommendedFor && (
+                {playPlan.tags && (
                   <div className="user-components-card-tags">
-                    {playPlan.recommendedFor}
+                    {playPlan.tags}
                   </div>
                 )}
               </div>
             </Link>
             <button
               className="user-components-remove-btn"
-              onClick={() => handleRemove(playPlan.id)}
+              onClick={() => handleRemove(String(playPlan.id))}
               disabled={removing}
               aria-label="お気に入り解除"
             >

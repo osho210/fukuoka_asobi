@@ -85,11 +85,6 @@ export const UserPlayPlans: React.FC = () => {
                     作成日: {new Date(plan.createdAt).toLocaleDateString('ja-JP')}
                   </p>
                 </div>
-                {plan.recommendedFor && (
-                  <div className="user-components-card-tags">
-                    {plan.recommendedFor}
-                  </div>
-                )}
               </div>
             </Link>
           </div>
