@@ -1,10 +1,41 @@
 {
+  "name": "fukuoka-asobi",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "admin"
+  ],
   "scripts": {
-    "commit": "cz"
+    "commit": "cz",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:admin": "npm run dev -w admin",
+    "build:frontend": "npm run build -w frontend",
+    "build:admin": "npm run build -w admin",
+    "lint:frontend": "npm run lint -w frontend",
+    "lint:admin": "npm run lint -w admin"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "graphql": "^16.11.0",
+    "next": "15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/client-preset": "^4.8.0",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "commitizen": "^4.3.0",
-    "cz-git": "^1.12.0"
+    "cz-git": "^1.12.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "typescript": "^5.8.2"
   },
   "config": {
     "commitizen": {
