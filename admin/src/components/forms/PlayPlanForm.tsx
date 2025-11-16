@@ -76,7 +76,7 @@ export default function PlayPlanForm({
    */
   const calculateTotalBudget = (planDetails: PlanDetail[]): number => {
     return planDetails.reduce((total, detail) => {
-      const budget = parseFloat(detail.budget || '0');
+      const budget = detail.budget || 0;
       return total + (isNaN(budget) ? 0 : budget);
     }, 0);
   };

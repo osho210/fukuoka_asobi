@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import Image from 'next/image';
 
 // バックエンドから受け取る画像の型
 interface ExistingImage {
@@ -58,9 +59,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
         <div>
             {/* 既存の画像プレビュー */}
             <div className='preview-image-container'>
-                {currentImages.map((image) => (
+                {currentImages.map((image, index) => (
                     <div key={image.id} style={previewStyle}>
-                        <img src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`} alt={`Existing image ${image.id}`} style={imageStyle} />
+                        <Image src={image.url} alt={`Preview ${index}`} width={150} height={150} style={imageStyle} />
                         <button onClick={() => handleRemoveExistingImage(image.id)} style={deleteButtonStyle}>×</button>
                     </div>
                 ))}
@@ -73,7 +74,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
                 {/* 新しく追加された画像プレビュー */}
                 {newPreviews.map((preview, index) => (
                     <div key={index} style={previewStyle}>
-                        <img src={preview} alt={`Preview ${index}`} style={imageStyle} />
+                        <Image src={preview} alt={`Preview ${index}`} width={150} height={150} style={imageStyle} />
                     </div>
                 ))}
             </div>

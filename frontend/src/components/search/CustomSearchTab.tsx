@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SearchParams } from '@/types/search';
+import { SearchParams, CustomOptionsInput } from '@/types/search';
 import '@/styles/SearchForm.css';
 import Image from 'next/image';
 import { useOptions } from '@/lib/hooks/useOptions';
@@ -22,7 +22,7 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
   const [isStartingPointModalOpen, setIsStartingPointModalOpen] = useState(false);
 
   // カスタムオプションの更新
-  const updateCustomOptions = (updates: Partial<CustomOptions>) => {
+  const updateCustomOptions = (updates: Partial<CustomOptionsInput>) => {
     updateSearchParams({
       customOptions: {
         ...searchParams.customOptions,

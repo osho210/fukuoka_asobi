@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   DragDropContext,
   Droppable,
@@ -117,9 +118,8 @@ const ImagePropertiesEditor: React.FC<ImagePropertiesEditorProps> = ({
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className={`image-properties-editor__item ${
-                        snapshot.isDragging ? 'image-properties-editor__item--dragging' : ''
-                      } ${property.isSelected ? 'image-properties-editor__item--selected' : ''}`}
+                      className={`image-properties-editor__item ${snapshot.isDragging ? 'image-properties-editor__item--dragging' : ''
+                        } ${property.isSelected ? 'image-properties-editor__item--selected' : ''}`}
                     >
                       <div className="image-properties-editor__item-content">
                         {/* ドラッグハンドル */}
@@ -131,13 +131,16 @@ const ImagePropertiesEditor: React.FC<ImagePropertiesEditorProps> = ({
                             <path d="M7 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM7 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM7 14a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM17 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM17 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM17 14a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
                           </svg>
                         </div>
-
                         {/* 画像サムネイル */}
                         <div className="image-properties-editor__thumbnail">
-                          <img
+                          <Image
                             src={property.url}
                             alt={`Image ${index + 1}`}
                             className="image-properties-editor__image"
+                            width={100}
+                            height={100}
+                            objectFit="cover"
+                            unoptimized={false}
                           />
                         </div>
 
