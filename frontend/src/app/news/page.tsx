@@ -4,7 +4,7 @@ import NewsCard from '@/components/NewsCard';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
-import { News } from '@/types/news';
+import { News } from '@/__generated__/graphql';
 import '@styles/NewsPage.css';
 
 type Category = {

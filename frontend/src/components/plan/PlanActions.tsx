@@ -1,7 +1,7 @@
 'use client';
 
 import FavoriteButton from '../common/FavoriteButton';
-import { PlayPlan } from '@/types/plan';
+import { PlayPlan } from '@/__generated__/graphql';
 
 interface PlanActionsProps {
   plan?: PlayPlan;

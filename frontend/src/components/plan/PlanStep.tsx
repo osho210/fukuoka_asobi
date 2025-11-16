@@ -1,6 +1,6 @@
 'use client';
 
-import { PlanDetail } from '@/types/plan';
+import { PlanDetail } from '@/__generated__/graphql';
 import { formatTravelTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
 import '@/styles/GeneratedPlan.css';

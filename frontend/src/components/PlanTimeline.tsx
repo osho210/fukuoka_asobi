@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PlanDetail } from '@/types/plan';
+import { PlanDetail } from '@/__generated__/graphql';
 import { formatTime } from '@/utils/dateUtils';
 import styles from '@/styles/PlanTimeline.module.css';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { PlayPlan } from '@/types/plan';
+import { PlayPlan } from '@/__generated__/graphql';
 import PlanStep from './PlanStep';
 
 interface PlanStepListProps {

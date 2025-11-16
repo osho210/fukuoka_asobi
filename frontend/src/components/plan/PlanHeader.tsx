@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { PlayPlan } from '@/types/plan';
+import { PlayPlan } from '@/__generated__/graphql';
 import { formatDate, getTripTypeText } from '@/utils/dateUtils';
 
 interface PlanHeaderProps {

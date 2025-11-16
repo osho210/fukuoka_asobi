@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { News } from '../../types/news';
+import { News } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';

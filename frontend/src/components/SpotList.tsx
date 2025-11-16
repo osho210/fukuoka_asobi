@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { GET_SPOTS } from '../graphql/queries/getSpots';
 import Link from 'next/link';
-import { Spot, Category, Area, Hashtag } from '../types/spot';
+import { Spot, Category, Area, Hashtag } from '@/__generated__/graphql';
 
 interface SpotsData {
   spots: Spot[];

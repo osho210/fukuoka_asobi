@@ -2,7 +2,7 @@
 
 import { useQuery } from '@apollo/client';
 import { GET_EVENT } from '../../../graphql/queries/getEvent';
-import { Event } from '../../../types/event';
+import { Event } from '@/__generated__/graphql';
 import EventDetailAdapter from '@/components/adapters/EventDetailAdapter';
 
 interface EventDetailContainerProps {

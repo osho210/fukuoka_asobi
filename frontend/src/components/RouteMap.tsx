@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { TravelRoute } from '@/types/plan';
+import { TravelRoute } from '@/__generated__/graphql';
 import { formatTravelTime } from '@/utils/dateUtils';
 import styles from '@/styles/RouteMap.module.css';
 

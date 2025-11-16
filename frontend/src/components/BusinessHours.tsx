@@ -1,7 +1,7 @@
 'use client';
 import '@styles/BusinessHour.css';
 import { formatTimeFromIso } from '../lib/dateUtils';
-import { Spot } from '@/types/spot'; // Spot 型をインポート
+import { Spot } from '@/__generated__/graphql';
 
 interface BusinessHoursProps {
   spot: Spot; // spotプロップの型をSpotに修正

@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { Event } from '../../types/event';
+import { Event } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import { formatDateRange } from '../../lib/dateUtils';
 import '@styles/ContentDetail.css';
