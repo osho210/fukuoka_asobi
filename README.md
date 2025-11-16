@@ -94,7 +94,7 @@ fukuoka-asobi/
 - **GraphQL** 16.x
 - **TypeScript** 5.x
 - **ESLint** 9.x
-- **GraphQL Code Generator**
+- **GraphQL Code Generator** - スキーマ駆動開発のための型自動生成
 
 ### 開発コマンド
 
@@ -108,6 +108,10 @@ npm run dev:frontend
 # 管理画面開発サーバー起動（ポート: 9200）
 npm run dev:admin
 
+# GraphQL型定義の生成（スキーマ変更時に実行）
+cd frontend && npm run generate
+cd admin && npm run generate
+
 # ビルド
 npm run build:frontend
 npm run build:admin
@@ -120,6 +124,17 @@ npm run lint:admin
 npm run <script> -w frontend
 npm run <script> -w admin
 ```
+
+### GraphQLスキーマ駆動開発
+
+このプロジェクトでは、GraphQL Code Generatorを使用してバックエンドのスキーマから自動的にTypeScript型定義を生成しています。
+
+- 📝 **詳細な運用ガイド**: [docs/GRAPHQL_CODEGEN.md](./docs/GRAPHQL_CODEGEN.md)
+- 🎯 **型安全性**: バックエンドのスキーマ変更が即座にフロントエンドに反映
+- ✨ **生成場所**: `frontend/src/__generated__/`, `admin/src/__generated__/`
+- 🔄 **ワークフロー**: スキーマ変更 → `npm run generate` → 型定義更新
+
+**重要**: GraphQLスキーマを変更した際は、必ず型定義を再生成してください。
 
 ### メリット
 
