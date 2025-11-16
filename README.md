@@ -129,12 +129,18 @@ npm run <script> -w admin
 
 このプロジェクトでは、GraphQL Code Generatorを使用してバックエンドのスキーマから自動的にTypeScript型定義を生成しています。
 
+- 📘 **型使用ガイド**: [docs/GRAPHQL_TYPES_GUIDE.md](./docs/GRAPHQL_TYPES_GUIDE.md) - **必読！GraphQL型の使い方**
 - 📝 **詳細な運用ガイド**: [docs/GRAPHQL_CODEGEN.md](./docs/GRAPHQL_CODEGEN.md)
 - 🎯 **型安全性**: バックエンドのスキーマ変更が即座にフロントエンドに反映
 - ✨ **生成場所**: `frontend/src/__generated__/`, `admin/src/__generated__/`
 - 🔄 **ワークフロー**: スキーマ変更 → `npm run generate` → 型定義更新
 
-**重要**: GraphQLスキーマを変更した際は、必ず型定義を再生成してください。
+**重要な開発ルール**:
+- ❌ GraphQLのクエリ/ミューテーションに対応する型を手動で定義しない
+- ✅ 常に自動生成された型（`@/__generated__/types` または `@/__generated__/graphql`）を使用する
+- ✅ GraphQLスキーマを変更した際は、必ず `npm run generate` で型定義を再生成する
+
+詳しくは [GraphQL Types Usage Guide](./docs/GRAPHQL_TYPES_GUIDE.md) を参照してください。
 
 ### メリット
 
