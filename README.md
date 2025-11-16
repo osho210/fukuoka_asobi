@@ -66,7 +66,67 @@
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
 
+## 📦 プロジェクト構成とライブラリ管理
 
+このプロジェクトは **npm workspaces** を使用したモノレポ構造を採用しています。
+
+### ワークスペース構成
+
+```
+fukuoka-asobi/
+├── package.json          # ルートパッケージ（ワークスペース設定）
+├── package-lock.json     # 統一されたロックファイル
+├── node_modules/         # 共有依存関係
+├── frontend/             # フロントエンド（ユーザー向け）
+│   └── package.json
+├── admin/                # 管理画面
+│   └── package.json
+└── backend/              # バックエンド（Rails）
+```
+
+### 共通ライブラリ（ルートレベル）
+
+以下のライブラリはルートレベルで管理され、全ワークスペースで共有されます：
+
+- **React** 19.x
+- **Next.js** 15.3.x
+- **Apollo Client** 3.13.x
+- **GraphQL** 16.x
+- **TypeScript** 5.x
+- **ESLint** 9.x
+- **GraphQL Code Generator**
+
+### 開発コマンド
+
+```bash
+# 依存関係のインストール（初回またはpackage.json更新時）
+npm install
+
+# フロントエンド開発サーバー起動（ポート: 8200）
+npm run dev:frontend
+
+# 管理画面開発サーバー起動（ポート: 9200）
+npm run dev:admin
+
+# ビルド
+npm run build:frontend
+npm run build:admin
+
+# リント
+npm run lint:frontend
+npm run lint:admin
+
+# 特定のワークスペースでコマンド実行
+npm run <script> -w frontend
+npm run <script> -w admin
+```
+
+### メリット
+
+- ✅ **バージョンの統一**: 共通ライブラリのバージョンが一元管理され、不整合がない
+- ✅ **ディスク容量の削減**: 重複する依存関係がない
+- ✅ **メンテナンス性の向上**: 依存関係の更新が1箇所で完結
+- ✅ **開発効率の向上**: パッケージ間の連携がスムーズ
 
 ## 🚀 デプロイ
 

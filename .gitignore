@@ -4,4 +4,6 @@
 schemaspy/output
 schemaspy/logs
 
+# Node.js dependencies
 node_modules
+**/node_modules
