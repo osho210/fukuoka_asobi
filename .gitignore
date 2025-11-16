@@ -7,7 +7,3 @@ schemaspy/logs
 # Node.js dependencies
 node_modules
 **/node_modules
-
-# Lock files (only root package-lock.json is tracked)
-frontend/package-lock.json
-admin/package-lock.json
