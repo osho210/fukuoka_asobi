@@ -12,16 +12,16 @@ module Types
     field :catchphrase, String, null: true
     field :recommended_for_1, String, null: true
     field :recommended_for_2, String, null: true
-    field :parking_available, Boolean, null: true
+    field :parking_available, Boolean, null: false
     field :nearest_station, String, null: true
     field :review_rating, Float, null: true
     field :review_count, Integer, null: true
     field :instagram_url, String, null: true
-    field :is_closed, Boolean, null: true
-    field :budget_range, Types::BudgetTypeRangeEnumType, null: true
-    field :max_people, Integer, null: true
-    field :min_people, Integer, null: true
-    field :is_rainy_ok, Boolean, null: true
+    field :is_closed, Boolean, null: false
+    field :budget_range, Types::BudgetTypeRangeEnumType, null: false
+    field :max_people, Integer, null: false
+    field :min_people, Integer, null: false
+    field :is_rainy_ok, Boolean, null: false
     field :theme, String, null: true
     field :image_url, Types::ImageType, null: true
 
@@ -36,8 +36,8 @@ module Types
     end
 
     field :google_place_id, String, null: true
-    field :latitude,        Float,  null: true
-    field :longitude,       Float,  null: true
+    field :latitude,        Float,  null: false
+    field :longitude,       Float,  null: false
     field :business_status, Types::BusinessStatusEnumType, null: true
     field :price_level,     Types::PriceLevelEnumType, null: true
     field :last_api_sync_at, GraphQL::Types::ISO8601DateTime, null: true
@@ -81,18 +81,18 @@ module Types
     field :price_range, Types::PriceRangeType, null: true
     field :review_summary, Types::ReviewSummaryType, null: true
     field :payment_options, Types::PaymentOptionsType, null: true
-    field :accepts_credit_cards, Boolean, null: true
-    field :accepts_debit_cards, Boolean, null: true
-    field :accepts_cash_only, Boolean, null: true
-    field :accepts_nfc, Boolean, null: true
+    field :accepts_credit_cards, Boolean, null: false
+    field :accepts_debit_cards, Boolean, null: false
+    field :accepts_cash_only, Boolean, null: false
+    field :accepts_nfc, Boolean, null: false
     field :parking_options, Types::ParkingOptionsType, null: true
-    field :free_parking_lot, Boolean, null: true
-    field :paid_parking_lot, Boolean, null: true
-    field :free_street_parking, Boolean, null: true
-    field :paid_street_parking, Boolean, null: true
-    field :valet_parking, Boolean, null: true
-    field :free_garage_parking, Boolean, null: true
-    field :paid_garage_parking, Boolean, null: true
+    field :free_parking_lot, Boolean, null: false
+    field :paid_parking_lot, Boolean, null: false
+    field :free_street_parking, Boolean, null: false
+    field :paid_street_parking, Boolean, null: false
+    field :valet_parking, Boolean, null: false
+    field :free_garage_parking, Boolean, null: false
+    field :paid_garage_parking, Boolean, null: false
     field :price_range_start_amount, Float, null: true
     field :price_range_end_amount, Float, null: true
     field :price_range_average, Float, null: true, description: "価格帯の平均値"
@@ -100,30 +100,30 @@ module Types
     field :accessibility_options, [Types::AccessibilityOptionType], null: true
 
     # サービス提供情報
-    field :takeout, Boolean, null: true
-    field :delivery, Boolean, null: true
-    field :dine_in, Boolean, null: true
-    field :curbside_pickup, Boolean, null: true
-    field :reservable, Boolean, null: true
-    field :serves_breakfast, Boolean, null: true
-    field :serves_lunch, Boolean, null: true
-    field :serves_dinner, Boolean, null: true
-    field :serves_brunch, Boolean, null: true
-    field :serves_beer, Boolean, null: true
-    field :serves_wine, Boolean, null: true
-    field :serves_vegetarian_food, Boolean, null: true
-    field :outdoor_seating, Boolean, null: true
-    field :live_music, Boolean, null: true
-    field :menu_for_children, Boolean, null: true
-    field :serves_cocktails, Boolean, null: true
-    field :serves_dessert, Boolean, null: true
-    field :serves_coffee, Boolean, null: true
-    field :good_for_children, Boolean, null: true
-    field :allows_dogs, Boolean, null: true
-    field :restroom, Boolean, null: true
-    field :good_for_groups, Boolean, null: true
-    field :good_for_watching_sports, Boolean, null: true
-    field :pure_service_area_business, Boolean, null: true
+    field :takeout, Boolean, null: false
+    field :delivery, Boolean, null: false
+    field :dine_in, Boolean, null: false
+    field :curbside_pickup, Boolean, null: false
+    field :reservable, Boolean, null: false
+    field :serves_breakfast, Boolean, null: false
+    field :serves_lunch, Boolean, null: false
+    field :serves_dinner, Boolean, null: false
+    field :serves_brunch, Boolean, null: false
+    field :serves_beer, Boolean, null: false
+    field :serves_wine, Boolean, null: false
+    field :serves_vegetarian_food, Boolean, null: false
+    field :outdoor_seating, Boolean, null: false
+    field :live_music, Boolean, null: false
+    field :menu_for_children, Boolean, null: false
+    field :serves_cocktails, Boolean, null: false
+    field :serves_dessert, Boolean, null: false
+    field :serves_coffee, Boolean, null: false
+    field :good_for_children, Boolean, null: false
+    field :allows_dogs, Boolean, null: false
+    field :restroom, Boolean, null: false
+    field :good_for_groups, Boolean, null: false
+    field :good_for_watching_sports, Boolean, null: false
+    field :pure_service_area_business, Boolean, null: false
 
     def opening_hour_list
       object.opening_hour_list

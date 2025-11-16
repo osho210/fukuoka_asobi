@@ -74,9 +74,9 @@ export type BookmarkableUnion = PlayPlan;
 /** 予算範囲の入力 */
 export type BudgetInput = {
   /** 最大予算 */
-  max: Scalars['Int']['input'];
+  max?: InputMaybe<Scalars['Int']['input']>;
   /** 最小予算 */
-  min: Scalars['Int']['input'];
+  min?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** 価格帯を表す列挙型 */
@@ -856,11 +856,11 @@ export type GeneratePlanPayload = {
 export type GeneratedPlan = {
   __typename?: 'GeneratedPlan';
   description?: Maybe<Scalars['String']['output']>;
-  endDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  endTime: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   planDetails: Array<PlanDetail>;
   planName: Scalars['String']['output'];
-  startDatetime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  startTime: Scalars['String']['output'];
   totalBudget?: Maybe<Scalars['Float']['output']>;
   travelRoute: TravelRoute;
 };
@@ -1047,7 +1047,7 @@ export type Magazine = {
   issueNumber?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   publisher?: Maybe<Scalars['String']['output']>;
-  releaseDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  releaseDate: Scalars['ISO8601Date']['output'];
   salesInfo?: Maybe<Scalars['String']['output']>;
   salesUrl?: Maybe<Scalars['String']['output']>;
   status: Scalars['String']['output'];
@@ -1075,7 +1075,7 @@ export type Menu = {
   id: Scalars['ID']['output'];
   /** メニューの画像URL */
   imageUrl?: Maybe<Image>;
-  menuCategory?: Maybe<MenuCategory>;
+  menuCategory: MenuCategory;
   menuName: Scalars['String']['output'];
   price?: Maybe<Scalars['Float']['output']>;
   spots: Array<Spot>;
@@ -1455,7 +1455,7 @@ export type News = {
   __typename?: 'News';
   author?: Maybe<User>;
   body: Scalars['String']['output'];
-  category?: Maybe<Category>;
+  category: Category;
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
@@ -1473,12 +1473,12 @@ export type Node = {
 
 export type OpeningHour = {
   __typename?: 'OpeningHour';
-  closeTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  closeTime: Scalars['ISO8601DateTime']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   dayOfWeek: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isClosedDay: Scalars['Boolean']['output'];
-  openTime?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  openTime: Scalars['ISO8601DateTime']['output'];
   spot: Spot;
   spotId: Scalars['Int']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
@@ -1497,7 +1497,7 @@ export type OpeningHourAttributes = {
 export type OpeningHourList = {
   __typename?: 'OpeningHourList';
   /** 現在営業中か */
-  openNow?: Maybe<Scalars['Boolean']['output']>;
+  openNow: Scalars['Boolean']['output'];
   /** 営業時間の期間リスト */
   periods?: Maybe<Array<OpeningHourPeriod>>;
   /** 曜ごとの営業時間テキスト */
@@ -1526,40 +1526,40 @@ export type OpeningHourPeriodDetail = {
 
 export type ParkingOptions = {
   __typename?: 'ParkingOptions';
-  freeGarageParking?: Maybe<Scalars['Boolean']['output']>;
-  freeParkingLot?: Maybe<Scalars['Boolean']['output']>;
-  freeStreetParking?: Maybe<Scalars['Boolean']['output']>;
-  paidGarageParking?: Maybe<Scalars['Boolean']['output']>;
-  paidParkingLot?: Maybe<Scalars['Boolean']['output']>;
-  paidStreetParking?: Maybe<Scalars['Boolean']['output']>;
-  valetParking?: Maybe<Scalars['Boolean']['output']>;
+  freeGarageParking: Scalars['Boolean']['output'];
+  freeParkingLot: Scalars['Boolean']['output'];
+  freeStreetParking: Scalars['Boolean']['output'];
+  paidGarageParking: Scalars['Boolean']['output'];
+  paidParkingLot: Scalars['Boolean']['output'];
+  paidStreetParking: Scalars['Boolean']['output'];
+  valetParking: Scalars['Boolean']['output'];
 };
 
 export type PaymentOptions = {
   __typename?: 'PaymentOptions';
-  acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
-  acceptsCreditCards?: Maybe<Scalars['Boolean']['output']>;
-  acceptsDebitCards?: Maybe<Scalars['Boolean']['output']>;
-  acceptsNfc?: Maybe<Scalars['Boolean']['output']>;
+  acceptsCashOnly: Scalars['Boolean']['output'];
+  acceptsCreditCards: Scalars['Boolean']['output'];
+  acceptsDebitCards: Scalars['Boolean']['output'];
+  acceptsNfc: Scalars['Boolean']['output'];
 };
 
 export type PlanDetail = Node & {
   __typename?: 'PlanDetail';
-  budget?: Maybe<Scalars['Float']['output']>;
-  comment?: Maybe<Scalars['String']['output']>;
+  budget: Scalars['Float']['output'];
+  comment: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
-  durationMinutes?: Maybe<Scalars['Int']['output']>;
-  endTime?: Maybe<Scalars['String']['output']>;
+  durationMinutes: Scalars['Int']['output'];
+  endTime: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   planId: Scalars['Int']['output'];
-  plannerDescription?: Maybe<Scalars['String']['output']>;
-  plannerTitle?: Maybe<Scalars['String']['output']>;
+  plannerDescription: Scalars['String']['output'];
+  plannerTitle: Scalars['String']['output'];
   playPlan: PlayPlan;
   spot?: Maybe<Spot>;
-  spotId?: Maybe<Scalars['Int']['output']>;
-  startTime?: Maybe<Scalars['String']['output']>;
-  stepDescription?: Maybe<Scalars['String']['output']>;
+  spotId: Scalars['Int']['output'];
+  startTime: Scalars['String']['output'];
+  stepDescription: Scalars['String']['output'];
   stepName: Scalars['String']['output'];
   stepNumber: Scalars['Int']['output'];
   travelDetails: Array<TravelDetail>;
@@ -1569,25 +1569,25 @@ export type PlanDetail = Node & {
 /** プラン詳細の入力タイプ */
 export type PlanDetailInput = {
   /** 予算 */
-  budget?: InputMaybe<Scalars['Float']['input']>;
+  budget: Scalars['Float']['input'];
   /** コメント */
-  comment?: InputMaybe<Scalars['String']['input']>;
+  comment: Scalars['String']['input'];
   /** 滞在時間（分単位） */
-  durationMinutes?: InputMaybe<Scalars['Int']['input']>;
+  durationMinutes: Scalars['Int']['input'];
   /** 終了日時 */
-  endTime?: InputMaybe<Scalars['String']['input']>;
+  endTime: Scalars['String']['input'];
   /** プラン詳細ID（更新時のみ） */
   id?: InputMaybe<Scalars['ID']['input']>;
   /** 備考 */
   notes?: InputMaybe<Scalars['String']['input']>;
   /** プランナーのタイトル */
-  plannerTitle?: InputMaybe<Scalars['String']['input']>;
+  plannerTitle: Scalars['String']['input'];
   /** スポットID */
-  spotId?: InputMaybe<Scalars['ID']['input']>;
+  spotId: Scalars['ID']['input'];
   /** 開始日時 */
-  startTime?: InputMaybe<Scalars['String']['input']>;
+  startTime: Scalars['String']['input'];
   /** ステップ説明 */
-  stepDescription?: InputMaybe<Scalars['String']['input']>;
+  stepDescription: Scalars['String']['input'];
   /** ステップ名 */
   stepName: Scalars['String']['input'];
   /** ステップ番号 */
@@ -1598,37 +1598,37 @@ export type PlanDetailInput = {
 
 export type PlayPlan = {
   __typename?: 'PlayPlan';
-  catchCopy?: Maybe<Scalars['String']['output']>;
+  catchCopy: Scalars['String']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   departure?: Maybe<Scalars['String']['output']>;
   departureTime?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  endTime?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
+  endTime: Scalars['String']['output'];
   favoriteCount: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   /** プランに紐づく画像とそのプロパティ */
-  imageProperties?: Maybe<Array<ImageProperty>>;
+  imageProperties: Array<ImageProperty>;
   imageUrl?: Maybe<Scalars['String']['output']>;
   /** プランに紐づく画像のURLリスト */
-  imageUrls?: Maybe<Array<Image>>;
+  imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
-  leadText?: Maybe<Scalars['String']['output']>;
-  location?: Maybe<Scalars['String']['output']>;
+  leadText: Scalars['String']['output'];
+  location: Scalars['String']['output'];
   planDetails?: Maybe<Array<PlanDetail>>;
   planId: Scalars['Int']['output'];
   planName: Scalars['String']['output'];
-  plannerDescription?: Maybe<Scalars['String']['output']>;
-  plannerTitle?: Maybe<Scalars['String']['output']>;
-  publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  plannerDescription: Scalars['String']['output'];
+  plannerTitle: Scalars['String']['output'];
+  publishedAt: Scalars['ISO8601DateTime']['output'];
   rating: Scalars['Float']['output'];
   recommendUsers?: Maybe<Array<Scalars['String']['output']>>;
-  recommendedFors?: Maybe<Array<RecommendedFor>>;
+  recommendedFors: Array<RecommendedFor>;
   reviewCount: Scalars['Int']['output'];
-  startTime?: Maybe<Scalars['String']['output']>;
+  startTime: Scalars['String']['output'];
   status: StatusEnum;
-  subtitle?: Maybe<Scalars['String']['output']>;
-  tags?: Maybe<Scalars['String']['output']>;
-  totalBudget?: Maybe<Scalars['Float']['output']>;
+  subtitle: Scalars['String']['output'];
+  tags: Scalars['String']['output'];
+  totalBudget: Scalars['Float']['output'];
   travelMethodToFirstSpot?: Maybe<Scalars['String']['output']>;
   travelTimeToFirstSpot?: Maybe<Scalars['Int']['output']>;
   tripType: TripTypeEnum;
@@ -1655,8 +1655,8 @@ export enum PriceLevelEnum {
 
 export type PriceRange = {
   __typename?: 'PriceRange';
-  endPrice?: Maybe<Money>;
-  startPrice?: Maybe<Money>;
+  endPrice: Money;
+  startPrice: Money;
 };
 
 export type Purpose = {
@@ -1765,7 +1765,7 @@ export type QueryEventCategoryArgs = {
 
 export type QueryEventsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
-  upcoming?: InputMaybe<Scalars['Boolean']['input']>;
+  upcoming: Scalars['Boolean']['input'];
 };
 
 
@@ -1900,37 +1900,37 @@ export type ReviewSummary = {
 
 export type Spot = {
   __typename?: 'Spot';
-  acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
-  acceptsCreditCards?: Maybe<Scalars['Boolean']['output']>;
-  acceptsDebitCards?: Maybe<Scalars['Boolean']['output']>;
-  acceptsNfc?: Maybe<Scalars['Boolean']['output']>;
+  acceptsCashOnly: Scalars['Boolean']['output'];
+  acceptsCreditCards: Scalars['Boolean']['output'];
+  acceptsDebitCards: Scalars['Boolean']['output'];
+  acceptsNfc: Scalars['Boolean']['output'];
   accessibilityOptions?: Maybe<Array<AccessibilityOption>>;
   address?: Maybe<Scalars['String']['output']>;
   adrFormatAddress?: Maybe<Scalars['String']['output']>;
-  allowsDogs?: Maybe<Scalars['Boolean']['output']>;
+  allowsDogs: Scalars['Boolean']['output'];
   apiSyncStatus?: Maybe<Scalars['String']['output']>;
   areas: Array<Area>;
-  budgetRange?: Maybe<BudgetTypeRangeEnum>;
+  budgetRange: BudgetTypeRangeEnum;
   businessStatus?: Maybe<BusinessStatusEnum>;
   catchphrase?: Maybe<Scalars['String']['output']>;
   categories: Array<Category>;
   /** 定休日の曜日リスト */
   closedDays: Array<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
-  curbsidePickup?: Maybe<Scalars['Boolean']['output']>;
-  delivery?: Maybe<Scalars['Boolean']['output']>;
+  curbsidePickup: Scalars['Boolean']['output'];
+  delivery: Scalars['Boolean']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  dineIn?: Maybe<Scalars['Boolean']['output']>;
+  dineIn: Scalars['Boolean']['output'];
   district: District;
   districtId: Scalars['Int']['output'];
   editorialSummary?: Maybe<Scalars['String']['output']>;
-  freeGarageParking?: Maybe<Scalars['Boolean']['output']>;
-  freeParkingLot?: Maybe<Scalars['Boolean']['output']>;
-  freeStreetParking?: Maybe<Scalars['Boolean']['output']>;
+  freeGarageParking: Scalars['Boolean']['output'];
+  freeParkingLot: Scalars['Boolean']['output'];
+  freeStreetParking: Scalars['Boolean']['output'];
   generativeSummary?: Maybe<Scalars['String']['output']>;
-  goodForChildren?: Maybe<Scalars['Boolean']['output']>;
-  goodForGroups?: Maybe<Scalars['Boolean']['output']>;
-  goodForWatchingSports?: Maybe<Scalars['Boolean']['output']>;
+  goodForChildren: Scalars['Boolean']['output'];
+  goodForGroups: Scalars['Boolean']['output'];
+  goodForWatchingSports: Scalars['Boolean']['output'];
   googleMapsUri?: Maybe<Scalars['String']['output']>;
   googlePlaceId?: Maybe<Scalars['String']['output']>;
   googleTypes?: Maybe<Array<Scalars['String']['output']>>;
@@ -1944,27 +1944,27 @@ export type Spot = {
   instagramEmbeds: Array<InstagramEmbed>;
   instagramUrl?: Maybe<Scalars['String']['output']>;
   internationalPhoneNumber?: Maybe<Scalars['String']['output']>;
-  isClosed?: Maybe<Scalars['Boolean']['output']>;
-  isRainyOk?: Maybe<Scalars['Boolean']['output']>;
+  isClosed: Scalars['Boolean']['output'];
+  isRainyOk: Scalars['Boolean']['output'];
   lastApiSyncAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  latitude?: Maybe<Scalars['Float']['output']>;
-  liveMusic?: Maybe<Scalars['Boolean']['output']>;
-  longitude?: Maybe<Scalars['Float']['output']>;
+  latitude: Scalars['Float']['output'];
+  liveMusic: Scalars['Boolean']['output'];
+  longitude: Scalars['Float']['output'];
   /** 掲載雑誌リスト */
   magazines?: Maybe<Array<Magazine>>;
-  maxPeople?: Maybe<Scalars['Int']['output']>;
-  menuForChildren?: Maybe<Scalars['Boolean']['output']>;
+  maxPeople: Scalars['Int']['output'];
+  menuForChildren: Scalars['Boolean']['output'];
   menus: Array<Menu>;
-  minPeople?: Maybe<Scalars['Int']['output']>;
+  minPeople: Scalars['Int']['output'];
   nearestStation?: Maybe<Scalars['String']['output']>;
   /** 営業時間のリスト（曜日と営業時間） */
   openingHourList: Array<OpeningHourList>;
   openingHours: Array<OpeningHour>;
-  outdoorSeating?: Maybe<Scalars['Boolean']['output']>;
-  paidGarageParking?: Maybe<Scalars['Boolean']['output']>;
-  paidParkingLot?: Maybe<Scalars['Boolean']['output']>;
-  paidStreetParking?: Maybe<Scalars['Boolean']['output']>;
-  parkingAvailable?: Maybe<Scalars['Boolean']['output']>;
+  outdoorSeating: Scalars['Boolean']['output'];
+  paidGarageParking: Scalars['Boolean']['output'];
+  paidParkingLot: Scalars['Boolean']['output'];
+  paidStreetParking: Scalars['Boolean']['output'];
+  parkingAvailable: Scalars['Boolean']['output'];
   parkingOptions?: Maybe<ParkingOptions>;
   paymentOptions?: Maybe<PaymentOptions>;
   phoneNumber?: Maybe<Scalars['String']['output']>;
@@ -1976,25 +1976,25 @@ export type Spot = {
   priceRangeStartAmount?: Maybe<Scalars['Float']['output']>;
   primaryType?: Maybe<Scalars['String']['output']>;
   primaryTypeDisplayName?: Maybe<Scalars['String']['output']>;
-  pureServiceAreaBusiness?: Maybe<Scalars['Boolean']['output']>;
+  pureServiceAreaBusiness: Scalars['Boolean']['output'];
   purposes: Array<Purpose>;
   recommendedFor1?: Maybe<Scalars['String']['output']>;
   recommendedFor2?: Maybe<Scalars['String']['output']>;
-  reservable?: Maybe<Scalars['Boolean']['output']>;
-  restroom?: Maybe<Scalars['Boolean']['output']>;
+  reservable: Scalars['Boolean']['output'];
+  restroom: Scalars['Boolean']['output'];
   reviewCount?: Maybe<Scalars['Int']['output']>;
   reviewRating?: Maybe<Scalars['Float']['output']>;
   reviewSummary?: Maybe<ReviewSummary>;
-  servesBeer?: Maybe<Scalars['Boolean']['output']>;
-  servesBreakfast?: Maybe<Scalars['Boolean']['output']>;
-  servesBrunch?: Maybe<Scalars['Boolean']['output']>;
-  servesCocktails?: Maybe<Scalars['Boolean']['output']>;
-  servesCoffee?: Maybe<Scalars['Boolean']['output']>;
-  servesDessert?: Maybe<Scalars['Boolean']['output']>;
-  servesDinner?: Maybe<Scalars['Boolean']['output']>;
-  servesLunch?: Maybe<Scalars['Boolean']['output']>;
-  servesVegetarianFood?: Maybe<Scalars['Boolean']['output']>;
-  servesWine?: Maybe<Scalars['Boolean']['output']>;
+  servesBeer: Scalars['Boolean']['output'];
+  servesBreakfast: Scalars['Boolean']['output'];
+  servesBrunch: Scalars['Boolean']['output'];
+  servesCocktails: Scalars['Boolean']['output'];
+  servesCoffee: Scalars['Boolean']['output'];
+  servesDessert: Scalars['Boolean']['output'];
+  servesDinner: Scalars['Boolean']['output'];
+  servesLunch: Scalars['Boolean']['output'];
+  servesVegetarianFood: Scalars['Boolean']['output'];
+  servesWine: Scalars['Boolean']['output'];
   shortFormattedAddress?: Maybe<Scalars['String']['output']>;
   spotAmbiances: Array<SpotAmbiance>;
   /** 掲載雑誌の中間テーブル情報 */
@@ -2002,13 +2002,13 @@ export type Spot = {
   spotName: Scalars['String']['output'];
   spotPhotos?: Maybe<Array<SpotPhoto>>;
   spotType: SpotTypeEnum;
-  takeout?: Maybe<Scalars['Boolean']['output']>;
+  takeout: Scalars['Boolean']['output'];
   theme?: Maybe<Scalars['String']['output']>;
   timeZoneDisplayName?: Maybe<Scalars['String']['output']>;
   timeZoneId?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['ISO8601DateTime']['output'];
   utcOffsetMinutes?: Maybe<Scalars['Int']['output']>;
-  valetParking?: Maybe<Scalars['Boolean']['output']>;
+  valetParking: Scalars['Boolean']['output'];
   website?: Maybe<Scalars['String']['output']>;
 };
 
@@ -2207,7 +2207,7 @@ export type TravelDetail = {
   /** 移動方法 */
   travelMethod: Scalars['String']['output'];
   /** 移動時間（分） */
-  travelTime?: Maybe<Scalars['Int']['output']>;
+  travelTime: Scalars['Int']['output'];
   /** 更新日時 */
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
@@ -2807,7 +2807,7 @@ export type UserAppleAuthInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   idToken: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
-  termsAgreed?: InputMaybe<Scalars['Boolean']['input']>;
+  termsAgreed: Scalars['Boolean']['input'];
 };
 
 /** Autogenerated return type of UserAppleAuth. */
@@ -2912,7 +2912,7 @@ export type GetUserBookmarksQueryVariables = Exact<{
 }>;
 
 
-export type GetUserBookmarksQuery = { __typename?: 'Query', userBookmarks: Array<{ __typename?: 'Bookmark', id: string, bookmarkableType: string, bookmarkableId: number, title?: string | null, note?: string | null, category?: string | null, createdAt: any, bookmarkable?: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, status: StatusEnum } | null }> };
+export type GetUserBookmarksQuery = { __typename?: 'Query', userBookmarks: Array<{ __typename?: 'Bookmark', id: string, bookmarkableType: string, bookmarkableId: number, title?: string | null, note?: string | null, category?: string | null, createdAt: any, bookmarkable?: { __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, status: StatusEnum } | null }> };
 
 export type CreateBookmarkMutationVariables = Exact<{
   bookmarkableType: Scalars['String']['input'];
@@ -2966,7 +2966,7 @@ export type RemoveFavoriteMutation = { __typename?: 'Mutation', removeFavorite?:
 export type GetUserFavoritesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserFavoritesQuery = { __typename?: 'Query', userFavorites?: Array<{ __typename?: 'Favorite', id: string, playPlanId: number, createdAt: any, playPlan: { __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, status: StatusEnum, tags?: string | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null } }> | null };
+export type GetUserFavoritesQuery = { __typename?: 'Query', userFavorites?: Array<{ __typename?: 'Favorite', id: string, playPlanId: number, createdAt: any, playPlan: { __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, status: StatusEnum, tags: string, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null } }> | null };
 
 export type GeneratePlanMutationVariables = Exact<{
   districts: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
@@ -2979,7 +2979,7 @@ export type GeneratePlanMutationVariables = Exact<{
 }>;
 
 
-export type GeneratePlanMutation = { __typename?: 'Mutation', generatePlan?: { __typename?: 'GeneratePlanPayload', errors: Array<string>, plan?: { __typename?: 'GeneratedPlan', id: string, planName: string, description?: string | null, totalBudget?: number | null, planDetails: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, startTime?: string | null, durationMinutes?: number | null, budget?: number | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null } | null, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime?: number | null }> }>, travelRoute: { __typename?: 'TravelRoute', totalDistance?: number | null, totalTravelTime?: number | null, travelSegments: Array<{ __typename?: 'TravelSegment', distance?: number | null, travelTime?: number | null, travelMethod: string, fromSpot: { __typename?: 'Spot', id: string, spotName: string }, toSpot: { __typename?: 'Spot', id: string, spotName: string } }> } } | null } | null };
+export type GeneratePlanMutation = { __typename?: 'Mutation', generatePlan?: { __typename?: 'GeneratePlanPayload', errors: Array<string>, plan?: { __typename?: 'GeneratedPlan', id: string, planName: string, description?: string | null, totalBudget?: number | null, startTime: string, endTime: string, planDetails: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, startTime: string, durationMinutes: number, endTime: string, budget: number, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null } | null, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime: number }> }>, travelRoute: { __typename?: 'TravelRoute', totalDistance?: number | null, totalTravelTime?: number | null, travelSegments: Array<{ __typename?: 'TravelSegment', distance?: number | null, travelTime?: number | null, travelMethod: string, fromSpot: { __typename?: 'Spot', id: string, spotName: string }, toSpot: { __typename?: 'Spot', id: string, spotName: string } }> } } | null } | null };
 
 export type GetRecommendedEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3001,7 +3001,7 @@ export type GetUserPlayPlansQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPlayPlansQuery = { __typename?: 'Query', userPlayPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, status: StatusEnum, createdAt: any, totalBudget?: number | null }> };
+export type GetUserPlayPlansQuery = { __typename?: 'Query', userPlayPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, status: StatusEnum, createdAt: any, totalBudget: number }> };
 
 export type UpdateUserProfileMutationVariables = Exact<{
   username?: InputMaybe<Scalars['String']['input']>;
@@ -3024,14 +3024,14 @@ export type GetPlayPlansQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
 
 export type GetPlayPlanQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, catchCopy?: string | null, subtitle?: string | null, leadText?: string | null, description?: string | null, imageUrl?: string | null, departure?: string | null, departureTime?: string | null, travelMethodToFirstSpot?: string | null, travelTimeToFirstSpot?: number | null, location?: string | null, tripType: TripTypeEnum, totalBudget?: number | null, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startTime?: string | null, endTime?: string | null, tags?: string | null, recommendUsers?: Array<string> | null, userId?: number | null, plannerTitle?: string | null, plannerDescription?: string | null, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null, imageProperties?: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }> | null, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, recommendedFors?: Array<{ __typename?: 'RecommendedFor', id: string, name: string }> | null, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription?: string | null, comment?: string | null, startTime?: string | null, durationMinutes?: number | null, budget?: number | null, notes?: string | null, plannerTitle?: string | null, plannerDescription?: string | null, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime?: number | null, notes?: string | null }>, spot?: { __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, phoneNumber?: string | null, budgetRange?: BudgetTypeRangeEnum | null, isRainyOk?: boolean | null, website?: string | null, nearestStation?: string | null, instagramUrl?: string | null, reviewCount?: number | null, reviewRating?: number | null, acceptsCreditCards?: boolean | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, takeout?: boolean | null, reservable?: boolean | null, catchphrase?: string | null, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, categories: Array<{ __typename?: 'Category', name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
+export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, imageUrl?: string | null, departure?: string | null, departureTime?: string | null, travelMethodToFirstSpot?: string | null, travelTimeToFirstSpot?: number | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startTime: string, endTime: string, tags: string, recommendUsers?: Array<string> | null, userId?: number | null, plannerTitle: string, plannerDescription: string, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, comment: string, startTime: string, durationMinutes: number, budget: number, notes?: string | null, plannerTitle: string, plannerDescription: string, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }>, spot?: { __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, phoneNumber?: string | null, budgetRange: BudgetTypeRangeEnum, isRainyOk: boolean, website?: string | null, nearestStation?: string | null, instagramUrl?: string | null, reviewCount?: number | null, reviewRating?: number | null, acceptsCreditCards: boolean, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, takeout: boolean, reservable: boolean, catchphrase?: string | null, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, categories: Array<{ __typename?: 'Category', name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any, isClosedDay: boolean }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3065,7 +3065,7 @@ export type GetNewsDetailQueryVariables = Exact<{
 }>;
 
 
-export type GetNewsDetailQuery = { __typename?: 'Query', newsDetail?: { __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null } | null };
+export type GetNewsDetailQuery = { __typename?: 'Query', newsDetail?: { __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category: { __typename?: 'Category', id: string, name: string }, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null } | null };
 
 export type GetNewsListQueryVariables = Exact<{
   categoryId?: InputMaybe<Scalars['ID']['input']>;
@@ -3073,7 +3073,7 @@ export type GetNewsListQueryVariables = Exact<{
 }>;
 
 
-export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', id: string, name: string } | null, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
+export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category: { __typename?: 'Category', id: string, name: string }, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3090,7 +3090,7 @@ export type GetSpotQueryVariables = Exact<{
 }>;
 
 
-export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk?: boolean | null, budgetRange?: BudgetTypeRangeEnum | null, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed?: boolean | null, maxPeople?: number | null, minPeople?: number | null, recommendedFor1?: string | null, recommendedFor2?: string | null, nearestStation?: string | null, parkingAvailable?: boolean | null, googlePlaceId?: string | null, latitude?: number | null, longitude?: number | null, businessStatus?: BusinessStatusEnum | null, priceLevel?: PriceLevelEnum | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, reservable?: boolean | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBrunch?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesVegetarianFood?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, acceptsCreditCards?: boolean | null, acceptsDebitCards?: boolean | null, acceptsCashOnly?: boolean | null, acceptsNfc?: boolean | null, freeParkingLot?: boolean | null, paidParkingLot?: boolean | null, freeStreetParking?: boolean | null, paidStreetParking?: boolean | null, valetParking?: boolean | null, freeGarageParking?: boolean | null, paidGarageParking?: boolean | null, googleTypes?: Array<string> | null, adrFormatAddress?: string | null, generativeSummary?: string | null, editorialSummary?: string | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, district: { __typename?: 'District', id: string, districtName: string }, priceRange?: { __typename?: 'PriceRange', startPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null, endPrice?: { __typename?: 'Money', amount?: number | null, currency?: string | null } | null } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime?: any | null, closeTime?: any | null, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, imageUrl?: { __typename?: 'Image', id: string, url: string } | null }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, spotMagazines?: Array<{ __typename?: 'SpotMagazine', id?: string | null, publicationFeature?: string | null, pageNumber?: number | null, notes?: string | null, magazine: { __typename?: 'Magazine', id: string, name: string } }> | null, magazines?: Array<{ __typename?: 'Magazine', id: string, name: string, releaseDate?: any | null, salesInfo?: string | null, salesUrl?: string | null, publisher?: string | null, issueNumber?: string | null, coverImageUrl?: string | null, description?: string | null, status: string }> | null, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null } | null };
+export type GetSpotQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, districtId: number, phoneNumber?: string | null, website?: string | null, catchphrase?: string | null, isRainyOk: boolean, budgetRange: BudgetTypeRangeEnum, spotType: SpotTypeEnum, theme?: string | null, reviewRating?: number | null, reviewCount?: number | null, instagramUrl?: string | null, isClosed: boolean, maxPeople: number, minPeople: number, recommendedFor1?: string | null, recommendedFor2?: string | null, nearestStation?: string | null, parkingAvailable: boolean, googlePlaceId?: string | null, latitude: number, longitude: number, businessStatus?: BusinessStatusEnum | null, priceLevel?: PriceLevelEnum | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, internationalPhoneNumber?: string | null, shortFormattedAddress?: string | null, googleMapsUri?: string | null, takeout: boolean, delivery: boolean, dineIn: boolean, reservable: boolean, servesBreakfast: boolean, servesLunch: boolean, servesDinner: boolean, servesBrunch: boolean, servesBeer: boolean, servesWine: boolean, servesVegetarianFood: boolean, outdoorSeating: boolean, liveMusic: boolean, menuForChildren: boolean, servesCocktails: boolean, servesDessert: boolean, servesCoffee: boolean, goodForChildren: boolean, allowsDogs: boolean, restroom: boolean, goodForGroups: boolean, goodForWatchingSports: boolean, acceptsCreditCards: boolean, acceptsDebitCards: boolean, acceptsCashOnly: boolean, acceptsNfc: boolean, freeParkingLot: boolean, paidParkingLot: boolean, freeStreetParking: boolean, paidStreetParking: boolean, valetParking: boolean, freeGarageParking: boolean, paidGarageParking: boolean, googleTypes?: Array<string> | null, adrFormatAddress?: string | null, generativeSummary?: string | null, editorialSummary?: string | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, district: { __typename?: 'District', id: string, districtName: string }, priceRange?: { __typename?: 'PriceRange', startPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null }, endPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null } } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any, isClosedDay: boolean }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, purposes: Array<{ __typename?: 'Purpose', id: string, purposeName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, menus: Array<{ __typename?: 'Menu', id: string, menuName: string, imageUrl?: { __typename?: 'Image', id: string, url: string } | null }>, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, spotMagazines?: Array<{ __typename?: 'SpotMagazine', id?: string | null, publicationFeature?: string | null, pageNumber?: number | null, notes?: string | null, magazine: { __typename?: 'Magazine', id: string, name: string } }> | null, magazines?: Array<{ __typename?: 'Magazine', id: string, name: string, releaseDate: any, salesInfo?: string | null, salesUrl?: string | null, publisher?: string | null, issueNumber?: string | null, coverImageUrl?: string | null, description?: string | null, status: string }> | null, imageUrls?: Array<{ __typename?: 'Image', id: string, url: string }> | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null } | null };
 
 export type GetSpotAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3100,7 +3100,7 @@ export type GetSpotAmbiancesQuery = { __typename?: 'Query', spotAmbiances: Array
 export type GetSpotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, catchphrase?: string | null, parkingAvailable?: boolean | null, reviewRating?: number | null, reviewCount?: number | null, budgetRange?: BudgetTypeRangeEnum | null, theme?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
+export type GetSpotsQuery = { __typename?: 'Query', spots: Array<{ __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, catchphrase?: string | null, parkingAvailable: boolean, reviewRating?: number | null, reviewCount?: number | null, budgetRange: BudgetTypeRangeEnum, theme?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, district: { __typename?: 'District', id: string, districtName: string }, areas: Array<{ __typename?: 'Area', id: string, areaName: string }>, categories: Array<{ __typename?: 'Category', id: string, name: string }>, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type SearchPlansQueryVariables = Exact<{
   areas?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
@@ -3111,4 +3111,4 @@ export type SearchPlansQueryVariables = Exact<{
 }>;
 
 
-export type SearchPlansQuery = { __typename?: 'Query', searchPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description?: string | null, imageUrl?: string | null, location?: string | null, totalBudget?: number | null, rating: number, reviewCount: number, tripType: TripTypeEnum, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepName: string, stepDescription?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null } | null }> | null }> };
+export type SearchPlansQuery = { __typename?: 'Query', searchPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, totalBudget: number, rating: number, reviewCount: number, tripType: TripTypeEnum, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepName: string, stepDescription: string, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null } | null }> | null }> };

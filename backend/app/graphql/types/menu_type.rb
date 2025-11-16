@@ -5,7 +5,7 @@ module Types
     field :price, Float, null: true
     field :description, String, null: true
     field :image_url, Types::ImageType, null: true, description: "メニューの画像URL"
-    field :menu_category, Types::MenuCategoryType, null: true
+    field :menu_category, Types::MenuCategoryType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

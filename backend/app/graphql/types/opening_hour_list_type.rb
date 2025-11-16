@@ -20,7 +20,7 @@ module Types
 
   class OpeningHourListType < Types::BaseObject
     description "Google Places APIの営業時間情報"
-    field :open_now, Boolean, null: true, description: "現在営業中か"
+    field :open_now, Boolean, null: false, description: "現在営業中か"
     field :periods, [Types::OpeningHourPeriodType], null: true, description: "営業時間の期間リスト"
     field :weekday_descriptions, [String], null: true, description: "曜ごとの営業時間テキスト"
   end
