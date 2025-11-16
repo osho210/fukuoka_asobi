@@ -55,7 +55,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     minThumbRef.current.style.left = `${minPercent}%`;
     maxThumbRef.current.style.left = `${maxPercent}%`;
 
-    const rangeElement = trackRef.current.querySelector(`."sliderRange"`) as HTMLElement;
+    const rangeElement = trackRef.current.querySelector('.sliderRange') as HTMLElement;
     if (rangeElement) {
       rangeElement.style.left = `${minPercent}%`;
       rangeElement.style.width = `${maxPercent - minPercent}%`;

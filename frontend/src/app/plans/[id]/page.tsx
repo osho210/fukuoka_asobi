@@ -25,34 +25,34 @@ export default function PlanDetailPage() {
 
     if (errorMessage.includes('ログインが必要です')) {
       return (
-        <div className={styles['error-container']}>
+        <div className={'error-container'}>
           <h2>ログインが必要です</h2>
           <p>このプランを閲覧するにはログインが必要です。</p>
-          <div className={styles['action-buttons']}>
-            <Link href="/login" className={styles['primary-button']}>ログインする</Link>
-            <Link href="/register" className={styles['secondary-button']}>新規登録する</Link>
+          <div className={'action-buttons'}>
+            <Link href="/login" className={'primary-button'}>ログインする</Link>
+            <Link href="/register" className={'secondary-button'}>新規登録する</Link>
           </div>
         </div>
       );
     } else if (errorMessage.includes('こちらのページは課金しないと見れません')) {
       return (
-        <div className={styles['error-container']}>
+        <div className={'error-container'}>
           <h2>有償会員限定コンテンツ</h2>
           <p>このプランは有償会員または作成者本人のみが閲覧できます。</p>
           <p>有償会員になると、すべてのプランを閲覧できるようになります。</p>
-          <div className={styles['action-buttons']}>
-            <Link href="/mypage/subscription" className={styles['primary-button']}>有償会員になる</Link>
-            <Link href="/plans" className={styles['secondary-button']}>他のプランを見る</Link>
+          <div className={'action-buttons'}>
+            <Link href="/mypage/subscription" className={'primary-button'}>有償会員になる</Link>
+            <Link href="/plans" className={'secondary-button'}>他のプランを見る</Link>
           </div>
         </div>
       );
     } else {
       return (
-        <div className={styles['error-container']}>
+        <div className={'error-container'}>
           <h2> エラーが発生しました</h2>
           <p>{errorMessage}</p>
-          <div className={styles['action-buttons']}>
-            <button onClick={() => router.back()} className={styles['secondary-button']}>戻る</button>
+          <div className={'action-buttons'}>
+            <button onClick={() => router.back()} className={'secondary-button'}>戻る</button>
           </div >
         </div >
       );

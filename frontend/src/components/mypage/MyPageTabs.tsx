@@ -24,22 +24,21 @@ const MyPageTabs: React.FC<MyPageTabsProps> = ({
 }) => {
   return (
     <div className={className}>
-      <div className={styles['mypage-tabs-container']}>
+      <div className={'mypage-tabs-container'}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`${styles['mypage-tab-button']} ${
-              activeTab === tab.id
-                ? styles['mypage-tab-active']
-                : styles['mypage-tab-inactive']
-            }`}
+            className={`${'mypage-tab-button'} ${activeTab === tab.id
+                ? 'mypage-tab-active'
+                : 'mypage-tab-inactive'
+              }`}
             onClick={() => onTabChange(tab.id)}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div className={styles['mypage-tab-content']}>
+      <div className={'mypage-tab-content'}>
         {tabs.find(tab => tab.id === activeTab)?.content}
       </div>
     </div>
