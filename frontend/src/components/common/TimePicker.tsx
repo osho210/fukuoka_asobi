@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import styles from '@/styles/TimePicker.module.css';
+import '@/styles/TimePicker.css';
 
 interface TimePickerProps {
   selectedTime: string | null;
@@ -77,23 +77,23 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const timeOptions = generateTimeOptions();
 
   return (
-    <div ref={timePickerRef} className={styles.timePickerContainer}>
-      {label && <div className={styles.timePickerLabel}>{label}</div>}
+    <div ref={timePickerRef} className="timePickerContainer">
+      {label && <div className="timePickerLabel">{label}</div>}
       <input
         type="text"
-        className={styles.timePickerInput}
+        className="timePickerInput"
         value={selectedTime || ''}
         placeholder={placeholder}
         readOnly
         onClick={() => setIsOpen(!isOpen)}
       />
       {isOpen && (
-        <div className={styles.timePickerDropdown}>
+        <div className="timePickerDropdown">
           {timeOptions.map((time) => (
             <div
               key={time}
-              className={`${styles.timeOption} ${
-                selectedTime === time ? styles.selectedTime : ''
+              className={`timeOption ${
+                selectedTime === time ? "selectedTime" : ''
               }`}
               onClick={() => handleTimeSelect(time)}
             >

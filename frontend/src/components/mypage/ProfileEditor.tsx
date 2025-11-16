@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PROFILE } from '@/graphql/mypage';
-import styles from '@/styles/ProfileEditor.module.css';
+import '@/styles/ProfileEditor.css';
 import { SubscriptionStatus } from '@/components/mypage/SubscriptionStatus';
 import Image from 'next/image';
 

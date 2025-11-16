@@ -3,7 +3,7 @@
 import React from 'react';
 import DatePicker from '@/components/common/DatePicker';
 import TimePicker from '@/components/common/TimePicker';
-import styles from '@/styles/SearchForm.module.css';
+import '@/styles/SearchForm.css';
 
 interface DateTimeSelectorProps {
   date: string;
@@ -50,11 +50,11 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   };
 
   return (
-    <div className={styles.formSection}>
-      <h2 className={styles.sectionTitle}>日時を選択</h2>
+    <div className="formSection">
+      <h2 className="sectionTitle">日時を選択</h2>
 
-      <div className={styles.formGroup}>
-        <label className={styles.formLabel}>訪問予定日</label>
+      <div className="formGroup">
+        <label className="formLabel">訪問予定日</label>
         <DatePicker
           selectedDate={parseDate(date)}
           onChange={handleDateChange}
@@ -62,9 +62,9 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
         />
       </div>
 
-      <div className={styles.formRow}>
-        <div className={styles.formColumn}>
-          <label className={styles.formLabel}>開始時間</label>
+      <div className="formRow">
+        <div className="formColumn">
+          <label className="formLabel">開始時間</label>
           <TimePicker
             selectedTime={startTime || null}
             onChange={handleStartTimeChange}
@@ -74,8 +74,8 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
           />
         </div>
 
-        <div className={styles.formColumn}>
-          <label className={styles.formLabel}>終了時間</label>
+        <div className="formColumn">
+          <label className="formLabel">終了時間</label>
           <TimePicker
             selectedTime={endTime || null}
             onChange={handleEndTimeChange}

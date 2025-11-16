@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from '@/styles/SubscriptionStatus.module.css';
+import '@/styles/SubscriptionStatus.css';
 
 interface User {
     id: string;

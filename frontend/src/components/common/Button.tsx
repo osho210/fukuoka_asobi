@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from '@/styles/Button.module.css';
+import '@/styles/Button.css';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -26,15 +26,15 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   // スタイルクラスの組み合わせ
   const buttonClasses = [
-    styles.button,
-    variant === 'primary' ? styles.primaryButton :
-    variant === 'secondary' ? styles.secondaryButton :
-    styles.outlineButton,
-    size === 'sm' ? styles.smallButton :
-    size === 'lg' ? styles.largeButton :
-    styles.mediumButton,
-    fullWidth ? styles.fullWidth : '',
-    disabled ? styles.disabled : '',
+    'button',
+    variant === 'primary' ? 'primaryButton' :
+    variant === 'secondary' ? 'secondaryButton' :
+    'outlineButton',
+    size === 'sm' ? 'smallButton' :
+    size === 'lg' ? 'largeButton' :
+    'mediumButton',
+    fullWidth ? 'fullWidth' : '',
+    disabled ? 'disabled' : '',
     className
   ].filter(Boolean).join(' ');
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import styles from '@/styles/MyPageTabs.module.css';
+import '@/styles/MyPageTabs.css';
 
 interface TabItem {
   id: string;

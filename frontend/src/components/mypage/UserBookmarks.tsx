@@ -6,7 +6,7 @@ import { GET_USER_FAVORITES, REMOVE_FAVORITE } from '@/graphql/favorites';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Favorite, PlayPlan } from '@/__generated__/graphql';
+import { Favorite } from '@/__generated__/graphql';
 
 /**
  * 型定義

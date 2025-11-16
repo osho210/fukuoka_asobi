@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from '@/styles/AreaMap.module.css';
+import '@/styles/AreaMap.css';
 import Image from 'next/image';
 
 interface AreaMapProps {
@@ -67,11 +67,11 @@ const AreaMap: React.FC<AreaMapProps> = ({
   };
 
   return (
-    <div className={styles.mapContainer}>
-      {title && <h3 className={styles.mapTitle}>{title}</h3>}
-      {description && <p className={styles.mapDescription}>{description}</p>}
+    <div className="mapContainer">
+      {title && <h3 className="mapTitle">{title}</h3>}
+      {description && <p className="mapDescription">{description}</p>}
 
-      <div className={styles.mapWrapper}>
+      <div className="mapWrapper">
         <Image src="/fukuoka_map.svg" alt="福岡市地図" width={300} height={300} />
         {areaPositions.map((area) => (
           <button
@@ -79,7 +79,7 @@ const AreaMap: React.FC<AreaMapProps> = ({
             type="button"
             value={area.id}
             onClick={() => handleAreaClick(area.id)}
-            className={`${styles.areaButton} ${selectedAreas.includes(area.id) ? styles.selected : ''
+            className={`areaButton ${selectedAreas.includes(area.id) ? "selected" : ''
               }`}
             style={{ top: area.top, left: area.left }}
           >
@@ -90,13 +90,13 @@ const AreaMap: React.FC<AreaMapProps> = ({
 
 
       {selectedAreas.length > 0 && (
-        <div className={styles.districtsList}>
+        <div className="districtsList">
           {selectedAreas.map((areaId) => (
-            <div key={areaId} className={styles.areaTag}>
+            <div key={areaId} className="areaTag">
               {getAreaName(areaId)}
               <button
                 type="button"
-                className={styles.removeButton}
+                className="removeButton"
                 onClick={() => handleRemoveArea(areaId)}
               >
                 ×

@@ -5,7 +5,7 @@ import PlanDetailForm from './PlanDetailForm';
 import ImageUpload from './ImageUpload';
 import ImagePropertiesEditor from '../ImagePropertiesEditor';
 import '@/styles/play-plans.css';
-import { Spot, RecommendedFor, TravelDetail, PlanDetail, ImageProperty } from '@/__generated__/graphql';
+import { Spot, RecommendedFor, PlanDetail, ImageProperty } from '@/__generated__/graphql';
 
 interface ExistingImage {
   id: string;

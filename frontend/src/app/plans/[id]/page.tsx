@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
-import styles from '@/styles/PlayPlanDetail.module.css';
+import '@/styles/PlayPlanDetail.css';
 import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 import Link from 'next/link';
 

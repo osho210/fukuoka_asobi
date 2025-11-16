@@ -9,7 +9,7 @@ import RangeSlider from '@/components/common/RangeSlider';
 import AreaMap from '@/components/common/AreaMap';
 import DatePicker from '@/components/common/DatePicker';
 import TimePicker from '@/components/common/TimePicker';
-import styles from '@/styles/SearchForm.module.css';
+import '@/styles/SearchForm.css';
 import Image from 'next/image';
 
 interface NormalSearchTabProps {
@@ -129,26 +129,26 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
   };
 
   return (
-    <div className={styles.searchForm}>
-      <div className={styles.formGroup}>
-        <div className={styles.areaGroup} onClick={() => setIsAreaModalOpen(true)}>
+    <div className="searchForm">
+      <div className="formGroup">
+        <div className="areaGroup" onClick={() => setIsAreaModalOpen(true)}>
           <Image src="/location_icon.svg" width={'30'} height={'30'} alt='エリア' />
-          <span className={styles.selectionText}>{getSelectedAreasText()}</span>
+          <span className="selectionText">{getSelectedAreasText()}</span>
         </div>
-        <div className={styles.calendarGroup} onClick={() => setIsDateTimeModalOpen(true)}>
+        <div className="calendarGroup" onClick={() => setIsDateTimeModalOpen(true)}>
           <Image src="/calendar_icon.svg" width={'30'} height={'30'} alt='日付' />
-          <span className={styles.selectionText}>{getSelectedDateTimeText()}</span>
+          <span className="selectionText">{getSelectedDateTimeText()}</span>
         </div>
-        <div className={styles.memberGroup} onClick={() => setIsMemberModalOpen(true)}>
+        <div className="memberGroup" onClick={() => setIsMemberModalOpen(true)}>
           <Image src="/member_icon.svg" width={'30'} height={'30'} alt='利用メンバー' />
-          <span className={styles.selectionText}>
+          <span className="selectionText">
             {searchParams.memberInfo.recommendUsers.length > 0
               ? `${searchParams.memberInfo.recommendUsers.length}件選択中`
               : '利用メンバーを選択'}
           </span>
         </div>
-        <div className={styles.budgetGroup}>
-          <label className={styles.formLabel}>予算</label>
+        <div className="budgetGroup">
+          <label className="formLabel">予算</label>
           <RangeSlider
             min={0}
             max={20000}
@@ -163,18 +163,18 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
 
       {/* エリア選択モーダル */}
       {isAreaModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsAreaModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>エリアを選択</h2>
+        <div className="modalOverlay" onClick={() => setIsAreaModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">エリアを選択</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsAreaModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
+            <div className="modalBody">
               <AreaMap
                 selectedAreas={searchParams.districts || []}
                 onChange={handleAreaChange}
@@ -183,9 +183,9 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                 description="福岡県内で遊びたいエリアを選択してください（最大3つまで）(福岡市内は1つのみ選択可能)"
               />
             </div>
-            <div className={styles.modalFooter}>
+            <div className="modalFooter">
               <button
-                className={styles.modalButton}
+                className="modalButton"
                 onClick={() => setIsAreaModalOpen(false)}
               >
                 選択完了
@@ -197,20 +197,20 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
 
       {/* 日時選択モーダル */}
       {isDateTimeModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsDateTimeModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>日時を選択</h2>
+        <div className="modalOverlay" onClick={() => setIsDateTimeModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">日時を選択</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsDateTimeModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>訪問予定日</label>
+            <div className="modalBody">
+              <div className="formGroup">
+                <label className="formLabel">訪問予定日</label>
                 <DatePicker
                   selectedDate={parseDate(searchParams.date)}
                   onChange={handleDateChange}
@@ -218,9 +218,9 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                 />
               </div>
 
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <label className={styles.formLabel}>開始時間</label>
+              <div className="formRow">
+                <div className="formColumn">
+                  <label className="formLabel">開始時間</label>
                   <TimePicker
                     selectedTime={searchParams.startTime || null}
                     onChange={handleStartTimeChange}
@@ -230,8 +230,8 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                   />
                 </div>
 
-                <div className={styles.formColumn}>
-                  <label className={styles.formLabel}>終了時間</label>
+                <div className="formColumn">
+                  <label className="formLabel">終了時間</label>
                   <TimePicker
                     selectedTime={searchParams.endTime || null}
                     onChange={handleEndTimeChange}
@@ -242,9 +242,9 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                 </div>
               </div>
             </div>
-            <div className={styles.modalFooter}>
+            <div className="modalFooter">
               <button
-                className={styles.modalButton}
+                className="modalButton"
                 onClick={() => setIsDateTimeModalOpen(false)}
               >
                 選択完了
@@ -256,30 +256,30 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
 
       {/* 利用メンバー選択モーダル */}
       {isMemberModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsMemberModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>利用メンバーを選択</h2>
+        <div className="modalOverlay" onClick={() => setIsMemberModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">利用メンバーを選択</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsMemberModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
+            <div className="modalBody">
               {loading ? (
                 <p>読み込み中...</p>
               ) : error ? (
                 <p>エラーが発生しました: {error.message}</p>
               ) : (
-                <div className={styles.recommendedForList}>
-                  <p className={styles.modalDescription}>
+                <div className="recommendedForList">
+                  <p className="modalDescription">
                     利用メンバーを選択してください（複数選択可）
                   </p>
                   {recommendedFors.map((item) => (
-                    <div key={item.id} className={styles.recommendedForItem}>
-                      <label className={styles.checkboxLabel}>
+                    <div key={item.id} className="recommendedForItem">
+                      <label className="checkboxLabel">
                         <input
                           type="checkbox"
                           checked={searchParams.memberInfo.recommendUsers.includes(item.id)}
@@ -293,7 +293,7 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                               updateMemberInfo(currentIds.filter(id => id !== item.id));
                             }
                           }}
-                          className={styles.checkbox}
+                          className="checkbox"
                         />
                         {item.name}
                       </label>
@@ -302,9 +302,9 @@ const NormalSearchTab: React.FC<NormalSearchTabProps> = ({
                 </div>
               )}
             </div>
-            <div className={styles.modalFooter}>
+            <div className="modalFooter">
               <button
-                className={styles.modalButton}
+                className="modalButton"
                 onClick={() => setIsMemberModalOpen(false)}
               >
                 選択完了
