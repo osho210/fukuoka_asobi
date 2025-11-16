@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+
+    pull-request-branch-name:
+      prefix: "deps/bundler"
+      separator: "/"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "bot"
+    reviewers:
+      - "your-github-id"
+    assignees:
+      - "your-github-id"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+
+    pull-request-branch-name:
+      prefix: "deps/gh-actions"
+      separator: "/"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "bot"
