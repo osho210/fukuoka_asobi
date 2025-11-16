@@ -3,3 +3,5 @@
 # schemaspy
 schemaspy/output
 schemaspy/logs
+
+node_modules
