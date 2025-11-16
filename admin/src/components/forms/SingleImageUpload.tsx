@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import Image from 'next/image';
 
 interface SingleImageUploadProps {
     onImageChange: (base64Image: string | null) => void;
@@ -68,10 +69,13 @@ const SingleImageUpload: React.FC<SingleImageUploadProps> = ({
             {preview ? (
                 <div style={previewContainerStyle}>
                     <div style={previewStyle}>
-                        <img
-                            src={hasExistingImage ? preview : preview}
+                        <Image
+                            src={preview || ''}
                             alt="画像プレビュー"
+                            width={200}
+                            height={200}
                             style={imageStyle}
+                            unoptimized
                         />
                         <button
                             type="button"
@@ -99,8 +103,9 @@ const SingleImageUpload: React.FC<SingleImageUploadProps> = ({
                         }
                     </p>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

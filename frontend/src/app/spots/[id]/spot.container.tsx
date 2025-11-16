@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_SPOT } from '../../../graphql/queries/getSpot';
+import { GET_SPOT } from '@graphql/queries/getSpot';
 import { Spot } from '@/__generated__/graphql';
 import SpotPresenter from './presenter'
 

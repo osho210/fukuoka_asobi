@@ -392,7 +392,6 @@ export function ModelDetailModal({
         openTime: oh.openTime,
         closeTime: oh.closeTime,
         isClosedDay: oh.isClosedDay,
-        _destroy: oh._destroy
       }));
     }
 

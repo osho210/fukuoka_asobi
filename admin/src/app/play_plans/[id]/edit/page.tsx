@@ -8,7 +8,7 @@ import '@/styles/play-plans.css';
 import { UPDATE_PLAY_PLAN_WITH_DETAILS } from '@/graphql/mutations/updatePlanDetails';
 import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
 import { GET_FORM_OPTIONS } from '@/graphql/queries/getSpots';
-import { PlayPlan } from '@graphql_types/types.ts';
+import { PlayPlan } from '@graphql_types/types';
 
 export default function EditPlayPlanPage() {
   const router = useRouter();
@@ -43,8 +43,8 @@ export default function EditPlayPlanPage() {
       tripType: plan.tripType || 'day_trip',
       totalBudget: plan.totalBudget?.toString() || '',
       location: plan.location || '',
-      startTime: plan.startTime,
-      endTime: plan.endTime,
+      startTime: plan.startTime || undefined,
+      endTime: plan.endTime || undefined,
       imageUrl: plan.imageUrl || '',
       imageUrls: plan.imageUrls || [],
       imageProperties: plan.imageProperties || [],
@@ -60,8 +60,8 @@ export default function EditPlayPlanPage() {
         plannerTitle: detail.plannerTitle || '',
         spotId: detail.spot?.id || '',
         comment: detail.comment || '',
-        endTime: detail.endTime,
-        startTime: detail.startTime,
+        endTime: detail.endTime || undefined,
+        startTime: detail.startTime || undefined,
         durationMinutes: detail.durationMinutes,
         budget: detail.budget?.toString() || '',
         notes: detail.notes || '',
@@ -114,13 +114,12 @@ export default function EditPlayPlanPage() {
             startTime: formData.startTime,
             endTime: formData.endTime,
             imageUrl: formData.imageUrl,
-            images: formData.newImages,
-            deleteImageIds: formData.deleteImageIds,
+            images: formData.imageUrls,
             tags: formData.tags,
             recommendUsers: formData.recommendUsers || [],
             plannerTitle: formData.plannerTitle,
             plannerDescription: formData.plannerDescription,
-            planDetails: formData.planDetails.map((detail) => ({
+            planDetails: (formData.planDetails || []).map((detail) => ({
               id: detail.id || null,
               stepNumber: detail.stepNumber,
               stepName: detail.stepName,
@@ -131,17 +130,17 @@ export default function EditPlayPlanPage() {
               startTime: detail.startTime,
               endTime: detail.endTime,
               durationMinutes: detail.durationMinutes,
-              budget: detail.budget ? parseFloat(detail.budget) : null,
+              budget: detail.budget ? detail.budget : null,
               notes: detail.notes,
-              travelDetails: detail.travelDetails?.map((travel: any) => ({
+              travelDetails: detail.travelDetails?.map((travel) => ({
                 id: travel.id || null,
                 sequenceNumber: travel.sequenceNumber,
                 travelMethod: travel.travelMethod,
-                travelTime: travel.travelTime ? parseInt(travel.travelTime) : null,
+                travelTime: travel.travelTime ? travel.travelTime : null,
                 notes: travel.notes,
               })) || [],
             })),
-            imageProperties: formData.imageProperties?.map((prop: any) => ({
+            imageProperties: formData.imageProperties?.map((prop) => ({
               attachmentId: prop.attachmentId,
               isSelected: prop.isSelected,
               position: prop.position,
