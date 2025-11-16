@@ -5,27 +5,7 @@ import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import '@/styles/play-plans.css';
 import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
-
-interface PlayPlan {
-  id: string;
-  planName: string;
-  description?: string;
-  status: string;
-  tripType: string;
-  totalBudget?: number;
-  location?: string;
-  createdAt: string;
-  updatedAt: string;
-  user?: {
-    id: string;
-    username: string;
-  };
-  planDetails: Array<{
-    id: string;
-    stepNumber: number;
-    stepName: string;
-  }>;
-}
+import { PlayPlan } from '@/__generated__/graphql';
 
 export default function PlayPlansPage() {
   const [searchTerm, setSearchTerm] = useState('');

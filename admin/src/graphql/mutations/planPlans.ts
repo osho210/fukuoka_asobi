@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { PlanDetail, Spot } from '@/__generated__/graphql';
 
 export const UPDATE_PLAY_PLAN = gql`
   mutation UpdatePlayPlan($input: UpdatePlayPlanInput!) {
@@ -56,28 +57,11 @@ export const UPDATE_PLAY_PLAN = gql`
 `;
 
 /**
- * プラン詳細データの型定義
+ * プラン詳細データの型定義（Spotオブジェクト付き）
  */
-export interface PlanDetailWithSpot {
-  id: string;
-  stepNumber?: number;
-  stepName?: string;
-  stepDescription?: string;
-  plannerTitle?: string;
-  startTime?: string;
-  durationMinutes?: number;
-  budget?: number;
-  comment?: string;
-  notes?: string;
-  spot?: {
+export interface PlanDetailWithSpot extends Partial<PlanDetail> {
+  spot?: Partial<Spot> & {
     id: string;
-    spotName?: string;
-    address?: string;
-    phoneNumber?: string;
-    budgetRange?: string;
-    isRainyOk?: boolean;
-    imageUrl?: string;
-    catchphrase?: string;
     __typename?: string;
   };
   __typename?: string;

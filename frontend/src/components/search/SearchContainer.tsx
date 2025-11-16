@@ -10,67 +10,10 @@ import TabSelector from '@/components/common/TabSelector';
 import Button from '@/components/common/Button';
 import GeneratedPlanView from '@/components/GeneratedPlanView';
 import styles from '@/styles/SearchForm.module.css';
+import { TravelDetail, Spot, PlanDetail, TravelRoute, GeneratedPlan } from '@/__generated__/graphql';
 
 // GraphQLクエリのインポート
 import { GENERATE_PLAN } from '../../graphql/generatePlan';
-
-// 生成されたプランの型定義
-interface TravelDetail {
-  sequenceNumber: number;
-  travelMethod: string;
-  travelTime: number;
-}
-
-interface Spot {
-  id: string;
-  spotName: string;
-  address: string;
-  catchphrase: string;
-  imageUrl: string;
-}
-
-interface PlanDetail {
-  id: string;
-  stepNumber: number;
-  stepName: string;
-  stepDescription: string;
-  startDatetime: string;
-  endDatetime: string;
-  budget: number;
-  spot: Spot;
-  travelDetails: TravelDetail[];
-}
-
-interface TravelSegment {
-  fromSpot: {
-    id: string;
-    spotName: string;
-  };
-  toSpot: {
-    id: string;
-    spotName: string;
-  };
-  distance: number;
-  travelTime: number;
-  travelMethod: string;
-}
-
-interface TravelRoute {
-  totalDistance: number;
-  totalTravelTime: number;
-  travelSegments: TravelSegment[];
-}
-
-interface GeneratedPlan {
-  id: string;
-  planName: string;
-  description: string;
-  totalBudget: number;
-  startDatetime: string;
-  endDatetime: string;
-  planDetails: PlanDetail[];
-  travelRoute: TravelRoute;
-}
 
 // 検索タブの定義
 enum SearchTab {

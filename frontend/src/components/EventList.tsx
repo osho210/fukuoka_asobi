@@ -4,23 +4,7 @@ import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
 import '@styles/EventsPage.css';
 import Image from 'next/image';
-
-type Event = {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDatetime: string;
-  endDatetime: string;
-  price: string | null;
-  bannerImage: string | null;
-  isOnline: boolean;
-  status: string;
-  eventCategory: {
-    id: string;
-    name: string;
-  };
-};
+import { Event } from '@/__generated__/graphql';
 
 type EventListProps = {
   categoryId?: string;

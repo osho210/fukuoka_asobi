@@ -3,37 +3,7 @@
 import { useState } from 'react';
 import TravelDetailForm from './TravelDetailForm';
 import '@/styles/play-plans.css';
-
-interface Spot {
-  id: string;
-  spotName: string;
-  priceRangeAverage?: number | null;
-}
-
-interface TravelDetail {
-  id?: string;
-  sequenceNumber: number;
-  travelMethod: string;
-  travelTime?: string;
-  notes?: string;
-}
-
-interface PlanDetail {
-  id?: string;
-  stepNumber: number;
-  stepName: string;
-  stepDescription?: string;
-  spotId?: string;
-  plannerTitle?: string;
-  plannerDescription?: string;
-  comment?: string;
-  startTime?: string;
-  endTime?: string;
-  durationMinutes?: number;
-  budget?: string;
-  notes?: string;
-  travelDetails: TravelDetail[];
-}
+import { Spot, TravelDetail, PlanDetail } from '@/__generated__/graphql';
 
 interface PlanDetailFormProps {
   planDetails: PlanDetail[];

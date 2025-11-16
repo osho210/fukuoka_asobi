@@ -2,6 +2,7 @@ import { client } from '@/lib/apolloClient';
 import { getModelNameFromRoute } from './modelRouteMap';
 import { toCamelCase } from '@/app/utils/stringUtils';
 import { omitTypename } from '@/app/utils/omitTypename';
+import { PlanDetailInput } from '@/__generated__/graphql';
 
 // クエリのインポート
 import { GET_AREAS } from '@/graphql/queries/getAreas';
@@ -523,22 +524,12 @@ export const removeSpotAmbiance = async (spotId: string, ambianceId: string) => 
   }
 };
 
-// PlanDetailInputの型定義
-export interface PlanDetailInput {
-  id: string;
-  stepNumber?: number;
-  stepName?: string;
-  stepDescription?: string;
-  startDatetime?: string;
-  endDatetime?: string;
-  budget?: number;
-  spotId?: number | null;
-  comment?: string;
-  notes?: string;
-}
+// Re-export PlanDetailInput from generated types
+export type { PlanDetailInput };
 
 // spotフィールドを含むPlanDetailInputの拡張型
-export interface PlanDetailInputWithSpot extends PlanDetailInput {
+export interface PlanDetailInputWithSpot extends Partial<PlanDetailInput> {
+  id?: string;
   spot?: {
     id: string;
     spotName?: string;
