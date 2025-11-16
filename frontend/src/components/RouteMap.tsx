@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { TravelRoute } from '@/__generated__/graphql';
 import { formatTravelTime } from '@/utils/dateUtils';
-import styles from '@/styles/RouteMap.module.css';
+import '@/styles/RouteMap.css';
 
 interface RouteMapProps {
   travelRoute: TravelRoute;
@@ -153,39 +153,39 @@ const RouteMap: React.FC<RouteMapProps> = ({ travelRoute }) => {
   }, [travelRoute]);
 
   return (
-    <div className={styles.routeMapContainer}>
+    <div className="routeMapContainer">
       <canvas
         ref={canvasRef}
         width={800}
         height={500}
-        className={styles.routeMapCanvas}
+        className="routeMapCanvas"
       />
-      <div className={styles.routeMapLegend}>
-        <div className={styles.legendItem}>
-          <div className={styles.legendColor} style={{ backgroundColor: '#4CAF50' }}></div>
-          <div className={styles.legendLabel}>徒歩</div>
+      <div className="routeMapLegend">
+        <div className="legendItem">
+          <div className="legendColor" style={{ backgroundColor: '#4CAF50' }}></div>
+          <div className="legendLabel">徒歩</div>
         </div>
-        <div className={styles.legendItem}>
-          <div className={styles.legendColor} style={{ backgroundColor: '#2196F3' }}></div>
-          <div className={styles.legendLabel}>車</div>
+        <div className="legendItem">
+          <div className="legendColor" style={{ backgroundColor: '#2196F3' }}></div>
+          <div className="legendLabel">車</div>
         </div>
-        <div className={styles.legendItem}>
-          <div className={styles.legendColor} style={{ backgroundColor: '#F44336' }}></div>
-          <div className={styles.legendLabel}>電車</div>
+        <div className="legendItem">
+          <div className="legendColor" style={{ backgroundColor: '#F44336' }}></div>
+          <div className="legendLabel">電車</div>
         </div>
-        <div className={styles.legendItem}>
-          <div className={styles.legendColor} style={{ backgroundColor: '#FF9800' }}></div>
-          <div className={styles.legendLabel}>自転車</div>
+        <div className="legendItem">
+          <div className="legendColor" style={{ backgroundColor: '#FF9800' }}></div>
+          <div className="legendLabel">自転車</div>
         </div>
       </div>
-      <div className={styles.routeMapInfo}>
-        <div className={styles.routeMapInfoItem}>
-          <span className={styles.infoLabel}>総移動距離:</span>
-          <span className={styles.infoValue}>{travelRoute.totalDistance.toFixed(1)}km</span>
+      <div className="routeMapInfo">
+        <div className="routeMapInfoItem">
+          <span className="infoLabel">総移動距離:</span>
+          <span className="infoValue">{travelRoute.totalDistance.toFixed(1)}km</span>
         </div>
-        <div className={styles.routeMapInfoItem}>
-          <span className={styles.infoLabel}>総移動時間:</span>
-          <span className={styles.infoValue}>{formatTravelTime(travelRoute.totalTravelTime)}</span>
+        <div className="routeMapInfoItem">
+          <span className="infoLabel">総移動時間:</span>
+          <span className="infoValue">{formatTravelTime(travelRoute.totalTravelTime)}</span>
         </div>
       </div>
     </div>

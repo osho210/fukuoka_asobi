@@ -3,7 +3,7 @@
 import React from 'react';
 import { PlanDetail } from '@/__generated__/graphql';
 import { formatTime } from '@/utils/dateUtils';
-import styles from '@/styles/PlanTimeline.module.css';
+import '@/styles/PlanTimeline.css';
 
 interface PlanTimelineProps {
   planDetails: PlanDetail[];
@@ -43,29 +43,29 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
   };
 
   return (
-    <div className={styles.timelineContainer}>
+    <div className="timelineContainer">
       {planDetails.map((detail, index) => (
         <React.Fragment key={detail.id}>
-          <div className={styles.timelineItem}>
-            <div className={styles.timelineTime}>
+          <div className="timelineItem">
+            <div className="timelineTime">
               {detail.startDatetime && formatTime(detail.startDatetime)}
             </div>
-            <div className={styles.timelinePoint}>
-              <div className={styles.timelinePointDot}></div>
+            <div className="timelinePoint">
+              <div className="timelinePointDot"></div>
             </div>
-            <div className={styles.timelineContent}>
-              <div className={styles.timelineSpot}>
-                <span className={styles.timelineSpotNumber}>{detail.stepNumber}</span>
-                <span className={styles.timelineSpotName}>{detail.stepName}</span>
+            <div className="timelineContent">
+              <div className="timelineSpot">
+                <span className="timelineSpotNumber">{detail.stepNumber}</span>
+                <span className="timelineSpotName">{detail.stepName}</span>
               </div>
             </div>
           </div>
 
           {/* 滞在時間 */}
           {detail.startDatetime && detail.endDatetime && (
-            <div className={styles.timelineStay}>
-              <div className={styles.timelineStayLine}></div>
-              <div className={styles.timelineStayDuration}>
+            <div className="timelineStay">
+              <div className="timelineStayLine"></div>
+              <div className="timelineStayDuration">
                 滞在: {calculateDuration(detail.startDatetime, detail.endDatetime)}分
               </div>
             </div>
@@ -73,23 +73,23 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
 
           {/* 移動情報（最後のスポット以外） */}
           {index < planDetails.length - 1 && detail.travelDetails && detail.travelDetails.length > 0 && (
-            <div className={styles.timelineTravel}>
-              <div className={styles.timelineTime}>
+            <div className="timelineTravel">
+              <div className="timelineTime">
                 {detail.endDatetime && formatTime(detail.endDatetime)}
               </div>
-              <div className={styles.timelineTravelLine}>
-                <div className={styles.timelineTravelIcon}>
+              <div className="timelineTravelLine">
+                <div className="timelineTravelIcon">
                   {getTravelMethodIcon(detail.travelDetails[0].travelMethod)}
                 </div>
               </div>
-              <div className={styles.timelineTravelInfo}>
-                <div className={styles.timelineTravelMethod}>
+              <div className="timelineTravelInfo">
+                <div className="timelineTravelMethod">
                   {detail.travelDetails[0].travelMethod === 'walk' ? '徒歩' :
                    detail.travelDetails[0].travelMethod === 'car' ? '車' :
                    detail.travelDetails[0].travelMethod === 'train' ? '電車' :
                    detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
                 </div>
-                <div className={styles.timelineTravelTime}>
+                <div className="timelineTravelTime">
                   {formatLocalTravelTime(detail.travelDetails[0].travelTime)}
                 </div>
               </div>
@@ -100,15 +100,15 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
 
       {/* 最終時間 */}
       {planDetails.length > 0 && planDetails[planDetails.length - 1].endDatetime && (
-        <div className={styles.timelineItem}>
-          <div className={styles.timelineTime}>
+        <div className="timelineItem">
+          <div className="timelineTime">
             {formatTime(planDetails[planDetails.length - 1].endDatetime)}
           </div>
-          <div className={styles.timelinePoint}>
-            <div className={styles.timelinePointDot}></div>
+          <div className="timelinePoint">
+            <div className="timelinePointDot"></div>
           </div>
-          <div className={styles.timelineContent}>
-            <div className={styles.timelineEnd}>プラン終了</div>
+          <div className="timelineContent">
+            <div className="timelineEnd">プラン終了</div>
           </div>
         </div>
       )}

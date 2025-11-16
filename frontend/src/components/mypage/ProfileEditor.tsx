@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PROFILE } from '@/graphql/mypage';
-import styles from '@/styles/ProfileEditor.module.css';
+import '@/styles/ProfileEditor.css';
 import { SubscriptionStatus } from '@/components/mypage/SubscriptionStatus';
 import Image from 'next/image';
 
@@ -112,17 +112,17 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
     };
 
     return (
-        <div className={styles['profile-editor-container']}>
-            <h2 className={styles['profile-editor-title']}>プロフィール編集</h2>
+        <div className={'profile-editor-container'}>
+            <h2 className={'profile-editor-title'}>プロフィール編集</h2>
 
             {successMessage && (
-                <div className={styles['profile-editor-success']}>
+                <div className={'profile-editor-success'}>
                     {successMessage}
                 </div>
             )}
 
             {errorMessages.length > 0 && (
-                <div className={styles['profile-editor-errors']}>
+                <div className={'profile-editor-errors'}>
                     <ul>
                         {errorMessages.map((error, index) => (
                             <li key={index}>{error}</li>
@@ -131,50 +131,50 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className={styles['profile-editor-form']}>
-                <div className={styles['profile-editor-field']}>
-                    <label className={styles['profile-editor-label']}>ユーザー名</label>
+            <form onSubmit={handleSubmit} className={'profile-editor-form'}>
+                <div className={'profile-editor-field'}>
+                    <label className={'profile-editor-label'}>ユーザー名</label>
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className={styles['profile-editor-input']}
+                        className={'profile-editor-input'}
                         maxLength={20}
                         required
                     />
-                    <p className={styles['profile-editor-hint']}>20文字以内で入力してください</p>
+                    <p className={'profile-editor-hint'}>20文字以内で入力してください</p>
                 </div>
 
-                <div className={styles['profile-editor-field']}>
-                    <label className={styles['profile-editor-label']}>自己紹介</label>
+                <div className={'profile-editor-field'}>
+                    <label className={'profile-editor-label'}>自己紹介</label>
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        className={styles['profile-editor-textarea']}
+                        className={'profile-editor-textarea'}
                         maxLength={200}
                     />
-                    <p className={styles['profile-editor-hint']}>200文字以内で入力してください</p>
+                    <p className={'profile-editor-hint'}>200文字以内で入力してください</p>
                 </div>
 
-                <div className={styles['profile-editor-field']}>
-                    <label className={styles['profile-editor-label']}>Instagram URL</label>
+                <div className={'profile-editor-field'}>
+                    <label className={'profile-editor-label'}>Instagram URL</label>
                     <input
                         type="url"
                         value={instagramUrl}
                         onChange={(e) => setInstagramUrl(e.target.value)}
-                        className={styles['profile-editor-input']}
+                        className={'profile-editor-input'}
                         placeholder="https://www.instagram.com/username"
                     />
                 </div>
 
-                <div className={styles['profile-editor-field']}>
-                    <label className={styles['profile-editor-label']}>プロフィール画像</label>
-                    <div className={styles['profile-editor-image-container']}>
+                <div className={'profile-editor-field'}>
+                    <label className={'profile-editor-label'}>プロフィール画像</label>
+                    <div className={'profile-editor-image-container'}>
                         {avatarFile ? (
                             <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
-                                className={styles['profile-editor-image']}
+                                className={'profile-editor-image'}
                                 width={100}
                                 height={100}
                             />
@@ -182,7 +182,7 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                             <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
-                                className={styles['profile-editor-image']}
+                                className={'profile-editor-image'}
                                 width={100}
                                 height={100}
                             />
@@ -190,12 +190,12 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                             <Image
                                 src={fullAvatarUrl}
                                 alt="プロフィール画像"
-                                className={styles['profile-editor-image']}
+                                className={'profile-editor-image'}
                                 width={100}
                                 height={100}
                             />
                         ) : (
-                            <div className={styles['profile-editor-image-placeholder']}>
+                            <div className={'profile-editor-image-placeholder'}>
                                 画像なし
                             </div>
                         )}
@@ -203,25 +203,25 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                             type="file"
                             accept="image/*"
                             onChange={handleImageUpload}
-                            className={styles['profile-editor-image-input']}
+                            className={'profile-editor-image-input'}
                             id="profile-image-upload"
                         />
                         <label
                             htmlFor="profile-image-upload"
-                            className={styles['profile-editor-image-button']}
+                            className={'profile-editor-image-button'}
                         >
                             画像を選択
                         </label>
                     </div>
-                    <p className={styles['profile-editor-hint']}>
+                    <p className={'profile-editor-hint'}>
                         JPG、PNG形式、5MB以下の画像をアップロードしてください
                     </p>
                 </div>
 
-                <div className={styles['profile-editor-actions']}>
+                <div className={'profile-editor-actions'}>
                     <button
                         type="submit"
-                        className={styles['profile-editor-submit']}
+                        className={'profile-editor-submit'}
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? '更新中...' : '更新する'}
@@ -229,15 +229,15 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 </div>
             </form>
 
-            <div className={styles['profile-editor-info']}>
-                <h3 className={styles['profile-editor-info-title']}>アカウント情報</h3>
-                <div className={styles['profile-editor-info-item']}>
-                    <span className={styles['profile-editor-info-label']}>メールアドレス:</span>
-                    <span className={styles['profile-editor-info-value']}>{user.email}</span>
+            <div className={'profile-editor-info'}>
+                <h3 className={'profile-editor-info-title'}>アカウント情報</h3>
+                <div className={'profile-editor-info-item'}>
+                    <span className={'profile-editor-info-label'}>メールアドレス:</span>
+                    <span className={'profile-editor-info-value'}>{user.email}</span>
                 </div>
-                <div className={styles['profile-editor-info-item']}>
-                    <span className={styles['profile-editor-info-label']}>会員ステータス:</span>
-                    <span className={styles['profile-editor-info-value']}>
+                <div className={'profile-editor-info-item'}>
+                    <span className={'profile-editor-info-label'}>会員ステータス:</span>
+                    <span className={'profile-editor-info-value'}>
                         {user.isPaidMember && user.paidEndDate && new Date(user.paidEndDate) >= new Date()
                             ? '有料会員'
                             : '無料会員'}
@@ -245,8 +245,8 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 </div>
             </div>
 
-            <div className={styles['profile-editor-subscription']}>
-                <h3 className={styles['profile-editor-section-title']}>サブスクリプション情報</h3>
+            <div className={'profile-editor-subscription'}>
+                <h3 className={'profile-editor-section-title'}>サブスクリプション情報</h3>
                 <SubscriptionStatus user={user} />
             </div>
         </div>

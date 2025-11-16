@@ -9,8 +9,8 @@ import CustomSearchTab from './CustomSearchTab';
 import TabSelector from '@/components/common/TabSelector';
 import Button from '@/components/common/Button';
 import GeneratedPlanView from '@/components/GeneratedPlanView';
-import styles from '@/styles/SearchForm.module.css';
-import { TravelDetail, Spot, PlanDetail, TravelRoute, GeneratedPlan } from '@/__generated__/graphql';
+import '@/styles/SearchForm.css';
+import { GeneratedPlan } from '@/__generated__/graphql';
 
 // GraphQLクエリのインポート
 import { GENERATE_PLAN } from '../../graphql/generatePlan';
@@ -134,7 +134,7 @@ const SearchContainer: React.FC = () => {
   // 生成されたプランがある場合はそれを表示
   if (generatedPlan) {
     return (
-      <div className={styles.searchResultContainer}>
+      <div className="searchResultContainer">
         <GeneratedPlanView
           plan={generatedPlan}
           onSave={savePlan}
@@ -145,13 +145,13 @@ const SearchContainer: React.FC = () => {
   }
 
   return (
-    <div className={styles.searchFormContainer}>
+    <div className="searchFormContainer">
       <TabSelector
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={(tabId) => setActiveTab(tabId as SearchTab)}
       />
-      <div className={styles.formSection}>
+      <div className="formSection">
         {activeTab === SearchTab.Normal ? (
           <NormalSearchTab
             searchParams={searchParams}
@@ -165,14 +165,14 @@ const SearchContainer: React.FC = () => {
         )}
       </div>
       {errorMessage && (
-        <div className={styles.errorMessage}>
+        <div className="errorMessage">
           {errorMessage}
         </div>
       )}
-      <div className={styles.buttonContainer}>
+      <div className="buttonContainer">
         <Button
           onClick={handleSearch}
-          className={styles.nextButton}
+          className="nextButton"
           disabled={isLoading}
         >
           {isLoading ? 'プラン生成中...' : 'プランを作成する'}

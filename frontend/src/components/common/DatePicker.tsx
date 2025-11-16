@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import styles from '@/styles/DatePicker.module.css';
+import '@/styles/DatePicker.css';
 
 interface DatePickerProps {
   selectedDate: Date | null;
@@ -157,51 +157,51 @@ const DatePicker: React.FC<DatePickerProps> = ({
   }, []);
 
   return (
-    <div ref={datePickerRef} className={styles.datePickerContainer}>
-      {label && <div className={styles.sliderLabel}>{label}</div>}
+    <div ref={datePickerRef} className="datePickerContainer">
+      {label && <div className="sliderLabel">{label}</div>}
       <input
         type="text"
-        className={styles.datePickerInput}
+        className="datePickerInput"
         value={selectedDate ? formatDate(selectedDate) : ''}
         placeholder={placeholder}
         readOnly
         onClick={() => setIsOpen(!isOpen)}
       />
       {isOpen && (
-        <div className={styles.datePickerCalendar}>
-          <div className={styles.calendarHeader}>
+        <div className="datePickerCalendar">
+          <div className="calendarHeader">
             <button
               type="button"
-              className={styles.navButton}
+              className="navButton"
               onClick={goToPrevMonth}
             >
               ←
             </button>
-            <div className={styles.monthYearLabel}>
+            <div className="monthYearLabel">
               {`${currentMonth.getFullYear()}年 ${getMonthName(currentMonth.getMonth())}`}
             </div>
             <button
               type="button"
-              className={styles.navButton}
+              className="navButton"
               onClick={goToNextMonth}
             >
               →
             </button>
           </div>
-          <div className={styles.weekdaysRow}>
+          <div className="weekdaysRow">
             {weekdays.map((day) => (
               <div key={day}>{day}</div>
             ))}
           </div>
-          <div className={styles.daysGrid}>
+          <div className="daysGrid">
             {generateCalendarDays().map((day, index) => (
               <div
                 key={index}
-                className={`${styles.dayCell} ${
-                  day.isSelected ? styles.selectedDay : ''
-                } ${day.isToday ? styles.todayDay : ''} ${
-                  !day.isCurrentMonth ? styles.outsideDay : ''
-                } ${day.isDisabled ? styles.disabledDay : ''}`}
+                className={`dayCell ${
+                  day.isSelected ? "selectedDay" : ''
+                } ${day.isToday ? "todayDay" : ''} ${
+                  !day.isCurrentMonth ? "outsideDay" : ''
+                } ${day.isDisabled ? "disabledDay" : ''}`}
                 onClick={() => !day.isDisabled && handleDateSelect(day.date)}
               >
                 {day.date.getDate()}

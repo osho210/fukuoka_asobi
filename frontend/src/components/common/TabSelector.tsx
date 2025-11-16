@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from '@/styles/TabSelector.module.css';
+import '@/styles/TabSelector.css';
 
 interface TabProps {
   tabs: { id: string; label: string }[];
@@ -12,14 +12,12 @@ interface TabProps {
 
 const TabSelector: React.FC<TabProps> = ({ tabs, activeTab, onTabChange, className = '' }) => {
   return (
-    <div className={`${styles.tabContainer} ${className}`}>
+    <div className={`tabContainer ${className}`}>
       {tabs.map((tab) => (
         <button
           key={tab.id}
-          className={`${styles.tabButton} ${
-            activeTab === tab.id
-              ? styles.activeTab
-              : styles.inactiveTab
+          className={`tabButton ${
+            activeTab === tab.id ? "activeTab" : "inactiveTab"
           }`}
           onClick={() => onTabChange(tab.id)}
         >

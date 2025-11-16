@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import styles from '@/styles/RangeSlider.module.css';
+import '@/styles/RangeSlider.css';
 
 
 interface RangeSliderProps {
@@ -55,7 +55,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     minThumbRef.current.style.left = `${minPercent}%`;
     maxThumbRef.current.style.left = `${maxPercent}%`;
 
-    const rangeElement = trackRef.current.querySelector(`.${styles.sliderRange}`) as HTMLElement;
+    const rangeElement = trackRef.current.querySelector('.sliderRange') as HTMLElement;
     if (rangeElement) {
       rangeElement.style.left = `${minPercent}%`;
       rangeElement.style.width = `${maxPercent - minPercent}%`;
@@ -135,26 +135,26 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   }, [minValue, maxValue]);
 
   return (
-    <div className={styles.sliderContainer}>
-      {label && <div className={styles.sliderLabel}>{label}</div>}
+    <div className="sliderContainer">
+      {label && <div className="sliderLabel">{label}</div>}
       <div
         ref={trackRef}
-        className={styles.sliderTrack}
+        className="sliderTrack"
         onClick={handleTrackClick}
       >
-        <div className={styles.sliderRange}></div>
+        <div className="sliderRange"></div>
         <div
           ref={minThumbRef}
-          className={styles.sliderThumb}
+          className="sliderThumb"
           onMouseDown={(e) => handleMouseDown(e, true)}
         ></div>
         <div
           ref={maxThumbRef}
-          className={styles.sliderThumb}
+          className="sliderThumb"
           onMouseDown={(e) => handleMouseDown(e, false)}
         ></div>
       </div>
-      <div className={styles.sliderValues}>
+      <div className="sliderValues">
         <span>{formatValue(minValue)}</span>
         <span>{formatValue(maxValue)}</span>
       </div>

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SearchParams, CustomOptionsInput } from '@/types/search';
-import styles from '@/styles/SearchForm.module.css';
+import { SearchParams } from '@/types/search';
+import '@/styles/SearchForm.css';
 import Image from 'next/image';
 import { useOptions } from '@/lib/hooks/useOptions';
 
@@ -113,43 +113,43 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
 
   return (
     <div>
-      <div className={styles.formGroup}>
+      <div className="formGroup">
         <div
-          className={styles.areaGroup}
+          className="areaGroup"
           onClick={() => setIsTransportationModalOpen(true)}
         >
           <Image src="/calendar_icon.svg" width={30} height={30} alt='移動手段' />
-          <span className={styles.selectionText}>{getSelectedTransportationText()}</span>
+          <span className="selectionText">{getSelectedTransportationText()}</span>
         </div>
       </div>
 
-      <div className={styles.formGroup}>
+      <div className="formGroup">
         <div
-          className={styles.areaGroup}
+          className="areaGroup"
           onClick={() => setIsThemeModalOpen(true)}
         >
           <Image src="/calendar_icon.svg" width={30} height={30} alt='テーマ' />
-          <span className={styles.selectionText}>{getSelectedThemeText()}</span>
+          <span className="selectionText">{getSelectedThemeText()}</span>
         </div>
       </div>
 
-      <div className={styles.formGroup}>
-        <div className={styles.toggleOptionsContainer}>
+      <div className="formGroup">
+        <div className="toggleOptionsContainer">
           <div
-            className={`${styles.toggleOption} ${searchParams.customOptions?.rainyDayOption ? styles.toggleOptionActive : ''}`}
+            className={`toggleOption ${searchParams.customOptions?.rainyDayOption ? "toggleOptionActive" : ''}`}
             onClick={() => handleRainyDayOptionChange(!searchParams.customOptions?.rainyDayOption)}
           >
-            <div className={styles.toggleIcon}>
+            <div className="toggleIcon">
               ☂️
             </div>
             <span>雨天でも楽しめる</span>
           </div>
 
           <div
-            className={`${styles.toggleOption} ${searchParams.customOptions?.includeEvents ? styles.toggleOptionActive : ''}`}
+            className={`toggleOption ${searchParams.customOptions?.includeEvents ? "toggleOptionActive" : ''}`}
             onClick={() => handleIncludeEventsChange(!searchParams.customOptions?.includeEvents)}
           >
-            <div className={styles.toggleIcon}>
+            <div className="toggleIcon">
               🎭
             </div>
             <span>イベントを含む</span>
@@ -157,39 +157,39 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
         </div>
       </div>
 
-      <div className={styles.formRow}>
-        <div className={styles.formColumn}>
+      <div className="formRow">
+        <div className="formColumn">
           <div
-            className={styles.areaGroup}
+            className="areaGroup"
             onClick={() => setIsStartingPointModalOpen(true)}
           >
             <Image src="/location_icon.svg" width={30} height={30} alt='出発地点' />
-            <span className={styles.selectionText}>
+            <span className="selectionText">
               {searchParams.customOptions?.startingPoint || '出発地点を入力'}
             </span>
           </div>
         </div>
 
-        <div className={styles.formColumn}>
+        <div className="formColumn">
           <label className={""}>訪問スポット数</label>
           <input
             type="number"
             min="1"
             max="10"
-            className={styles.formControl}
+            className="formControl"
             value={searchParams.customOptions?.spotCount || ''}
             onChange={(e) => handleSpotCountChange(parseInt(e.target.value) || 0)}
           />
         </div>
       </div>
 
-      <div className={styles.categoryGroup}>
-        <label className={styles.categoryFormLabel}>プランに含めるカテゴリー</label>
-        <div className={styles.categoryButtonsContainer}>
+      <div className="categoryGroup">
+        <label className="categoryFormLabel">プランに含めるカテゴリー</label>
+        <div className="categoryButtonsContainer">
           {categoryOptions.map((option) => (
             <button
               key={option.id}
-              className={`${styles.categoryButton} ${isCategorySelected(option.id) ? styles.categoryButtonActive : ''}`}
+              className={`categoryButton ${isCategorySelected(option.id) ? "categoryButtonActive" : ''}`}
               onClick={() => handleCategoryChange(option.id)}
             >
               {option.label}
@@ -200,23 +200,23 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
 
       {/* 移動手段選択モーダル */}
       {isTransportationModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsTransportationModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>移動手段を選択</h2>
+        <div className="modalOverlay" onClick={() => setIsTransportationModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">移動手段を選択</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsTransportationModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
-              <div className={styles.optionsList}>
+            <div className="modalBody">
+              <div className="optionsList">
                 {transportationOptions.map((option) => (
                   <div
                     key={option.id}
-                    className={`${styles.optionItem} ${searchParams.customOptions?.transportationMethod === option.id ? styles.optionItemActive : ''}`}
+                    className={`optionItem ${searchParams.customOptions?.transportationMethod === option.id ? "optionItemActive" : ''}`}
                     onClick={() => handleTransportationChange(option.id)}
                   >
                     {option.label}
@@ -230,23 +230,23 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
 
       {/* テーマ選択モーダル */}
       {isThemeModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsThemeModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>テーマを選択</h2>
+        <div className="modalOverlay" onClick={() => setIsThemeModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">テーマを選択</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsThemeModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
-              <div className={styles.optionsList}>
+            <div className="modalBody">
+              <div className="optionsList">
                 {themeOptions.map((option) => (
                   <div
                     key={option.id}
-                    className={`${styles.optionItem} ${searchParams.customOptions?.theme === option.id ? styles.optionItemActive : ''}`}
+                    className={`optionItem ${searchParams.customOptions?.theme === option.id ? "optionItemActive" : ''}`}
                     onClick={() => handleThemeChange(option.id)}
                   >
                     {option.label}
@@ -260,29 +260,29 @@ const CustomSearchTab: React.FC<CustomSearchTabProps> = ({
 
       {/* 出発地点入力モーダル */}
       {isStartingPointModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsStartingPointModalOpen(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>出発地点を入力</h2>
+        <div className="modalOverlay" onClick={() => setIsStartingPointModalOpen(false)}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalHeader">
+              <h2 className="modalTitle">出発地点を入力</h2>
               <button
-                className={styles.modalCloseButton}
+                className="modalCloseButton"
                 onClick={() => setIsStartingPointModalOpen(false)}
               >
                 ×
               </button>
             </div>
-            <div className={styles.modalBody}>
+            <div className="modalBody">
               <input
                 type="text"
-                className={styles.formControl}
+                className="formControl"
                 value={searchParams.customOptions?.startingPoint || ''}
                 onChange={(e) => handleStartingPointChange(e.target.value)}
                 placeholder="例: 福岡空港"
               />
             </div>
-            <div className={styles.modalFooter}>
+            <div className="modalFooter">
               <button
-                className={styles.modalButton}
+                className="modalButton"
                 onClick={handleStartingPointConfirm}
               >
                 確定
