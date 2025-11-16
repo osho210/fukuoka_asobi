@@ -12,6 +12,7 @@ interface ExistingImage {
   url: string;
 }
 
+// Extend generated UpdatePlayPlanInput with UI-specific fields
 interface PlayPlanFormData {
   planName: string;
   catchCopy?: string;

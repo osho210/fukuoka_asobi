@@ -56,21 +56,8 @@ import {
   REMOVE_SPOT_AMBIANCE
 } from '@/graphql/mutations/spots';
 
-/**
- * モデル入力データの型定義
- */
-interface MoneyInput {
-  amount: number | null;
-  currency: string | null;
-}
-
-interface PriceRangeInput {
-  startPrice: MoneyInput;
-  endPrice: MoneyInput;
-}
-
 export type ModelInput = {
-  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[] | PriceRangeInput;
+  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[];
 };
 
 // GraphQLクエリの型定義

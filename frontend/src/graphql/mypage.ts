@@ -47,3 +47,12 @@ export const UPDATE_USER_PROFILE = gql`
     }
   }
 `;
+
+// Re-export types from generated GraphQL types
+export type {
+  GetCurrentUserQuery,
+  GetUserPlayPlansQuery,
+  GetUserPlayPlansQueryVariables,
+  UpdateUserProfileMutation,
+  UpdateUserProfileMutationVariables,
+} from '@/__generated__/types';
