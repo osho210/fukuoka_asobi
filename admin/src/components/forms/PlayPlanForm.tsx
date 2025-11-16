@@ -5,53 +5,11 @@ import PlanDetailForm from './PlanDetailForm';
 import ImageUpload from './ImageUpload';
 import ImagePropertiesEditor from '../ImagePropertiesEditor';
 import '@/styles/play-plans.css';
-
-interface Spot {
-  id: string;
-  spotName: string;
-  priceRangeAverage?: number | null;
-}
-
-interface RecommendedFor {
-  id: string;
-  name: string;
-}
-
-interface TravelDetail {
-  id?: string;
-  sequenceNumber: number;
-  travelMethod: string;
-  travelTime?: string;
-  notes?: string;
-}
-
-interface PlanDetail {
-  id?: string;
-  stepNumber: number;
-  stepName: string;
-  stepDescription?: string;
-  plannerTitle?: string;
-  spotId?: string;
-  comment?: string;
-  startTime?: string;
-  endTime?: string;
-  durationMinutes?: number;
-  budget?: string;
-  notes?: string;
-  travelDetails: TravelDetail[];
-}
+import { Spot, RecommendedFor, TravelDetail, PlanDetail, ImageProperty } from '@/__generated__/graphql';
 
 interface ExistingImage {
   id: string;
   url: string;
-}
-
-interface ImageProperty {
-  attachmentId: string;
-  url: string;
-  isSelected: boolean;
-  position: number;
-  comment?: string;
 }
 
 interface PlayPlanFormData {

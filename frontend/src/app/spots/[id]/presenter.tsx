@@ -1,4 +1,4 @@
-import { Spot } from '../../../types/spot';
+import { Spot } from '@/__generated__/graphql';
 import Image from 'next/image';
 import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';

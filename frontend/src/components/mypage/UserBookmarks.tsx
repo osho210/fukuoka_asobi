@@ -6,6 +6,7 @@ import { GET_USER_FAVORITES, REMOVE_FAVORITE } from '@/graphql/favorites';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Favorite, PlayPlan } from '@/__generated__/graphql';
 
 /**
  * 型定義
@@ -13,28 +14,6 @@ import Image from 'next/image';
  */
 interface UserFavoritesQuery {
   userFavorites: Favorite[];
-}
-
-interface Favorite {
-  id: string;
-  playPlanId: string;
-  createdAt: string;
-  playPlan: PlayPlan;
-}
-
-interface PlayPlan {
-  id: string;
-  planName: string;
-  description: string;
-  imageUrl: string | null;
-  location: string | null;
-  tripType: string;
-  totalBudget: number;
-  rating: number;
-  reviewCount: number;
-  favoriteCount: number;
-  status: string;
-  recommendedFor: string;
 }
 
 /**

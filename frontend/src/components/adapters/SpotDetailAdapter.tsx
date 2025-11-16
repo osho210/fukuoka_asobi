@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { Spot } from '../../types/spot';
+import { Spot } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import BusinessHours from '../BusinessHours';
 import '@styles/ContentDetail.css';

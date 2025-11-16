@@ -1,11 +1,8 @@
 'use client';
 import '@styles/SpotsPage.css';
+import { Category } from '@/__generated__/graphql';
 
-type SpotCategory = {
-  id: string;
-  name: string;
-  description?: string | null;
-};
+type SpotCategory = Category;
 
 interface SpotCategoryListProps {
   categories: SpotCategory[];

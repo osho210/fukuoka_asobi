@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_RECOMMENDED_FORS } from '@/graphql/queries/getRecommendedFors';
-import { RecommendedFor } from '@/types/recommendedFor';
+import { RecommendedFor } from '@/__generated__/graphql';
 import { SearchParams } from '@/types/search';
 import RangeSlider from '@/components/common/RangeSlider';
 import AreaMap from '@/components/common/AreaMap';

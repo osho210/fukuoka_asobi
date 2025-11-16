@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SearchParams, CustomOptions } from '@/types/search';
+import { SearchParams, CustomOptionsInput } from '@/types/search';
 import styles from '@/styles/SearchForm.module.css';
 import Image from 'next/image';
 import { useOptions } from '@/lib/hooks/useOptions';

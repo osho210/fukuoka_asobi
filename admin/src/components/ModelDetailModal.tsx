@@ -28,6 +28,7 @@ import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
 import { modelDisplayNames, fieldDisplayNames, modelConfigs, ModelData } from '@/lib/modelConstants';
+import { OpeningHour } from '@/__generated__/graphql';
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
 interface RelationData {
@@ -44,15 +45,6 @@ interface SpotMagazine {
   publicationFeature?: string;
   pageNumber?: number | null;
   notes?: string;
-  _destroy?: boolean;
-}
-
-interface OpeningHour {
-  id?: string;
-  dayOfWeek: string;
-  openTime?: string | null;
-  closeTime?: string | null;
-  isClosedDay: boolean;
   _destroy?: boolean;
 }
 

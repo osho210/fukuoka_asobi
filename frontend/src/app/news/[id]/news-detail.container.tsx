@@ -2,7 +2,7 @@
 
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
-import { News, NewsStatus } from '../../../types/news';
+import { News } from '@/__generated__/graphql';
 import NewsDetailAdapter from '@/components/adapters/NewsDetailAdapter';
 
 interface NewsDetailContainerProps {

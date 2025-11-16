@@ -6,6 +6,7 @@ import { GET_USER_PLAY_PLANS } from '@/graphql/mypage';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { PlayPlan } from '@/__generated__/graphql';
 
 /**
  * 型定義
@@ -13,17 +14,6 @@ import Image from 'next/image';
  */
 interface UserPlayPlansQuery {
   userPlayPlans: PlayPlan[];
-}
-
-interface PlayPlan {
-  id: string;
-  planName: string;
-  description?: string;
-  imageUrl?: string | null;
-  status: string;
-  createdAt: string;
-  totalBudget?: number;
-  recommendedFor?: string;
 }
 
 export const UserPlayPlans: React.FC = () => {

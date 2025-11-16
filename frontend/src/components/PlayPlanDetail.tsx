@@ -1,6 +1,6 @@
 'use client';
 
-import { PlayPlan } from '@/types/plan';
+import { PlayPlan } from '@/__generated__/graphql';
 import PlanHeader from './plan/PlanHeader';
 import PlanRecommendation from './plan/PlanRecommendation';
 import PlanStats from './plan/PlanStats';

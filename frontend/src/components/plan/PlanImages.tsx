@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { PlayPlan } from '@/types/plan';
+import { PlayPlan } from '@/__generated__/graphql';
 
 export interface ImageProperty {
     attachmentId: string;

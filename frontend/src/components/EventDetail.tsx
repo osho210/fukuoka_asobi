@@ -4,30 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { formatDateRange } from '../lib/dateUtils';
 import '@styles/EventsPage.css';
-
-type Event = {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  latitude: number | null;
-  longitude: number | null;
-  startDatetime: string;
-  endDatetime: string;
-  recurringRule: string | null;
-  price: string | null;
-  organizer: string | null;
-  contactEmail: string | null;
-  contactPhone: string | null;
-  capacity: number | null;
-  isOnline: boolean;
-  sourceUrl: string | null;
-  bannerImage: string | null;
-  eventCategory: {
-    id: string;
-    name: string;
-  };
-};
+import { Event } from '@/__generated__/graphql';
 
 type EventDetailProps = {
   eventId: string;
