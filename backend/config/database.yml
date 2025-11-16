@@ -20,7 +20,10 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV.fetch("DB_NAME") { "fukuoka_asobi_development" } %>
+  database: fukuoka_asobi_development
+  username: rails   # ここは Docker の設定に合わせて
+  password: rails   # 同じく
+  host: db          # db コンテナ名を使うなら
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -58,4 +61,25 @@ production:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-   url: <%= ENV.fetch("DATABASE_URL") %>
+  primary:
+    adapter: postgresql
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+  cache:
+    adapter: postgresql
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    migrations_paths: db/cache_migrate
+
+  queue:
+    adapter: postgresql
+    url: <%= ENV["QUEUE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    migrations_paths: db/queue_migrate
+
+  cable:
+    adapter: postgresql
+    url: <%= ENV["CABLE_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    migrations_paths: db/cable_migrate
