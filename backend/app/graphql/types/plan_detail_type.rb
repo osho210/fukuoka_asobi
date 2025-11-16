@@ -5,16 +5,16 @@ module Types
     field :plan_id, Integer, null: false
     field :step_number, Integer, null: false
     field :step_name, String, null: false
-    field :step_description, String, null: true
-    field :spot_id, Integer, null: true
-    field :comment, String, null: true
-    field :start_time, String, null: true
-    field :end_time, String, null: true
-    field :duration_minutes, Integer, null: true
-    field :budget, Float, null: true
+    field :step_description, String, null: false
+    field :spot_id, Integer, null: false
+    field :comment, String, null: false
+    field :start_time, String, null: false
+    field :end_time, String, null: false
+    field :duration_minutes, Integer, null: false
+    field :budget, Float, null: false
     field :notes, String, null: true
-    field :planner_title, String, null: true
-    field :planner_description, String, null: true
+    field :planner_title, String, null: false
+    field :planner_description, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

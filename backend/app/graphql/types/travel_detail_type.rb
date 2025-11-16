@@ -6,7 +6,7 @@ module Types
     field :plan_detail_id, Integer, null: false, description: "プラン詳細ID"
     field :sequence_number, Integer, null: false, description: "移動順序番号"
     field :travel_method, String, null: false, description: "移動方法"
-    field :travel_time, Integer, null: true, description: "移動時間（分）"
+    field :travel_time, Integer, null: false, description: "移動時間（分）"
     field :notes, String, null: true, description: "メモ"
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false, description: "作成日時"
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false, description: "更新日時"

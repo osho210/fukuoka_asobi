@@ -7,7 +7,7 @@ module Types
     field :status, Types::StatusEnumType, null: true
     field :image_url, String, null: true
     field :author, Types::UserType, null: true
-    field :category, Types::CategoryType, null: true
+    field :category, Types::CategoryType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

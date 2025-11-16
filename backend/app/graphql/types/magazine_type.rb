@@ -4,7 +4,7 @@ module Types
   class MagazineType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
-    field :release_date, GraphQL::Types::ISO8601Date, null: true
+    field :release_date, GraphQL::Types::ISO8601Date, null: false
     field :sales_info, String, null: true
     field :sales_url, String, null: true
     field :publisher, String, null: true

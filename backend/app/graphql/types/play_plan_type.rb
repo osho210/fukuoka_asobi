@@ -8,13 +8,13 @@ module Types
       object.user
     end
     field :plan_name, String, null: false
-    field :catch_copy, String, null: true
-    field :subtitle, String, null: true
-    field :lead_text, String, null: true
+    field :catch_copy, String, null: false
+    field :subtitle, String, null: false
+    field :lead_text, String, null: false
     field :plan_id, Integer, null: false
-    field :start_time, String, null: true
-    field :end_time, String, null: true
-    field :description, String, null: true
+    field :start_time, String, null: false
+    field :end_time, String, null: false
+    field :description, String, null: false
     field :departure, String, null: true
     field :departure_time, String, null: true
     field :travel_method_to_first_spot, String, null: true
@@ -24,15 +24,15 @@ module Types
     field :rating, Float, null: false
     field :review_count, Integer, null: false
     field :image_url, String, null: true
-    field :image_urls, [Types::ImageType], null: true, description: "プランに紐づく画像のURLリスト"
-    field :image_properties, [Types::ImagePropertyType], null: true, description: "プランに紐づく画像とそのプロパティ"
-    field :tags, String, null: true
-    field :location, String, null: true
-    field :published_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :image_urls, [Types::ImageType], null: false, description: "プランに紐づく画像のURLリスト"
+    field :image_properties, [Types::ImagePropertyType], null: false, description: "プランに紐づく画像とそのプロパティ"
+    field :tags, String, null: false
+    field :location, String, null: false
+    field :published_at, GraphQL::Types::ISO8601DateTime, null: false
     field :trip_type, Types::TripTypeEnum, null: false
-    field :total_budget, Float, null: true
-    field :planner_title, String, null: true
-    field :planner_description, String, null: true
+    field :total_budget, Float, null: false
+    field :planner_title, String, null: false
+    field :planner_description, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
@@ -43,7 +43,7 @@ module Types
     end
 
     # おすすめ対象を取得
-    field :recommended_fors, [Types::RecommendedForType], null: true
+    field :recommended_fors, [Types::RecommendedForType], null: false
 
     # おすすめ対象の文字列表現を取得
     field :recommend_users, [String], null: true

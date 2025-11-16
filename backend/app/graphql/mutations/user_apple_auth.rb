@@ -7,7 +7,7 @@ module Mutations
     # 入力フィールド
     argument :id_token, String, required: true
     argument :name, String, required: false
-    argument :terms_agreed, Boolean, required: false
+    argument :terms_agreed, Boolean, required: true
 
     # 出力フィールド
     field :user, Types::UserType, null: true
