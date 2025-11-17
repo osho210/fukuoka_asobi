@@ -19,7 +19,7 @@ module Types
     field :instagram_url, String, null: true
     field :is_closed, Boolean, null: false
     field :budget_range, Types::BudgetTypeRangeEnumType, null: false
-    field :max_people, Integer, null: false
+    field :max_people, Integer, null: true
     field :min_people, Integer, null: false
     field :is_rainy_ok, Boolean, null: false
     field :theme, String, null: true
@@ -86,13 +86,13 @@ module Types
     field :accepts_cash_only, Boolean, null: true
     field :accepts_nfc, Boolean, null: true
     field :parking_options, Types::ParkingOptionsType, null: true
-    field :free_parking_lot, Boolean, null: false
-    field :paid_parking_lot, Boolean, null: false
-    field :free_street_parking, Boolean, null: false
-    field :paid_street_parking, Boolean, null: false
-    field :valet_parking, Boolean, null: false
-    field :free_garage_parking, Boolean, null: false
-    field :paid_garage_parking, Boolean, null: false
+    field :free_parking_lot, Boolean, null: true
+    field :paid_parking_lot, Boolean, null: true
+    field :free_street_parking, Boolean, null: true
+    field :paid_street_parking, Boolean, null: true
+    field :valet_parking, Boolean, null: true
+    field :free_garage_parking, Boolean, null: true
+    field :paid_garage_parking, Boolean, null: true
     field :price_range_start_amount, Float, null: true
     field :price_range_end_amount, Float, null: true
     field :price_range_average, Float, null: true, description: "価格帯の平均値"
