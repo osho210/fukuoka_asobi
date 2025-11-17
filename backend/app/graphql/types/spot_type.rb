@@ -81,10 +81,10 @@ module Types
     field :price_range, Types::PriceRangeType, null: true
     field :review_summary, Types::ReviewSummaryType, null: true
     field :payment_options, Types::PaymentOptionsType, null: true
-    field :accepts_credit_cards, Boolean, null: false
-    field :accepts_debit_cards, Boolean, null: false
-    field :accepts_cash_only, Boolean, null: false
-    field :accepts_nfc, Boolean, null: false
+    field :accepts_credit_cards, Boolean, null: true
+    field :accepts_debit_cards, Boolean, null: true
+    field :accepts_cash_only, Boolean, null: true
+    field :accepts_nfc, Boolean, null: true
     field :parking_options, Types::ParkingOptionsType, null: true
     field :free_parking_lot, Boolean, null: false
     field :paid_parking_lot, Boolean, null: false
@@ -128,6 +128,7 @@ module Types
     def opening_hour_list
       object.opening_hour_list
     end
+
 
     def closed_days
       object.closed_days
