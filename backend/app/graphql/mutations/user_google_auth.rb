@@ -48,14 +48,10 @@ module Mutations
             }
           end
 
-          # ランダムパスワードを生成
-          password = SecureRandom.hex(10)
-
-          # ユーザー作成
+          # ユーザー作成（パスワードなしでGoogle OAuth専用）
           user = User.new(
             email: email,
             username: name,
-            password: password,
             gender: 'prefer_not_to_say',
             terms_agreed: terms_agreed
           )

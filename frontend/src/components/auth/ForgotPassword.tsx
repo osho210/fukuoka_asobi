@@ -1,95 +1,55 @@
 /**
- * パスワードリセットリクエストフォーム
+ * パスワードリセットリクエストフォーム（廃止済み）
  */
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { requestPasswordReset } from '../../lib/api/passwordApi';
+import { useEffect } from 'react';
 
 /**
  * パスワードリセットリクエストフォームコンポーネント
  */
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  useEffect(() => {
+    // Redirect to login page after showing message
+    const timer = setTimeout(() => {
+      window.location.href = '/login';
+    }, 3000);
 
-  /**
-   * フォーム送信ハンドラー
-   */
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!email) {
-      setMessage({ type: 'error', text: 'メールアドレスを入力してください' });
-      return;
-    }
-
-    setIsSubmitting(true);
-    setMessage(null);
-
-    try {
-      const response = await requestPasswordReset(email);
-      setMessage({
-        type: 'success',
-        text: response.message || 'パスワード再設定用のメールを送信しました。メールに記載されたリンクからパスワードを再設定してください'
-      });
-      setEmail('');
-    } catch (error: unknown) {
-      const apiError = error as { response?: { data?: { message?: string } } };
-      setMessage({
-        type: 'error',
-        text: apiError.response?.data?.message || 'エラーが発生しました。しばらく経ってからもう一度お試しください'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="auth-container">
       <h1 className="auth-title">パスワードをお忘れの方</h1>
 
-      <p className="auth-description">
-        登録済みのメールアドレスを入力してください。<br />
-        パスワード再設定用のリンクをメールでお送りします。
-      </p>
-
-      {message && (
-        <div className={`message ${message.type}`}>
-          {message.text}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="auth-form">
-        <div className="form-group">
-          <label htmlFor="email">メールアドレス</label>
-          <input
-            className='form-input'
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="登録済みのメールアドレス"
-            disabled={isSubmitting}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="submit-button"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? '送信中...' : 'パスワード再設定メールを送信'}
-        </button>
-
-        <div className="auth-links">
-          <a href="/login" className="auth-link">
-            ログイン画面に戻る
-          </a>
-        </div>
-      </form>
+      <div className="auth-info" style={{ 
+        marginTop: '2rem', 
+        padding: '2rem', 
+        backgroundColor: '#fef3c7', 
+        borderRadius: '8px', 
+        border: '2px solid #fbbf24',
+        textAlign: 'center'
+      }}>
+        <h3 style={{ marginTop: 0, color: '#92400e' }}>パスワード認証は廃止されました</h3>
+        <p style={{ margin: '1rem 0', fontSize: '1rem', color: '#78350f' }}>
+          現在はGoogleアカウントでのログインのみご利用いただけます。
+        </p>
+        <p style={{ margin: '1rem 0', fontSize: '0.9rem', color: '#78350f' }}>
+          3秒後にログインページへ移動します...
+        </p>
+        <a href="/login" style={{ 
+          display: 'inline-block',
+          marginTop: '1rem',
+          padding: '0.75rem 1.5rem',
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '6px',
+          fontWeight: 'bold'
+        }}>
+          ログインページへ
+        </a>
+      </div>
     </div>
   );
 }
