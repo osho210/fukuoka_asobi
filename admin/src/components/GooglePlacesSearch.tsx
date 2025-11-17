@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { gql } from '@apollo/client';
+import { SearchGooglePlacesQuery, SyncSpotWithGooglePlacesMutation } from '@/__generated__/types';
 
 const SEARCH_GOOGLE_PLACES = gql`
   query SearchGooglePlaces($query: String!, $latitude: Float, $longitude: Float, $radius: Int) {
@@ -118,124 +119,9 @@ const SYNC_SPOT_WITH_GOOGLE_PLACES = gql`
   }
 `;
 
-interface OpeningHoursPeriod {
-  open: {
-    day: number;
-    hour: number;
-    minute: number;
-  };
-  close: {
-    day: number;
-    hour: number;
-    minute: number;
-  };
-}
-
-interface OpeningHours {
-  openNow: boolean;
-  periods: OpeningHoursPeriod[];
-  weekdayDescriptions: string[];
-}
-
-interface PaymentOptions {
-  acceptsCreditCards?: boolean;
-  acceptsDebitCards?: boolean;
-  acceptsCashOnly?: boolean;
-  acceptsNfc?: boolean;
-}
-
-interface ParkingOptions {
-  freeParkingLot?: boolean;
-  paidParkingLot?: boolean;
-  freeStreetParking?: boolean;
-  paidStreetParking?: boolean;
-  valetParking?: boolean;
-  freeGarageParking?: boolean;
-  paidGarageParking?: boolean;
-}
-
-export interface GooglePlace {
-  placeId: string;
-  name: string;
-  formattedAddress: string;
-  shortFormattedAddress?: string;
-  rating?: number;
-  userRatingCount?: number;
-  types?: string[];
-  primaryType?: string;
-  primaryTypeDisplayName?: string;
-  businessStatus?: string;
-  priceLevel?: string;
-  location?: {
-    latitude: number;
-    longitude: number;
-  };
-  googleMapsUri?: string;
-  websiteUri?: string;
-  nationalPhoneNumber?: string;
-  internationalPhoneNumber?: string;
-  regularOpeningHours?: OpeningHours;
-  currentOpeningHours?: OpeningHours;
-  paymentOptions?: PaymentOptions;
-  parkingOptions?: ParkingOptions;
-  servesBreakfast?: boolean;
-  servesLunch?: boolean;
-  servesDinner?: boolean;
-  servesBeer?: boolean;
-  servesWine?: boolean;
-  servesBrunch?: boolean;
-  servesCocktails?: boolean;
-  servesDessert?: boolean;
-  servesCoffee?: boolean;
-  takeout?: boolean;
-  delivery?: boolean;
-  dineIn?: boolean;
-  curbsidePickup?: boolean;
-  reservable?: boolean;
-  outdoorSeating?: boolean;
-  liveMusic?: boolean;
-  menuForChildren?: boolean;
-  goodForChildren?: boolean;
-  allowsDogs?: boolean;
-  restroom?: boolean;
-  goodForGroups?: boolean;
-  goodForWatchingSports?: boolean;
-  generativeSummary?: string;
-  editorialSummary?: string;
-  priceRange?: {
-    startPrice?: {
-      amount?: number;
-      currency?: string;
-    };
-    endPrice?: {
-      amount?: number;
-      currency?: string;
-    };
-  };
-  reviewSummary?: {
-    text?: string;
-    flagContentUri?: string;
-    disclosureText?: string;
-    reviewsUri?: string;
-  };
-}
-
-export interface SyncedSpot {
-  id: string;
-  spotName: string;
-  googlePlaceId?: string;
-  latitude?: number;
-  longitude?: number;
-  address?: string;
-  phoneNumber?: string;
-  website?: string;
-  reviewRating?: number;
-  reviewCount?: number;
-  businessStatus?: string;
-  priceLevel?: string;
-  lastApiSyncAt?: string;
-  apiSyncStatus?: string;
-}
+// Extract types from generated GraphQL types
+export type GooglePlace = NonNullable<SearchGooglePlacesQuery['searchGooglePlaces'][number]>;
+export type SyncedSpot = NonNullable<SyncSpotWithGooglePlacesMutation['syncSpotWithGooglePlaces']>['spot'];
 
 interface GooglePlacesSearchProps {
   spotId?: string;

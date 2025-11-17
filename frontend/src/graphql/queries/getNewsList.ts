@@ -12,11 +12,16 @@ export const GET_NEWS_LIST = gql`
       category {
         id
         name
+        createdAt
+        updatedAt
       }
       author {
         id
         username
         profileImageUrl
+        email
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt

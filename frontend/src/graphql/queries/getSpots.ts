@@ -37,6 +37,8 @@ export const GET_SPOTS = gql`
     categories {
       id
       name
+      createdAt
+      updatedAt
     }
   }
 `;

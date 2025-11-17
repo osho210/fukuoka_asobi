@@ -59,66 +59,13 @@ export const REMOVE_FAVORITE = gql`
   }
 `;
 
-// 型定義
-export interface Favorite {
-  id: string;
-  playPlanId: string;
-  createdAt: string;
-  playPlan?: {
-    id: string;
-    planName: string;
-    description?: string;
-    imageUrl?: string;
-    location?: string;
-    tripType: string;
-    totalBudget?: number;
-    rating: number;
-    reviewCount: number;
-    favoriteCount: number;
-    status: string;
-    user?: {
-      id: string;
-      username: string;
-      profileImageUrl?: string;
-      role: string;
-    };
-  };
-}
-
-export interface GetUserFavoritesQuery {
-  userFavorites: Favorite[];
-}
-
-export interface IsFavoriteQuery {
-  isFavorite: boolean;
-}
-
-export interface IsFavoriteQueryVariables {
-  playPlanId: string;
-}
-
-export interface AddFavoriteMutation {
-  addFavorite: {
-    favorite: {
-      id: string;
-      playPlanId: string;
-      createdAt: string;
-    } | null;
-    errors: string[];
-  };
-}
-
-export interface AddFavoriteMutationVariables {
-  playPlanId: string;
-}
-
-export interface RemoveFavoriteMutation {
-  removeFavorite: {
-    success: boolean;
-    errors: string[];
-  };
-}
-
-export interface RemoveFavoriteMutationVariables {
-  playPlanId: string;
-}
+// Re-export types from generated GraphQL types
+export type {
+  GetUserFavoritesQuery,
+  IsFavoriteQuery,
+  IsFavoriteQueryVariables,
+  AddFavoriteMutation,
+  AddFavoriteMutationVariables,
+  RemoveFavoriteMutation,
+  RemoveFavoriteMutationVariables,
+} from '@/__generated__/types';

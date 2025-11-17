@@ -1,18 +1,10 @@
 import { useQuery } from '@apollo/client';
 import { GET_ENUM_VALUES } from '@/graphql/queries/getEnumTypes';
+import { __EnumValue, __Type } from '@/__generated__/graphql';
 
-interface EnumValue {
-  name: string;
-  description: string | null;
-}
-
-interface EnumType {
-  name: string;
-  enumValues: EnumValue[];
-}
-
+// Query response type
 interface QueryData {
-  __type: EnumType;
+  __type: __Type;
 }
 
 interface SelectOption {
@@ -32,7 +24,7 @@ export const useEnumOptions = (enumName: string) => {
   });
 
   const options: SelectOption[] =
-    data?.__type?.enumValues.map((enumValue) => ({
+    data?.__type?.enumValues?.map((enumValue: __EnumValue) => ({
       value: enumValue.name,
       label: enumValue.description || enumValue.name,
     })) || [];

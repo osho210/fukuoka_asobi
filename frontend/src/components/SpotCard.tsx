@@ -6,7 +6,7 @@ type SpotCardProps = {
   spotName: string;
   address?: string | null;
   catchphrase?: string | null;
-  imageUrl?: { id: number, url: string } | null;
+  imageUrl?: { id: string, url: string } | null;
   reviewRating?: number | null;
   reviewCount?: number | null;
   budgetRange?: string | null;

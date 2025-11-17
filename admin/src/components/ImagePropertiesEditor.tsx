@@ -8,18 +8,16 @@ import {
   Draggable,
   DropResult
 } from '@hello-pangea/dnd';
+import { ImageProperty } from '@/__generated__/graphql';
 
-export interface ImageProperty {
-  attachmentId: string;
+// UI-specific extension of ImageProperty with url field
+export interface ImagePropertyWithUrl extends Omit<ImageProperty, '__typename'> {
   url: string;
-  isSelected: boolean;
-  position: number;
-  comment?: string;
 }
 
 interface ImagePropertiesEditorProps {
-  imageProperties: ImageProperty[];
-  onChange: (properties: ImageProperty[]) => void;
+  imageProperties: ImagePropertyWithUrl[];
+  onChange: (properties: ImagePropertyWithUrl[]) => void;
   maxSelected?: number;
 }
 
@@ -28,7 +26,7 @@ const ImagePropertiesEditor: React.FC<ImagePropertiesEditorProps> = ({
   onChange,
   maxSelected = 3,
 }) => {
-  const [properties, setProperties] = useState<ImageProperty[]>(imageProperties);
+  const [properties, setProperties] = useState<ImagePropertyWithUrl[]>(imageProperties);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {

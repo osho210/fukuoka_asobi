@@ -5,50 +5,13 @@ import SpotCategoryList from '@/components/SpotCategoryList';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
+import { GetSpotsQuery } from '@/__generated__/types';
 import '@styles/SpotsPage.css';
-
-type Category = {
-    id: string;
-    name: string;
-};
-
-type Spot = {
-    id: string;
-    spotName: string;
-    address: string | null;
-    catchphrase: string | null;
-    reviewRating: number | null;
-    reviewCount: number | null;
-    imageUrl: { id: number, url: string } | null;
-    budgetRange: string | null;
-    spotType: string;
-    district: {
-        id: string;
-        districtName: string;
-    };
-    categories: {
-        id: string;
-        name: string;
-    }[];
-    areas: {
-        id: string;
-        areaName: string;
-    }[];
-    hashtags: {
-        id: string;
-        hashtagName: string;
-    }[];
-};
-
-interface SpotsListData {
-    spots: Spot[];
-    categories: Category[];
-}
 
 export default function SpotsPage() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
-    const { loading, error, data } = useQuery<SpotsListData>(GET_SPOTS);
+    const { loading, error, data } = useQuery<GetSpotsQuery>(GET_SPOTS);
 
     if (loading) return <div className="spots-loading-container">読み込み中...</div>;
     if (error) return <div className="spots-error-container">エラーが発生しました</div>;
@@ -79,7 +42,7 @@ export default function SpotsPage() {
                 </div>
             ) : (
                 <div className="spots-grid">
-                    {filteredSpots.map((spot: Spot) => (
+                    {filteredSpots.map((spot) => (
                         <SpotCard
                             key={spot.id}
                             id={spot.id}

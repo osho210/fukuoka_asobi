@@ -1,18 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { GET_SPOT } from '@graphql/queries/getSpot';
-import { Spot } from '@/__generated__/graphql';
+import { GetSpotQuery } from '@/__generated__/types';
 import SpotPresenter from './presenter'
 
 interface SpotContainerProps {
   spotId: string;
 }
 
-interface SpotData {
-  spot: Spot;
-}
-
 export default function SpotContainer({ spotId }: SpotContainerProps) {
-  const { loading, error, data } = useQuery<SpotData>(GET_SPOT, {
+  const { loading, error, data } = useQuery<GetSpotQuery>(GET_SPOT, {
     variables: { id: spotId },
   });
 

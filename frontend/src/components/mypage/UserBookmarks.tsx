@@ -2,19 +2,10 @@
 
 import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_USER_FAVORITES, REMOVE_FAVORITE } from '@/graphql/favorites';
+import { GET_USER_FAVORITES, REMOVE_FAVORITE, GetUserFavoritesQuery } from '@/graphql/favorites';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Favorite } from '@/__generated__/graphql';
-
-/**
- * 型定義
- * --------------------------------------------------
- */
-interface UserFavoritesQuery {
-  userFavorites: Favorite[];
-}
 
 /**
  * コンポーネント
@@ -29,7 +20,7 @@ export const UserBookmarks: React.FC = () => {
     loading,
     error,
     refetch,
-  } = useQuery<UserFavoritesQuery>(GET_USER_FAVORITES, {
+  } = useQuery<GetUserFavoritesQuery>(GET_USER_FAVORITES, {
     fetchPolicy: 'network-only', // 常に最新データを取得
   });
 
@@ -68,7 +59,7 @@ export const UserBookmarks: React.FC = () => {
     );
   }
 
-  if (!data || data.userFavorites.length === 0) {
+  if (!data || !data.userFavorites || data.userFavorites.length === 0) {
     return (
       <div className="user-components-empty">
         <p>お気に入りはありません。</p>
@@ -121,16 +112,16 @@ export const UserBookmarks: React.FC = () => {
                     作成日: {new Date(createdAt).toLocaleDateString('ja-JP')}
                   </p>
                 </div>
-                {playPlan.recommendedFor && (
+                {playPlan.tags && (
                   <div className="user-components-card-tags">
-                    {playPlan.recommendedFor}
+                    {playPlan.tags}
                   </div>
                 )}
               </div>
             </Link>
             <button
               className="user-components-remove-btn"
-              onClick={() => handleRemove(playPlan.id)}
+              onClick={() => handleRemove(String(playPlan.id))}
               disabled={removing}
               aria-label="お気に入り解除"
             >

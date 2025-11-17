@@ -3,22 +3,14 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_PLAY_PLANS } from '@/graphql/mypage';
+import { GetUserPlayPlansQuery } from '@/__generated__/types';
 import '@/styles/UserComponents.css';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PlayPlan } from '@/__generated__/graphql';
-
-/**
- * 型定義
- * --------------------------------------------------
- */
-interface UserPlayPlansQuery {
-  userPlayPlans: PlayPlan[];
-}
 
 export const UserPlayPlans: React.FC = () => {
   // プラン一覧を取得
-  const { data, loading, error } = useQuery<UserPlayPlansQuery>(GET_USER_PLAY_PLANS, {
+  const { data, loading, error } = useQuery<GetUserPlayPlansQuery>(GET_USER_PLAY_PLANS, {
     variables: { limit: 20 },
     fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
   });
@@ -65,7 +57,7 @@ export const UserPlayPlans: React.FC = () => {
       </div>
 
       <div className="user-components-grid">
-        {data.userPlayPlans.map((plan: PlayPlan) => (
+        {data.userPlayPlans.map((plan) => (
           <div key={plan.id} className="user-components-card">
             <Link href={`/plans/${plan.id}`}>
               <div className="user-components-card-image">
@@ -93,11 +85,6 @@ export const UserPlayPlans: React.FC = () => {
                     作成日: {new Date(plan.createdAt).toLocaleDateString('ja-JP')}
                   </p>
                 </div>
-                {plan.recommendedFor && (
-                  <div className="user-components-card-tags">
-                    {plan.recommendedFor}
-                  </div>
-                )}
               </div>
             </Link>
           </div>

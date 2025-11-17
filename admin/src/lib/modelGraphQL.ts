@@ -56,21 +56,8 @@ import {
   REMOVE_SPOT_AMBIANCE
 } from '@/graphql/mutations/spots';
 
-/**
- * モデル入力データの型定義
- */
-interface MoneyInput {
-  amount: number | null;
-  currency: string | null;
-}
-
-interface PriceRangeInput {
-  startPrice: MoneyInput;
-  endPrice: MoneyInput;
-}
-
 export type ModelInput = {
-  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[] | PriceRangeInput;
+  [key: string]: string | number | boolean | null | string[] | number[] | PlanDetailWithSpot[] | Record<string, unknown>[];
 };
 
 // GraphQLクエリの型定義
@@ -547,29 +534,19 @@ export interface PlanDetailInputWithSpot extends Partial<PlanDetailInput> {
 export const updatePlanDetails = async (planId: string, planDetails: (PlanDetailInput | PlanDetailInputWithSpot)[]) => {
   try {
     // planDetailsの各項目からspotフィールドを削除し、spotIdを設定
-    const processedPlanDetails = planDetails.map(detail => {
-      // 新しいオブジェクトを作成
-      const processedDetail: PlanDetailInput = { ...detail };
-
+    const processedPlanDetails: PlanDetailInput[] = planDetails.map(detail => {
       // spotフィールドがある場合は削除
       const detailWithSpot = detail as PlanDetailInputWithSpot;
       if (detailWithSpot.spot) {
-        // spotオブジェクトからspotIdを抽出（まだ設定されていない場合）
-        if (detailWithSpot.spot.id && !processedDetail.spotId) {
-          processedDetail.spotId = parseInt(detailWithSpot.spot.id, 10);
+        // spotオブジェクトからspotIdを抽出し、spotフィールドを除外
+        const { spot, ...processedDetail } = detailWithSpot;
+        if (spot.id && !processedDetail.spotId) {
+          processedDetail.spotId = parseInt(spot.id, 10);
         }
-
-        // spotフィールドを除外した新しいオブジェクトを作成
-        const newDetail = { ...processedDetail };
-        // Record<string, unknown>型として扱い、spotプロパティを削除
-        const detailRecord = newDetail as Record<string, unknown>;
-        if ('spot' in detailRecord) {
-          delete detailRecord.spot;
-        }
-        return newDetail;
+        return processedDetail as PlanDetailInput;
       }
 
-      return processedDetail;
+      return detail as PlanDetailInput;
     });
 
     console.log('プラン詳細データの処理後:', processedPlanDetails);
