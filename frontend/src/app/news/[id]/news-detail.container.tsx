@@ -2,7 +2,7 @@
 
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
-import { GetNewsListQuery, StatusEnum } from '@/__generated__/types';
+import { GetNewsListQuery } from '@/__generated__/types';
 import NewsDetailAdapter from '@/components/adapters/NewsDetailAdapter';
 
 interface NewsDetailContainerProps {

@@ -55,7 +55,7 @@ export default function NewsPage() {
         </div>
       ) : (
         <div className="news-grid">
-          {news.map((item: News) => (
+          {news.map((item) => (
             <NewsCard
               key={item.id}
               id={item.id}

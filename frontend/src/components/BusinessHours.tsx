@@ -1,10 +1,17 @@
 'use client';
 import '@styles/BusinessHour.css';
 import { formatTimeFromIso } from '../lib/dateUtils';
-import { Spot } from '@/__generated__/graphql';
 
 interface BusinessHoursProps {
-  spot: Spot; // spotプロップの型をSpotに修正
+  spot: {
+    openingHours: Array<{
+      id: string;
+      dayOfWeek: string;
+      openTime: string;
+      closeTime: string;
+      isClosedDay: boolean;
+    }>;
+  };
 }
 
 export default function BusinessHours({ spot }: BusinessHoursProps) {

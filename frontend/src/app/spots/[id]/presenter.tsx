@@ -4,7 +4,6 @@ import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';
 import '@styles/RecommendedSpot.css'
 
-// Extract the spot type from GetSpotQuery (non-null version)
 type SpotFromQuery = NonNullable<GetSpotQuery['spot']>;
 
 interface SpotPresenterProps {
