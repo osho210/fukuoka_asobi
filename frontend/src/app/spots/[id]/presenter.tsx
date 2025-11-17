@@ -1,11 +1,14 @@
-import { Spot } from '@/__generated__/graphql';
+import { GetSpotQuery } from '@/__generated__/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';
 import '@styles/RecommendedSpot.css'
 
+// Extract the spot type from GetSpotQuery (non-null version)
+type SpotFromQuery = NonNullable<GetSpotQuery['spot']>;
+
 interface SpotPresenterProps {
-  spot: Spot;
+  spot: SpotFromQuery;
 }
 
 export default function SpotPresenter({ spot }: SpotPresenterProps) {

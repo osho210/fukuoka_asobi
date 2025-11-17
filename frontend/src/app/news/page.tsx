@@ -4,23 +4,13 @@ import NewsCard from '@/components/NewsCard';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
-import { News } from '@/__generated__/graphql';
+import { GetNewsListQuery } from '@/__generated__/types';
 import '@styles/NewsPage.css';
-
-type Category = {
-  id: string;
-  name: string;
-};
-
-interface NewsListData {
-  news: News[];
-  categories: Category[];
-}
 
 export default function NewsPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
-  const { loading, error, data } = useQuery<NewsListData>(GET_NEWS_LIST, {
+  const { loading, error, data } = useQuery<GetNewsListQuery>(GET_NEWS_LIST, {
     variables: {
       categoryId: selectedCategoryId,
       limit: 20
@@ -46,7 +36,7 @@ export default function NewsPage() {
           >
             すべて
           </button>
-          {data?.categories?.map((category: Category) => (
+          {data?.categories?.map((category) => (
             <button
               key={category.id}
               className={`news-category-button ${selectedCategoryId === category.id ? 'news-category-button-active' : ''}`}
