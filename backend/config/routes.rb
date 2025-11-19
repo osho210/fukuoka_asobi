@@ -11,14 +11,8 @@ Rails.application.routes.draw do
 
   # API用のルーティング
   namespace :api do
-    # パスワードリセットは廃止
-    # post 'password/forgot', to: 'passwords#forgot'
-    # post 'password/reset', to: 'passwords#reset'
-
     namespace :v1 do
-      # 認証関連 - パスワード認証は廃止、セッション管理のみ残す
-      # post 'login', to: 'sessions#create'
-      # post 'signup', to: 'auth#signup'
+      # 認証関連 - Google OAuth のみ
       delete 'logout', to: 'sessions#destroy'
 
       # ユーザー情報

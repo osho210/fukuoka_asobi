@@ -1,7 +1,7 @@
 # Google OAuth-Only Authentication Implementation - Summary
 
 ## Overview
-This implementation converts the authentication system from password-based to Google OAuth-only authentication.
+This implementation converts the authentication system from password-based to Google OAuth-only authentication. All password-based authentication code has been **completely removed** from the codebase.
 
 ## What Was Changed
 
@@ -28,28 +28,30 @@ This implementation converts the authentication system from password-based to Go
   - Updated to create users without password
   - Primary authentication method
 
-- **`UserLogin` (app/graphql/mutations/user_login.rb)**
-  - Returns error message: "パスワード認証は廃止されました"
-
-- **`UserRegister` (app/graphql/mutations/user_register.rb)**
-  - Returns error message: "パスワードによる新規登録は廃止されました"
+- **Deleted mutations:**
+  - `UserLogin` - Completely removed
+  - `UserRegister` - Completely removed
 
 #### API Controllers
+- **Deleted controllers:**
+  - `Api::PasswordsController` - Completely removed
+  - `Api::V1::AuthController` - Completely removed
+
 - **`Api::V1::SessionsController`**
-  - `create` action returns HTTP 410 (Gone)
+  - Removed `create` action (login)
+  - Kept `destroy` action (logout) for session cleanup
 
-- **`Api::V1::AuthController`**
-  - `login` action returns HTTP 410 (Gone)
-  - `signup` action returns HTTP 410 (Gone)
-  - `logout` action remains functional
-
-- **`Api::PasswordsController`**
-  - `forgot` action returns HTTP 410 (Gone)
-  - `reset` action returns HTTP 410 (Gone)
+#### GraphQL Schema (`app/graphql/types/mutation_type.rb`)
+- Removed field declarations for `user_login` and `user_register`
+- Only OAuth mutations remain: `user_google_auth`, `user_apple_auth`
 
 #### Routes (`config/routes.rb`)
-- Commented out password-based authentication routes
+- Removed all password-based authentication routes
 - Kept logout route active
+
+#### Mailers
+- **Deleted:**
+  - `password_mailer.rb` - Completely removed
 
 #### Dependencies (`Gemfile`)
 - Added: `gem 'google-id-token'` for Google OAuth token validation
@@ -57,19 +59,27 @@ This implementation converts the authentication system from password-based to Go
 ### Frontend (Next.js)
 
 #### Login Component (`src/components/auth/Login.tsx`)
+- **ログイン・新規登録の統一画面**
 - Removed email/password input fields
 - Implemented Google Sign-In button using Google OAuth SDK
 - Added GraphQL mutation call to `userGoogleAuth`
-- Added informational message about password authentication deprecation
+- Improved initialization logic:
+  - Proper script loading with state management
+  - Better error handling
+  - Loading indicators
+  - Configuration validation (checks for NEXT_PUBLIC_GOOGLE_CLIENT_ID)
+  - Japanese locale support
+- Supports both login and new user registration via Google OAuth
 
-#### Register Component (`src/components/auth/RegisterFlow.tsx`)
-- Replaced 3-step registration form with deprecation notice
-- Auto-redirects to login page after 3 seconds
-
-#### Password Reset Components
-- **`ForgotPassword.tsx`**: Shows deprecation message
-- **`ResetPassword.tsx`**: Shows deprecation message
-- Both auto-redirect to login page
+#### Deleted Components and Pages
+- **Completely removed:**
+  - `RegisterFlow.tsx`, `RegisterStep1.tsx`, `RegisterStep2.tsx`, `RegisterStep3.tsx` - Password-based registration
+  - `ForgotPassword.tsx` - Password reset request
+  - `ResetPassword.tsx` - Password reset execution
+  - `/register` page - Password registration page
+  - `/forgot-password` page - Password reset request page
+  - `/reset-password` page - Password reset page
+  - `passwordApi.ts` - Password reset API client
 
 #### Environment Configuration
 - Created `.env.example` with required variables:
@@ -201,27 +211,41 @@ This implementation converts the authentication system from password-based to Go
 
 ## Files Changed
 
-### Backend
-- `backend/Gemfile`
-- `backend/app/models/user.rb`
-- `backend/app/graphql/mutations/user_google_auth.rb`
-- `backend/app/graphql/mutations/user_login.rb`
-- `backend/app/graphql/mutations/user_register.rb`
-- `backend/app/controllers/api/passwords_controller.rb`
-- `backend/app/controllers/api/v1/auth_controller.rb`
-- `backend/app/controllers/api/v1/sessions_controller.rb`
-- `backend/config/routes.rb`
+### Backend (Deleted)
+- `backend/app/graphql/mutations/user_login.rb` - Deleted
+- `backend/app/graphql/mutations/user_register.rb` - Deleted
+- `backend/app/controllers/api/passwords_controller.rb` - Deleted
+- `backend/app/controllers/api/v1/auth_controller.rb` - Deleted
+- `backend/app/mailers/password_mailer.rb` - Deleted
 
-### Frontend
-- `frontend/.env.example` (new)
-- `frontend/src/components/auth/Login.tsx`
-- `frontend/src/components/auth/RegisterFlow.tsx`
-- `frontend/src/components/auth/ForgotPassword.tsx`
-- `frontend/src/components/auth/ResetPassword.tsx`
+### Backend (Modified)
+- `backend/Gemfile` - Added google-id-token
+- `backend/app/models/user.rb` - Removed password Devise modules
+- `backend/app/graphql/mutations/user_google_auth.rb` - Updated to create users without password
+- `backend/app/graphql/types/mutation_type.rb` - Removed user_login and user_register fields
+- `backend/app/controllers/api/v1/sessions_controller.rb` - Kept only logout action
+- `backend/config/routes.rb` - Removed password-related routes
+
+### Frontend (Deleted)
+- `frontend/src/components/auth/RegisterFlow.tsx` - Deleted
+- `frontend/src/components/auth/RegisterStep1.tsx` - Deleted
+- `frontend/src/components/auth/RegisterStep2.tsx` - Deleted
+- `frontend/src/components/auth/RegisterStep3.tsx` - Deleted
+- `frontend/src/components/auth/ForgotPassword.tsx` - Deleted
+- `frontend/src/components/auth/ResetPassword.tsx` - Deleted
+- `frontend/src/lib/api/passwordApi.ts` - Deleted
+- `frontend/src/app/register/` - Deleted entire directory
+- `frontend/src/app/forgot-password/` - Deleted entire directory
+- `frontend/src/app/reset-password/` - Deleted entire directory
+
+### Frontend (Modified)
+- `frontend/.env.example` - Created with Google OAuth config
+- `frontend/src/components/auth/Login.tsx` - Updated to unified login/register page with Google OAuth
 
 ### Documentation
-- `README.md`
-- `docs/google_oauth_setup.md` (new)
+- `README.md` - Updated authentication section
+- `docs/google_oauth_setup.md` - Created comprehensive setup guide
+- `docs/google_oauth_implementation_summary.md` - This document
 
 ## Security Analysis Results
 
