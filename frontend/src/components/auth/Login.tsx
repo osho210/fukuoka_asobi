@@ -1,42 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import '@styles/Auth.css';
-
-// Google OAuth script loading utility
-const loadGoogleScript = () => {
-  return new Promise<void>((resolve, reject) => {
-    if (document.getElementById('google-oauth-script')) {
-      resolve();
-      return;
-    }
-    
-    const script = document.createElement('script');
-    script.id = 'google-oauth-script';
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Google OAuth script'));
-    document.head.appendChild(script);
-  });
-};
 
 // ログイン画面コンポーネント
 const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
 
-  useEffect(() => {
-    // Load Google OAuth script
-    loadGoogleScript().catch((err) => {
-      console.error('Failed to load Google OAuth:', err);
-      setError('Google認証の読み込みに失敗しました');
-    });
-  }, []);
-
-  // Googleログイン
-  const handleGoogleLogin = async (credentialResponse: any) => {
+  // Googleログイン処理
+  const handleGoogleLogin = useCallback(async (credentialResponse: any) => {
     setError('');
     setIsLoading(true);
 
@@ -80,7 +54,7 @@ const Login = () => {
         // Redirect to home
         window.location.href = '/';
       } else if (result.data?.userGoogleAuth?.isNewUser && result.data?.userGoogleAuth?.errors?.includes('新規ユーザーの場合は利用規約への同意が必要です')) {
-        // Need terms agreement - could show a modal here
+        // Need terms agreement
         setError('利用規約への同意が必要です');
       } else {
         const errors = result.data?.userGoogleAuth?.errors || ['認証に失敗しました'];
@@ -92,36 +66,82 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    // Initialize Google Sign-In button
-    if (typeof window !== 'undefined' && (window as any).google) {
+    // Load Google OAuth script and initialize
+    const loadGoogleScript = () => {
+      // Check if already loaded
+      if ((window as any).google?.accounts?.id) {
+        setIsGoogleLoaded(true);
+        return;
+      }
+
+      // Check if script is already in DOM
+      if (document.getElementById('google-oauth-script')) {
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.id = 'google-oauth-script';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        setIsGoogleLoaded(true);
+      };
+      
+      script.onerror = () => {
+        console.error('Failed to load Google OAuth script');
+        setError('Google認証の読み込みに失敗しました');
+      };
+
+      document.head.appendChild(script);
+    };
+
+    loadGoogleScript();
+  }, []);
+
+  useEffect(() => {
+    // Initialize Google Sign-In button after script loads
+    if (!isGoogleLoaded || !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+      return;
+    }
+
+    try {
       (window as any).google.accounts.id.initialize({
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         callback: handleGoogleLogin,
       });
 
-      (window as any).google.accounts.id.renderButton(
-        document.getElementById('google-signin-button'),
-        {
-          theme: 'outline',
-          size: 'large',
-          text: 'signin_with',
-          width: '100%',
-        }
-      );
+      const buttonElement = document.getElementById('google-signin-button');
+      if (buttonElement) {
+        (window as any).google.accounts.id.renderButton(
+          buttonElement,
+          {
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            width: '100%',
+            locale: 'ja',
+          }
+        );
+      }
+    } catch (error) {
+      console.error('Failed to initialize Google Sign-In:', error);
+      setError('Google認証の初期化に失敗しました');
     }
-  }, []);
+  }, [isGoogleLoaded, handleGoogleLogin]);
 
   return (
     <div className="auth-container">
-      <h2 className="auth-title">ログイン</h2>
+      <h2 className="auth-title">ログイン・新規登録</h2>
 
       <div className="auth-info" style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: '#f0f9ff', borderRadius: '8px', border: '1px solid #bae6fd' }}>
         <p style={{ margin: 0, fontSize: '0.9rem', color: '#0c4a6e' }}>
-          Googleアカウントでログインしてください。<br />
-          パスワード認証は廃止されました。
+          Googleアカウントでログイン・新規登録ができます。<br />
+          初めての方も既存ユーザーの方も、同じボタンからログインしてください。
         </p>
       </div>
 
@@ -134,8 +154,21 @@ const Login = () => {
       )}
 
       <div className="social-buttons">
+        {!isGoogleLoaded && !error && (
+          <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
+            <p>Google認証を読み込み中...</p>
+          </div>
+        )}
         <div id="google-signin-button" style={{ width: '100%' }}></div>
       </div>
+
+      {!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+        <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#fef2f2', borderRadius: '8px', border: '1px solid #fecaca' }}>
+          <p style={{ margin: 0, fontSize: '0.9rem', color: '#991b1b' }}>
+            Google Client IDが設定されていません。環境変数を確認してください。
+          </p>
+        </div>
+      )}
 
       <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
         <p>
