@@ -3,26 +3,63 @@
 module Authentication
   extend ActiveSupport::Concern
 
-  # ユーザーIDをCookieに設定
-  def set_user_cookie(user)
-    cookies.encrypted[:fukuoka_asobi_user_id] = {
-      value: user.id,
+  # JWTトークンをCookieに設定
+  def set_auth_cookie(token)
+    cookie_options = {
+      value: token,
+      expires: 6.months.from_now,
       httponly: true,
       secure: Rails.env.production?,
       same_site: :lax,
-      path: '/',
-      expires: 7.days.from_now
+      path: '/'
     }
+    cookies.encrypted[:fukuoka_asobi_auth_token] = cookie_options
   end
 
-  # ユーザーCookieを削除
+  # 認証Cookieを削除
   def clear_user_cookie
-    cookies.delete(:fukuoka_asobi_user_id, path: '/')
+    cookies.delete(:fukuoka_asobi_auth_token, path: '/')
   end
 
-  # Cookieからユーザーを取得
+  # Cookieからユーザーを取得（JWTトークンをデコード）
   def current_user_from_cookie
-    user_id = cookies.encrypted[:fukuoka_asobi_user_id]
-    User.find_by(id: user_id) if user_id
+    token = cookies.encrypted[:fukuoka_asobi_auth_token]
+    return nil unless token
+
+    begin
+      # JWTトークンをデコード
+      decoded_token = JWT.decode(
+        token,
+        Rails.application.credentials.dig(:devise, :jwt_secret_key),
+        true,
+        { algorithm: 'HS256' }
+      )
+
+      payload = decoded_token.first
+      user_id = payload['sub']
+      jti = payload['jti']
+
+      # ユーザーを取得し、JTIが一致するか確認
+      user = User.find_by(id: user_id)
+      return nil unless user
+      return nil unless user.jti == jti
+
+      user
+    rescue JWT::DecodeError, JWT::ExpiredSignature => e
+      Rails.logger.warn "JWT decode error: #{e.message}"
+      nil
+    end
+  end
+
+  # トークンを生成
+  def generate_auth_token(user)
+    payload = {
+      sub: user.id,
+      jti: user.jti,
+      scp: 'user',
+      exp: 6.months.from_now.to_i
+    }
+
+    JWT.encode(payload, Rails.application.credentials.dig(:devise, :jwt_secret_key))
   end
 end

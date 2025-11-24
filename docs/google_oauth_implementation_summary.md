@@ -23,10 +23,33 @@ This implementation converts the authentication system from password-based to Go
   - `password_required?` - Returns false to allow OAuth-only users
   - `email_required?` - Returns true to ensure email is present
 
+#### Authentication Concern (`app/controllers/concerns/authentication.rb`)
+- **JWT-based cookie authentication:**
+  - `set_auth_cookie(token)` - Sets encrypted JWT token in `fukuoka_asobi_auth_token` cookie (6 months expiry)
+  - `clear_user_cookie` - Clears the authentication cookie on logout
+  - `current_user_from_cookie` - Decodes JWT from cookie, validates token and JTI, returns current user
+  - `generate_auth_token(user)` - Generates JWT token with user ID, JTI, scope, and expiration
+
+- **Security features:**
+  - Encrypted cookies using Rails encrypted cookie jar
+  - HttpOnly flag prevents JavaScript access
+  - Secure flag enabled in production (HTTPS only)
+  - SameSite: Lax for CSRF protection
+  - JTI (JWT ID) validation to prevent token reuse
+  - 6-month token expiration
+
 #### GraphQL Mutations
 - **`UserGoogleAuth` (app/graphql/mutations/user_google_auth.rb)**
   - Updated to create users without password
   - Primary authentication method
+  - Generates JWT token and sets it in encrypted cookie
+  - Returns token in response for backward compatibility
+  - Cookie name: `fukuoka_asobi_auth_token`
+  - Token lifetime: 6 months
+
+- **`UserLogout` (app/graphql/mutations/user_logout.rb)**
+  - Clears authentication cookie
+  - Uses `clear_user_cookie` from Authentication concern
 
 - **Deleted mutations:**
   - `UserLogin` - Completely removed
@@ -127,9 +150,51 @@ This implementation converts the authentication system from password-based to Go
 3. Authenticates with Google account using same email
 4. System finds existing user by email
 5. User is logged in to existing account
-6. No data loss or account duplication
+6. JWT token is generated and stored in encrypted cookie
+7. No data loss or account duplication
 
 **Note:** If user uses different email for Google account, a new account will be created.
+
+## Authentication Flow
+
+### Login/Registration Process
+1. User clicks Google Sign-In button on frontend
+2. Google OAuth returns ID token
+3. Frontend sends ID token to `userGoogleAuth` GraphQL mutation
+4. Backend validates ID token with Google
+5. Backend finds or creates user by email
+6. Backend generates JWT token with user ID, JTI, and expiration
+7. Backend sets encrypted cookie `fukuoka_asobi_auth_token` with JWT
+8. Backend returns user data and token to frontend
+9. Frontend stores token in localStorage (for backward compatibility)
+10. Cookie is automatically sent with all subsequent requests
+
+### Authentication Verification
+1. Client makes request to backend (GraphQL or REST API)
+2. Backend reads encrypted `fukuoka_asobi_auth_token` cookie
+3. Backend decodes JWT token
+4. Backend validates:
+   - Token signature using secret key
+   - Token expiration (6 months)
+   - JTI matches user's current JTI
+5. If valid, `current_user` is set for the request
+6. If invalid or expired, `current_user` is nil
+
+### Logout Process
+1. User triggers logout (via `userLogout` mutation or `/api/v1/logout`)
+2. Backend clears `fukuoka_asobi_auth_token` cookie
+3. Frontend clears localStorage token
+4. User is redirected to login page
+
+### Cookie Details
+- **Name:** `fukuoka_asobi_auth_token`
+- **Type:** Encrypted (Rails encrypted cookie jar)
+- **Content:** JWT token
+- **Expiration:** 6 months
+- **HttpOnly:** true (prevents JavaScript access)
+- **Secure:** true in production (HTTPS only)
+- **SameSite:** Lax (CSRF protection)
+- **Path:** `/` (available for all routes)
 
 ## Setup Requirements
 
