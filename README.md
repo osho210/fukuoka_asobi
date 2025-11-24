@@ -121,6 +121,11 @@ npm run lint:admin
 # 特定のワークスペースでコマンド実行
 npm run <script> -w frontend
 npm run <script> -w admin
+
+# Rails gemインストール時の注意
+キャッシュが影響して依存関係の解消に失敗する時もある。その際は以下コマンドを実行
+docker volume ls | grep bundle
+docker volume rm fukuoka-asobi_bundle_cache
 ```
 
 ### GraphQLスキーマ駆動開発

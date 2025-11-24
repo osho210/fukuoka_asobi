@@ -30,10 +30,10 @@ module Mutations
         if user
           # 既存ユーザーの場合はログイン処理
           token = generate_token(user)
+          set_auth_cookie(token)
 
           {
             user: user,
-            token: token,
             is_new_user: false,
             errors: []
           }
@@ -91,11 +91,22 @@ module Mutations
         sub: user.id,
         jti: user.jti,
         scp: 'user',
-        exp: 1.day.from_now.to_i
+        exp: 6.months.from_now.to_i
       }
 
       JWT.encode(payload, Rails.application.credentials.dig(:devise, :jwt_secret_key))
+    end
 
+    def set_auth_cookie(token)
+      cookie_options = {
+        value: token,
+        expires: 6.months.from_now,            # 半年間で設定
+        http_only: true,                       # JS からアクセス不可
+        secure: Rails.env.production?,         # 本番のみ Secure（HTTPS 必須）
+        same_site: :lax                        # CSRF 対策。必要に応じて :strict や :none に
+      }
+
+      context[:cookies].encrypted[:fukuoka_asobi_auth_token] = cookie_options
     end
   end
 end
