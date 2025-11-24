@@ -63,6 +63,10 @@ module Authentication
       exp: 6.months.from_now.to_i
     }
 
-    JWT.encode(payload, Rails.application.credentials.dig(:devise, :jwt_secret_key))
+    secret_key = Rails.application.credentials.dig(:devise, :jwt_secret_key)
+    unless secret_key
+      raise "JWT secret key is not configured. Please set :devise, :jwt_secret_key in your credentials."
+    end
+    JWT.encode(payload, secret_key)
   end
 end
