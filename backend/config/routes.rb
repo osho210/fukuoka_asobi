@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   # API用のルーティング
   namespace :api do
     namespace :v1 do
-      # 認証関連 - Google OAuth のみ
+      # 認証関連 - ログアウトのみ
       delete 'logout', to: 'sessions#destroy'
 
       # ユーザー情報
