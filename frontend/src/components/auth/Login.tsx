@@ -165,7 +165,7 @@ const Login = () => {
       <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
         <p>
           ログインすることで、<a href="/privacy-policy" style={{ color: '#3b82f6', textDecoration: 'underline' }}>プライバシーポリシー</a>と
-          <a href="/privacy-policy" style={{ color: '#3b82f6', textDecoration: 'underline' }}>利用規約</a>に同意したものとみなします。
+          <a href="/terms" style={{ color: '#3b82f6', textDecoration: 'underline' }}>利用規約</a>に同意したものとみなします。
         </p>
       </div>
     </div>
