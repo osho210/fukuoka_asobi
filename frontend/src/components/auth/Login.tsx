@@ -108,7 +108,11 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (!isGoogleLoaded || !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+    if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+      setError('Google認証の設定が見つかりません。管理者に連絡してください。');
+      return;
+    }
+    if (!isGoogleLoaded) {
       return;
     }
 
