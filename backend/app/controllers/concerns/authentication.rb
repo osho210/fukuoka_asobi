@@ -24,6 +24,8 @@ module Authentication
   # Cookieからユーザーを取得（JWTトークンをデコード）
   def current_user_from_cookie
     token = cookies.encrypted[:fukuoka_asobi_auth_token]
+
+    # トークンが存在しない場合はnilを返す
     return nil unless token
 
     begin
@@ -35,6 +37,7 @@ module Authentication
         { algorithm: 'HS256' }
       )
 
+      # ペイロードからユーザーIDとJTIを取得
       payload = decoded_token.first
       user_id = payload['sub']
       jti = payload['jti']
@@ -46,7 +49,7 @@ module Authentication
 
       user
     rescue JWT::DecodeError, JWT::ExpiredSignature => e
-      Rails.logger.warn "JWT decode error: #{e.message}"
+      Rails.logger.warn "トークン認証でエラーが発生しました error: #{e.message}"
       nil
     end
   end

@@ -65,7 +65,7 @@ const Login = () => {
 
       // ログインに成功した場合、マイページ画面に遷移する
       if (payload?.user) {
-        window.location.href = '/my-page';
+        window.location.href = '/mypage';
         return;
       }
 
