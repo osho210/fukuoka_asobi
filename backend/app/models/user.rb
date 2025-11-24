@@ -17,7 +17,6 @@ class User < ApplicationRecord
   validates :username, presence: true
   validates :email, presence: true, uniqueness: true
   validates :gender, inclusion: { in: %w(male female prefer_not_to_say) }, allow_nil: true
-  validates :terms_agreed, acceptance: { accept: true, message: 'を承諾してください' }, on: :create
 
   # ロールの定義
   enum :role, {
