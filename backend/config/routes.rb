@@ -11,14 +11,8 @@ Rails.application.routes.draw do
 
   # API用のルーティング
   namespace :api do
-    # パスワードリセット
-    post 'password/forgot', to: 'passwords#forgot'
-    post 'password/reset', to: 'passwords#reset'
-
     namespace :v1 do
-      # 認証関連
-      post 'login', to: 'sessions#create'
-      post 'signup', to: 'auth#signup'
+      # 認証関連 - ログアウトのみ
       delete 'logout', to: 'sessions#destroy'
 
       # ユーザー情報

@@ -28,10 +28,8 @@
 
 - **カテゴリー一覧表示**: 様々なカテゴリーを閲覧できます
 - **ユーザー認証システム**:
-  - メールアドレスとパスワードによる登録・ログイン
-  - Google認証によるログイン
-  - Apple認証によるログイン
-  - 3ステップの会員登録フロー
+  - ⚠️ **重要: パスワード認証は廃止され、Google認証（OAuth 2.0）に移行しました。今後はGoogleアカウントでのみログイン可能です。**
+  - **Google認証によるログイン（OAuth 2.0）** - メイン認証方式
   - JWTを使用したセッション管理
 
 ## 🏗 システム構成
@@ -123,6 +121,11 @@ npm run lint:admin
 # 特定のワークスペースでコマンド実行
 npm run <script> -w frontend
 npm run <script> -w admin
+
+# Rails gemインストール時の注意
+キャッシュが影響して依存関係の解消に失敗する時もある。その際は以下コマンドを実行
+docker volume ls | grep bundle
+docker volume rm fukuoka-asobi_bundle_cache
 ```
 
 ### GraphQLスキーマ駆動開発

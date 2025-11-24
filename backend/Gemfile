@@ -87,6 +87,9 @@ gem "graphiql-rails"
 # HTTP client for Google Places API
 gem 'httparty'
 
+# Google OAuth authentication
+gem 'google-id-token'
+
 group :development do
   gem "graphiql-rails"
 end

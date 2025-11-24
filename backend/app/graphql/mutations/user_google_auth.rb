@@ -29,7 +29,8 @@ module Mutations
 
         if user
           # 既存ユーザーの場合はログイン処理
-          token = generate_token(user)
+          token = context[:controller].send(:generate_auth_token, user)
+          context[:controller].send(:set_auth_cookie, token)
 
           {
             user: user,
@@ -48,20 +49,17 @@ module Mutations
             }
           end
 
-          # ランダムパスワードを生成
-          password = SecureRandom.hex(10)
-
-          # ユーザー作成
+          # ユーザー作成（パスワードなしでGoogle OAuth専用）
           user = User.new(
             email: email,
             username: name,
-            password: password,
             gender: 'prefer_not_to_say',
             terms_agreed: terms_agreed
           )
 
           if user.save
-            token = generate_token(user)
+            token = context[:controller].send(:generate_auth_token, user)
+            context[:controller].send(:set_auth_cookie, token)
 
             {
               user: user,
@@ -86,20 +84,6 @@ module Mutations
           errors: ["認証に失敗しました: #{e.message}"]
         }
       end
-    end
-
-    private
-
-    def generate_token(user)
-      payload = {
-        sub: user.id,
-        jti: user.jti,
-        scp: 'user',
-        exp: 1.day.from_now.to_i
-      }
-
-      JWT.encode(payload, Rails.application.credentials.dig(:devise, :jwt_secret_key))
-
     end
   end
 end
