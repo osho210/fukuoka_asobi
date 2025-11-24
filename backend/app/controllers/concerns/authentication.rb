@@ -48,7 +48,7 @@ module Authentication
       return nil unless user.jti == jti
 
       user
-    rescue JWT::DecodeError, JWT::ExpiredSignature => e
+    rescue JWT::DecodeError => e
       Rails.logger.warn "トークン認証でエラーが発生しました error: #{e.message}"
       nil
     end
