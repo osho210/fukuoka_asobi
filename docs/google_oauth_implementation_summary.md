@@ -202,7 +202,6 @@ This implementation converts the authentication system from password-based to Go
 
 1. **Google Cloud Console:**
    - Create new project or use existing
-   - Enable Google+ API
    - Create OAuth 2.0 credentials
    - Configure authorized JavaScript origins
 
