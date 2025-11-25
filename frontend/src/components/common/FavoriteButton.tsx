@@ -18,7 +18,6 @@ interface FavoriteButtonProps {
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   playPlanId,
   isFavorite = false,
-  size = 'md',
   showText = true,
   className = '',
   onToggle
@@ -97,34 +96,29 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
     });
   };
 
-  // サイズに応じたクラスを取得
-  const getSizeClass = () => {
-    switch (size) {
-      case 'sm':
-        return 'text-lg';
-      case 'lg':
-        return 'text-2xl';
-      case 'md':
-      default:
-        return 'text-xl';
-    }
-  };
-
   const isLoading = addLoading || removeLoading;
 
   return (
     <button
       className={`favorite-button flex items-center ${className}`}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        padding: 0,
+        cursor: isLoading ? 'not-allowed' : 'pointer'
+      }}
       onClick={toggleFavorite}
       disabled={isLoading}
       aria-pressed={favorite}
       aria-label={favorite ? 'お気に入りから削除' : 'お気に入りに追加'}
     >
-      <span className={`heart-icon ${getSizeClass()} ${favorite ? 'text-red-500' : 'text-gray-400'}`}>
-        {favorite ? '♥' : '♡'}
+      <span
+        className={`heart-icon ${favorite ? 'heart-active' : ''}`}
+      >
+        {favorite ? '❤︎' : '♡'}
       </span>
       {showText && (
-        <span className="ml-1">
+        <span className="ml-1 text-sm text-gray-600">
           {favorite ? 'お気に入り済み' : 'お気に入りに追加'}
         </span>
       )}
