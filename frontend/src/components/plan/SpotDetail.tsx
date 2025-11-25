@@ -231,7 +231,7 @@ function ShopDetailTab({ detail }: { detail: PlanDetail }) {
           <Image src="/magazine-icon.png" alt="カテゴリアイコン" width={24} height={24} />
           <ul className="spot-item-lists">
             {detail.spot.categories.map((category) => (
-              <li className='spot-item-list' key={category.id}>{category.name}</li>
+              <li className='spot-item-list' key={category.name}>{category.name}</li>
             ))}
           </ul>
         </div>
