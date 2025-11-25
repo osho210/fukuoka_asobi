@@ -1,6 +1,5 @@
 /* プラン詳細ページのスタイル */
 .play-plan-detail {
-    padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -197,13 +196,22 @@
 }
 
 .favorite-button {
-    background-color: #ff6b6b;
-    color: white;
+    background-color: transparent !important;
+    color: inherit;
     border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #cb6b52;
+}
+
+.favorite-button .heart-icon {
+    font-size: 20px;
+    line-height: 1;
+    color: '#56b6f7';
 }
 
 .favorite-button:hover {
-    background-color: #ff5252;
+    background-color: transparent !important;
 }
 
 .share-button {
@@ -289,6 +297,10 @@
 
 /* スマホ対応 */
 @media (max-width: 768px) {
+    .plan-image {
+        height: 150px
+    }
+
     .action-buttons {
         flex-direction: column;
         align-items: stretch;

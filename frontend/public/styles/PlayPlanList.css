@@ -129,7 +129,6 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: #777;
 }
 
 .plan-rating {
@@ -144,6 +143,34 @@
 .plan-favorites {
   margin-left: auto;
   color: #cb6b52;
+}
+
+.plan-favorites-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.plan-favorites-button {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.plan-favorites-button .heart-icon {
+  font-size: 20px !important;
+  line-height: 1 !important;
+  display: inline-block;
+}
+
+.plan-favorites-count {
+  color: #cb6b52;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .play-plan-user-info {
