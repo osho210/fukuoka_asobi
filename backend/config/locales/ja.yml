@@ -1,0 +1,25 @@
+ja:
+  errors:
+    plan_generation:
+      invalid_parameters: "検索条件の形式が正しくありません"
+      insufficient_spots: "条件に合うスポットが不足しています。条件を緩和して再検索してください。"
+      internal_error: "プラン生成中にエラーが発生しました。時間をおいて再度お試しください。"
+      premium_required: "この検索条件はプレミアムプランでのみ利用可能です"
+    validation:
+      date:
+        required: "日付を選択してください"
+        past_date: "過去の日付は指定できません"
+      districts:
+        required: "エリアを選択してください"
+        invalid: "無効なエリアが指定されています"
+      member_info:
+        required: "利用メンバーを選択してください"
+      budget:
+        required: "予算を入力してください"
+        invalid_range: "予算の範囲が正しくありません"
+        min_greater_than_max: "最小予算が最大予算を超えています"
+      time:
+        invalid_format: "時刻の形式が正しくありません"
+        end_before_start: "終了時刻は開始時刻より後に設定してください"
+      custom_options:
+        spot_count_invalid: "訪問スポット数は1以上10以下で指定してください"
