@@ -83,7 +83,7 @@ class SearchParamsValidator
 
     # 地区IDまたはslugが有効かチェック
     invalid_districts = districts.reject do |district_identifier|
-      if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
+      if StringUtils.numeric_string?(district_identifier)
         District.exists?(id: district_identifier)
       else
         District.exists?(slug: district_identifier)

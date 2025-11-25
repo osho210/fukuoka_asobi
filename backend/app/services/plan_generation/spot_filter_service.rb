@@ -48,7 +48,7 @@ module PlanGeneration
       # 数値IDとslugの両方に対応
       district_ids = districts.map do |district_identifier|
         # 数値IDの場合はそのまま使用
-        if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
+        if StringUtils.numeric_string?(district_identifier)
           district_identifier
         else
           # 文字列（slug）の場合はIDに変換

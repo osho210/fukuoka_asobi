@@ -66,7 +66,9 @@ module Mutations
       # detailsから具体的なエラーメッセージを抽出
       if error.details.any?
         error_messages = error.details.flat_map do |field, messages|
-          messages.map { |msg| "#{field}: #{msg}" }
+          # フィールド名を日本語に変換（必要に応じて）
+          field_label = field.to_s
+          messages.map { |msg| "#{field_label}: #{msg}" }
         end
         { plan: nil, errors: error_messages }
       else

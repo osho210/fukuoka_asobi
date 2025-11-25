@@ -38,9 +38,8 @@ const SearchContainer: React.FC = () => {
     });
 
     if (!isValid) {
-      // バリデーションエラーがある場合は、エラーメッセージを表示
-      // errorsオブジェクトから最初のエラーメッセージを取得
-      const firstError = Object.values(errors)[0];
+      // バリデーションエラーがある場合は処理を中断
+      // errorsはSearchFormに自動的に渡される
       return;
     }
 
