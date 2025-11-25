@@ -3,6 +3,7 @@
 import React from 'react';
 import '@/styles/AreaMap.css';
 import Image from 'next/image';
+import { get } from 'http';
 
 interface AreaMapProps {
   selectedAreas: string[];
@@ -66,6 +67,7 @@ const AreaMap: React.FC<AreaMapProps> = ({
     return area ? area.name : '';
   };
 
+
   return (
     <div className="mapContainer">
       {title && <h3 className="mapTitle">{title}</h3>}
@@ -77,7 +79,7 @@ const AreaMap: React.FC<AreaMapProps> = ({
           <button
             key={area.id}
             type="button"
-            value={area.id}
+            value={area.name}
             onClick={() => handleAreaClick(area.id)}
             className={`areaButton ${selectedAreas.includes(area.id) ? "selected" : ''
               }`}
@@ -87,24 +89,6 @@ const AreaMap: React.FC<AreaMapProps> = ({
           </button>
         ))}
       </div>
-
-
-      {selectedAreas.length > 0 && (
-        <div className="districtsList">
-          {selectedAreas.map((areaId) => (
-            <div key={areaId} className="areaTag">
-              {getAreaName(areaId)}
-              <button
-                type="button"
-                className="removeButton"
-                onClick={() => handleRemoveArea(areaId)}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

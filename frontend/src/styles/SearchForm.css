@@ -1,19 +1,26 @@
+.container {
+    padding: 0 10px;
+}
+
+/* コンテナ */
 .searchFormContainer {
     max-width: 800px;
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 0;
     background: #fff;
     color: #000;
+    margin-bottom: 50px;
 }
 
 .formSection {
-    margin-bottom: 2rem;
+    margin: 1rem 0;
 }
 
 .sectionTitle {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1rem;
+    color: #111827;
 }
 
 .searchForm {
@@ -28,57 +35,77 @@
     margin-top: -5px;
 }
 
+/* フォームグループ - 統一スタイル */
 .formGroup {
     position: relative;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin: 20px 0px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    margin: 5px 0;
+    background-color: #ffffff;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.budgetGroup {
-    position: relative;
-    padding: 10px;
+.formGroup:hover {
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    transform: translateY(-1px);
 }
 
 .categoryGroup {
     position: relative;
-    padding: 40px 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin: 40px 0px;
+    padding: 40px 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    margin: 24px 0;
+    background-color: #ffffff;
+    transition: box-shadow 0.2s ease;
+}
+
+.categoryGroup:hover {
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
 }
 
 .formLabel {
     display: block;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 0.5rem;
+    color: #374151;
+    font-size: 0.95rem;
 }
 
 .categoryFormLabel {
-    display: block;
-    background: #CB6B52;
+    background: linear-gradient(135deg, #CB6B52 0%, #b55a43 100%);
     color: #fff;
     display: inline-block;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 700;
     position: absolute;
-    top: -15px;
-    left: 0px;
+    top: -12px;
+    left: 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.3);
+    letter-spacing: 0.5px;
 }
 
 .formControl {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.25rem;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
     font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.formControl:hover {
+    border-color: #d1d5db;
 }
 
 .formControl:focus {
     outline: none;
     border-color: #CB6B52;
-    box-shadow: 0 0 0 1px #CB6B52;
+    box-shadow: 0 0 0 3px rgba(203, 107, 82, 0.1);
+    background-color: #fff;
 }
 
 .formRow {
@@ -103,26 +130,78 @@
 
 .areaGroup,
 .calendarGroup,
-.genderGroup {
+.memberGroup {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border-bottom: 1px solid #e5e7eb;
-    border-radius: 0.25rem;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.areaGroup::before,
+.calendarGroup::before,
+.memberGroup::before {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #9ca3af;
+    border-bottom: 2px solid #9ca3af;
+    transform: translateY(-50%) rotate(-45deg);
+    transition: all 0.25s ease;
 }
 
 .areaGroup:hover,
-.calendarGroup:hover {
-    border-color: #CB6B52;
-    box-shadow: 0 0 0 1px #CB6B52;
+.calendarGroup:hover,
+.memberGroup:hover {
+    border-color: #cb6b52;
+    box-shadow: 0 4px 12px rgba(203, 107, 82, 0.15);
+    background-color: #fff7f4;
+    transform: translateY(-2px);
+}
+
+.areaGroup:hover::before,
+.calendarGroup:hover::before,
+.memberGroup:hover::before {
+    border-color: #cb6b52;
+}
+
+.areaGroup:active,
+.calendarGroup:active,
+.memberGroup:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(203, 107, 82, 0.1);
+}
+
+/* 選択済み状態 */
+.areaGroup.selected,
+.calendarGroup.selected,
+.memberGroup.selected {
+    border-color: #cb6b52;
+    background-color: #fef2ee;
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.2);
 }
 
 .selectionText {
     flex: 1;
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
+    color: #111827;
+    font-weight: 500;
+    padding-right: 24px;
+}
+
+.selectionText.placeholder {
+    color: #9ca3af;
+    font-weight: 400;
 }
 
 .genderGroup {
@@ -135,69 +214,59 @@
     width: 80px;
 }
 
-.memberGroup {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border-bottom: 1px solid #e5e7eb;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.memberGroup:hover {
-    border-color: #CB6B52;
-    box-shadow: 0 0 0 1px #CB6B52;
-}
-
 .recommendedForList {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 8px;
 }
 
 .recommendedForItem {
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    transition: background-color 0.2s;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
 .recommendedForItem:hover {
     background-color: #f9fafb;
+    border-color: #e5e7eb;
 }
 
 .checkboxLabel {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 10px;
     cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #374151;
 }
 
 .checkbox {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #CB6B52;
 }
 
 .modalDescription {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: #6b7280;
+    font-size: 0.9375rem;
+    line-height: 1.6;
 }
 
 .checkboxGroup {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 0.5rem;
-}
-
-.checkbox {
-    display: flex;
-    align-items: center;
+    margin-top: 0.75rem;
 }
 
 .checkboxInput {
     margin-right: 0.5rem;
+    cursor: pointer;
+    accent-color: #CB6B52;
 }
 
 .radioGroup {
@@ -245,84 +314,120 @@
 /* トグルオプション */
 .toggleOptionsContainer {
     display: flex;
-    gap: 1rem;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
 .toggleOption {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 24px;
     background-color: #f9fafb;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid #e5e7eb;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid #e5e7eb;
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.toggleOption:hover {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .toggleOptionActive {
-    background-color: #f0f9ff;
+    background: linear-gradient(135deg, #fef2ee 0%, #fff7f4 100%);
     border-color: #CB6B52;
     color: #CB6B52;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.15);
+}
+
+.toggleOptionActive:hover {
+    background: linear-gradient(135deg, #fee8e1 0%, #fef2ee 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(203, 107, 82, 0.2);
 }
 
 .toggleIcon {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.25rem;
 }
 
 /* カテゴリーボタン */
 .categoryButtonsContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
+    gap: 10px;
+    margin-top: 16px;
 }
 
 .categoryButton {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 0.95rem;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 0.9375rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: #fff;
-    border: 1px solid #CB6B52;
+    border: 2px solid #CB6B52;
     color: #CB6B52;
 }
 
-.categoryButtonActive {
-    background-color: #CB6B52;
-    color: #fff;
+.categoryButton:hover {
+    background-color: #fff7f4;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.15);
 }
 
-.categoryButton:hover {
-    opacity: 0.9;
+.categoryButtonActive {
+    background: linear-gradient(135deg, #CB6B52 0%, #b55a43 100%);
+    color: #fff;
+    border-color: #CB6B52;
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.3);
+    font-weight: 600;
+}
+
+.categoryButtonActive:hover {
+    background: linear-gradient(135deg, #b55a43 0%, #a04f39 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(203, 107, 82, 0.4);
 }
 
 /* オプションリスト */
 .optionsList {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .optionItem {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+    padding: 14px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    font-size: 0.9375rem;
+    font-weight: 500;
 }
 
 .optionItem:hover {
     background-color: #f9fafb;
+    border-color: #e5e7eb;
 }
 
 .optionItemActive {
-    background-color: #f0f9ff;
+    background: linear-gradient(135deg, #fef2ee 0%, #fff7f4 100%);
     color: #CB6B52;
-    font-weight: 500;
+    font-weight: 600;
+    border-color: #CB6B52;
+    box-shadow: 0 2px 6px rgba(203, 107, 82, 0.1);
 }
 
 /* モーダル関連のスタイル */
@@ -332,81 +437,193 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modalContent {
     background-color: white;
-    border-radius: 0.5rem;
+    border-radius: 16px;
     width: 90%;
     max-width: 600px;
-    height: 570px;
+    max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modalHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 20px 24px;
     border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
 }
 
 .modalTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.375rem;
+    font-weight: 700;
     margin: 0;
+    color: #111827;
 }
 
 .modalCloseButton {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     cursor: pointer;
-    color: #6b7280;
+    color: #9ca3af;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
 }
 
 .modalCloseButton:hover {
-    color: #111827;
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.modalCloseButton:active {
+    background-color: #e5e7eb;
 }
 
 .modalBody {
-    padding: 1rem;
+    padding: 24px;
     flex: 1;
     overflow-y: auto;
 }
 
+/* モーダル内のスクロールバーのスタイリング */
+.modalBody::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.modalBody::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 .modalFooter {
-    padding: 1rem;
+    padding: 16px 24px;
     border-top: 1px solid #e5e7eb;
     display: flex;
     justify-content: flex-end;
+    background: linear-gradient(to top, #ffffff 0%, #fafafa 100%);
 }
 
 .modalButton {
-    background-color: #CB6B52;
+    background: linear-gradient(135deg, #CB6B52 0%, #b55a43 100%);
     color: white;
     border: none;
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
+    border-radius: 24px;
+    padding: 12px 32px;
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(203, 107, 82, 0.3);
 }
 
 .modalButton:hover {
-    background-color: #3b5bd9;
+    background: linear-gradient(135deg, #b55a43 0%, #a04f39 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(203, 107, 82, 0.4);
+}
+
+.modalButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(203, 107, 82, 0.25);
 }
 
 .mapDescription {
     margin-bottom: 1rem;
     font-size: 0.95rem;
     color: #6b7280;
+    line-height: 1.6;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .modalContent {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .formRow {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .categoryButtonsContainer {
+        gap: 8px;
+    }
+
+    .categoryButton {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+
+    .toggleOption {
+        padding: 8px 14px;
+        font-size: 0.875rem;
+    }
+
+    .modalHeader {
+        padding: 16px 20px;
+    }
+
+    .modalTitle {
+        font-size: 1.25rem;
+    }
+
+    .modalBody {
+        padding: 20px;
+    }
+
+    .modalFooter {
+        padding: 12px 20px;
+    }
 }

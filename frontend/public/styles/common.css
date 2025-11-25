@@ -28,6 +28,7 @@ li {
 
 .image-container {
     position: relative;
+    text-align: center;
 }
 
 .vertical-text {

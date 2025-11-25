@@ -17,7 +17,7 @@
 }
 
 .play-plan-card {
-  width: 320px;
+  width: 350px;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -195,6 +195,7 @@
   width: 100%;
   padding-top: 20px;
   padding-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .play-plan-slider .swiper-slide {
@@ -206,6 +207,7 @@
   background: #cb6b52;
   bottom: -10px;
 }
-.swiper{
-  z-index: 0!important;
+
+.swiper {
+  z-index: 0 !important;
 }
