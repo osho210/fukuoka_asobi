@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import '@styles/AboutPage.css';
+import '../../styles/AboutPage.css';
 
 export default function AboutPage() {
   return (
@@ -13,27 +13,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="concept">
-        <div className="container">
-          <h2 className="section-title">サービスコンセプト</h2>
-          <div className="concept-content">
-            <div className="concept-text">
-              <p>「福岡あそび」は、週末や休暇のお出かけプランを簡単に立てられることを目的とした<strong>隠れ家スポット提案サービス</strong>です。</p>
-              <p>王道の観光地ではなく、地元の人しか知らないような隠れ家カフェや、ディープなローカルスポットを中心に、デート、友人同士、ソロなど、さまざまなシチュエーションに合わせた1日プランをご提案します。</p>
-              <p>さらに、天気予報にあわせて屋外/屋内を切り替えられるため、当日「雨が降ってしまった…」という場合も柔軟に対応可能。いつもとは違う、新鮮でユニークなスポットを一日通して楽しめるプランを手軽に見つけられます。</p>
-            </div>
-            <div className="concept-image">
-              <Image
-                src="/kv.jpg"
-                alt="福岡あそびのコンセプトイメージ"
-                width={500}
-                height={300}
-                className="rounded-image"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="target">
         <div className="container">
