@@ -10,6 +10,7 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^8.5.3",
     "@types/react-slick": "^0.23.13",
     "axios": "^1.6.7",
     "date-fns": "^4.1.0",
