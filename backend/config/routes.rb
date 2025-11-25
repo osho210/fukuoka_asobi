@@ -20,6 +20,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # Webhooks
+  namespace :webhooks do
+    post 'stripe', to: 'stripe#create'
+  end
+
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 end

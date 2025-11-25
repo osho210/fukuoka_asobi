@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorite_play_plans, through: :favorites, source: :play_plan
+  has_many :payment_transactions, dependent: :destroy
 
   validates :username, presence: true
   validates :email, presence: true, uniqueness: true

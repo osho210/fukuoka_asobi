@@ -1,0 +1,135 @@
+.subscription-plan-container {
+  background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+}
+
+.subscription-plan-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.subscription-plan-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.subscription-plan-subtitle {
+  color: #4b5563;
+  font-size: 16px;
+}
+
+.subscription-plan-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.subscription-plan-price {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.subscription-plan-amount {
+  font-size: 48px;
+  font-weight: bold;
+  color: #4f46e5;
+  margin-bottom: 8px;
+}
+
+.subscription-plan-amount-unit {
+  font-size: 18px;
+  font-weight: normal;
+  color: #6b7280;
+}
+
+.subscription-plan-tax-note {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.subscription-plan-benefits {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.subscription-plan-benefits-title {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.subscription-plan-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subscription-plan-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.subscription-plan-benefit-check {
+  width: 24px;
+  height: 24px;
+  color: #10b981;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.subscription-plan-benefit-text {
+  color: #374151;
+  line-height: 1.5;
+}
+
+.subscription-plan-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.subscription-plan-error-text {
+  color: #991b1b;
+  font-size: 14px;
+}
+
+.subscription-plan-button {
+  width: 100%;
+  background: #4f46e5;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subscription-plan-button:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.subscription-plan-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.subscription-plan-footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.subscription-plan-footer p {
+  margin: 4px 0;
+}

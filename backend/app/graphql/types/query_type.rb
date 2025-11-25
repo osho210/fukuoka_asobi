@@ -211,6 +211,27 @@ module Types
     # プランがお気に入りに登録されているか
     field :is_favorite, resolver: Resolvers::IsFavoriteResolver
 
+    # サブスクリプション情報
+    field :current_subscription, Types::SubscriptionType, null: true, description: "現在のサブスクリプション情報"
+    def current_subscription
+      user = context[:current_user]
+      return nil unless user&.stripe_subscription_id
+
+      service = ::Stripe::SubscriptionService.new(user)
+      service.retrieve_subscription
+    end
+
+    # 決済履歴
+    field :payment_history, [Types::PaymentTransactionType], null: false, description: "決済履歴" do
+      argument :limit, Integer, required: false, default_value: 10
+    end
+    def payment_history(limit:)
+      user = context[:current_user]
+      return [] unless user
+
+      user.payment_transactions.recent.limit(limit)
+    end
+
     # --------------------------------------------
     # ① Category 単体取得
     # --------------------------------------------

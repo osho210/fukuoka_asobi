@@ -1,0 +1,126 @@
+.cancel-subscription-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.cancel-subscription-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  padding: 24px;
+}
+
+.cancel-subscription-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.cancel-subscription-content {
+  margin-bottom: 24px;
+}
+
+.cancel-subscription-text {
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.cancel-subscription-warning {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.cancel-subscription-warning-text {
+  font-size: 14px;
+  color: #92400e;
+}
+
+.cancel-subscription-warning-text strong {
+  font-weight: 600;
+}
+
+.cancel-subscription-checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.cancel-subscription-checkbox {
+  margin-top: 4px;
+  margin-right: 12px;
+}
+
+.cancel-subscription-checkbox-label {
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.cancel-subscription-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.cancel-subscription-error-text {
+  color: #991b1b;
+  font-size: 14px;
+}
+
+.cancel-subscription-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.cancel-subscription-button {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-subscription-button-cancel {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.cancel-subscription-button-cancel:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.cancel-subscription-button-cancel:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.cancel-subscription-button-confirm {
+  background: #ef4444;
+  color: white;
+}
+
+.cancel-subscription-button-confirm:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.cancel-subscription-button-confirm:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

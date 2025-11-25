@@ -19,6 +19,10 @@ module Types
     # ユーザープロフィール関連
     field :update_user_profile, mutation: Mutations::UpdateUserProfile
 
+    # サブスクリプション関連
+    field :create_subscription, mutation: Mutations::CreateSubscription
+    field :cancel_subscription, mutation: Mutations::CancelSubscription
+
     # ブックマーク関連
     field :create_bookmark, mutation: Mutations::CreateBookmark
     field :update_bookmark, mutation: Mutations::UpdateBookmark
