@@ -324,7 +324,14 @@ export default function SpotInfoTabs({ detail }: { detail: PlanDetail }) {
               />
             </div>
           )}
-          {detail.stepName && <p><span className="plan-step-name">{detail.stepName}</span></p>}
+          {/* stepNameが存在する場合はそれを表示、なければカテゴリを表示 */}
+          {detail.stepName ? (
+            <p><span className="plan-step-name">{detail.stepName}</span></p>
+          ) : (
+            detail?.spot?.categories && detail.spot.categories.length > 0 && (
+              <p><span className="plan-step-name">{detail.spot.categories[0].name}</span></p>
+            )
+          )}
           {detail.stepDescription && (
             <div className="plan-step-description">
               {detail.stepDescription}

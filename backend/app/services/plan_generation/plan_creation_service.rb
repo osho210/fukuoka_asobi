@@ -6,7 +6,7 @@ module PlanGeneration
   # プラン生成処理を担当するサービスクラス
   # 時間配分されたルート情報から、PlayPlan、PlanDetail、TravelDetailを生成し保存する
   class PlanCreationService
-    # 予算レンジごとの概算金額（円）
+    # 予算レンジごとの概算金額（円）- フォールバック用
     BUDGET_VALUES = {
       "CHEAP" => 3000,
       "AVERAGE" => 8000,
@@ -85,7 +85,20 @@ module PlanGeneration
     # @return [Integer] 総予算（円）
     def self.calculate_total_budget(route_with_times)
       route_with_times.sum do |item|
-        BUDGET_VALUES[item[:spot].budget_range] || BUDGET_VALUES["AVERAGE"]
+        calculate_spot_budget(item[:spot])
+      end
+    end
+
+    # スポットの予算を計算
+    # price_range_start_amount と price_range_end_amount の平均値を使用
+    # これらの値がない場合は budget_range に基づいた固定値を使用
+    # @param spot [Spot] スポット
+    # @return [Integer] 予算（円）
+    def self.calculate_spot_budget(spot)
+      if spot.price_range_start_amount.present? && spot.price_range_end_amount.present?
+        ((spot.price_range_start_amount + spot.price_range_end_amount) / 2.0).round
+      else
+        BUDGET_VALUES[spot.budget_range] || BUDGET_VALUES["AVERAGE"]
       end
     end
 
@@ -155,7 +168,7 @@ module PlanGeneration
         current_time = stay_end
 
         # 予算を設定
-        spot_budget = BUDGET_VALUES[item[:spot].budget_range] || BUDGET_VALUES["AVERAGE"]
+        spot_budget = calculate_spot_budget(item[:spot])
 
         # PlanDetailを作成して保存
         plan_detail = PlanDetail.create!(
@@ -264,8 +277,9 @@ module PlanGeneration
       end
     end
 
-    private_class_method :generate_plan_name, :calculate_total_budget, :calculate_end_datetime,
-                         :build_play_plan, :create_plan_details, :create_travel_detail,
-                         :convert_travel_method_to_japanese, :create_travel_route, :attach_travel_route
+    private_class_method :generate_plan_name, :calculate_total_budget, :calculate_spot_budget,
+                         :calculate_end_datetime, :build_play_plan, :create_plan_details,
+                         :create_travel_detail, :convert_travel_method_to_japanese,
+                         :create_travel_route, :attach_travel_route
   end
 end

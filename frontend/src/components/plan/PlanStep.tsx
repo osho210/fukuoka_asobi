@@ -1,7 +1,7 @@
 'use client';
 
 import { PlanDetail } from '@/__generated__/graphql';
-import { formatTravelTime } from '@/utils/dateUtils';
+import { formatTravelTime, formatTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
 import '@/styles/GeneratedPlan.css';
 import Image from 'next/image';
@@ -47,7 +47,7 @@ const PlanStep: React.FC<PlanStepProps> = ({ detail, isLastStep }) => {
             <div className="plan-step-header-time">
               <p className="plan-step-header-label">到着時間</p>
               <Image src="/watch-icon.png" alt="時計アイコン" width={24} height={24} />
-              <p className='plan-step-header-value'>{detail.startTime}</p>
+              <p className='plan-step-header-value'>{formatTime(detail.startTime)}</p>
             </div>
           )}
           {detail.durationMinutes && (
