@@ -1,5 +1,11 @@
 export { };
 
+interface GoogleCredentialResponse {
+    credential: string;
+    select_by?: string;
+    client_id?: string;
+}
+
 declare global {
     interface Window {
         google?: {
@@ -7,7 +13,7 @@ declare global {
                 id?: {
                     initialize: (options: {
                         client_id: string;
-                        callback: (response: any) => void;
+                        callback: (response: GoogleCredentialResponse) => void;
                     }) => void;
                     renderButton: (
                         parent: HTMLElement,
