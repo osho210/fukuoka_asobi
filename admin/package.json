@@ -10,6 +10,11 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
+    "next": "*",
+    "react": "*",
+    "react-dom": "*",
+    "@apollo/client": "*",
+    "graphql": "*",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-dialog": "^1.1.11",
@@ -28,6 +33,12 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "typescript": "*",
+    "eslint": "*",
+    "eslint-config-next": "*",
     "@dotenvx/dotenvx": "^1.48.3"
   }
 }
