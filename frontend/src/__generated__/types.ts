@@ -564,16 +564,42 @@ export type CreateStationPayload = {
 
 /** カスタム検索オプションの入力 */
 export type CustomOptionsInput = {
+  /** 現金のみ（プレミアム） */
+  acceptsCashOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  /** クレジットカード可（プレミアム） */
+  acceptsCreditCards?: InputMaybe<Scalars['Boolean']['input']>;
+  /** NFC決済可（プレミアム） */
+  acceptsNfc?: InputMaybe<Scalars['Boolean']['input']>;
+  /** ペット可（プレミアム） */
+  allowsDogs?: InputMaybe<Scalars['Boolean']['input']>;
   /** カテゴリー */
   categories?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** デリバリー可（プレミアム） */
+  delivery?: InputMaybe<Scalars['Boolean']['input']>;
+  /** 子供連れ歓迎（プレミアム） */
+  goodForChildren?: InputMaybe<Scalars['Boolean']['input']>;
   /** イベント含む */
   includeEvents?: InputMaybe<Scalars['Boolean']['input']>;
+  /** 屋外席あり（プレミアム） */
+  outdoorSeating?: InputMaybe<Scalars['Boolean']['input']>;
   /** 雨天対応 */
   rainyDayOption?: InputMaybe<Scalars['Boolean']['input']>;
+  /** 予約可能（プレミアム） */
+  reservable?: InputMaybe<Scalars['Boolean']['input']>;
+  /** 朝食提供（プレミアム） */
+  servesBreakfast?: InputMaybe<Scalars['Boolean']['input']>;
+  /** ディナー提供（プレミアム） */
+  servesDinner?: InputMaybe<Scalars['Boolean']['input']>;
+  /** ランチ提供（プレミアム） */
+  servesLunch?: InputMaybe<Scalars['Boolean']['input']>;
+  /** ベジタリアン対応（プレミアム） */
+  servesVegetarianFood?: InputMaybe<Scalars['Boolean']['input']>;
   /** スポット数 */
   spotCount?: InputMaybe<Scalars['Int']['input']>;
   /** 出発地点 */
   startingPoint?: InputMaybe<Scalars['String']['input']>;
+  /** テイクアウト可（プレミアム） */
+  takeout?: InputMaybe<Scalars['Boolean']['input']>;
   /** テーマ */
   theme?: InputMaybe<Scalars['String']['input']>;
   /** 移動手段 */

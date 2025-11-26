@@ -66,11 +66,32 @@ module PlanGeneration
     # @param end_time [Time] 終了時刻
     # @return [ActiveRecord::Relation] フィルタリング後のクエリ
     def self.filter_by_opening_hours(query, date, start_time, end_time)
-      day_of_week = date.strftime("%a").downcase
-      query.joins(:opening_hours)
-           .where("opening_hours.day_of_week = ? AND opening_hours.is_closed_day = false", day_of_week)
-           .where("opening_hours.open_time <= ? AND opening_hours.close_time >= ?",
-                  end_time.strftime("%H:%M"), start_time.strftime("%H:%M"))
+      # 日本語の曜日に変換
+      day_of_week_ja = date.strftime("%a")
+      day_mapping = {
+        'Sun' => '日',
+        'Mon' => '月',
+        'Tue' => '火',
+        'Wed' => '水',
+        'Thu' => '木',
+        'Fri' => '金',
+        'Sat' => '土'
+      }
+      day_of_week = day_mapping[day_of_week_ja]
+
+      # 時刻をJSTに変換してから文字列化
+      start_time_jst = start_time.in_time_zone('Asia/Tokyo')
+      end_time_jst = end_time.in_time_zone('Asia/Tokyo')
+
+      # 営業時間に一致するspot_idをサブクエリで取得
+      # DBのopen_time/close_timeはTime型で保存されているため、Time型で比較
+      valid_spot_ids = OpeningHour
+        .where(day_of_week: day_of_week, is_closed_day: false)
+        .where("open_time <= ? AND close_time >= ?", end_time_jst, start_time_jst)
+        .select(:spot_id)
+
+      # 既存のクエリ条件を保持しながら、営業時間に一致するスポットのみに絞る
+      query.where(id: valid_spot_ids)
     end
 
     # 予算によるフィルタリング

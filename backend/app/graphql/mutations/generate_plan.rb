@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../../services/plan_generator'
+require_relative '../../errors/plan_generation_error'
+require_relative '../../errors/invalid_search_parameters_error'
+require_relative '../../errors/insufficient_spots_error'
 
 module Mutations
   class GeneratePlan < GraphQL::Schema::Mutation
@@ -29,16 +32,17 @@ module Mutations
       plan_generator = PlanGenerator.new(
         districts: districts,
         date: date,
-        member_info: member_info,
-        budget: budget,
+        member_info: member_info.to_h,
+        budget: budget.to_h,
         start_time: start_time,
         end_time: end_time,
-        custom_options: custom_options,
+        custom_options: custom_options&.to_h,
         user: context[:current_user]
       )
 
       begin
         generated_plan = plan_generator.generate
+
         { plan: generated_plan, errors: [] }
       rescue InvalidSearchParametersError => e
         # バリデーションエラーの場合
@@ -77,4 +81,3 @@ module Mutations
     end
   end
 end
-

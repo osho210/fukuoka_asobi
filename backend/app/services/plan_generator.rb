@@ -2,6 +2,7 @@
 
 require 'ostruct'
 require 'securerandom'
+require_relative 'validators/search_params_validator'
 
 # プラン自動生成サービスのメインクラス
 # 検索条件に基づいてスポットを検索し、最適なプランを生成する
@@ -21,8 +22,9 @@ class PlanGenerator
     @date = Date.parse(date)
     @member_info = member_info
     @budget = budget
-    @start_time = start_time ? Time.parse("#{date} #{start_time}") : Time.parse("#{date} 09:00")
-    @end_time = end_time ? Time.parse("#{date} #{end_time}") : Time.parse("#{date} 21:00")
+    # Time.zone.parseを使用してJSTとして時刻をパース
+    @start_time = start_time ? Time.zone.parse("#{date} #{start_time}") : Time.zone.parse("#{date} 09:00")
+    @end_time = end_time ? Time.zone.parse("#{date} #{end_time}") : Time.zone.parse("#{date} 21:00")
     @custom_options = custom_options || {}
     @total_available_time = (@end_time - @start_time) / 60 # 分単位
     @user = user

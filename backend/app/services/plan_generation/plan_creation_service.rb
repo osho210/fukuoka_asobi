@@ -38,7 +38,8 @@ module PlanGeneration
         date: date,
         start_time: start_time,
         end_datetime: end_datetime,
-        total_budget: total_budget
+        total_budget: total_budget,
+        districts: districts
       )
 
       # トランザクションでプランとその詳細を保存
@@ -115,17 +116,28 @@ module PlanGeneration
     # @param start_time [Time] 開始時刻
     # @param end_datetime [Time] 終了時刻
     # @param total_budget [Integer] 総予算
+    # @param districts [Array<String|Integer>] 地区ID または slug の配列
     # @return [PlayPlan] PlayPlanインスタンス（未保存）
-    def self.build_play_plan(user:, plan_name:, date:, start_time:, end_datetime:, total_budget:)
+    def self.build_play_plan(user:, plan_name:, date:, start_time:, end_datetime:, total_budget:, districts:)
+      # 地区名を取得してlocationに設定
+      location = districts.map do |district_identifier|
+        if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
+          District.find_by(id: district_identifier)&.district_name
+        else
+          District.find_by(slug: district_identifier)&.district_name
+        end
+      end.compact.join('・')
+
       PlayPlan.new(
         user_id: user&.id,
         plan_name: plan_name,
         description: "#{date.strftime('%Y年%m月%d日')}の#{plan_name}です。",
         status: 'published',
-        start_datetime: start_time,
-        end_datetime: end_datetime,
+        start_time: start_time,
+        end_time: end_datetime,
         total_budget: total_budget,
-        trip_type: 'day_trip'
+        trip_type: 'day_trip',
+        location: location
       )
     end
 
@@ -152,8 +164,9 @@ module PlanGeneration
           step_name: item[:spot].spot_name,
           step_description: item[:spot].catchphrase,
           spot: item[:spot],
-          start_datetime: stay_start,
-          end_datetime: stay_end,
+          start_time: stay_start,
+          end_time: stay_end,
+          duration_minutes: item[:stay_time],
           budget: spot_budget
         )
 
