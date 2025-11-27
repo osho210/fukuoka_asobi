@@ -46,16 +46,18 @@ module PlanGeneration
       return query if districts.blank?
 
       # 数値IDとslugの両方に対応
-      district_ids = districts.map do |district_identifier|
-        # 数値IDの場合はそのまま使用
-        if StringUtils.numeric_string?(district_identifier)
-          district_identifier
-        else
-          # 文字列（slug）の場合はIDに変換
-          District.find_by(slug: district_identifier)&.id
-        end
-      end.compact
+      numeric_ids, slugs = districts.partition { |district_identifier| StringUtils.numeric_string?(district_identifier) }
 
+      # 一度のクエリで全slug→idのマッピングを取得
+      slug_to_id = {}
+      if slugs.present?
+        # Remove nils and duplicates just in case
+        slugs = slugs.compact.uniq
+        slug_to_id = District.where(slug: slugs).pluck(:slug, :id).to_h
+      end
+
+      district_ids = numeric_ids + slugs.map { |slug| slug_to_id[slug] }
+      district_ids.compact!
       query.where(district_id: district_ids)
     end
 
