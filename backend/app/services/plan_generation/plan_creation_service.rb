@@ -60,12 +60,18 @@ module PlanGeneration
     # @param custom_options [Hash] カスタムオプション
     # @return [String] プラン名
     def self.generate_plan_name(districts, custom_options)
-      # 地区名を取得
+      # 地区名を取得（N+1クエリを防ぐため、まとめて取得）
+      id_identifiers = districts.select { |d| d.is_a?(Integer) || d.to_i.to_s == d.to_s }.map(&:to_i)
+      slug_identifiers = districts.reject { |d| d.is_a?(Integer) || d.to_i.to_s == d.to_s }.map(&:to_s)
+      districts_records = District.where(id: id_identifiers).or(District.where(slug: slug_identifiers)).to_a
+      # ハッシュを作成して高速に参照
+      districts_by_id = districts_records.index_by(&:id)
+      districts_by_slug = districts_records.index_by(&:slug)
       district_names = districts.map do |district_identifier|
         if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
-          District.find_by(id: district_identifier)&.district_name
+          districts_by_id[district_identifier.to_i]&.district_name
         else
-          District.find_by(slug: district_identifier)&.district_name
+          districts_by_slug[district_identifier.to_s]&.district_name
         end
       end.compact.join('・')
 
