@@ -138,12 +138,29 @@ module PlanGeneration
     # @param districts [Array<String|Integer>] 地区ID または slug の配列
     # @return [PlayPlan] PlayPlanインスタンス（未保存）
     def self.build_play_plan(user:, plan_name:, date:, start_time:, end_datetime:, total_budget:, districts:)
-      # 地区名を取得してlocationに設定
+      # 地区名を取得してlocationに設定（N+1クエリを回避）
+      id_districts = districts.select { |d| d.is_a?(Integer) || d.to_i.to_s == d.to_s }
+      slug_districts = districts.reject { |d| d.is_a?(Integer) || d.to_i.to_s == d.to_s }
+
+      districts_by_id = {}
+      if id_districts.any?
+        District.where(id: id_districts).find_each do |district|
+          districts_by_id[district.id.to_s] = district.district_name
+        end
+      end
+
+      districts_by_slug = {}
+      if slug_districts.any?
+        District.where(slug: slug_districts).find_each do |district|
+          districts_by_slug[district.slug.to_s] = district.district_name
+        end
+      end
+
       location = districts.map do |district_identifier|
-        if district_identifier.is_a?(Integer) || district_identifier.to_i.to_s == district_identifier.to_s
-          District.find_by(id: district_identifier)&.district_name
+        if id_districts.include?(district_identifier)
+          districts_by_id[district_identifier.to_s]
         else
-          District.find_by(slug: district_identifier)&.district_name
+          districts_by_slug[district_identifier.to_s]
         end
       end.compact.join('・')
 
