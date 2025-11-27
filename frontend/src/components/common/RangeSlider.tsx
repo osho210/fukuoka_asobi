@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import '@/styles/RangeSlider.css';
 
 
@@ -34,19 +34,19 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const isDraggingMax = useRef(false);
 
   // 値をパーセンテージに変換
-  const valueToPercent = (value: number) => {
+  const valueToPercent = useCallback((value: number) => {
     return ((value - min) / (max - min)) * 100;
-  };
+  }, [min, max]);
 
   // パーセンテージを値に変換
-  const percentToValue = (percent: number) => {
+  const percentToValue = useCallback((percent: number) => {
     const rawValue = min + ((max - min) * percent) / 100;
     const steppedValue = Math.round(rawValue / step) * step;
     return Math.min(Math.max(steppedValue, min), max);
-  };
+  }, [min, max, step]);
 
   // スライダーの位置を更新
-  const updateSliderPositions = () => {
+  const updateSliderPositions = useCallback(() => {
     if (!trackRef.current || !minThumbRef.current || !maxThumbRef.current) return;
 
     const minPercent = valueToPercent(minValue);
@@ -60,7 +60,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       rangeElement.style.left = `${minPercent}%`;
       rangeElement.style.width = `${maxPercent - minPercent}%`;
     }
-  };
+  }, [minValue, maxValue, valueToPercent]);
 
   // マウスイベントハンドラー
   const handleMouseDown = (e: React.MouseEvent, isMin: boolean) => {
@@ -72,7 +72,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDraggingMin.current && !isDraggingMax.current) return;
     if (!trackRef.current) return;
 
@@ -94,7 +94,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         onChange?.(minValue, newValue);
       }
     }
-  };
+  }, [minValue, maxValue, step, onChange, percentToValue]);
 
   const handleMouseUp = () => {
     isDraggingMin.current = false;
@@ -127,12 +127,12 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [minValue, maxValue]);
+  }, [handleMouseMove]);
 
   // スライダーの位置を更新
   useEffect(() => {
     updateSliderPositions();
-  }, [minValue, maxValue]);
+  }, [updateSliderPositions]);
 
   return (
     <div className="sliderContainer">

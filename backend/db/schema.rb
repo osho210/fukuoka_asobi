@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_31_052545) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_235543) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -214,6 +214,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_052545) do
     t.index ["opening_hours_type"], name: "index_opening_hours_on_opening_hours_type"
     t.index ["spot_id", "day_of_week", "open_time"], name: "index_opening_hours_on_spot_day_and_open_time", unique: true
     t.index ["spot_id"], name: "index_opening_hours_on_spot_id"
+  end
+
+  create_table "payment_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_payment_intent_id"
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "currency"
+    t.string "status"
+    t.datetime "paid_at"
+    t.text "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_payment_transactions_on_status"
+    t.index ["stripe_payment_intent_id"], name: "index_payment_transactions_on_stripe_payment_intent_id"
+    t.index ["user_id"], name: "index_payment_transactions_on_user_id"
   end
 
   create_table "plan_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -563,9 +578,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_052545) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.string "jti", null: false
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_id"
+    t.string "subscription_status"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id"
+    t.index ["stripe_subscription_id"], name: "index_users_on_stripe_subscription_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -578,6 +598,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_052545) do
   add_foreign_key "news", "categories"
   add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"
+  add_foreign_key "payment_transactions", "users"
   add_foreign_key "play_plan_image_properties", "active_storage_attachments", column: "attachment_id"
   add_foreign_key "play_plan_image_properties", "play_plans"
   add_foreign_key "spot_accessibility_options", "accessibility_options"

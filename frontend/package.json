@@ -10,6 +10,11 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
+    "next": "*",
+    "react": "*",
+    "react-dom": "*",
+    "@apollo/client": "*",
+    "graphql": "*",
     "@stripe/stripe-js": "^8.5.3",
     "@types/react-slick": "^0.23.13",
     "axios": "^1.6.7",
@@ -19,6 +24,12 @@
     "swiper": "^11.2.5"
   },
   "devDependencies": {
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "typescript": "*",
+    "eslint": "*",
+    "eslint-config-next": "*",
     "@types/axios": "^0.14.0"
   }
 }

@@ -3,7 +3,6 @@
 import React from 'react';
 import '@/styles/AreaMap.css';
 import Image from 'next/image';
-import { get } from 'http';
 
 interface AreaMapProps {
   selectedAreas: string[];
@@ -54,17 +53,6 @@ const AreaMap: React.FC<AreaMapProps> = ({
     } else {
       alert(`エリアは最大${maxSelections}つまで選択可能です`);
     }
-  };
-
-  // 選択エリアを削除
-  const handleRemoveArea = (areaId: string) => {
-    onChange(selectedAreas.filter((id) => id !== areaId));
-  };
-
-  // エリア名を取得
-  const getAreaName = (areaId: string) => {
-    const area = areaPositions.find((area) => area.id === areaId);
-    return area ? area.name : '';
   };
 
 

@@ -2,14 +2,13 @@
 
 import React from 'react';
 import { GeneratedPlan } from '@/__generated__/graphql';
-import { formatTime, formatTravelTime } from '@/utils/dateUtils';
-import PlanTimeline from './PlanTimeline';
-import RouteMap from './RouteMap';
+import { formatTravelTime, formatTime } from '@/utils/dateUtils';
 import '@/styles/GeneratedPlan.css';
+import '@/styles/PlayPlanDetail.css';
 import PlanActions from './plan/PlanActions';
 import PlanTotalBudget from './plan/PlanTotalBudget';
-import PlanStep from '../components/plan/PlanStep';
-
+import PlanStep from './plan/PlanStep';
+import Image from 'next/image';
 
 interface GeneratedPlanViewProps {
   plan: GeneratedPlan;
@@ -18,60 +17,80 @@ interface GeneratedPlanViewProps {
 }
 
 const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onEdit }) => {
+  // 開始時刻から出発時刻を抽出（HH:mm形式にフォーマット）
+  const departureTime = formatTime(plan.startTime) || '';
+
+  // 最初のスポットまでの移動情報を取得
+  const firstTravelDetail = plan.planDetails[0]?.travelDetails?.[0];
+  const travelMethodToFirstSpot = firstTravelDetail?.travelMethod || '徒歩';
+  const travelTimeToFirstSpot = firstTravelDetail?.travelTime || 0;
+
   return (
-    <div className="generatedPlanContainer">
-      <div className="planHeader">
-        <h1 className="planTitle">{plan.planName}</h1>
-        <p className="planDescription">{plan.description}</p>
-        <div className="planMeta">
-          <div className="planMetaItem">
-            <span className="metaLabel">日時:</span>
-            <span className="metaValue">
-              {formatTime(plan.startDatetime)} 〜 {formatTime(plan.endDatetime)}
-            </span>
-          </div>
-          <div className="planMetaItem">
-            <span className="metaLabel">予算:</span>
-            <span className="metaValue">{plan.totalBudget.toLocaleString()}円</span>
-          </div>
-          <div className="planMetaItem">
-            <span className="metaLabel">総移動時間:</span>
-            <span className="metaValue">{formatTravelTime(plan.travelRoute.totalTravelTime)}</span>
-          </div>
-          <div className="planMetaItem">
-            <span className="metaLabel">総移動距離:</span>
-            <span className="metaValue">{plan.travelRoute.totalDistance.toFixed(1)}km</span>
-          </div>
+    <div className="play-plan-detail">
+      {/* ヘッダーセクション */}
+      <div className="plan-header">
+        <h1 className="plan-title">{plan.planName}</h1>
+        {plan.description && <p className='plan-description'>{plan.description}</p>}
+
+        {/* メタ情報 */}
+        <div className="plan-meta">
+          {plan.totalBudget && (
+            <div className="plan-meta-item">
+              <span className="plan-meta-icon">
+                <Image src="/money-icon.png" alt="予算アイコン" width={24} height={24} />
+              </span>
+              <span>予算: ¥{plan.totalBudget.toLocaleString()}</span>
+            </div>
+          )}
+          {plan.travelRoute.totalTravelTime && (
+            <div className="plan-meta-item">
+              <span className="plan-meta-icon">⏱️</span>
+              <span>総移動時間: {formatTravelTime(plan.travelRoute.totalTravelTime)}</span>
+            </div>
+          )}
+          {plan.travelRoute.totalDistance && (
+            <div className="plan-meta-item">
+              <span className="plan-meta-icon">📍</span>
+              <span>総移動距離: {plan.travelRoute.totalDistance.toFixed(1)}km</span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="planContent">
-        <div className="timelineSection">
-          <h2 className="sectionTitle">プランタイムライン</h2>
-          <PlanTimeline planDetails={plan.planDetails} />
+      {/* 出発地点セクション */}
+      <div className="plan-departure-section">
+        <h2 className='plan-departure-title'>集合 {departureTime}</h2>
+        <div className='plan-departure-container'>
+          <Image src="/pin-icon.png" alt="出発地点アイコン" width={20} height={20} />
+          <p className="plan-departure-location">
+            出発地点
+          </p>
         </div>
-
-        <div className="mapSection">
-          <h2 className="sectionTitle">ルートマップ</h2>
-          <RouteMap travelRoute={plan.travelRoute} />
-        </div>
-
-        <div className="detailsSection">
-          <h2 className="sectionTitle">スポット詳細</h2>
-          <div className="spotsList">
-            {plan.planDetails.map((detail, index) => (
-              <PlanStep
-                key={detail.id}
-                detail={detail}
-                isLastStep={index === plan.planDetails.length - 1}
-              />
-
-            ))}
+        {firstTravelDetail && (
+          <div className='plan-departure-departure-time'>
+            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={50} />
+            <p>{travelMethodToFirstSpot}で{travelTimeToFirstSpot}分</p>
           </div>
+        )}
+      </div>
+
+      {/* プラン詳細セクション */}
+      <div className="plan-details-section">
+        <div className="plan-steps">
+          {plan.planDetails.map((detail, index) => (
+            <PlanStep
+              key={detail.id}
+              detail={detail}
+              isLastStep={index === plan.planDetails.length - 1}
+            />
+          ))}
         </div>
       </div>
 
-      <PlanTotalBudget totalBudget={plan.totalBudget} />
+      {/* 総予算 */}
+      <PlanTotalBudget totalBudget={plan.totalBudget || 0} />
+
+      {/* アクション */}
       <PlanActions onSave={onSave} onEdit={onEdit} showFavorite={false} showShare={false} />
     </div>
   );

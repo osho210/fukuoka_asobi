@@ -33,14 +33,17 @@ module Backend
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # デフォルトのタイムゾーンJS(日本時刻に変更)
+    # デフォルトのタイムゾーンをJST(日本時刻)に設定
     config.time_zone = 'Tokyo'
 
     # デプロイ先の指定
     config.hosts << "https://fukuoka-asobi.onrender.com"
 
-    # dbのデフォルトタイムゾーンはUTC
-    config.time_zone = 'UTC'
+    # dbのデフォルトタイムゾーンはUTCのまま（DBは常にUTCで保存）
     config.active_record.default_timezone = :utc
+
+    # ロケール設定
+    config.i18n.default_locale = :ja
+    config.i18n.available_locales = [:ja, :en]
   end
 end
