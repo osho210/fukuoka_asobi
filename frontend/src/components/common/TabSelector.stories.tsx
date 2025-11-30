@@ -63,5 +63,10 @@ const InteractiveTabSelector = () => {
 };
 
 export const Interactive: Story = {
+  args: {
+    tabs: sampleTabs,
+    activeTab: 'tab1',
+    onTabChange: () => {},
+  },
   render: () => <InteractiveTabSelector />,
 };

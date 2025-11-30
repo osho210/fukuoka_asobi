@@ -96,8 +96,6 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
                     {spot.menus.map(menu => (
                       <li key={menu.id}>
                         <strong>{menu.menuName}</strong>
-                        {menu.price && <span> - ¥{menu.price.toLocaleString()}</span>}
-                        {menu.description && <p>{menu.description}</p>}
                       </li>
                     ))}
                   </ul>

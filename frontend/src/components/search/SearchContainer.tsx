@@ -31,8 +31,14 @@ const SearchContainer: React.FC = () => {
     const isValid = validateAll({
       date: searchParams.date,
       districts: searchParams.districts,
-      memberInfo: searchParams.memberInfo,
-      budget: searchParams.budget,
+      memberInfo: {
+        ...searchParams.memberInfo,
+        recommendUsers: searchParams.memberInfo.recommendUsers.map(Number),
+      },
+      budget: {
+        min: searchParams.budget?.min ?? 0,
+        max: searchParams.budget?.max ?? 0,
+      },
       startTime: searchParams.startTime,
       endTime: searchParams.endTime,
     });
@@ -70,7 +76,7 @@ const SearchContainer: React.FC = () => {
       updateSearchParams={updateSearchParams}
       onSearch={handleSearch}
       isLoading={isLoading}
-      errorMessage={errorMessage || Object.values(errors)[0]}
+      errorMessage={errorMessage ?? Object.values(errors)[0] ?? null}
     />
   );
 };
