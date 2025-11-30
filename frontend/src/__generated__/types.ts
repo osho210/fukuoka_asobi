@@ -322,6 +322,8 @@ export type CreateOrUpdatePlayPlanWithDetailsInput = {
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   /** 新規画像のBase64エンコード文字列配列 */
   images?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** 編集部おすすめフラグ */
+  isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
   /** リードテキスト */
   leadText?: InputMaybe<Scalars['String']['input']>;
   /** 場所 */
@@ -1624,6 +1626,8 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
+  /** 編集部おすすめフラグ */
+  isRecommended: Scalars['Boolean']['output'];
   leadText: Scalars['String']['output'];
   location: Scalars['String']['output'];
   planDetails?: Maybe<Array<PlanDetail>>;
@@ -1824,6 +1828,7 @@ export type QueryPlayPlanWithDetailsArgs = {
 
 
 export type QueryPlayPlansArgs = {
+  isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<StatusEnum>;
 };
@@ -2993,17 +2998,18 @@ export type GetOptionsQuery = { __typename?: 'Query', themeOptions: Array<{ __ty
 
 export type GetPlayPlansQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
+  isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, isRecommended: boolean, status: StatusEnum, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
 
 export type GetPlayPlanQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, imageUrl?: string | null, departure?: string | null, departureTime?: string | null, travelMethodToFirstSpot?: string | null, travelTimeToFirstSpot?: number | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startTime: string, endTime: string, tags: string, recommendUsers?: Array<string> | null, userId?: number | null, plannerTitle: string, plannerDescription: string, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, comment: string, startTime: string, durationMinutes: number, budget: number, notes?: string | null, plannerTitle: string, plannerDescription: string, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }>, spot?: { __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, phoneNumber?: string | null, budgetRange: BudgetTypeRangeEnum, isRainyOk: boolean, website?: string | null, nearestStation?: string | null, instagramUrl?: string | null, reviewCount?: number | null, reviewRating?: number | null, acceptsCreditCards?: boolean | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, takeout: boolean, reservable: boolean, catchphrase?: string | null, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, categories: Array<{ __typename?: 'Category', name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any, isClosedDay: boolean }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
+export type GetPlayPlanQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, imageUrl?: string | null, departure?: string | null, departureTime?: string | null, travelMethodToFirstSpot?: string | null, travelTimeToFirstSpot?: number | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, isRecommended: boolean, status: StatusEnum, startTime: string, endTime: string, tags: string, recommendUsers?: Array<string> | null, userId?: number | null, plannerTitle: string, plannerDescription: string, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, comment: string, startTime: string, durationMinutes: number, budget: number, notes?: string | null, plannerTitle: string, plannerDescription: string, travelDetails: Array<{ __typename?: 'TravelDetail', sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }>, spot?: { __typename?: 'Spot', id: string, spotName: string, description?: string | null, address?: string | null, phoneNumber?: string | null, budgetRange: BudgetTypeRangeEnum, isRainyOk: boolean, website?: string | null, nearestStation?: string | null, instagramUrl?: string | null, reviewCount?: number | null, reviewRating?: number | null, acceptsCreditCards?: boolean | null, priceRangeStartAmount?: number | null, priceRangeEndAmount?: number | null, takeout: boolean, reservable: boolean, catchphrase?: string | null, menus: Array<{ __typename?: 'Menu', id: string, menuName: string }>, spotAmbiances: Array<{ __typename?: 'SpotAmbiance', id: string, ambianceName: string }>, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }>, categories: Array<{ __typename?: 'Category', name: string }>, openingHours: Array<{ __typename?: 'OpeningHour', id: string, dayOfWeek: string, openTime: any, closeTime: any, isClosedDay: boolean }>, district: { __typename?: 'District', districtName: string } } | null }> | null } | null };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
