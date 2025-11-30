@@ -1,9 +1,4 @@
-.hamburger-menu-container {
-    position: fixed;
-    top: 25px;
-    right: 20px;
-    z-index: 10;
-}
+
 
 .hamburger-menu {
     display: flex;
@@ -13,6 +8,7 @@
     height: 20px;
     cursor: pointer;
     position: relative;
+    z-index: 10;
 }
 
 .hamburger-menu__bar {
