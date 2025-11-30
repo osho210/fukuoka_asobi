@@ -2,7 +2,7 @@
 
 import '@/styles/play-plans.css';
 
-type TravelDetailFormData = {
+export type TravelDetailFormData = {
   id?: string;
   sequenceNumber: number;
   travelMethod?: string;

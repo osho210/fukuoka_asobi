@@ -1,18 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import TravelDetailForm from './TravelDetailForm';
+import TravelDetailForm, { TravelDetailFormData } from './TravelDetailForm';
 import '@/styles/play-plans.css';
 import { Spot } from '@/__generated__/graphql';
 import { PlanDetailFormData } from './PlayPlanForm';
-
-type TravelDetailFormData = {
-  id?: string;
-  sequenceNumber: number;
-  travelMethod?: string;
-  travelTime?: string;
-  notes?: string;
-};
 
 interface PlanDetailFormProps {
   planDetails: PlanDetailFormData[];
