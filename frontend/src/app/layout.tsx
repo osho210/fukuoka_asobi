@@ -61,8 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ApolloWrapper>
+          <Header />
           <div className="container">
-            <Header />
             {children}
             <Footer />
           </div>
