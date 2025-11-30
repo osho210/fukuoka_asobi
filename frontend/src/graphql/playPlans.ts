@@ -3,8 +3,8 @@ import { GetPlayPlansQuery, GetPlayPlansQueryVariables } from '@/__generated__/t
 
 // .graphqlファイルからクエリをインポート
 export const GET_PLAY_PLANS = gql`
-  query GetPlayPlans($limit: Int) {
-    playPlans(limit: $limit) {
+  query GetPlayPlans($limit: Int, $isRecommended: Boolean) {
+    playPlans(limit: $limit, isRecommended: $isRecommended) {
       id
       planName
       description
@@ -16,6 +16,7 @@ export const GET_PLAY_PLANS = gql`
       reviewCount
       favoriteCount
       isFavorite
+      isRecommended
       status
       imageUrls {
         id
@@ -63,6 +64,7 @@ export const GET_PLAY_PLAN = gql`
       reviewCount
       favoriteCount
       isFavorite
+      isRecommended
       status
       startTime
       endTime

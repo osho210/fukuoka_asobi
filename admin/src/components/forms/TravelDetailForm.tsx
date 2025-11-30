@@ -2,17 +2,17 @@
 
 import '@/styles/play-plans.css';
 
-interface TravelDetail {
+type TravelDetailFormData = {
   id?: string;
   sequenceNumber: number;
-  travelMethod: string;
+  travelMethod?: string;
   travelTime?: string;
   notes?: string;
-}
+};
 
 interface TravelDetailFormProps {
-  travelDetails: TravelDetail[];
-  onChange: (travelDetails: TravelDetail[]) => void;
+  travelDetails: TravelDetailFormData[];
+  onChange: (travelDetails: TravelDetailFormData[]) => void;
   stepIndex: number;
   errors: Record<string, string>;
 }
@@ -32,7 +32,7 @@ export default function TravelDetailForm({
   errors,
 }: TravelDetailFormProps) {
   const addTravelDetail = () => {
-    const newTravelDetail: TravelDetail = {
+    const newTravelDetail: TravelDetailFormData = {
       sequenceNumber: travelDetails.length + 1,
       travelMethod: '徒歩',
       travelTime: '',
@@ -55,7 +55,7 @@ export default function TravelDetailForm({
     }
   };
 
-  const updateTravelDetail = (index: number, field: keyof TravelDetail, value: string | number) => {
+  const updateTravelDetail = (index: number, field: keyof TravelDetailFormData, value: string | number) => {
     const newTravelDetails = [...travelDetails];
     newTravelDetails[index] = {
       ...newTravelDetails[index],

@@ -15,7 +15,10 @@ import FavoriteButton from './common/FavoriteButton';
 const PlayPlanList = () => {
 
   const { loading, error, data } = useQuery<GetPlayPlansQuery, GetPlayPlansQueryVariables>(GET_PLAY_PLANS, {
-    variables: { limit: 5 },
+    variables: {
+      limit: 5,
+      isRecommended: true,
+    },
   });
 
   if (loading) return <p>読み込み中...</p>;
