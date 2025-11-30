@@ -11,6 +11,7 @@ jobs:
   chromatic-frontend:
     name: Chromatic - Frontend
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,15 +26,18 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        timeout-minutes: 10
 
       - name: Run Chromatic (Frontend)
         run: npm run chromatic:frontend
+        timeout-minutes: 15
         env:
           CHROMATIC_PROJECT_TOKEN_FRONTEND: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
 
   chromatic-admin:
     name: Chromatic - Admin
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,8 +52,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        timeout-minutes: 10
 
       - name: Run Chromatic (Admin)
         run: npm run chromatic:admin
+        timeout-minutes: 15
         env:
           CHROMATIC_PROJECT_TOKEN_ADMIN: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
