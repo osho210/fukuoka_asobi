@@ -128,6 +128,83 @@ docker volume ls | grep bundle
 docker volume rm fukuoka-asobi_bundle_cache
 ```
 
+### Storybook
+
+UI コンポーネントのカタログとして Storybook を使用しています。
+
+```bash
+# frontend の Storybook を起動（ポート: 6006）
+npm run storybook:frontend
+
+# admin の Storybook を起動（ポート: 6007）
+npm run storybook:admin
+
+# Storybook のビルド
+npm run build-storybook:frontend
+npm run build-storybook:admin
+```
+
+#### Story の作成ルール
+
+- **ファイル名**: `*.stories.tsx`
+- **配置**: 各コンポーネントと同階層
+  - 例: `common/Button.tsx` → `common/Button.stories.tsx`
+- **検索パターン**: `src/components/**/*.stories.@(ts|tsx)`
+
+#### Story ファイルの基本構造
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import YourComponent from './YourComponent';
+
+const meta = {
+  title: 'Category/ComponentName',
+  component: YourComponent,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    // Props の制御設定
+  },
+} satisfies Meta<typeof YourComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    // デフォルトの props
+  },
+};
+```
+
+### Chromatic
+
+ビジュアルリグレッションテストと UI レビューに Chromatic を使用しています。
+
+#### 自動実行
+
+- PR 作成・更新時に自動で Chromatic が実行されます
+- UI に変更があった場合、Chromatic 上で差分が表示されます
+
+#### Chromatic の利用方法
+
+1. PR を作成すると、GitHub Actions で Chromatic が自動実行
+2. Chromatic ダッシュボードで UI の差分を確認
+3. 意図した変更であれば Chromatic 上で承認（Accept）
+4. 意図しない変更であれば、コードを修正して再度 PR を更新
+
+#### ローカルでの Chromatic 実行
+
+```bash
+# frontend の Chromatic を実行
+CHROMATIC_PROJECT_TOKEN_FRONTEND=<your-token> npm run chromatic:frontend
+
+# admin の Chromatic を実行
+CHROMATIC_PROJECT_TOKEN_ADMIN=<your-token> npm run chromatic:admin
+```
+
 ### GraphQLスキーマ駆動開発
 
 このプロジェクトでは、GraphQL Code Generatorを使用してバックエンドのスキーマから自動的にTypeScript型定義を生成しています。
