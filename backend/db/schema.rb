@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_25_235543) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_30_041027) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -301,6 +301,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_25_235543) do
     t.time "departure_time"
     t.string "travel_method_to_first_spot"
     t.integer "travel_time_to_first_spot"
+    t.boolean "is_recommended", default: false, null: false, comment: "編集部おすすめフラグ"
+    t.index ["is_recommended"], name: "index_play_plans_on_is_recommended"
   end
 
   create_table "purposes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
