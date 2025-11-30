@@ -8,7 +8,7 @@ export interface ImageProperty {
     url: string;
     isSelected: boolean;
     position: number;
-    comment?: string;
+    comment?: string | null;
 }
 
 interface PlayPlanDetailProps {

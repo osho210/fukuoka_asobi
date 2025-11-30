@@ -20,7 +20,7 @@ const PlanRecommendation: React.FC<PlanRecommendationProps> = ({ plan }) => {
             <span key={item.id} className="plan-recommended-for-tag">{item.name}</span>
           ))
         ) : plan.recommendUsers ? (
-          plan.recommendUsers.split(',').map((item, index) => (
+          plan.recommendUsers.map((item, index) => (
             <span key={index} className="plan-recommended-for-tag">{item.trim()}</span>
           ))
         ) : null}

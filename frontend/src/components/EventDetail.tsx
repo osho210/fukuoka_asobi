@@ -41,8 +41,13 @@ export default function EventDetail({ eventId }: EventDetailProps) {
           bannerImage: '',
           eventCategory: {
             id: '1',
-            name: 'フェス・マーケット'
-          }
+            name: 'フェス・マーケット',
+            createdAt: undefined,
+            updatedAt: undefined
+          },
+          createdAt: undefined,
+          eventCategoryId: 0,
+          updatedAt: undefined
         };
 
         // 実際のAPIでは、eventIdを使用して特定のイベントを取得

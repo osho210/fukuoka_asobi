@@ -48,6 +48,16 @@ interface SpotMagazine {
   _destroy?: boolean;
 }
 
+// OpeningHourを拡張した型（削除フラグを追加）
+interface OpeningHourWithDestroy extends Partial<OpeningHour> {
+  dayOfWeek: string;
+  isClosedDay: boolean;
+  openTime?: string | null;
+  closeTime?: string | null;
+  id?: string;
+  _destroy?: boolean;
+}
+
 interface ModelDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -70,7 +80,7 @@ export function ModelDetailModal({
   // 子モデルの状態管理を追加
   const [childModels, setChildModels] = useState<Record<string, ModelData[]>>({});
   const [spotMagazines, setSpotMagazines] = useState<SpotMagazine[]>([]);
-  const [openingHours, setOpeningHours] = useState<OpeningHour[]>([]);
+  const [openingHours, setOpeningHours] = useState<OpeningHourWithDestroy[]>([]);
   const [newImages, setNewImages] = useState<string[]>([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
   // isLoadingは現在使用していないため削除
@@ -423,23 +433,25 @@ export function ModelDetailModal({
           // PlanDetailInputの形式に変換
           const planDetailInputs: PlanDetailInput[] = childModels.planDetails.map(detail => {
             // spotフィールドがある場合はspotIdに変換し、spotフィールドを削除
-            let spotId = detail.spotId as number | null;
+            let spotId = detail.spotId as string;
             if (detail.spot && typeof detail.spot === 'object' && 'id' in detail.spot) {
-              spotId = parseInt(detail.spot.id as string, 10);
+              spotId = detail.spot.id as string;
             }
 
-            // 新しいオブジェクトを作成（spotフィールドを含まない）
+            // 新しいオブジェクトを作成（PlanDetailInputの全フィールドを含む）
             return {
-              id: detail.id,
+              id: detail.id as string,
               stepNumber: detail.stepNumber as number,
               stepName: detail.stepName as string,
               stepDescription: detail.stepDescription as string,
-              startDatetime: detail.startDatetime as string,
-              endDatetime: detail.endDatetime as string,
+              startTime: detail.startTime as string,
+              endTime: detail.endTime as string,
+              durationMinutes: detail.durationMinutes as number,
+              plannerTitle: detail.plannerTitle as string,
               budget: detail.budget as number,
               spotId: spotId,
               comment: detail.comment as string,
-              notes: detail.notes as string
+              notes: (detail.notes as string) || ''
             };
           });
 

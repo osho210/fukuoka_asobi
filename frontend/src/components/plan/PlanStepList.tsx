@@ -18,7 +18,7 @@ const PlanStepList: React.FC<PlanStepListProps> = ({ plan }) => {
         <PlanStep
           key={detail.id}
           detail={detail}
-          isLastStep={index === plan.planDetails.length - 1}
+          isLastStep={index === ((plan.planDetails?.length ?? 0) - 1)}
         />
       ))}
     </div>

@@ -115,7 +115,7 @@ const RouteMap: React.FC<RouteMapProps> = ({ travelRoute }) => {
       const midX = (fromSpot.x + toSpot.x) / 2;
       const midY = (fromSpot.y + toSpot.y) / 2;
       const methodLabel = getTravelMethodLabel(segment.travelMethod);
-      const timeLabel = formatTravelTime(segment.travelTime);
+      const timeLabel = formatTravelTime(segment.travelTime ?? 0);
 
       ctx.fillStyle = '#333';
       ctx.font = '12px Arial';
@@ -123,7 +123,7 @@ const RouteMap: React.FC<RouteMapProps> = ({ travelRoute }) => {
       ctx.fillText(`${methodLabel} (${timeLabel})`, midX, midY - 10);
 
       // 距離を表示
-      ctx.fillText(`${segment.distance.toFixed(1)}km`, midX, midY + 10);
+      ctx.fillText(`${(segment.distance ?? 0).toFixed(1)}km`, midX, midY + 10);
     }
 
     // スポットを描画
@@ -181,11 +181,11 @@ const RouteMap: React.FC<RouteMapProps> = ({ travelRoute }) => {
       <div className="routeMapInfo">
         <div className="routeMapInfoItem">
           <span className="infoLabel">総移動距離:</span>
-          <span className="infoValue">{travelRoute.totalDistance.toFixed(1)}km</span>
+          <span className="infoValue">{(travelRoute.totalDistance ?? 0).toFixed(1)}km</span>
         </div>
         <div className="routeMapInfoItem">
           <span className="infoLabel">総移動時間:</span>
-          <span className="infoValue">{formatTravelTime(travelRoute.totalTravelTime)}</span>
+          <span className="infoValue">{formatTravelTime(travelRoute.totalTravelTime ?? 0)}</span>
         </div>
       </div>
     </div>

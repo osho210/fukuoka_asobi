@@ -59,13 +59,12 @@ export const UPDATE_PLAY_PLAN = gql`
 /**
  * プラン詳細データの型定義（Spotオブジェクト付き）
  */
-export interface PlanDetailWithSpot extends Partial<PlanDetail> {
+export interface PlanDetailWithSpot extends Omit<Partial<PlanDetail>, 'spot'> {
   spot?: Partial<Spot> & {
     id: string;
     __typename?: string;
   };
-  __typename?: string;
-  planId?: string | number;
+  __typename?: "PlanDetail";
   spotId?: number;
 }
 

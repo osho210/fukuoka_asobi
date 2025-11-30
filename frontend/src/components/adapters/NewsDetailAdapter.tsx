@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import '@styles/ContentDetail.css';
 import Image from "next/image";
+import { StatusEnum } from '@/__generated__/types';
 
 type NewsDetailAdapterProps = {
   news: News;
@@ -24,7 +25,7 @@ export default function NewsDetailAdapter({ news }: NewsDetailAdapterProps) {
           {news.category.name}
         </span>
       )}
-      {news.status === 'archived' && (
+      {news.status === StatusEnum.Archived && (
         <span className="content-detail-badge" style={{ backgroundColor: '#999', color: 'white' }}>
           アーカイブ
         </span>

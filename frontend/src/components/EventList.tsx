@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
 import '@styles/EventsPage.css';
 import Image from 'next/image';
-import { Event } from '@/__generated__/graphql';
+import { Event, StatusEnum } from '@/__generated__/graphql';
 
 type EventListProps = {
   categoryId?: string;
@@ -35,11 +35,16 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             price: '入場無料（飲食は有料）',
             bannerImage: '',
             isOnline: false,
-            status: 'PUBLISHED',
+            status: StatusEnum.Published,
             eventCategory: {
               id: '1',
-              name: 'フェス・マーケット'
-            }
+              name: 'フェス・マーケット',
+              createdAt: undefined,
+              updatedAt: undefined
+            },
+            createdAt: undefined,
+            eventCategoryId: 0,
+            updatedAt: undefined
           },
           {
             id: '2',
@@ -51,11 +56,16 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             price: '入場無料',
             bannerImage: '',
             isOnline: false,
-            status: 'PUBLISHED',
+            status: StatusEnum.Published,
             eventCategory: {
               id: '1',
-              name: 'フェス・マーケット'
-            }
+              name: 'フェス・マーケット',
+              createdAt: undefined,
+              updatedAt: undefined
+            },
+            createdAt: undefined,
+            eventCategoryId: 0,
+            updatedAt: undefined
           },
           {
             id: '3',
@@ -67,11 +77,16 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             price: '会場により異なる',
             bannerImage: '',
             isOnline: false,
-            status: 'PUBLISHED',
+            status: StatusEnum.Published,
             eventCategory: {
               id: '2',
-              name: '展示会・ギャラリー'
-            }
+              name: '展示会・ギャラリー',
+              createdAt: undefined,
+              updatedAt: undefined
+            },
+            createdAt: undefined,
+            eventCategoryId: 0,
+            updatedAt: undefined
           },
           {
             id: '4',
@@ -83,11 +98,16 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
             price: '3,000円（材料費込み）',
             bannerImage: '',
             isOnline: false,
-            status: 'PUBLISHED',
+            status: StatusEnum.Published,
             eventCategory: {
               id: '3',
-              name: 'ワークショップ'
-            }
+              name: 'ワークショップ',
+              createdAt: undefined,
+              updatedAt: undefined
+            },
+            createdAt: undefined,
+            eventCategoryId: 0,
+            updatedAt: undefined
           }
         ];
 

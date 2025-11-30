@@ -9,10 +9,6 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
-  typescript: {
-    // TODO:最速でデプロイするために一時的に無効化。本来は有効にする
-    ignoreBuildErrors: true
-  },
   images: {
     domains: ["localhost"], // 外部画像のホスト名を追加
     remotePatterns: [
