@@ -1,35 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { GET_EVENT } from '@graphql/queries/getEvent';
+import { GET_EVENT } from '@/graphql/queries/getEvent';
 import EventDetailContainer from './event-detail.container';
 
 // モックイベントデータ
 const mockEvent = {
   id: '1',
-  title: '福岡クラフトビアフェスティバル',
-  description: '福岡市内外のクラフトビールブルワリーが集結する九州最大級のビールイベント。国内外の厳選されたクラフトビールが楽しめます。',
-  location: '福岡市中央区天神 天神中央公園',
+  title: '博多どんたく港まつり',
+  description: '博多を代表する春の祭り。市内各所でパレードや舞台が開催されます。',
+  location: '福岡市内各所',
   latitude: 33.5904,
-  longitude: 130.3989,
-  startDatetime: '2025-04-01T10:00:00Z',
-  endDatetime: '2025-04-03T18:00:00Z',
+  longitude: 130.4017,
+  startDatetime: '2025-05-03T10:00:00Z',
+  endDatetime: '2025-05-04T21:00:00Z',
   recurringRule: null,
-  price: '入場無料（飲食は有料）',
-  organizer: '福岡クラフトビール協会',
-  contactEmail: 'info@fukuoka-craft-beer.example.com',
+  price: 0,
+  organizer: '福岡市民の祭り振興会',
+  contactEmail: 'info@dontaku.jp',
   contactPhone: '092-XXX-XXXX',
-  capacity: 5000,
+  capacity: null,
   isOnline: false,
-  sourceUrl: 'https://example.com/event',
+  sourceUrl: 'https://example.com/dontaku',
   bannerImage: '/itoshima.png',
   status: 'PUBLISHED',
   eventCategory: {
     id: '1',
-    name: 'フェス・マーケット',
-    description: 'フェスやマーケットイベント',
+    name: 'フェスティバル',
+    description: '地域のお祭りやフェスティバル',
   },
   eventCategoryId: '1',
-  createdAt: '2025-03-01T00:00:00Z',
-  updatedAt: '2025-03-15T00:00:00Z',
+  createdAt: '2025-01-01T00:00:00Z',
+  updatedAt: '2025-01-15T00:00:00Z',
 };
 
 const eventMocks = [
@@ -52,9 +52,18 @@ const eventMocks = [
         event: {
           ...mockEvent,
           id: '2',
-          title: '糸島ファーマーズマーケット',
-          description: '糸島の新鮮な農産物や海産物、加工品などを販売する定期市。',
-          location: '糸島市二丈福井 ファームパーク伊都国',
+          title: '福岡アジア美術館 特別展',
+          description: 'アジアの現代アートを紹介する特別展覧会です。',
+          location: '福岡アジア美術館',
+          startDatetime: '2025-04-01T09:00:00Z',
+          endDatetime: '2025-06-30T17:00:00Z',
+          price: 1000,
+          eventCategory: {
+            id: '2',
+            name: '展示会',
+            description: '美術館や博物館の展示会',
+          },
+          eventCategoryId: '2',
         },
       },
     },

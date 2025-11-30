@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { GET_PLAY_PLAN } from '@/graphql/playPlans';
-import PlanDetailPage from './page';
+import PlanDetailContainer from './plan-detail.container';
 
 // モックプランデータ
 const mockPlayPlan = {
@@ -133,19 +133,19 @@ const planMocks = [
 
 const meta = {
   title: 'Pages/Frontend/Plans/Detail',
-  component: PlanDetailPage,
+  component: PlanDetailContainer,
   parameters: {
     layout: 'fullscreen',
     apolloMocks: planMocks,
-    nextjs: {
-      appDirectory: true,
-      navigation: {
-        pathname: '/plans/[id]',
-      },
-    },
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof PlanDetailPage>;
+  argTypes: {
+    planId: {
+      control: 'text',
+      description: 'プランID',
+    },
+  },
+} satisfies Meta<typeof PlanDetailContainer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -155,13 +155,8 @@ type Story = StoryObj<typeof meta>;
  * プラン詳細ページの基本的な表示状態
  */
 export const Default: Story = {
-  parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/plans/1',
-        query: { id: '1' },
-      },
-    },
+  args: {
+    planId: '1',
   },
 };
 
@@ -169,13 +164,8 @@ export const Default: Story = {
  * 別のプラン
  */
 export const Plan2: Story = {
-  parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/plans/2',
-        query: { id: '2' },
-      },
-    },
+  args: {
+    planId: '2',
   },
 };
 
@@ -183,13 +173,10 @@ export const Plan2: Story = {
  * ローディング状態
  */
 export const Loading: Story = {
+  args: {
+    planId: '1',
+  },
   parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/plans/1',
-        query: { id: '1' },
-      },
-    },
     apolloMocks: [
       {
         ...planMocks[0],
