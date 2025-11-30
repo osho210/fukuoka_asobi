@@ -26,6 +26,7 @@ module Mutations
     argument :recommend_users, [ID], required: false, description: "おすすめ対象IDリスト"
     argument :planner_title, String, required: false, description: "プランナータイトル"
     argument :planner_description, String, required: false, description: "プランナー説明"
+    argument :is_recommended, Boolean, required: false, description: "編集部おすすめフラグ"
     argument :plan_details, [Types::PlanDetailInputType], required: true, description: "プラン詳細リスト"
     argument :image_properties, [Mutations::Inputs::ImagePropertyInputType], required: false, description: "画像プロパティリスト"
 

@@ -34,6 +34,9 @@ class PlayPlan < ApplicationRecord
   # ユーザーが作成したプランを取得するスコープ
   scope :by_user, ->(user_id) { where(user_id: user_id) }
 
+  # 記事が公開されていて、編集部おすすめのプランを取得するスコープ
+  scope :recommended, -> { where(is_recommended: true, status: :published) }
+
   # recommended_for文字列からRecommendedForオブジェクトを作成・関連付けするメソッド
   def recommended_for_string=(value)
     return if value.blank?
