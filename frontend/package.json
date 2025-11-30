@@ -13,9 +13,9 @@
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND --exit-zero-on-changes"
   },
   "dependencies": {
-    "next": "*",
-    "react": "*",
-    "react-dom": "*",
+    "next": "15.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "@apollo/client": "*",
     "graphql": "*",
     "@stripe/stripe-js": "^8.5.3",
