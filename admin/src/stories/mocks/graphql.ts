@@ -72,7 +72,7 @@ export function createLoadingMock<T = unknown>(
   query: DocumentNode,
   result: T,
   variables?: Record<string, unknown>,
-  delay: number = 10000
+  delay: number = 2500
 ): GraphQLMock<T> {
   return createMock(query, result, variables, delay);
 }
