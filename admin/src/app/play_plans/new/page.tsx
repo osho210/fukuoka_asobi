@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
-import PlayPlanForm from '@/components/forms/PlayPlanForm';
+import PlayPlanForm, { PlayPlanFormData } from '@/components/forms/PlayPlanForm';
 import { GET_FORM_OPTIONS } from '@/graphql/queries/getSpots';
 import '@/styles/play-plans.css';
 import { UPDATE_PLAY_PLAN_WITH_DETAILS } from '@/graphql/mutations/updatePlanDetails';
@@ -18,7 +18,7 @@ export default function NewPlayPlanPage() {
   const { data: optionsData, loading: optionsLoading } = useQuery(GET_FORM_OPTIONS);
 
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: PlayPlanFormData) => {
     setIsSubmitting(true);
 
     try {
@@ -39,7 +39,7 @@ export default function NewPlayPlanPage() {
             recommendUsers: formData.recommendUsers || [],
             plannerTitle: formData.plannerTitle,
             plannerDescription: formData.plannerDescription,
-            planDetails: formData.planDetails.map((detail: any) => ({
+            planDetails: formData.planDetails.map((detail) => ({
               stepNumber: detail.stepNumber,
               stepName: detail.stepName,
               stepDescription: detail.stepDescription,
@@ -52,7 +52,7 @@ export default function NewPlayPlanPage() {
               budget: detail.budget ? parseFloat(detail.budget) : null,
               notes: detail.notes,
               travelDetails:
-                detail.travelDetails?.map((travel: any) => ({
+                detail.travelDetails?.map((travel) => ({
                   sequenceNumber: travel.sequenceNumber,
                   travelMethod: travel.travelMethod,
                   travelTime: travel.travelTime ? parseInt(travel.travelTime, 10) : null,
@@ -71,7 +71,7 @@ export default function NewPlayPlanPage() {
         const errors = payload?.errors || [];
         alert(
           `エラーが発生しました:\n` +
-          errors.map((e: any) => `${e.field}: ${e.message}`).join('\n')
+          errors.map((e: { field: string, message: string }) => `${e.field}: ${e.message}`).join('\n')
         );
       }
     } catch (e) {

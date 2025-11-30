@@ -195,7 +195,7 @@ export const fetchRelationOptions = async (
       });
 
       if (response.data && response.data[field.model]) {
-        options[field.model] = response.data[field.model].map((item: any) => ({
+        options[field.model] = response.data[field.model].map((item: { [x: string]: unknown; id: unknown; }) => ({
           value: item.id,
           label: item[field.labelField],
         }));
@@ -541,7 +541,7 @@ export const updatePlanDetails = async (planId: string, planDetails: (PlanDetail
         // spotオブジェクトからspotIdを抽出し、spotフィールドを除外
         const { spot, ...processedDetail } = detailWithSpot;
         if (spot.id && !processedDetail.spotId) {
-          processedDetail.spotId = parseInt(spot.id, 10);
+          processedDetail.spotId = spot.id;
         }
         return processedDetail as PlanDetailInput;
       }

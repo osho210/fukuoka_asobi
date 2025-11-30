@@ -13,7 +13,7 @@ import { PlayPlan } from '@graphql_types/types';
 export default function EditPlayPlanPage() {
   const router = useRouter();
   const params = useParams();
-  const planId = params.id;
+  const planId = params?.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: planData, loading: planLoading, error: planError } = useQuery(GET_PLAY_PLANS, {

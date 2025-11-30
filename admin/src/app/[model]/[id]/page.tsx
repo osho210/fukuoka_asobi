@@ -271,7 +271,7 @@ const fieldDisplayNames: Record<string, string> = {
 export default function ModelDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const modelRoute = params.model as string;
+  const modelRoute = params?.model as string;
   const id = params?.id as string;
   const isNew = id === 'new';
 
@@ -714,7 +714,7 @@ export default function ModelDetailPage() {
                           closeTime: string | null;
                           isClosedDay: boolean;
                         };
-                        const formattedHours = value.map((hour: SyncedOpeningHour) => ({
+                        const formattedHours = (value as SyncedOpeningHour[]).map((hour) => ({
                           id: hour.id,
                           dayOfWeek: hour.dayOfWeek,
                           openTime: hour.openTime ? hour.openTime.substring(11, 16) : null,
@@ -904,13 +904,18 @@ export default function ModelDetailPage() {
               case 'image_upload': {
                 // formDataから 'images' ではなく 'image_urls' を参照
                 const existingImageUrls = (formData?.image_urls as string[] | undefined) || [];
+                const existingImages = existingImageUrls.map((url) => ({
+                  id: url,
+                  url,
+                }));
                 return (
                   <div key={fieldName} className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
                     <ImageUpload
                       onImagesChange={setNewImages}
-                      existingImages={existingImageUrls}
-                    />
+                      existingImages={existingImages} onDeleteImage={function (): void {
+                        throw new Error('Function not implemented.');
+                      }} />
                   </div>
                 );
               }

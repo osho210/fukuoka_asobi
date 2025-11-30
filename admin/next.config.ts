@@ -1,14 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    // TODO:最速でデプロイするために一時的に無効化。本来は有効にする
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    // TODO:最速でデプロイするために一時的に無効化。本来は有効にする
-    ignoreDuringBuilds: true,
-  },
   images: {
     domains: ["localhost"],
     remotePatterns: [

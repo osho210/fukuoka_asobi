@@ -113,5 +113,12 @@ const InteractiveModal = () => {
 };
 
 export const Interactive: Story = {
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    title: 'インタラクティブモーダル',
+    size: 'md',
+    children: <p>ボタンをクリックしてモーダルを閉じることができます。</p>,
+  },
   render: () => <InteractiveModal />,
 };

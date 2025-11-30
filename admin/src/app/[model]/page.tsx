@@ -131,7 +131,7 @@ function useModelData(modelRoute: string, pageSize: number) {
  */
 export default function ModelListPage() {
   const params = useParams();
-  const modelRoute = params.model as string;
+  const modelRoute = params?.model as string;
   const pageSize = 10;
 
   // モーダル関連の状態
