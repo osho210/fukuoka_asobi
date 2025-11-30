@@ -908,14 +908,20 @@ export default function ModelDetailPage() {
                   id: url,
                   url,
                 }));
+                // 画像削除時のハンドラ
+                const handleDeleteImage = (url: string) => {
+                  // image_urlsから該当URLを除外
+                  const updatedImageUrls = existingImageUrls.filter((imgUrl) => imgUrl !== url);
+                  setFormData((prev) => prev ? { ...prev, image_urls: updatedImageUrls } : prev);
+                };
                 return (
                   <div key={fieldName} className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{fieldLabel}</label>
                     <ImageUpload
                       onImagesChange={setNewImages}
-                      existingImages={existingImages} onDeleteImage={function (): void {
-                        throw new Error('Function not implemented.');
-                      }} />
+                      existingImages={existingImages}
+                      onDeleteImage={handleDeleteImage}
+                    />
                   </div>
                 );
               }
