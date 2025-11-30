@@ -48,7 +48,7 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
         <React.Fragment key={detail.id}>
           <div className="timelineItem">
             <div className="timelineTime">
-              {detail.startDatetime && formatTime(detail.startDatetime)}
+              {detail.startTime && formatTime(detail.startTime)}
             </div>
             <div className="timelinePoint">
               <div className="timelinePointDot"></div>
@@ -62,11 +62,11 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
           </div>
 
           {/* 滞在時間 */}
-          {detail.startDatetime && detail.endDatetime && (
+          {detail.startTime && detail.endTime && (
             <div className="timelineStay">
               <div className="timelineStayLine"></div>
               <div className="timelineStayDuration">
-                滞在: {calculateDuration(detail.startDatetime, detail.endDatetime)}分
+                滞在: {calculateDuration(detail.startTime, detail.endTime)}分
               </div>
             </div>
           )}
@@ -75,7 +75,7 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
           {index < planDetails.length - 1 && detail.travelDetails && detail.travelDetails.length > 0 && (
             <div className="timelineTravel">
               <div className="timelineTime">
-                {detail.endDatetime && formatTime(detail.endDatetime)}
+                {detail.endTime && formatTime(detail.endTime)}
               </div>
               <div className="timelineTravelLine">
                 <div className="timelineTravelIcon">
@@ -85,9 +85,9 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
               <div className="timelineTravelInfo">
                 <div className="timelineTravelMethod">
                   {detail.travelDetails[0].travelMethod === 'walk' ? '徒歩' :
-                   detail.travelDetails[0].travelMethod === 'car' ? '車' :
-                   detail.travelDetails[0].travelMethod === 'train' ? '電車' :
-                   detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
+                    detail.travelDetails[0].travelMethod === 'car' ? '車' :
+                      detail.travelDetails[0].travelMethod === 'train' ? '電車' :
+                        detail.travelDetails[0].travelMethod === 'bicycle' ? '自転車' : 'その他'}
                 </div>
                 <div className="timelineTravelTime">
                   {formatLocalTravelTime(detail.travelDetails[0].travelTime)}
@@ -99,10 +99,10 @@ const PlanTimeline: React.FC<PlanTimelineProps> = ({ planDetails }) => {
       ))}
 
       {/* 最終時間 */}
-      {planDetails.length > 0 && planDetails[planDetails.length - 1].endDatetime && (
+      {planDetails.length > 0 && planDetails[planDetails.length - 1].endTime && (
         <div className="timelineItem">
           <div className="timelineTime">
-            {formatTime(planDetails[planDetails.length - 1].endDatetime)}
+            {formatTime(planDetails[planDetails.length - 1].endTime)}
           </div>
           <div className="timelinePoint">
             <div className="timelinePointDot"></div>

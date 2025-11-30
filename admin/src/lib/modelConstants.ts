@@ -113,9 +113,13 @@ export const modelConfigs: Record<string, ModelConfig> = {
         accessorKey: 'imageUrl',
         sortable: false,
         cell: (item: ModelData) => {
-          if (item.imageUrl) {
+          if (
+            item.imageUrl &&
+            typeof item.imageUrl === 'object' &&
+            'url' in item.imageUrl
+          ) {
             return React.createElement('img', {
-              src: item.imageUrl.url as string,
+              src: (item.imageUrl as { url: string }).url,
               alt: item.menuName as string,
               style: { width: '40px', height: 'auto' },
             });
@@ -572,5 +576,4 @@ export const fieldDisplayNames: Record<string, string> = {
   salesInfo: '販売情報',
   salesUrl: '販売URL',
   coverImageUrl: '表紙画像URL',
-  description: '概要',
 };

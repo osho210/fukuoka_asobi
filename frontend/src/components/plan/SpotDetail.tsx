@@ -285,7 +285,7 @@ export default function SpotInfoTabs({ detail }: { detail: PlanDetail }) {
   const [currentTab, setCurrentTab] = useState<TabIdentifier>('basicInfo');
 
   const { showInstagramUrl, showWebsiteUrl } = useMemo(
-    () => decideWhichLinksToShow(detail.spot),
+    () => detail.spot ? decideWhichLinksToShow(detail.spot) : { showInstagramUrl: '', showWebsiteUrl: '' },
     [detail.spot]
   );
 

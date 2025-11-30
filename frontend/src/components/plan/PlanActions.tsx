@@ -24,7 +24,7 @@ const PlanActions: React.FC<PlanActionsProps> = ({
     <div className="plan-actions">
       {showFavorite && plan && (
         <FavoriteButton
-          playPlanId={plan.id}
+          playPlanId={String(plan.id)}
           isFavorite={plan.isFavorite}
           className="plan-action-button primary"
           showText={true}

@@ -120,7 +120,7 @@ export default function PlayPlansPage() {
                   </span>
                 </td>
                 <td className="play-plans__table-cell">
-                  {plan.planDetails.length}スポット
+                  {plan?.planDetails?.length}スポット
                 </td>
                 <td className="play-plans__table-cell">
                   {plan.totalBudget ? `¥${plan.totalBudget.toLocaleString()}` : '-'}
@@ -140,7 +140,7 @@ export default function PlayPlansPage() {
                       編集
                     </Link>
                     <button
-                      onClick={() => handleDelete(plan.id, plan.planName)}
+                      onClick={() => handleDelete(String(plan.id), plan.planName)}
                       className="play-plans__action-button"
                     >
                       削除

@@ -5,8 +5,7 @@ import '@styles/Auth.css';
 
 type CredentialResponse = {
   credential: string;
-  select_by: string;
-  state: string;
+  select_by?: string;
 };
 
 // ログイン画面コンポーネント
