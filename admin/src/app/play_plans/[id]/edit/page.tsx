@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
-import PlayPlanForm from '@/components/forms/PlayPlanForm';
+import PlayPlanForm, { PlayPlanFormData } from '@/components/forms/PlayPlanForm';
 import '@/styles/play-plans.css';
 import { UPDATE_PLAY_PLAN_WITH_DETAILS } from '@/graphql/mutations/updatePlanDetails';
 import { GET_PLAY_PLANS } from '@/graphql/queries/getPlayPlans';
@@ -26,7 +26,7 @@ export default function EditPlayPlanPage() {
   // ID の比較を文字列同士に
   const currentPlan = planData?.playPlans?.find((plan: PlayPlan) => plan.id.toString() === planId);
 
-  const transformPlanDataForForm = (plan: PlayPlan) => {
+  const transformPlanDataForForm = (plan: PlayPlan): PlayPlanFormData | null => {
     if (!plan) return null;
 
     return {
@@ -50,6 +50,7 @@ export default function EditPlayPlanPage() {
       imageProperties: plan.imageProperties || [],
       tags: plan.tags || '',
       recommendUsers: plan.recommendUsers || [],
+      isRecommended: plan.isRecommended || false,
       plannerTitle: plan.plannerTitle || '',
       plannerDescription: plan.plannerDescription || '',
       planDetails: plan.planDetails?.map((detail, index: number) => ({
@@ -90,7 +91,7 @@ export default function EditPlayPlanPage() {
     };
   };
 
-  const handleSubmit = async (formData: PlayPlan) => {
+  const handleSubmit = async (formData: PlayPlanFormData) => {
     setIsSubmitting(true);
 
     try {
@@ -103,20 +104,22 @@ export default function EditPlayPlanPage() {
             departure: formData.departure,
             departureTime: formData.departureTime,
             travelMethodToFirstSpot: formData.travelMethodToFirstSpot,
-            travelTimeToFirstSpot: formData.travelTimeToFirstSpot ? formData.travelTimeToFirstSpot : null,
+            travelTimeToFirstSpot: formData.travelTimeToFirstSpot ? parseInt(formData.travelTimeToFirstSpot as string, 10) : null,
             subtitle: formData.subtitle,
             leadText: formData.leadText,
             description: formData.description,
             status: formData.status?.toUpperCase(),
             tripType: formData.tripType?.toUpperCase(),
-            totalBudget: formData.totalBudget,
+            totalBudget: formData.totalBudget ? parseFloat(formData.totalBudget as string) : null,
             location: formData.location,
             startTime: formData.startTime,
             endTime: formData.endTime,
             imageUrl: formData.imageUrl,
-            images: formData.imageUrls,
+            images: formData.newImages || [],
+            deleteImageIds: formData.deleteImageIds || [],
             tags: formData.tags,
             recommendUsers: formData.recommendUsers || [],
+            isRecommended: formData.isRecommended || false,
             plannerTitle: formData.plannerTitle,
             plannerDescription: formData.plannerDescription,
             planDetails: (formData.planDetails || []).map((detail) => ({
@@ -130,13 +133,13 @@ export default function EditPlayPlanPage() {
               startTime: detail.startTime,
               endTime: detail.endTime,
               durationMinutes: detail.durationMinutes,
-              budget: detail.budget ? detail.budget : null,
+              budget: detail.budget ? parseFloat(detail.budget as string) : null,
               notes: detail.notes,
               travelDetails: detail.travelDetails?.map((travel) => ({
                 id: travel.id || null,
                 sequenceNumber: travel.sequenceNumber,
                 travelMethod: travel.travelMethod,
-                travelTime: travel.travelTime ? travel.travelTime : null,
+                travelTime: travel.travelTime ? parseInt(travel.travelTime as string, 10) : null,
                 notes: travel.notes,
               })) || [],
             })),

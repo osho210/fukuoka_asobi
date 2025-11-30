@@ -28,11 +28,12 @@ module Types
     field :image_properties, [Types::ImagePropertyType], null: false, description: "プランに紐づく画像とそのプロパティ"
     field :tags, String, null: false
     field :location, String, null: false
-    field :published_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     field :trip_type, Types::TripTypeEnum, null: false
     field :total_budget, Float, null: false
     field :planner_title, String, null: false
     field :planner_description, String, null: false
+    field :is_recommended, Boolean, null: false, description: "編集部おすすめフラグ"
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

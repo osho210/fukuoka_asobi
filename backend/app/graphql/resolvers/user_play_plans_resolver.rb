@@ -18,9 +18,6 @@ module Resolvers
       # ユーザーが作成したプランを取得
       query = PlayPlan.by_user(current_user.id)
 
-      # ステータスが指定されている場合はフィルタリング
-      query = query.where(status: status) if status.present?
-
       # 最新のプランを取得
       query.latest.limit(limit)
     end

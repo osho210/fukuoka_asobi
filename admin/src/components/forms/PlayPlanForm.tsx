@@ -5,14 +5,36 @@ import PlanDetailForm from './PlanDetailForm';
 import ImageUpload from './ImageUpload';
 import ImagePropertiesEditor from '../ImagePropertiesEditor';
 import '@/styles/play-plans.css';
-import { Spot, RecommendedFor, PlanDetail, ImageProperty } from '@/__generated__/graphql';
+import { Spot, RecommendedFor, ImageProperty } from '@/__generated__/graphql';
 
-interface ExistingImage {
+export interface ExistingImage {
   id: string;
   url: string;
 }
 
-interface PlayPlanFormData {
+export interface PlanDetailFormData {
+  id?: string;
+  stepNumber: number;
+  stepName: string;
+  stepDescription?: string;
+  plannerTitle?: string;
+  spotId?: string;
+  comment?: string;
+  startTime?: string;
+  endTime?: string;
+  durationMinutes?: number;
+  budget?: string;
+  notes?: string;
+  travelDetails?: Array<{
+    id?: string;
+    sequenceNumber: number;
+    travelMethod?: string;
+    travelTime?: string;
+    notes?: string;
+  }>;
+}
+
+export interface PlayPlanFormData {
   planName: string;
   catchCopy?: string;
   subtitle?: string;
@@ -35,7 +57,8 @@ interface PlayPlanFormData {
   deleteImageIds?: string[];
   tags?: string;
   recommendUsers: string[];
-  planDetails: PlanDetail[];
+  isRecommended?: boolean;
+  planDetails: PlanDetailFormData[];
   plannerTitle?: string;
   plannerDescription?: string;
 }
@@ -74,9 +97,9 @@ export default function PlayPlanForm({
    * @param planDetails - プラン詳細の配列
    * @returns 総予算の合計
    */
-  const calculateTotalBudget = (planDetails: PlanDetail[]): number => {
+  const calculateTotalBudget = (planDetails: PlanDetailFormData[]): number => {
     return planDetails.reduce((total, detail) => {
-      const budget = detail.budget || 0;
+      const budget = parseFloat(detail.budget || '0');
       return total + (isNaN(budget) ? 0 : budget);
     }, 0);
   };
@@ -105,7 +128,7 @@ export default function PlayPlanForm({
     }
   };
 
-  const handlePlanDetailsChange = (planDetails: PlanDetail[]) => {
+  const handlePlanDetailsChange = (planDetails: PlanDetailFormData[]) => {
     const newCalculatedBudget = calculateTotalBudget(planDetails);
 
     setFormData(prev => ({
@@ -197,6 +220,26 @@ export default function PlayPlanForm({
     <form onSubmit={handleSubmit} className="play-plan-form">
       {/* 基本情報 */}
       <div className="play-plan-form__section">
+        <h2 className="play-plan-form__section-title">公開情報</h2>
+        <div className="play-plan-form__grid">
+          <div className="play-plan-form__field">
+            <label className="play-plan-form__checkbox-item">
+              <input
+                type="checkbox"
+                id="isRecommended"
+                checked={formData.isRecommended || false}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    isRecommended: e.target.checked,
+                  }));
+                }}
+                className="play-plan-form__checkbox"
+              />
+              <span className="play-plan-form__checkbox-label">編集部おすすめに設定</span>
+            </label>
+          </div>
+        </div>
         <h2 className="play-plan-form__section-title">基本情報</h2>
 
         <div className="play-plan-form__grid">

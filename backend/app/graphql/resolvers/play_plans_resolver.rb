@@ -4,12 +4,13 @@ module Resolvers
 
     argument :limit, Integer, required: false, default_value: 5
     argument :status, Types::StatusEnumType, required: false
+    argument :is_recommended, Boolean, required: false, description: "編集部おすすめのプランのみを取得"
 
-    def resolve(limit: 5, status: nil)
+    # 公開中の編集部おすすめプランのみを表示する
+    def resolve(limit: 5, status: nil, is_recommended: nil)
       query = PlayPlan.all
 
-      # ステータスが指定されている場合はフィルタリング
-      query = query.where(status: status) if status.present?
+      query = query.recommended if is_recommended
 
       # 最新のプランを取得
       query.latest.limit(limit)

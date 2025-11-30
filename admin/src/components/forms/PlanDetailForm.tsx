@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import TravelDetailForm from './TravelDetailForm';
+import TravelDetailForm, { TravelDetailFormData } from './TravelDetailForm';
 import '@/styles/play-plans.css';
-import { Spot, TravelDetail, PlanDetail } from '@/__generated__/graphql';
+import { Spot } from '@/__generated__/graphql';
+import { PlanDetailFormData } from './PlayPlanForm';
 
 interface PlanDetailFormProps {
-  planDetails: PlanDetail[];
+  planDetails: PlanDetailFormData[];
   spots: Spot[];
-  onChange: (planDetails: PlanDetail[]) => void;
+  onChange: (planDetails: PlanDetailFormData[]) => void;
   onEndTimeChange?: (endTime: string) => void;
   errors: Record<string, string>;
   departureTime?: string;
@@ -47,7 +48,14 @@ const calculateDuration = (startTime: string, endTime: string): number => {
 };
 
 // 移動詳細の移動時間の合計を計算
-const calculateTotalTravelTime = (travelDetails: TravelDetail[]): number => {
+const calculateTotalTravelTime = (travelDetails?: Array<{
+  id?: string;
+  sequenceNumber: number;
+  travelMethod?: string;
+  travelTime?: string;
+  notes?: string;
+}>): number => {
+  if (!travelDetails) return 0;
   return travelDetails.reduce((total, detail) => {
     const travelTime = parseInt(detail.travelTime || '0', 10);
     return total + (isNaN(travelTime) ? 0 : travelTime);
@@ -76,14 +84,13 @@ export default function PlanDetailForm({
   };
 
   const addStep = () => {
-    const newStep: PlanDetail = {
+    const newStep: PlanDetailFormData = {
       stepNumber: planDetails.length + 1,
       stepName: '',
       stepDescription: '',
       spotId: '',
       comment: '',
       plannerTitle: '',
-      plannerDescription: '',
       startTime: '',
       endTime: '',
       durationMinutes: 60,
@@ -171,7 +178,7 @@ export default function PlanDetailForm({
   };
 
   // 全ステップの時刻を再計算する関数
-  const recalculateAllStepTimes = (planDetails: PlanDetail[]): PlanDetail[] => {
+  const recalculateAllStepTimes = (planDetails: PlanDetailFormData[]): PlanDetailFormData[] => {
     const updatedPlanDetails = [...planDetails];
 
     // 最初のステップの開始時間を集合時間と移動時間から計算
@@ -209,7 +216,7 @@ export default function PlanDetailForm({
     return updatedPlanDetails;
   };
 
-  const updateStep = (index: number, field: keyof PlanDetail, value: string | number | TravelDetail[]) => {
+  const updateStep = (index: number, field: keyof PlanDetailFormData, value: string | number | TravelDetailFormData[]) => {
     const newPlanDetails = [...planDetails];
     newPlanDetails[index] = {
       ...newPlanDetails[index],
@@ -219,7 +226,7 @@ export default function PlanDetailForm({
   };
 
   // 最後のステップの終了時刻を親コンポーネントに通知
-  const notifyEndTimeChange = (updatedPlanDetails: PlanDetail[]) => {
+  const notifyEndTimeChange = (updatedPlanDetails: PlanDetailFormData[]) => {
     if (onEndTimeChange && updatedPlanDetails.length > 0) {
       const lastStep = updatedPlanDetails[updatedPlanDetails.length - 1];
       if (lastStep.endTime) {
@@ -289,7 +296,7 @@ export default function PlanDetailForm({
   };
 
   // 移動詳細更新時の処理（後続ステップの時刻も更新）
-  const updateTravelDetails = (stepIndex: number, travelDetails: TravelDetail[]) => {
+  const updateTravelDetails = (stepIndex: number, travelDetails: TravelDetailFormData[]) => {
     const newPlanDetails = [...planDetails];
     newPlanDetails[stepIndex] = {
       ...newPlanDetails[stepIndex],
@@ -534,8 +541,8 @@ export default function PlanDetailForm({
               <div className="plan-detail-form__travel-section">
                 <h4 className="plan-detail-form__travel-title">移動詳細</h4>
                 <TravelDetailForm
-                  travelDetails={detail.travelDetails}
-                  onChange={(travelDetails: TravelDetail[]) => updateTravelDetails(index, travelDetails)}
+                  travelDetails={detail.travelDetails || []}
+                  onChange={(travelDetails) => updateTravelDetails(index, travelDetails)}
                   stepIndex={index}
                   errors={errors}
                 />

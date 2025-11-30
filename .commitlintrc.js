@@ -24,7 +24,13 @@ module.exports = defineConfig({
             generatedSelectByAI: "AIが生成した件名から適切なものを選択してください:",
             confirmCommit: "上記の内容でコミットしてもよろしいですか？",
         },
-        types: [{
+        types: [
+            {
+                value: "graphql",
+                name: "graphql:  🥅  GraphQL関連の変更",
+                emoji: "🥅",
+            },
+            {
                 value: "feat",
                 name: "feat:     ✨  新機能の追加",
                 emoji: "✨",
