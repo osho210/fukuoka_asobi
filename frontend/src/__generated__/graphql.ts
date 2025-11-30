@@ -1639,7 +1639,7 @@ export type PlayPlan = {
   planName: Scalars['String']['output'];
   plannerDescription: Scalars['String']['output'];
   plannerTitle: Scalars['String']['output'];
-  publishedAt: Scalars['ISO8601DateTime']['output'];
+  publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   rating: Scalars['Float']['output'];
   recommendUsers?: Maybe<Array<Scalars['String']['output']>>;
   recommendedFors: Array<RecommendedFor>;
