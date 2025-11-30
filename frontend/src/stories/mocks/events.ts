@@ -1,6 +1,7 @@
 /**
- * イベント一覧ページ用モックデータ
+ * イベントページ用モックデータ
  */
+import { GET_EVENT } from '@/graphql/queries/getEvent';
 
 // ダミーのイベントカテゴリ
 export const mockEventCategories = [
@@ -14,7 +15,7 @@ export const mockEventCategories = [
   { id: '8', name: 'その他' },
 ];
 
-// ダミーイベント
+// ダミーイベント（一覧用）
 export const mockEvents = [
   {
     id: '1',
@@ -67,5 +68,74 @@ export const mockEvents = [
     isOnline: false,
     status: 'PUBLISHED',
     eventCategory: { id: '3', name: 'ワークショップ' },
+  },
+];
+
+// イベント詳細用モックデータ
+export const mockEventDetail = {
+  id: '1',
+  title: '博多どんたく港まつり',
+  description: '博多を代表する春の祭り。市内各所でパレードや舞台が開催されます。',
+  location: '福岡市内各所',
+  latitude: 33.5904,
+  longitude: 130.4017,
+  startDatetime: '2025-05-03T10:00:00Z',
+  endDatetime: '2025-05-04T21:00:00Z',
+  recurringRule: null,
+  price: 0,
+  organizer: '福岡市民の祭り振興会',
+  contactEmail: 'info@dontaku.jp',
+  contactPhone: '092-XXX-XXXX',
+  capacity: null,
+  isOnline: false,
+  sourceUrl: 'https://example.com/dontaku',
+  bannerImage: '/itoshima.png',
+  status: 'PUBLISHED',
+  eventCategory: {
+    id: '1',
+    name: 'フェスティバル',
+    description: '地域のお祭りやフェスティバル',
+  },
+  eventCategoryId: '1',
+  createdAt: '2025-01-01T00:00:00Z',
+  updatedAt: '2025-01-15T00:00:00Z',
+};
+
+// イベント詳細用Apollo Clientモック配列
+export const eventDetailMocks = [
+  {
+    request: {
+      query: GET_EVENT,
+      variables: { id: '1' },
+    },
+    result: {
+      data: { event: mockEventDetail },
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT,
+      variables: { id: '2' },
+    },
+    result: {
+      data: {
+        event: {
+          ...mockEventDetail,
+          id: '2',
+          title: '福岡アジア美術館 特別展',
+          description: 'アジアの現代アートを紹介する特別展覧会です。',
+          location: '福岡アジア美術館',
+          startDatetime: '2025-04-01T09:00:00Z',
+          endDatetime: '2025-06-30T17:00:00Z',
+          price: 1000,
+          eventCategory: {
+            id: '2',
+            name: '展示会',
+            description: '美術館や博物館の展示会',
+          },
+          eventCategoryId: '2',
+        },
+      },
+    },
   },
 ];
