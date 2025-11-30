@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_ADMIN --exit-zero-on-changes"
   },
   "dependencies": {
     "next": "*",

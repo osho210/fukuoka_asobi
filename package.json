@@ -13,7 +13,13 @@
     "build:frontend": "npm run build -w frontend",
     "build:admin": "npm run build -w admin",
     "lint:frontend": "npm run lint -w frontend",
-    "lint:admin": "npm run lint -w admin"
+    "lint:admin": "npm run lint -w admin",
+    "storybook:frontend": "npm run storybook -w frontend",
+    "storybook:admin": "npm run storybook -w admin",
+    "build-storybook:frontend": "npm run build-storybook -w frontend",
+    "build-storybook:admin": "npm run build-storybook -w admin",
+    "chromatic:frontend": "npm run chromatic -w frontend",
+    "chromatic:admin": "npm run chromatic -w admin"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
@@ -28,13 +34,19 @@
     "@graphql-codegen/client-preset": "^4.8.0",
     "@graphql-codegen/typescript": "^4.1.6",
     "@graphql-codegen/typescript-operations": "^4.6.0",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-interactions": "^8.6.14",
+    "@storybook/experimental-nextjs-vite": "^8.6.14",
+    "@storybook/nextjs": "^8.6.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chromatic": "^13.3.4",
     "commitizen": "^4.3.0",
     "cz-git": "^1.12.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "storybook": "^8.6.14",
     "typescript": "^5.8.2"
   },
   "config": {

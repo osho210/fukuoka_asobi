@@ -1,0 +1,61 @@
+name: Chromatic
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+
+jobs:
+  chromatic-frontend:
+    name: Chromatic - Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        timeout-minutes: 10
+
+      - name: Run Chromatic (Frontend)
+        run: npm run chromatic:frontend
+        timeout-minutes: 15
+        env:
+          CHROMATIC_PROJECT_TOKEN_FRONTEND: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
+
+  chromatic-admin:
+    name: Chromatic - Admin
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        timeout-minutes: 10
+
+      - name: Run Chromatic (Admin)
+        run: npm run chromatic:admin
+        timeout-minutes: 15
+        env:
+          CHROMATIC_PROJECT_TOKEN_ADMIN: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
