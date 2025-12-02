@@ -135,10 +135,9 @@ ssh deploy@YOUR_VPS_IP
 # 一時ディレクトリにリポジトリをクローン
 cd /tmp
 git clone https://github.com/osho210/fukuoka_asobi.git
-cd fukuoka_asobi/backend
 
 # セットアップスクリプトを実行
-sudo bash bin/setup_vps
+sudo bash /tmp/fukuoka_asobi/backend/bin/setup_vps
 ```
 
 このスクリプトは以下を実行します：
