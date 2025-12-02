@@ -42,7 +42,7 @@ production:
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
   database: <%= ENV.fetch("DB_NAME") { "fukuoka_asobi_production" } %>
   username: <%= ENV.fetch("DB_USERNAME") { "fukuoka_asobi" } %>
-  password: <%= ENV.fetch("DB_PASSWORD") { "password" } %>
+  password: <%= ENV.fetch("DB_PASSWORD") { raise "DB_PASSWORD is required in production" } %>
   host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
   port: <%= ENV.fetch("DB_PORT") { 3306 } %>
 # As with config/credentials.yml, you never want to store sensitive information,
