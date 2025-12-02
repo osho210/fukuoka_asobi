@@ -1,0 +1,717 @@
+# Cline Rules
+
+## ロール定義
+
+あなたは熟練のRails/Nextプログラマとしてコードを書いてください。
+
+
+## 期待する回答
+
+- 実装コードは省略せず、完全な形で提供
+- 日本語での詳細な説明
+
+## サービス設計
+サービス設計 Wiki
+本ページでは、サービスの設計に関する各種要件や戦略をまとめています。
+ユーザー課題の整理からユーザーセグメントの明確化、情報管理、マネタイズ、差別化戦略までを一通り網羅しています。
+
+サービスの「ユーザー課題」と「解決策」を言語化
+ユーザー課題
+概要
+自分自身、週末に遊びに行くのが好きだが、ネット検索やインスタ検索でも「遊び欲」を満たすようなサービスが見当たらない。
+課題一覧
+一般的な観光地には行きたくない
+
+既存メディアや検索結果では王道スポットばかりがヒットする
+「地元住民しか知らない」「通」「一歩背伸び」「価値観に触れる」ような内容が不足
+
+心の琴線に触れる、奥深いローカル情報に出会いにくい
+スポット単体の記事のみが多く、1日遊ぶプランを考えるのが面倒
+
+お店単体、イベント単体で紹介されているだけでは、一日の流れを想定しにくい
+イベントだけでは1日過ごせない
+
+イベント参加後のプランをどう組むか悩む
+店舗ページまでいかないと、実際に空いているかどうかが分からない
+
+営業時間や混雑状況がリアルタイムに把握できない
+「福岡遊び」と検索しても、王道観光地・一般的なお店ばかり表示される
+
+真に求めている「ローカル色」や「隠れ家的なスポット」の情報が見つからない
+天候によるプラン変更が想定されていない
+
+屋外・屋内の切り替えなど、柔軟にプランを立てられるサービスが無い
+解決策
+「地元住民しか知らない」「通」「一歩背伸び」「価値観に触れる」をコンセプトに情報取得
+
+ユーザーが実際に利用したレポートや、ローカルキュレーターが発信する濃い情報を集約
+行く日程・相手・天気などから、お店やプランを自動で提案するサービス
+
+事前に選択した条件（日時、参加メンバー、予算、移動手段、天候など）に合わせて最適プランをリコメンド
+当日の天気が雨天の場合は、屋内プランへ切り替えるなど動的に対応
+取得したデータをもとにまとめ記事を作成
+
+体験談・店舗情報・イベント情報を編集部やユーザーの投稿と組み合わせ、読みやすい形でまとめる
+「1日遊び切れるプラン」「半日で気軽に回れるプラン」など、複数のシチュエーションに対応する記事を量産
+ユーザーセグメントの明確化
+20代前半〜20代後半の男性
+ペルソナ像
+属性: 20代前半〜後半の男性、社会人1〜3年目程度
+状況:
+最近彼女ができたものの、どんなデートプランを考えたらよいか分からない
+デート慣れしておらず、しっかりリードできるか不安
+趣味嗜好・行動特性
+趣味嗜好:
+基本的に外出や遊びは好きだが、下調べが苦手
+SNS映えよりも「彼女を楽しませる」「失敗しない」ことを優先
+行動特性:
+友達やSNSのクチコミを一通りチェックするものの、情報をまとめ切れず行き当たりばったりになりがち
+一日の流れやコース感を重視し、移動時間や混雑情報なども確認したい
+課題・ニーズ
+課題:
+有名な場所は混雑していたり、ありがちで面白みに欠ける
+天気や営業時間など、細かいスケジュール調整が煩雑
+ニーズ:
+一日を通して「失敗しないデートプラン」を自動提案してほしい
+混雑・予約情報を簡単にチェックできる機能を求める
+実際に体験した人のリアルな感想が見えると安心
+20代後半〜30代前半の女性
+ペルソナ像
+属性: 福岡在住、20代後半〜30代前半の女性
+状況:
+休日は友達や一人でいろいろなスポットを巡るのが趣味
+王道観光地は行き尽くしていて、もう少しディープな体験をしたい
+趣味嗜好・行動特性
+趣味嗜好:
+「隠れ家カフェ」「体験型ワークショップ」「ディープスポット」などのレア感に惹かれる
+写真映えよりも、そこにしかない世界観・体験を重視
+行動特性:
+ローカルメディアやSNSで情報を収集するが、点在する情報をまとめるのは手間
+友達同士やソロで動くことも多く、柔軟なプランを欲している
+課題・ニーズ
+課題:
+イベント情報だけでは1日を組み立てにくい
+キュレーション型の記事は大体「広告寄り」になりがちで、自分に合うかわからない
+ニーズ:
+イベントや店舗情報と、その近くのおすすめスポットをまとめて提案してほしい
+最新情報や期間限定企画などを効率よく把握できるプラットフォームを求める
+友人と共有・プラン調整しやすいUIが理想
+訪日外国人への対応
+現状:
+福岡空港を利用した海外旅行者が多いが、現時点ではローカルユーザー向けが主目的
+拡張性:
+i18n対応をベースに、多言語化（英語・中国語など）を可能にする設計は視野に入れたい
+観光客向け追加情報（交通手段、文化的背景、決済情報など）は将来的にオプションで検討
+カップル向け or 友達向け or ソロ向け
+サービス方針: 「行く相手」をユーザー入力項目に設定し、プランを分岐
+カップル/友達/ソロなどで大きく分けず、ユーザーが自由に選択できる
+理由:
+共通の店舗・イベント情報でも、誰と行くかでプランの組み方が変わる
+必要に応じて「カップルおすすめ」「ソロ向け」「グループ向け」といったタグを追加する余地を残しておく
+まとめ
+主要ターゲット
+20代前半〜後半の男性
+「失敗しないデートプラン」を求める層
+20代後半〜30代前半の女性
+「ディープな体験・隠れ家スポット」を求める層
+二次ターゲット
+訪日外国人（多言語化の実装は将来的に検討）
+カップル/友達/ソロの区別はユーザー入力項目でカバー
+ポイント:
+
+プラン提案やローカル情報のキュレーションを行う際、どの層が最もメリットを感じるかを明確にする
+まずは主要ターゲットを中心に機能開発とマーケティングを行い、拡大余地があれば他のユーザー層へ広げる
+ユーザーごとに「誰と」「いつ」「どんな体験をしたいか」といった条件を入力できる仕組みを整え、最適なプランを提示することがサービスの強みになる
+
+## 注意事項
+
+### 設計書
+
+- 新規開発時は docs ディレクトリ以下に以下の内容を含む設計書 `design.md`を作成してください：
+  - 要件定義書
+  - 設計書（概略・機能・クラス構成）
+- 既存のソフトウェアを修正する場合：
+  - 既存の設計書を参照してソフトウェアを開発してください
+  - 修正内容に応じて設計書も更新してください
+- 設計書を作成したら、コードを作成する前にユーザーに設計書のチェックを依頼してください
+
+### コーディング規約
+
+- RubyコードはRuboCopのコーディング規約に従ってください
+- TypeScriptコードはESLintおよびPrettierのコーディング規約に従ってください
+### バックエンドのテストコード
+
+- テストコードを spec ディレクトリ以下に app ディレクトリと同じ構成で作成してください
+- テストコードを作成したら rspec を実行してエラー無いことを確認してください。エラーが出たら修正してください
+- テストカバレッジを確認してください。カバレッジが低い場合はテストコードを追加してください
+
+### フロントエンドのテストコード
+コンポーネントのテストコードを src/components/tests/ 内に作成してください。テストコードは以下の観点をカバーしてください：
+- レンダリングのテスト
+- ユーザーの操作に対するテスト
+
+ユーティリティのテスト → src/lib/tests/
+
+テストファイルの命名
+コンポーネント: [ComponentName].test.tsx
+ユーティリティ: [utilityName].test.ts
+テストの構造
+describeブロックでテストをグループ化
+itブロックで個別のテストケースを記述
+期待される結果を明確にコメントで記述
+モック化の規則
+外部APIやデータベースアクセスは必ずモック化
+モックデータは現実的なデータ構造を反映
+beforeEach/afterEachでモックのセットアップとクリーンアップを行う
+vitest の vi.spyOn を使用してモック関数を作成
+テストの実行と検証
+各テストファイル作成後は必ずテストを実行
+すべてのテストが成功することを確認
+TypeScriptのエラーがないことを確認
+テストカバレッジの確認
+コンポーネントテストの注意点
+Honoのhtmlヘルパーを使用してレンダリング
+レンダリング結果を文字列として取得し検証
+クラス名、テキスト、属性値などの存在を確認
+多言語対応のテキストが正しく表示されることを確認
+ユーティリティテストの注意点
+関数の入出力を厳密にテスト
+エッジケースを考慮したテストケースを作成
+日付や時刻に依存するテストは固定値を使用
+テストメンテナンス
+コンポーネントやユーティリティの変更時は対応するテストも更新
+テストが失敗した場合は原因を特定し修正
+テストコードの重複を避け、必要に応じてヘルパー関数を作成
+
+
+
+### 重複実装の防止
+実装前に以下の確認を行ってください：
+- src/components/ 内の既存コンポーネントの再利用可能性
+- src/lib/ 内のユーティリティ関数の活用
+- 共通のスタイル定義（src/styles/global.ts）の利用
+- 多言語対応コンポーネントの統一的な実装方法
+
+このセクションは、後続のプロセス全体を導くものなので、時間をかけてでも、十分に詳細かつ包括的な分析を行ってください。
+
+
+### Git操作
+
+- gitの操作はgit statusでステータス確認しながら慎重に行ってください
+- git管理されているファイルは、git mv や git rm を使って移動削除してください
+
+### Pull Request(PR)
+
+#### PR作成時
+- PRを要望されたら、gitコマンドで差分を確認したうえで、`gh pr` コマンドを使ってPRを作成してください
+- PRのdescriptionは .github/pull_request_template.md を読み取ってフォーマットを合わせてください
+
+#### PRレビュー時
+以下の手順でファイルごとにコメントを付けてください：
+
+1. チェックする観点は .github/pull_request_template.md を参照してください
+2. PRの差分を確認:
+   ```bash
+   gh pr diff <PR番号>
+   ```
+
+3. ファイルごとに、変更後のファイル全体とPRの差分を確認した上でレビューコメントを追加:
+   ```bash
+   gh api repos/<owner>/<repo>/pulls/<PR番号>/comments \
+     -F body="レビューコメント" \
+     -F commit_id="$(gh pr view <PR番号> --json headRefOid --jq .headRefOid)" \
+     -F path="対象ファイルのパス" \
+     -F position=<diffの行番号>
+   ```
+
+   パラメータの説明：
+   - position: diffの行番号（新規ファイルの場合は1から開始）
+   - commit_id: PRの最新のコミットIDを自動取得
+
+以下のディレクトリ構造に従って実装を行ってください：
+
+fukuoka-asobi
+├── README.md
+├── .github
+│   ├── pull_request_template.md
+│   ├── ISSUE_TEMPLATE
+│   │   ├── bug_request.md
+│   │   ├── epic_request.md
+│   │   └── feature_request.md
+├── backend
+│   ├── assets
+│   ├── app
+│   │   ├── controllers
+│   │   ├── graphql
+│   │   ├── models
+│   │   ├── mailers
+│   │   ├── views
+│   │   └── helpers
+│   ├── bin
+│   ├── config
+│   ├── db
+│   ├── lib
+│   ├── log
+│   ├── public
+│   ├── spec
+│   ├── storage
+│   ├── test
+│   ├── tmp
+│   ├── vendor
+├── frontend
+│   ├── public
+│   ├── node_modules
+│   ├── src
+│   │   ├── components
+│   │   ├── lib
+│   │   ├── app
+│   │   ├── graphql
+│   │   └── styles
+└── .clinerules
+
+
+コア技術
+- Ruby on Rails
+- Next.js
+- TypeScript
+- GraphQL
+
+開発ツール
+- npm
+
+全ての言葉は日本語で行なってください.
+
+## 言語ガイドライン
+
+### コードレビュー
+
+- **すべてのレビューコメントは日本語で記述してください**
+- 技術用語は英語でも構いませんが、説明文は日本語で
+- 複雑なロジックには日本語でコメントを付けてください
+
+### 推奨されるコメント例
+
+```markdown
+✅ 良い例：
+- このコンポーネントの責任が大きすぎます。分割を検討してください
+- GraphQL のクエリをメモ化することでパフォーマンスが向上します
+- このテーブルの N+1 問題を解決するために eager_load を使用しましょう
+- 「福岡市内のスポットのみをフィルタリング」という意図が明確になります
+
+❌ 避けるべき例：
+- "this is inefficient"（英語のみ）
+- "missing types"（英語のみ）
+- "refactor this"（曖昧）
+```
+
+### ドキュメント・コメント
+
+- README、設計書、コメントはすべて日本語
+- コード内のコメントも日本語で記述
+- 変数名・関数名・クラス名は英語を使用
+
+### GitHub Copilot の使用
+
+- 提案されたコードに対する説明は日本語で確認
+- 複雑なロジックには日本語コメントを追加
+- 詳細は `copilot-instructions.md` を参照
+
+## よく使うコマンド集
+
+### 開発環境
+
+```bash
+# 全体セットアップ
+npm install
+npm run dev:frontend      # フロントエンド開発サーバー（ポート: 8200）
+npm run dev:admin         # 管理画面開発サーバー（ポート: 9200）
+cd backend && rails server # Rails サーバー（ポート: 3000）
+
+# Docker 使用時
+docker-compose up
+docker exec -it fukuoka_asobi_backend bash
+```
+
+### GraphQL 型定義生成
+
+```bash
+# フロントエンド
+cd frontend && npm run generate
+npm run generate -w frontend
+
+# 管理画面
+cd admin && npm run generate
+npm run generate -w admin
+
+# キャッシュをクリアして再生成
+rm -rf frontend/src/__generated__
+npm run generate -w frontend
+```
+
+### テスト実行
+
+```bash
+# バックエンド（RSpec）
+cd backend && rspec
+cd backend && rspec spec/models/spot_spec.rb  # 特定ファイルのみ
+cd backend && rspec --format coverage        # カバレッジ確認
+
+# フロントエンド（Vitest）
+npm test -w frontend
+npm test -- --watch -w frontend              # 監視モード
+npm test -- --coverage -w frontend           # カバレッジ確認
+```
+
+### ビルド・デプロイ
+
+```bash
+# ビルド
+npm run build:frontend
+npm run build:admin
+
+# リント
+npm run lint:frontend
+npm run lint:admin
+
+# 全ワークスペースでビルド
+npm run build --workspaces
+```
+
+### 依存関係管理
+
+```bash
+# パッケージ追加
+npm install <package-name>                   # ルートに追加（全ワークスペース共有）
+npm install <package-name> -w frontend       # frontend のみに追加
+npm install <package-name> -w admin          # admin のみに追加
+npm install -D <package-name> -w frontend    # 開発依存関係として追加
+
+# パッケージ削除
+npm uninstall <package-name>
+npm uninstall <package-name> -w frontend
+```
+
+### Rails コマンド
+
+```bash
+cd backend
+
+# マイグレーション
+rails db:migrate
+rails db:rollback
+rails db:setup                # DB 初期化
+
+# シード実行
+rails db:seed
+
+# コンソール
+rails console
+
+# クレデンシャル編集
+EDITOR="vim -f" bin/rails credentials:edit --environment development
+EDITOR="vim -f" bin/rails credentials:edit --environment production
+```
+
+### Git 操作
+
+```bash
+# ステータス確認
+git status
+
+# ファイル移動（git 管理下のファイル）
+git mv old_path new_path
+
+# ファイル削除（git 管理下のファイル）
+git rm file_path
+
+# PR 作成（gh コマンド）
+gh pr create --title "機能名" --body "説明"
+
+# PR 差分確認
+gh pr diff <PR番号>
+
+# PR レビューコメント追加
+gh api repos/<owner>/<repo>/pulls/<PR番号>/comments \
+  -F body="レビューコメント" \
+  -F commit_id="$(gh pr view <PR番号> --json headRefOid --jq .headRefOid)" \
+  -F path="対象ファイルのパス" \
+  -F position=<diffの行番号>
+```
+
+### Storybook
+
+```bash
+# フロントエンド Storybook 起動（ポート: 6006）
+npm run storybook:frontend
+
+# 管理画面 Storybook 起動（ポート: 6007）
+npm run storybook:admin
+
+# ビルド
+npm run build-storybook:frontend
+npm run build-storybook:admin
+```
+
+### トラブルシューティング
+
+```bash
+# Bundle キャッシュクリア
+docker volume ls | grep bundle
+docker volume rm fukuoka-asobi_bundle_cache
+
+# node_modules クリア
+rm -rf node_modules package-lock.json
+npm install
+
+# GraphQL キャッシュクリア
+rm -rf frontend/src/__generated__ admin/src/__generated__
+npm run generate --workspaces
+
+# ポート確認・プロセス終了
+lsof -i :8200
+lsof -i :9200
+lsof -i :3000
+kill -9 <PID>
+```
+
+## PR レビュー時のチェックリスト
+
+### バックエンド（Rails）
+
+- [ ] 新しい GraphQL 型には Docstring（Google スタイル）が記述されているか
+- [ ] RuboCop による自動チェックを通っているか
+- [ ] テストカバレッジが十分か（目安: 80% 以上）
+- [ ] N+1 クエリの問題はないか
+- [ ] 適切なバリデーションが実装されているか
+- [ ] すべてのレビューコメントは日本語で記述されているか
+
+### フロントエンド（Next.js）
+
+- [ ] TypeScript の型がすべて定義されているか
+- [ ] 自動生成された GraphQL 型を使用しているか（手動型定義はないか）
+- [ ] コンポーネントが過度に複雑ではないか（一つの責務に）
+- [ ] ESLint のエラーはないか
+- [ ] テストが追加されているか
+- [ ] すべてのレビューコメントは日本語で記述されているか
+
+### 共通
+
+- [ ] ドキュメントが更新されているか（必要な場合）
+- [ ] コミットメッセージは明確か
+- [ ] 設計書が更新されているか（大規模な変更の場合）
+
+## DB設計
+遊びのプランテーブル (play_plans)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+user_id	INT	Foreign Key to users.id
+plan_name	VARCHAR(255)	プランのタイトル
+created_at	DATETIME	作成日 (DEFAULT CURRENT_TIMESTAMP)
+updated_at	DATETIME	更新日 (DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+start_datetime	DATETIME	プランの開始日時 (NULL許可)
+end_datetime	DATETIME	プランの終了日時 (NULL許可)
+description	TEXT	プランの説明
+status	ENUM('公開', '下書き')	ステータス
+favorite_count	INT DEFAULT 0	お気に入り登録数
+rating	DECIMAL(3,2) DEFAULT 0.0	平均評価
+review_count	INT DEFAULT 0	レビュー数
+image_url	VARCHAR(255)	イメージ画像URL
+tags	VARCHAR(255)	関連タグ (将来的には中間テーブル化推奨)
+location	VARCHAR(255)	主な場所
+published_at	DATETIME	公開日 (NULL許可)
+trip_type	ENUM('日帰り', '泊まり')	日帰り or 泊まり
+total_budget	DECIMAL(10,2)	トータル予算
+recommended_for	VARCHAR(255)	おすすめ対象
+
+プラン詳細テーブル (plan_details)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+plan_id	INT	Foreign Key to play_plans.id
+step_number	INT	ステップ番号
+step_name	VARCHAR(255)	ステップタイトル
+step_description	TEXT	ステップ説明
+store_id	INT	Foreign Key to stores.id (NULL許可)
+comment	TEXT	コメント
+start_datetime	DATETIME	ステップ開始日時 (NULL許可)
+end_datetime	DATETIME	ステップ終了日時 (NULL許可)
+budget	DECIMAL(10,2)	予算
+notes	TEXT	メモ
+
+移動詳細テーブル (travel_details)
+Column Name	Data Type	Description
+travel_id	INT	Primary Key, Auto Increment
+detail_id	INT	Foreign Key to plan_details.id
+sequence_number	INT	移動順序番号
+travel_method	ENUM('徒歩', '電車', '車', '自転車', 'その他')	移動方法
+travel_time	INT	移動時間 (分)
+notes	TEXT	メモ
+
+店舗テーブル (stores)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+district_id	INT	Foreign Key to districts.id
+store_name	VARCHAR(255)	店名
+address	VARCHAR(255)	住所
+phone_number	VARCHAR(50)	電話番号
+website	VARCHAR(255)	サイトURL
+catchphrase	VARCHAR(255)	キャッチコピー
+recommended_for_1	VARCHAR(255)	おすすめ対象1
+recommended_for_2	VARCHAR(255)	おすすめ対象2
+parking_available	BOOLEAN	駐車場
+nearest_station	VARCHAR(255)	最寄駅
+review_rating	DECIMAL(3,2)	評価
+review_count	INT	レビュー数
+instagram_url	VARCHAR(255)	インスタURL
+is_closed	BOOLEAN	閉店フラグ
+budget_range	ENUM('安い', '普通', '高い')	予算感
+max_people	INT	最大人数
+min_people	INT	最小人数
+is_rainy_ok	BOOLEAN	雨天可否
+theme	ENUM('癒しの旅', 'アクティブ', 'コスパ', 'グルメ', '自然', '文化と歴史')	テーマ
+created_at	DATETIME	作成日
+updated_at	DATETIME	更新日
+
+営業時間テーブル (opening_hours)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+day_of_week	ENUM('月', '火', '水', '木', '金', '土', '日')	曜日
+open_time	TIME	開店時間
+close_time	TIME	閉店時間
+
+地区テーブル (districts)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+district_name	VARCHAR(255)	地区名
+
+地域テーブル (areas)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+area_name	VARCHAR(255)	地域名
+district_id	INT	Foreign Key to districts.id
+
+店舗-地域中間テーブル (store_areas)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+area_id	INT	Foreign Key to areas.id
+
+カテゴリーテーブル (categories)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+category_name	VARCHAR(255)	カテゴリー名
+
+店舗-カテゴリ中間テーブル (store_categories)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+category_id	INT	Foreign Key to categories.id
+
+ハッシュタグテーブル (hashtags)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+hashtag_name	VARCHAR(255)	ハッシュタグ名
+
+店舗-ハッシュタグ中間テーブル (store_hashtags)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+hashtag_id	INT	Foreign Key to hashtags.id
+
+インスタグラム埋め込みテーブル (instagram_embeds)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+instagram_embed_name	VARCHAR(255)	埋め込み名
+
+店舗-インスタグラム埋め込み中間テーブル (store_instagram_embeds)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+instagram_embed_id	INT	Foreign Key to instagram_embeds.id
+
+メニューテーブル (menus)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+menu_name	VARCHAR(255)	メニュー名
+
+店舗-メニュー中間テーブル (store_menus)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+menu_id	INT	Foreign Key to menus.id
+
+お店の雰囲気テーブル (store_ambiances)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+ambiance_name	VARCHAR(255)	雰囲気名
+
+店舗-お店の雰囲気中間テーブル (store_ambiance_relations)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+ambiance_id	INT	Foreign Key to store_ambiances.id
+
+目的テーブル (purposes)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+purpose_name	VARCHAR(255)	目的名
+
+店舗-目的中間テーブル (store_purposes)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+store_id	INT	Foreign Key to stores.id
+purpose_id	INT	Foreign Key to purposes.id
+
+ユーザーテーブル (users)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+username	VARCHAR(255)	ユーザー名
+profile_image_url	VARCHAR(255)	プロフィール画像URL
+bio	TEXT	自己紹介
+role	ENUM('管理者', '店舗運営者', '編集部', 'ユーザー')	権限
+email	VARCHAR(255)	メールアドレス
+password_hash	VARCHAR(255)	パスワードハッシュ
+instagram_url	VARCHAR(255)	Instagram URL
+is_paid_member	BOOLEAN DEFAULT FALSE	課金フラグ
+paid_start_date	DATE	課金開始日 (NULL許可)
+paid_end_date	DATE	課金終了日 (NULL許可)
+created_at	DATETIME	作成日
+updated_at	DATETIME	更新日
+
+ユーザーの作成したプラン情報テーブル (user_plans)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+user_id	INT	Foreign Key to users.id
+plan_id	INT	Foreign Key to play_plans.id
+
+ユーザーのお気に入り記事テーブル (user_favorites)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+user_id	INT	Foreign Key to users.id
+article_id	INT	Foreign Key to articles.id
+
+ユーザー閲覧履歴テーブル (user_histories)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+user_id	INT	Foreign Key to users.id
+article_id	INT	Foreign Key to articles.id
+viewed_at	DATETIME	閲覧日時
+
+ユーザーの購入した記事テーブル (user_purchases)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+user_id	INT	Foreign Key to users.id
+article_id	INT	Foreign Key to articles.id
+purchased_at	DATETIME	購入日時
+
+イベントテーブル (events)
+Column Name	Data Type	Description
+id	INT	Primary Key, Auto Increment
+title	VARCHAR(255)	イベントタイトル
+description	TEXT	イベント詳細説明
+location	VARCHAR(255)	開催場所
+start_datetime	DATETIME	開始日時
+end_datetime	DATETIME	終了日時
+source_url	VARCHAR(255)	情報元URL
+created_at	DATETIME	作成日
+updated_at	DATETIME	更新日
