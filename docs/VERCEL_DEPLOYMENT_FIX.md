@@ -5,9 +5,23 @@
 2024年12月、`frontend` と `admin` の Vercel デプロイが突然失敗するようになった。
 
 ### エラーメッセージ
+
+**エラー 1: Next.js バージョン検出の失敗**
 ```
 Warning: Could not identify Next.js version, ensure it is defined as a project dependency.
 Error: No Next.js version detected. Make sure your package.json has "next" in either "dependencies" or "devDependencies".
+```
+
+**エラー 2: GraphQL CodeGen の型解決の失敗**
+```
+Type error: Cannot find module '@graphql-codegen/cli' or its corresponding type declarations.
+> 1 | import { CodegenConfig } from "@graphql-codegen/cli";
+```
+
+**エラー 3: Storybook の型解決の失敗**
+```
+Type error: Cannot find module '@storybook/react' or its corresponding type declarations.
+> 1 | import type { Meta, StoryObj } from '@storybook/react';
 ```
 
 ## 根本原因
@@ -75,7 +89,34 @@ Error: No Next.js version detected. Make sure your package.json has "next" in ei
 }
 ```
 
-### 2. vercel.json の追加（オプション）
+### 2. GraphQL CodeGen パッケージの追加
+
+`codegen.ts` が `@graphql-codegen/cli` をインポートしているため、これらのパッケージを devDependencies に追加：
+
+```json
+{
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/client-preset": "^4.8.0",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.0"
+  }
+}
+```
+
+### 3. Storybook ファイルの除外
+
+`.stories.tsx` ファイルが `@storybook/react` をインポートしていますが、これらのファイルは本番ビルドに不要です。`tsconfig.json` で除外：
+
+```json
+{
+  "exclude": ["node_modules", "**/*.stories.tsx"]
+}
+```
+
+これにより、Next.js ビルド時に Storybook ファイルが処理されず、Storybook パッケージが不要になります。
+
+### 4. vercel.json の追加（オプション）
 
 各ディレクトリに `vercel.json` を追加して設定を固定化：
 
