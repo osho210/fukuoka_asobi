@@ -39,7 +39,12 @@ production:
   <<: *default
   adapter: mysql2
   encoding: utf8mb4
-  pool: 5
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+  database: <%= ENV.fetch("DB_NAME") { "fukuoka_asobi_production" } %>
+  username: <%= ENV.fetch("DB_USERNAME") { "fukuoka_asobi" } %>
+  password: <%= ENV.fetch("DB_PASSWORD") { "password" } %>
+  host: <%= ENV.fetch("DB_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DB_PORT") { 3306 } %>
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -60,26 +65,27 @@ production:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  primary:
-    adapter: postgresql
-    url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
-  cache:
-    adapter: postgresql
-    url: <%= ENV["CACHE_DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cache_migrate
-
-  queue:
-    adapter: postgresql
-    url: <%= ENV["QUEUE_DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/queue_migrate
-
-  cable:
-    adapter: postgresql
-    url: <%= ENV["CABLE_DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cable_migrate
+# Fly.io や他のクラウド環境で PostgreSQL を使用する場合は、以下の設定を使用してください
+# production:
+#   primary:
+#     adapter: postgresql
+#     url: <%= ENV["DATABASE_URL"] %>
+#     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#
+#   cache:
+#     adapter: postgresql
+#     url: <%= ENV["CACHE_DATABASE_URL"] %>
+#     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#     migrations_paths: db/cache_migrate
+#
+#   queue:
+#     adapter: postgresql
+#     url: <%= ENV["QUEUE_DATABASE_URL"] %>
+#     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#     migrations_paths: db/queue_migrate
+#
+#   cable:
+#     adapter: postgresql
+#     url: <%= ENV["CABLE_DATABASE_URL"] %>
+#     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#     migrations_paths: db/cable_migrate

@@ -30,6 +30,33 @@ threads threads_count, threads_count
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port ENV.fetch("PORT", 3000)
 
+# 本番環境では Unix ソケットを使用（Nginx との連携）
+if ENV["RAILS_ENV"] == "production"
+  app_dir = ENV.fetch("APP_DIR") { "/var/www/fukuoka_asobi/current" }
+  shared_dir = ENV.fetch("SHARED_DIR") { "/var/www/fukuoka_asobi/shared" }
+  
+  # Unix ソケットでバインド
+  bind "unix://#{shared_dir}/tmp/sockets/puma.sock"
+  
+  # PID ファイルとステートファイル
+  pidfile "#{shared_dir}/tmp/pids/puma.pid"
+  state_path "#{shared_dir}/tmp/pids/puma.state"
+  
+  # ログファイル
+  stdout_redirect "#{shared_dir}/log/puma_stdout.log", "#{shared_dir}/log/puma_stderr.log", true
+  
+  # ワーカー数（2GB メモリの場合は 2、4GB の場合は 4 を推奨）
+  workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+  
+  # ワーカーの起動前処理
+  on_worker_boot do
+    ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+  end
+  
+  # プリロード（メモリ効率化）
+  preload_app!
+end
+
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 

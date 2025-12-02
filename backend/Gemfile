@@ -56,8 +56,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+end
 
-  # Use mysql2 as the database for Active Record
+group :development, :test, :production do
+  # Use mysql2 as the database for Active Record (for ConoHa VPS deployment)
   gem "mysql2", "~> 0.5"
 end
 

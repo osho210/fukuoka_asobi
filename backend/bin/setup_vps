@@ -1,0 +1,150 @@
+#!/bin/bash
+# ConoHa VPS 初回セットアップスクリプト
+# このスクリプトは VPS 上で一度だけ実行します
+
+set -e
+
+echo "=== ConoHa VPS 初回セットアップを開始します ==="
+
+# 変数設定
+DEPLOY_USER="deploy"
+APP_NAME="fukuoka_asobi"
+APP_DIR="/var/www/${APP_NAME}"
+RUBY_VERSION="3.3.1"
+
+# ユーザー作成（既に存在する場合はスキップ）
+if ! id -u $DEPLOY_USER > /dev/null 2>&1; then
+    echo "ユーザー ${DEPLOY_USER} を作成します..."
+    sudo useradd -m -s /bin/bash $DEPLOY_USER
+    sudo usermod -aG sudo $DEPLOY_USER
+    echo "${DEPLOY_USER} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/${DEPLOY_USER}
+else
+    echo "ユーザー ${DEPLOY_USER} は既に存在します"
+fi
+
+# 基本パッケージのインストール
+echo "基本パッケージをインストールします..."
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y \
+    git \
+    curl \
+    wget \
+    build-essential \
+    libssl-dev \
+    libreadline-dev \
+    zlib1g-dev \
+    libmysqlclient-dev \
+    nginx \
+    mysql-server \
+    certbot \
+    python3-certbot-nginx
+
+# rbenv のインストール（deploy ユーザーで実行）
+echo "rbenv をインストールします..."
+sudo -u $DEPLOY_USER bash << 'EOF'
+if [ ! -d "$HOME/.rbenv" ]; then
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+    
+    git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+    echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+else
+    echo "rbenv は既にインストールされています"
+fi
+EOF
+
+# Ruby のインストール
+echo "Ruby ${RUBY_VERSION} をインストールします..."
+sudo -u $DEPLOY_USER bash << EOF
+source ~/.bashrc
+if ! rbenv versions | grep -q "${RUBY_VERSION}"; then
+    rbenv install ${RUBY_VERSION}
+    rbenv global ${RUBY_VERSION}
+    gem install bundler
+else
+    echo "Ruby ${RUBY_VERSION} は既にインストールされています"
+fi
+EOF
+
+# MySQL の初期設定
+echo "MySQL を設定します..."
+sudo mysql -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_production DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+sudo mysql -e "CREATE USER IF NOT EXISTS '${APP_NAME}'@'localhost' IDENTIFIED BY 'CHANGE_THIS_PASSWORD';"
+sudo mysql -e "GRANT ALL PRIVILEGES ON ${APP_NAME}_production.* TO '${APP_NAME}'@'localhost';"
+sudo mysql -e "FLUSH PRIVILEGES;"
+
+echo ""
+echo "⚠️  重要: MySQL のパスワードを変更してください！"
+echo "sudo mysql -e \"ALTER USER '${APP_NAME}'@'localhost' IDENTIFIED BY 'your_strong_password';\""
+echo ""
+
+# アプリケーションディレクトリの作成
+echo "アプリケーションディレクトリを作成します..."
+sudo mkdir -p $APP_DIR/{releases,shared/{tmp/{pids,sockets},log,storage}}
+sudo chown -R $DEPLOY_USER:$DEPLOY_USER $APP_DIR
+
+# SSH 公開鍵の設定（手動で行う必要があります）
+echo ""
+echo "=== SSH 公開鍵の設定 ==="
+echo "GitHub Actions からデプロイするため、以下の手順で SSH 公開鍵を設定してください："
+echo ""
+echo "1. ローカルマシンで SSH キーペアを生成（まだの場合）："
+echo "   ssh-keygen -t ed25519 -C 'github-actions@${APP_NAME}' -f ~/.ssh/github_actions_${APP_NAME}"
+echo ""
+echo "2. VPS に公開鍵を登録："
+echo "   ssh-copy-id -i ~/.ssh/github_actions_${APP_NAME}.pub ${DEPLOY_USER}@YOUR_VPS_IP"
+echo ""
+echo "3. GitHub リポジトリの Secrets に秘密鍵を登録："
+echo "   Settings > Secrets and variables > Actions > New repository secret"
+echo "   Name: VPS_SSH_KEY"
+echo "   Value: ~/.ssh/github_actions_${APP_NAME} の内容"
+echo ""
+
+# Nginx の設定
+echo ""
+echo "=== Nginx の設定 ==="
+echo "以下のコマンドで Nginx を設定してください："
+echo ""
+echo "sudo cp ${APP_DIR}/current/config/nginx/fukuoka_asobi.conf /etc/nginx/sites-available/${APP_NAME}"
+echo "sudo ln -s /etc/nginx/sites-available/${APP_NAME} /etc/nginx/sites-enabled/"
+echo "sudo nginx -t"
+echo "sudo systemctl reload nginx"
+echo ""
+
+# systemd の設定
+echo ""
+echo "=== systemd サービスの設定 ==="
+echo "以下のコマンドで systemd サービスを設定してください："
+echo ""
+echo "sudo cp ${APP_DIR}/current/config/systemd/fukuoka_asobi.service /etc/systemd/system/"
+echo "sudo systemctl daemon-reload"
+echo "sudo systemctl enable fukuoka_asobi"
+echo ""
+
+# 環境変数の設定
+echo ""
+echo "=== 環境変数の設定 ==="
+echo "環境変数ファイルを作成してください："
+echo ""
+echo "cp ${APP_DIR}/current/config/.env.production.example ${APP_DIR}/shared/.env.production"
+echo "nano ${APP_DIR}/shared/.env.production  # 各値を実際の値に変更"
+echo ""
+
+# Let's Encrypt の設定（ドメイン設定後）
+echo ""
+echo "=== Let's Encrypt の設定（ドメイン設定後） ==="
+echo "ドメインの DNS 設定が完了したら、以下のコマンドで SSL 証明書を取得してください："
+echo ""
+echo "sudo certbot --nginx -d your-domain.example.com"
+echo ""
+
+echo "=== 初回セットアップが完了しました ==="
+echo ""
+echo "次のステップ："
+echo "1. アプリケーションコードをデプロイ"
+echo "2. 環境変数ファイルを設定"
+echo "3. データベースマイグレーション実行"
+echo "4. systemd サービス起動"
+echo ""
