@@ -111,7 +111,7 @@ systemctl restart sshd
 apt install -y ufw
 
 # SSH を許可
-ufw allow 22/tcp
+ufw allow 10022/tcp
 
 # HTTP/HTTPS を許可
 ufw allow 80/tcp
