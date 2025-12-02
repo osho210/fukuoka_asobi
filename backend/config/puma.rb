@@ -32,7 +32,7 @@ port ENV.fetch("PORT", 3000)
 
 # 本番環境では Unix ソケットを使用（Nginx との連携）
 if Rails.env.production?
-  app_dir = ENV.fetch("APP_DIR") { "/var/www/fukuoka_asobi/current" }
+  app_dir = ENV.fetch("APP_DIR") { "/var/www/fukuoka_asobi/current/backend" }
   shared_dir = ENV.fetch("SHARED_DIR") { "/var/www/fukuoka_asobi/shared" }
   
   # Unix ソケットでバインド
