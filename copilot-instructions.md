@@ -161,7 +161,7 @@ npm run build --workspaces
 ### バックエンド（Ruby）
 
 ```ruby
-# ✅ PEP8 準拠（RuboCop で自動整形）
+# ✅ RuboCop準拠（Ruby Style Guide, 自動整形対応）
 # ✅ Google スタイルの Docstring
 
 class SpotService
