@@ -16,8 +16,8 @@
 .subscription-status-card {
   display: flex;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  border: 0.5px solid #000;
   padding: 24px;
   margin-bottom: 24px;
 }
@@ -30,13 +30,13 @@
 }
 
 .subscription-icon-paid {
-  color: #10B981;
+  color: #CB6B52;
   width: 100%;
   height: 100%;
 }
 
 .subscription-icon-free {
-  color: #6B7280;
+  color: #999;
   width: 100%;
   height: 100%;
 }
@@ -55,8 +55,9 @@
 .subscription-dates {
   margin-bottom: 20px;
   padding: 12px;
-  background-color: #F3F4F6;
-  border-radius: 6px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 0.5px solid #000;
 }
 
 .subscription-date-item {
@@ -110,21 +111,23 @@
   border-radius: 50%;
   margin-right: 12px;
   font-weight: bold;
-  background-color: #F3F4F6;
-  color: #9CA3AF;
+  background-color: #fff;
+  color: #999;
+  border: 0.5px solid #000;
 }
 
 .subscription-benefit-available {
-  background-color: #D1FAE5;
-  color: #10B981;
+  background-color: #CB6B52;
+  color: #fff;
+  border: none;
 }
 
 .subscription-upgrade {
   text-align: center;
   padding: 24px;
-  background-color: #F9FAFB;
-  border-radius: 8px;
-  border: 1px dashed #D1D5DB;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 0.5px solid #000;
 }
 
 .subscription-upgrade-button {
@@ -133,7 +136,7 @@
   color: white;
   font-weight: bold;
   padding: 12px 24px;
-  border-radius: 6px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
