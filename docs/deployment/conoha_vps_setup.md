@@ -111,7 +111,7 @@ systemctl restart sshd
 apt install -y ufw
 
 # SSH を許可
-ufw allow 10022/tcp
+ufw allow 22/tcp
 
 # HTTP/HTTPS を許可
 ufw allow 80/tcp
@@ -135,10 +135,9 @@ ssh deploy@YOUR_VPS_IP
 # 一時ディレクトリにリポジトリをクローン
 cd /tmp
 git clone https://github.com/osho210/fukuoka_asobi.git
-cd fukuoka_asobi/backend
 
 # セットアップスクリプトを実行
-sudo bash bin/setup_vps
+sudo bash /tmp/fukuoka_asobi/backend/bin/setup_vps
 ```
 
 このスクリプトは以下を実行します：
