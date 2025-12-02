@@ -1,6 +1,7 @@
 .about-page {
   font-family: 'Noto Sans JP', sans-serif;
   color: #333;
+  margin-top: 100px;
 }
 
 .hero {
@@ -44,12 +45,6 @@
   margin-bottom: 2rem;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 section {
   padding: 80px 0;
 }
@@ -69,7 +64,7 @@ section {
   transform: translateX(-50%);
   width: 80px;
   height: 3px;
-  background-color: #FF6B6B;
+  background-color: #CB6B52;
 }
 
 .concept-content {
@@ -94,7 +89,7 @@ section {
 
 .rounded-image {
   border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border: 0.5px solid #000;
 }
 
 .target-cards {
@@ -107,7 +102,7 @@ section {
   background: white;
   border-radius: 10px;
   padding: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid #000;
   transition: transform 0.3s ease;
 }
 
@@ -122,7 +117,7 @@ section {
 .target-card h3 {
   font-size: 1.3rem;
   margin-bottom: 15px;
-  color: #FF6B6B;
+  color: #CB6B52;
 }
 
 .target-card p {
@@ -146,7 +141,7 @@ section {
   bottom: 0;
   left: 120px;
   width: 2px;
-  background: #FF6B6B;
+  background: #CB6B52;
 }
 
 .timeline-item {
@@ -167,10 +162,10 @@ section {
 .event {
   flex: 1;
   background: white;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 20px;
   margin-left: 40px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid #000;
 }
 
 .event h4 {
@@ -192,7 +187,7 @@ section {
 }
 
 .benefits {
-  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  background: #CB6B52;
   color: white;
 }
 
@@ -247,10 +242,10 @@ section {
 
 .cta-button {
   display: inline-block;
-  background: #FF6B6B;
+  background: #CB6B52;
   color: white;
   padding: 15px 40px;
-  border-radius: 50px;
+  border-radius: 10px;
   font-size: 1.1rem;
   font-weight: bold;
   text-decoration: none;
@@ -258,7 +253,7 @@ section {
 }
 
 .cta-button:hover {
-  background: #ff5252;
+  background: #b55a43;
 }
 
 @media (max-width: 768px) {
