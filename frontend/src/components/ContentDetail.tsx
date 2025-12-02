@@ -99,8 +99,8 @@ export default function ContentDetail({
                         <Image
                           src={imageUrl.url}
                           alt={`${title} ${idx + 1}`}
-                          width={800}
-                          height={400}
+                          width={400}
+                          height={200}
                           className="content-detail-image-content"
                           priority={idx === 0}
                         />
@@ -111,8 +111,8 @@ export default function ContentDetail({
                   <Image
                     src={imageUrls[0].url}
                     alt={title}
-                    width={800}
-                    height={400}
+                    width={400}
+                    height={200}
                     className="content-detail-image-content"
                     priority
                   />
