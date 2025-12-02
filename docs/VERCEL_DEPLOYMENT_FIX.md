@@ -125,15 +125,24 @@ npm install
 
 以下のパッケージは必ず明示的なバージョンを指定：
 
+**dependencies:**
 - `next`
 - `react`
 - `react-dom`
 - `@apollo/client`
 - `graphql`
+
+**devDependencies:**
+- `@graphql-codegen/cli`
+- `@graphql-codegen/client-preset`
+- `@graphql-codegen/typescript`
+- `@graphql-codegen/typescript-operations`
 - `typescript`
 - `eslint`
 - `eslint-config-next`
 - `@types/*` (TypeScript 型定義)
+
+> **重要**: `codegen.ts` が `@graphql-codegen/cli` をインポートするため、GraphQL CodeGen パッケージは devDependencies に必須です。これがないと Vercel ビルド時に TypeScript が型を解決できずエラーになります。
 
 ## 検証方法
 
