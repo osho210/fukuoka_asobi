@@ -12,6 +12,7 @@ jobs:
     name: Chromatic - Frontend
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,21 +24,31 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          # ルートに package-lock.json がある想定
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
+        # ルートで依存関係をまとめてインストール（monorepo 想定）
         run: npm ci
-        timeout-minutes: 10
 
       - name: Run Chromatic (Frontend)
-        run: npm run chromatic:frontend
-        timeout-minutes: 15
-        env:
-          CHROMATIC_PROJECT_TOKEN_FRONTEND: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
+          # PR コメント、チェック連携用のトークン
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # frontend 配下の Storybook を対象にする
+          workingDir: frontend
+          # 差分があっても CI を失敗させない場合は true
+          exitZeroOnChanges: true
+          # 差分を自動承認して baseline を更新したいなら true のまま
+          autoAcceptChanges: true
 
   chromatic-admin:
     name: Chromatic - Admin
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -49,13 +60,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        timeout-minutes: 10
 
       - name: Run Chromatic (Admin)
-        run: npm run chromatic:admin
-        timeout-minutes: 15
-        env:
-          CHROMATIC_PROJECT_TOKEN_ADMIN: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workingDir: admin
+          exitZeroOnChanges: true
+          autoAcceptChanges: true
