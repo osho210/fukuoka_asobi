@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:  # 手動実行を許可
 
+# GITHUB_TOKEN のパーミッションを制限（セキュリティベストプラクティス）
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
