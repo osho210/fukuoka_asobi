@@ -8,20 +8,46 @@ on:
       - main
 
 jobs:
-  chromatic:
-    name: Chromatic - ${{ matrix.app.name }}
+  chromatic-frontend:
+    name: Chromatic - Frontend
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
-    strategy:
-      matrix:
-        app:
-          - name: Frontend
-            dir: frontend
-            projectToken: CHROMATIC_PROJECT_TOKEN_FRONTEND
-          - name: Admin
-            dir: admin
-            projectToken: CHROMATIC_PROJECT_TOKEN_ADMIN
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          # ルートに package-lock.json がある想定
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        # ルートで依存関係をまとめてインストール（monorepo 想定）
+        run: npm ci
+
+      - name: Run Chromatic (Frontend)
+        uses: chromaui/action@v11
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
+          # PR コメント、チェック連携用のトークン
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # frontend 配下の Storybook を対象にする
+          workingDir: frontend
+          # 差分があっても CI を失敗させない場合は true
+          exitZeroOnChanges: true
+          # 差分を自動承認して baseline を更新したいなら true のまま
+          autoAcceptChanges: true
+
+  chromatic-admin:
+    name: Chromatic - Admin
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code
@@ -38,16 +64,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./${{ matrix.app.dir }}
 
-      - name: Run Chromatic
+      - name: Run Chromatic (Admin)
         uses: chromaui/action@v11
         with:
-          # matrix で指定した環境変数名の secret を読む
-          projectToken: ${{ secrets[matrix.app.projectToken] }}
-          # GitHub と連携するためのトークン（PR コメントや Checks に必要）
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          # monorepo の該当アプリディレクトリ
-          workingDir: ${{ matrix.app.dir }}
-          # 差分を自動で承認して baseline 更新したい場合はコメントアウト外す
+          workingDir: admin
+          exitZeroOnChanges: true
           autoAcceptChanges: true
