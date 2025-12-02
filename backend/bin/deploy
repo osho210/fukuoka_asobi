@@ -71,10 +71,11 @@ fi
 # ヘルスチェック
 echo "ヘルスチェックを実行します..."
 sleep 5
-if curl -s http://localhost:3000/up | grep -q "ok"; then
-    echo "✓ アプリケーションは正常に起動しています"
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/up)
+if [ "$HTTP_STATUS" = "200" ]; then
+    echo "✓ アプリケーションは正常に起動しています (HTTP Status: $HTTP_STATUS)"
 else
-    echo "⚠ ヘルスチェックに失敗しました"
+    echo "⚠ ヘルスチェックに失敗しました (HTTP Status: $HTTP_STATUS)"
     echo "ログを確認してください: sudo journalctl -u fukuoka_asobi -n 50"
     exit 1
 fi

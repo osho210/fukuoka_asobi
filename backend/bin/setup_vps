@@ -70,14 +70,19 @@ EOF
 
 # MySQL の初期設定
 echo "MySQL を設定します..."
+# ランダムなパスワードを生成
+DB_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-25)
+echo "生成されたデータベースパスワード: ${DB_PASSWORD}"
+echo "このパスワードを .env.production に設定してください！"
+
 sudo mysql -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_production DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-sudo mysql -e "CREATE USER IF NOT EXISTS '${APP_NAME}'@'localhost' IDENTIFIED BY 'CHANGE_THIS_PASSWORD';"
+sudo mysql -e "CREATE USER IF NOT EXISTS '${APP_NAME}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON ${APP_NAME}_production.* TO '${APP_NAME}'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
 
 echo ""
-echo "⚠️  重要: MySQL のパスワードを変更してください！"
-echo "sudo mysql -e \"ALTER USER '${APP_NAME}'@'localhost' IDENTIFIED BY 'your_strong_password';\""
+echo "⚠️  重要: 以下のデータベースパスワードを .env.production の DB_PASSWORD に設定してください"
+echo "DB_PASSWORD=${DB_PASSWORD}"
 echo ""
 
 # アプリケーションディレクトリの作成

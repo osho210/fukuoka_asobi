@@ -31,7 +31,7 @@ threads threads_count, threads_count
 port ENV.fetch("PORT", 3000)
 
 # 本番環境では Unix ソケットを使用（Nginx との連携）
-if ENV["RAILS_ENV"] == "production"
+if Rails.env.production?
   app_dir = ENV.fetch("APP_DIR") { "/var/www/fukuoka_asobi/current" }
   shared_dir = ENV.fetch("SHARED_DIR") { "/var/www/fukuoka_asobi/shared" }
   

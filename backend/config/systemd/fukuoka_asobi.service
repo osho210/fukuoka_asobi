@@ -11,11 +11,13 @@ WorkingDirectory=/var/www/fukuoka_asobi/current
 # 環境変数
 Environment=RAILS_ENV=production
 Environment=PORT=3000
+# PATH に rbenv の shims を含める
+Environment=PATH=/home/deploy/.rbenv/shims:/home/deploy/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # 環境変数ファイルを読み込む
 EnvironmentFile=/var/www/fukuoka_asobi/shared/.env.production
 
-# Puma の起動コマンド
+# Puma の起動コマンド（rbenv を経由せず bundle を直接実行）
 ExecStart=/home/deploy/.rbenv/shims/bundle exec puma -C config/puma.rb
 
 # 再起動設定
