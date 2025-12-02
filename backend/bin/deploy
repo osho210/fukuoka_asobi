@@ -1,0 +1,93 @@
+#!/bin/bash
+# アプリケーションデプロイスクリプト
+# GitHub Actions またはサーバー上で実行されます
+
+set -e
+
+# 変数設定
+APP_NAME="fukuoka_asobi"
+APP_DIR="/var/www/${APP_NAME}"
+CURRENT_DIR="${APP_DIR}/current"
+SHARED_DIR="${APP_DIR}/shared"
+RELEASES_DIR="${APP_DIR}/releases"
+RELEASE_NAME=$(date +%Y%m%d%H%M%S)
+RELEASE_DIR="${RELEASES_DIR}/${RELEASE_NAME}"
+
+echo "=== デプロイを開始します ==="
+echo "リリース: ${RELEASE_NAME}"
+
+# リリースディレクトリの作成
+mkdir -p $RELEASE_DIR
+
+# Git リポジトリからコードを取得
+if [ -d "${CURRENT_DIR}/.git" ]; then
+    echo "既存のリポジトリを更新します..."
+    cd $CURRENT_DIR
+    git fetch origin
+    git reset --hard origin/main
+    git clean -fd
+else
+    echo "リポジトリをクローンします..."
+    git clone https://github.com/osho210/fukuoka_asobi.git $CURRENT_DIR
+    cd $CURRENT_DIR
+fi
+
+cd $CURRENT_DIR/backend
+
+# 依存関係のインストール
+echo "依存関係をインストールします..."
+bundle install --deployment --without development test
+
+# 共有ディレクトリへのシンボリックリンク作成
+echo "シンボリックリンクを作成します..."
+ln -nfs ${SHARED_DIR}/storage ${CURRENT_DIR}/backend/storage
+ln -nfs ${SHARED_DIR}/log ${CURRENT_DIR}/backend/log
+ln -nfs ${SHARED_DIR}/tmp ${CURRENT_DIR}/backend/tmp
+ln -nfs ${SHARED_DIR}/.env.production ${CURRENT_DIR}/backend/.env.production
+
+# 環境変数の読み込み
+if [ -f "${SHARED_DIR}/.env.production" ]; then
+    export $(cat ${SHARED_DIR}/.env.production | grep -v '^#' | xargs)
+fi
+
+# アセットのプリコンパイル
+echo "アセットをプリコンパイルします..."
+RAILS_ENV=production bundle exec rails assets:precompile
+
+# データベースマイグレーション
+echo "データベースマイグレーションを実行します..."
+RAILS_ENV=production bundle exec rails db:migrate
+
+# Puma の再起動
+echo "Puma を再起動します..."
+if sudo systemctl is-active --quiet fukuoka_asobi; then
+    sudo systemctl restart fukuoka_asobi
+    echo "Puma を再起動しました"
+else
+    sudo systemctl start fukuoka_asobi
+    echo "Puma を起動しました"
+fi
+
+# ヘルスチェック
+echo "ヘルスチェックを実行します..."
+sleep 5
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/up)
+if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "204" ]; then
+    echo "✓ アプリケーションは正常に起動しています (HTTP Status: $HTTP_STATUS)"
+elif [ -z "$HTTP_STATUS" ]; then
+    echo "⚠ ヘルスチェックに失敗しました (curl エラー)"
+    echo "ログを確認してください: sudo journalctl -u fukuoka_asobi -n 50"
+    exit 1
+else
+    echo "⚠ ヘルスチェックに失敗しました (HTTP Status: $HTTP_STATUS)"
+    echo "ログを確認してください: sudo journalctl -u fukuoka_asobi -n 50"
+    exit 1
+fi
+
+# 古いリリースの削除（最新5つを保持）
+echo "古いリリースを削除します..."
+cd $RELEASES_DIR
+ls -t | tail -n +6 | xargs -r rm -rf
+
+echo "=== デプロイが完了しました ==="
+echo "現在のリリース: ${RELEASE_NAME}"

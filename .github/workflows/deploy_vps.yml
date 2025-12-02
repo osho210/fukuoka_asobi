@@ -1,0 +1,95 @@
+name: Deploy to ConoHa VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 手動実行を許可
+
+# GITHUB_TOKEN のパーミッションを制限（セキュリティベストプラクティス）
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key ${VPS_USER}@${VPS_HOST} << 'ENDSSH'
+            set -e
+            
+            # アプリケーションディレクトリに移動
+            cd /var/www/fukuoka_asobi/current
+            
+            # リポジトリを更新
+            echo "リポジトリを更新しています..."
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
+            
+            # backend ディレクトリに移動
+            cd backend
+            
+            # 環境変数を読み込む
+            if [ -f /var/www/fukuoka_asobi/shared/.env.production ]; then
+              export $(cat /var/www/fukuoka_asobi/shared/.env.production | grep -v '^#' | xargs)
+            fi
+            
+            # 依存関係をインストール
+            echo "依存関係をインストールしています..."
+            bundle install --deployment --without development test
+            
+            # シンボリックリンクを作成
+            ln -nfs /var/www/fukuoka_asobi/shared/storage /var/www/fukuoka_asobi/current/backend/storage
+            ln -nfs /var/www/fukuoka_asobi/shared/log /var/www/fukuoka_asobi/current/backend/log
+            ln -nfs /var/www/fukuoka_asobi/shared/tmp /var/www/fukuoka_asobi/current/backend/tmp
+            
+            # アセットをプリコンパイル
+            echo "アセットをプリコンパイルしています..."
+            RAILS_ENV=production bundle exec rails assets:precompile
+            
+            # データベースマイグレーション
+            echo "データベースマイグレーションを実行しています..."
+            RAILS_ENV=production bundle exec rails db:migrate
+            
+            # Puma を再起動
+            echo "Puma を再起動しています..."
+            sudo systemctl restart fukuoka_asobi
+            
+            # ヘルスチェック
+            echo "ヘルスチェックを実行しています..."
+            sleep 5
+            # HTTP ステータスコードで確認（より堅牢な方法）
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/up)
+            if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "204" ]; then
+              echo "✓ デプロイが成功しました (HTTP Status: $HTTP_STATUS)"
+            elif [ -z "$HTTP_STATUS" ]; then
+              echo "⚠ ヘルスチェックに失敗しました (curl エラー)"
+              sudo journalctl -u fukuoka_asobi -n 50
+              exit 1
+            else
+              echo "⚠ ヘルスチェックに失敗しました (HTTP Status: $HTTP_STATUS)"
+              sudo journalctl -u fukuoka_asobi -n 50
+              exit 1
+            fi
+          ENDSSH
+
+      - name: Cleanup SSH
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
