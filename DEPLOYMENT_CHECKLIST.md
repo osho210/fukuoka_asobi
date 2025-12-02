@@ -132,6 +132,10 @@
 
 ## 4. Vercel（フロントエンド）
 
+> **重要**: このプロジェクトは npm workspaces を使用しています。
+> `frontend/package.json` と `admin/package.json` には明示的なバージョン番号が指定されており、
+> Vercel が Next.js を正しく検出できるようになっています。
+
 ### 4.1 Frontend（ユーザー向けサイト）
 
 - [ ] Vercelにログイン
@@ -139,8 +143,9 @@
 - [ ] GitHubリポジトリを選択
 - [ ] プロジェクト設定
   - Project Name: `fukuoka-asobi-frontend`
-  - Root Directory: `frontend`
-  - Build Command: `npm run build`
+  - Root Directory: `frontend` （必須）
+  - Build Command: `npm run build` （デフォルトでOK）
+  - Install Command: `npm install` （デフォルトでOK）
 - [ ] 環境変数を設定
   ```
   NEXT_PUBLIC_BACKEND_URL=https://fukuoka-asobi-backend.fly.dev
@@ -156,8 +161,9 @@
 - [ ] 同じGitHubリポジトリを選択
 - [ ] プロジェクト設定
   - Project Name: `fukuoka-asobi-admin`
-  - Root Directory: `admin`
-  - Build Command: `npm run build`
+  - Root Directory: `admin` （必須）
+  - Build Command: `npm run build` （デフォルトでOK）
+  - Install Command: `npm install` （デフォルトでOK）
 - [ ] 環境変数を設定
   ```
   NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://fukuoka-asobi-backend.fly.dev/graphql
