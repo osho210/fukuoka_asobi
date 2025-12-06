@@ -1,16 +1,19 @@
 # Name of your application. Used to uniquely configure containers.
-service: backend
+service: fukuoka-asobi-backend
 
 # Name of the container image.
-image: your-user/backend
+# Docker Hub: username/fukuoka-asobi-backend
+# GitHub Container Registry: ghcr.io/osho210/fukuoka-asobi-backend
+image: your-registry/fukuoka-asobi-backend
 
 # Deploy to these servers.
+# ConoHa VPS のIPアドレスを指定してください
 servers:
   web:
-    - 192.168.0.1
+    - YOUR_CONOHA_VPS_IP
   # job:
   #   hosts:
-  #     - 192.168.0.1
+  #     - YOUR_CONOHA_VPS_IP
   #   cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
@@ -19,13 +22,15 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: app.example.com
+  host: your-domain.com  # ConoHa VPS に紐付けたドメイン名を指定
 
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
-  # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-user
+  # GitHub Container Registry の場合: ghcr.io
+  # Docker Hub の場合: コメントアウト
+  # server: ghcr.io
+  username: your-registry-username
 
   # Always use an access token rather than real password when possible.
   password:
@@ -35,7 +40,13 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - SECRET_KEY_BASE
+    - DB_PASSWORD
+    - MINIO_ROOT_PASSWORD
   clear:
+    # Rails 環境
+    RAILS_ENV: production
+    
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
@@ -46,9 +57,18 @@ env:
     # Set number of cores available to the application on each server (default: 1).
     # WEB_CONCURRENCY: 2
 
-    # Match this to any external database server to configure Active Record correctly
-    # Use backend-db for a db accessory server on same machine via local kamal docker network.
-    # DB_HOST: 192.168.0.2
+    # データベース接続設定（Kamal accessories の db を使用）
+    DB_HOST: fukuoka-asobi-backend-db
+    DB_PORT: 3306
+    DB_USERNAME: fukuoka_asobi
+    DB_NAME: fukuoka_asobi_production
+
+    # MinIO 設定（Kamal accessories の minio を使用）
+    MINIO_ENDPOINT: http://fukuoka-asobi-backend-minio:9000
+    MINIO_ROOT_USER: fukuoka_asobi
+    
+    # Active Storage 設定
+    ACTIVE_STORAGE_SERVICE: minio
 
     # Log everything from Rails
     # RAILS_LOG_LEVEL: debug
@@ -62,10 +82,10 @@ aliases:
   dbc: app exec --interactive --reuse "bin/rails dbconsole"
 
 
-# Use a persistent storage volume for sqlite database files and local Active Storage files.
+# Use a persistent storage volume for Active Storage files.
 # Recommended to change this to a mounted volume path that is backed up off server.
 volumes:
-  - "backend_storage:/rails/storage"
+  - "fukuoka_asobi_storage:/rails/storage"
 
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
@@ -92,25 +112,36 @@ builder:
 #   user: app
 
 # Use accessory services (secrets come from .kamal/secrets).
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: redis:7.0
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+# MySQL と MinIO を Kamal accessories として管理
+accessories:
+  db:
+    image: mysql:8.0
+    host: YOUR_CONOHA_VPS_IP
+    # ローカルネットワークのみアクセス可能にする（セキュリティ向上）
+    port: "127.0.0.1:3306:3306"
+    env:
+      clear:
+        MYSQL_ROOT_HOST: '%'
+        MYSQL_DATABASE: fukuoka_asobi_production
+        MYSQL_USER: fukuoka_asobi
+      secret:
+        - MYSQL_ROOT_PASSWORD
+        - DB_PASSWORD:MYSQL_PASSWORD
+    cmd: --default-authentication-plugin=mysql_native_password
+    directories:
+      # MySQL データを永続化
+      - data:/var/lib/mysql
+
+  minio:
+    image: minio/minio
+    host: YOUR_CONOHA_VPS_IP
+    # MinIO API と Console ポート（ローカルネットワークのみ）
+    port: "127.0.0.1:9000:9000"
+    env:
+      secret:
+        - MINIO_ROOT_USER:MINIO_ROOT_USER
+        - MINIO_ROOT_PASSWORD:MINIO_ROOT_PASSWORD
+    cmd: server /data --console-address ":9001"
+    directories:
+      # MinIO データを永続化
+      - data:/data

@@ -64,7 +64,16 @@
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
 
-#### 本番環境（オプション 2: VPS）
+#### 本番環境（オプション 2: VPS with Kamal - 推奨）
+- **サーバー**: ConoHa VPS など
+- **デプロイツール**: Kamal（37signals製）
+- **データベース**: MySQL 8.0 (Docker accessory)
+- **ストレージ**: MinIO (Docker accessory)
+- **SSL**: Let's Encrypt（自動取得・更新）
+- **デプロイ方式**: Blue-Green（ゼロダウンタイム）
+- **コスト**: VPS 料金のみ（月額 1,000円〜）
+
+#### 本番環境（オプション 3: VPS with Docker Compose）
 - **サーバー**: ConoHa VPS など
 - **コンテナ化**: Docker Compose (本番用構成)
 - **データベース**: MySQL 8.0 (Docker)
@@ -264,9 +273,42 @@ CHROMATIC_PROJECT_TOKEN_ADMIN=<your-token> npm run chromatic:admin
 
 詳細は[デプロイガイド](./docs/deployment_guide.md)を参照してください。
 
-### ConoHa VPS への Docker デプロイ
+### ConoHa VPS への Kamal デプロイ（推奨）
 
-**ConoHa VPS 上で Docker を使用した本番環境構築**も可能です：
+**Kamal を使用した VPS への本番デプロイが最もシンプルで推奨されます**：
+
+#### 特徴
+- ✅ **ゼロダウンタイムデプロイ**: Blue-Green デプロイメントを自動化
+- ✅ **SSL 自動設定**: Let's Encrypt による証明書の自動取得・更新
+- ✅ **簡単なロールバック**: 問題発生時に即座に前バージョンに戻せる
+- ✅ **一元管理**: MySQL と MinIO を accessories として統合管理
+
+#### クイックスタート
+
+```bash
+# 1. 環境変数を設定
+export KAMAL_REGISTRY_PASSWORD="your_token"
+export MYSQL_ROOT_PASSWORD="secure_password"
+export DB_PASSWORD="secure_password"
+export MINIO_ROOT_PASSWORD="secure_password"
+
+# 2. ConoHa VPS の IP とドメインを設定
+cd backend
+nano config/deploy.yml  # IP とドメインを編集
+
+# 3. デプロイ実行
+bin/kamal setup
+bin/kamal app exec "bin/rails db:setup"
+bin/kamal deploy
+```
+
+詳細は以下を参照：
+- **クイックスタート**: [KAMAL_QUICKSTART.md](./KAMAL_QUICKSTART.md)
+- **完全ガイド**: [KAMAL_DEPLOYMENT_GUIDE.md](./KAMAL_DEPLOYMENT_GUIDE.md)
+
+### ConoHa VPS への Docker Compose デプロイ（代替手段）
+
+**手動で Docker Compose を使用したデプロイも可能です**：
 
 1. **本番用 Docker 構成を使用**
    - `docker-compose.prod.yml` で本番環境を構築
