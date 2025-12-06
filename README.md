@@ -57,12 +57,20 @@
 - **データベース**: MySQL 8.0
 - **ストレージ**: MinIO（S3互換）
 
-#### 本番環境
+#### 本番環境（オプション 1: クラウド）
 - **バックエンド**: Fly.io
 - **フロントエンド**: Vercel
 - **データベース**: TiDB Cloud (Serverless)
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
+
+#### 本番環境（オプション 2: VPS）
+- **サーバー**: ConoHa VPS など
+- **コンテナ化**: Docker Compose (本番用構成)
+- **データベース**: MySQL 8.0 (Docker)
+- **ストレージ**: MinIO (Docker)
+- **構成**: `docker-compose.prod.yml` 使用
+- **コスト**: VPS 料金のみ（月額 1,000円〜）
 
 ## 📦 プロジェクト構成とライブラリ管理
 
@@ -255,6 +263,27 @@ CHROMATIC_PROJECT_TOKEN_ADMIN=<your-token> npm run chromatic:admin
 - **中規模運用**: 月額 **3,000〜5,000円程度**
 
 詳細は[デプロイガイド](./docs/deployment_guide.md)を参照してください。
+
+### ConoHa VPS への Docker デプロイ
+
+**ConoHa VPS 上で Docker を使用した本番環境構築**も可能です：
+
+1. **本番用 Docker 構成を使用**
+   - `docker-compose.prod.yml` で本番環境を構築
+   - MySQL 8.0 + MinIO + Rails の構成
+   - 環境変数による柔軟な設定管理
+
+2. **デプロイ手順**
+   - [DEPLOYMENT_GUIDE_VPS.md](./DEPLOYMENT_GUIDE_VPS.md) の詳細な手順に従う
+   - `.env.example` をベースに環境変数を設定
+   - `docker compose -f docker-compose.prod.yml` で起動
+
+3. **特徴**
+   - 開発環境 (`docker-compose.yml`) と本番環境 (`docker-compose.prod.yml`) の分離
+   - 本番用 Dockerfile は Rails 8 + MySQL に最適化
+   - ボリューム管理の柔軟性（external 設定可能）
+
+詳細は[VPS デプロイガイド](./DEPLOYMENT_GUIDE_VPS.md)を参照してください。
 
 ---
 
