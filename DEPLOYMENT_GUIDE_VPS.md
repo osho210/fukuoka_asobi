@@ -119,6 +119,9 @@ docker compose -f docker-compose.prod.yml up -d backend
 
 これでバックエンドサーバーがポート 80 で起動します。
 
+**重要**: 本番環境では、Nginx などのリバースプロキシを使用して SSL 終端を行うことを強く推奨します。
+詳細は「セキュリティ上の注意」セクションを参照してください。
+
 ### Step 5: 動作確認
 
 ```bash
@@ -212,19 +215,113 @@ docker compose -f docker-compose.prod.yml exec backend bin/rails db:migrate:stat
 
 ## 🔒 セキュリティ上の注意
 
-1. **環境変数の管理**
+### 1. 環境変数の管理
    - `.env` ファイルは Git にコミットしない
-   - パスワードは強力なものを使用する
+   - パスワードは強力なものを使用する（最低 16 文字以上推奨）
    - `RAILS_MASTER_KEY` は厳重に管理する
+   - MinIO のデフォルト認証情報（minioadmin）は使用しない
 
-2. **ファイアウォール設定**
+### 2. ファイアウォール設定
    - 必要なポートのみを公開する
-   - MySQL (3306) は外部から直接アクセスできないようにする
+   - MySQL (3306) は外部から直接アクセスできないようにする（docker-compose.prod.yml では既にコメントアウト済み）
+   - MinIO (9000, 9001) も外部から直接アクセスできないようにする（docker-compose.prod.yml では既にコメントアウト済み）
    - HTTP (80) / HTTPS (443) のみを公開
 
-3. **定期的なアップデート**
+### 3. Nginx リバースプロキシの設定（推奨）
+
+本番環境では、Nginx を使用して SSL 終端とセキュリティヘッダーの追加を行うことを強く推奨します。
+
+#### Nginx 設定例 (`/etc/nginx/sites-available/fukuoka-asobi`)
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    # Let's Encrypt の証明書検証用
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # HTTP を HTTPS にリダイレクト
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+
+    # SSL 証明書（Let's Encrypt）
+    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+
+    # SSL 設定
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # セキュリティヘッダー
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
+    # バックエンドへのプロキシ
+    location / {
+        proxy_pass http://localhost:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+#### Nginx のセットアップ手順
+
+```bash
+# Nginx をインストール
+sudo apt update
+sudo apt install nginx certbot python3-certbot-nginx
+
+# 設定ファイルを作成
+sudo nano /etc/nginx/sites-available/fukuoka-asobi
+
+# シンボリックリンクを作成
+sudo ln -s /etc/nginx/sites-available/fukuoka-asobi /etc/nginx/sites-enabled/
+
+# 設定をテスト
+sudo nginx -t
+
+# Nginx を再起動
+sudo systemctl restart nginx
+
+# SSL 証明書を取得（Let's Encrypt）
+sudo certbot --nginx -d your-domain.com
+
+# 証明書の自動更新を設定（cron）
+sudo certbot renew --dry-run
+```
+
+### 4. 定期的なアップデート
    - Docker イメージを定期的に更新する
-   - Rails の依存関係を定期的に更新する
+   - Rails の依存関係を定期的に更新する（`bundle update`）
+   - OS のセキュリティパッチを適用する
+
+### 5. ポート公開の制限
+
+`docker-compose.prod.yml` では、セキュリティ上の理由から MySQL と MinIO のポートはデフォルトでコメントアウトされています。
+開発やデバッグ目的で一時的にアクセスが必要な場合のみ、コメントを外して使用してください。
+
+```yaml
+# デバッグ時のみコメントを外す
+# ports:
+#   - "3306:3306"  # MySQL
+#   - "9000:9000"  # MinIO API
+#   - "9001:9001"  # MinIO Console
+```
 
 ## 📊 モニタリング
 

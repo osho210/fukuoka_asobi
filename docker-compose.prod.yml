@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:8.0
@@ -10,13 +8,15 @@ services:
       MYSQL_DATABASE: ${DB_NAME:-fukuoka_asobi_production}
       MYSQL_USER: ${DB_USERNAME:-fukuoka_asobi}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
+      MYSQL_PWD: ${DB_ROOT_PASSWORD:-root}
+    # ポート 3306 は本番環境では公開しない（Docker ネットワーク経由で接続）
+    # ports:
+    #   - "3306:3306"
     volumes:
       - fukuoka_asobi_mysql_data_prod:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,12 +25,14 @@ services:
     image: minio/minio
     container_name: fukuoka_asobi_minio_prod
     restart: always
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+    # MinIO ポートは本番環境では公開しない（Docker ネットワーク経由で接続）
+    # 管理コンソールが必要な場合のみポートを公開してください
+    # ports:
+    #   - "9000:9000"
+    #   - "9001:9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
       - minio_data_prod:/data
     command: server /data --console-address ":9001"
@@ -53,6 +55,8 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+    # ポート 80 を公開（本番環境では Nginx などのリバースプロキシ経由を推奨）
+    # SSL 終端、セキュリティヘッダー、ロードバランシングは Nginx で実施
     ports:
       - "80:80"
     environment:
@@ -64,8 +68,8 @@ services:
       DB_PORT: 3306
       DB_NAME: ${DB_NAME:-fukuoka_asobi_production}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_ENDPOINT: http://minio:9000
     volumes:
       - rails_storage_prod:/rails/storage
