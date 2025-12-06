@@ -9,6 +9,11 @@ interface PlanHeaderProps {
 }
 
 const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
+  const imageUrl = plan.imageUrls?.[0]?.url ?? '/no-image.png';
+  const profileImageUrl = plan.user?.profileImageUrl
+    ? `/${plan.user.profileImageUrl}`
+    : imageUrl;
+
   return (
     <div className="plan-header">
 
@@ -17,16 +22,14 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
       {plan.subtitle && <p className="plan-subtitle">{plan.subtitle}</p>}
 
 
-      {plan.imageUrls && (
-        <div className="plan-image-container">
-          <Image
-            src={plan.imageUrls ? `${plan.imageUrls[0].url}` : '/no-image.png'}
-            alt={plan.planName}
-            fill
-            className="plan-image"
-          />
-        </div>
-      )}
+      <div className="plan-image-container">
+        <Image
+          src={imageUrl}
+          alt={plan.planName}
+          fill
+          className="plan-image"
+        />
+      </div>
 
       {/* メタ情報 */}
       <div className="plan-meta">
@@ -63,7 +66,7 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
             <Image
               className="plan-user-image"
               // TODO: seedにデータを登録していないため、一旦固定の画像を表示
-              src={plan.user.profileImageUrl ? `/${plan.user.profileImageUrl}` : `/${plan.imageUrls}`}
+              src={profileImageUrl}
               alt={`${plan.user.username}のプロフィール画像`}
               width={50}
               height={50}
