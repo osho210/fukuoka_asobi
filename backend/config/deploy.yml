@@ -2,8 +2,8 @@
 service: fukuoka-asobi-backend
 
 # Name of the container image.
-# Docker Hub: username/fukuoka-asobi-backend
-# GitHub Container Registry: ghcr.io/osho210/fukuoka-asobi-backend
+# Docker Hub: your-username/fukuoka-asobi-backend
+# GitHub Container Registry: ghcr.io/your-username/fukuoka-asobi-backend
 image: your-registry/fukuoka-asobi-backend
 
 # Deploy to these servers.
@@ -66,7 +66,6 @@ env:
     # MinIO 設定（Kamal accessories の minio を使用）
     MINIO_ENDPOINT: http://fukuoka-asobi-backend-minio:9000
     MINIO_ROOT_USER: fukuoka_asobi
-    
     # Active Storage 設定
     ACTIVE_STORAGE_SERVICE: minio
 
@@ -138,9 +137,12 @@ accessories:
     # MinIO API と Console ポート（ローカルネットワークのみ）
     port: "127.0.0.1:9000:9000"
     env:
+      clear:
+        # MinIO のユーザー名は clear で設定
+        MINIO_ROOT_USER: fukuoka_asobi
       secret:
-        - MINIO_ROOT_USER:MINIO_ROOT_USER
-        - MINIO_ROOT_PASSWORD:MINIO_ROOT_PASSWORD
+        # パスワードのみシークレット管理
+        - MINIO_ROOT_PASSWORD
     cmd: server /data --console-address ":9001"
     directories:
       # MinIO データを永続化
