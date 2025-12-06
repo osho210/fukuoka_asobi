@@ -90,8 +90,34 @@ export const useSearchValidation = () => {
    * @returns エラーメッセージ（正常な場合はundefined）
    */
   const validateTime = (startTime?: string, endTime?: string): string | undefined => {
+    const convertToMinutes = (time: string): number | null => {
+      const [hour, minute] = time.split(':');
+      const parsedHour = Number(hour);
+      const parsedMinute = Number(minute);
+
+      if (
+        Number.isNaN(parsedHour) ||
+        Number.isNaN(parsedMinute) ||
+        parsedHour < 0 ||
+        parsedHour > 23 ||
+        parsedMinute < 0 ||
+        parsedMinute > 59
+      ) {
+        return null;
+      }
+
+      return parsedHour * 60 + parsedMinute;
+    };
+
     if (startTime && endTime) {
-      if (endTime <= startTime) {
+      const startMinutes = convertToMinutes(startTime);
+      const endMinutes = convertToMinutes(endTime);
+
+      if (startMinutes === null || endMinutes === null) {
+        return '時刻の形式が正しくありません';
+      }
+
+      if (endMinutes <= startMinutes) {
         return '終了時刻は開始時刻より後に設定してください';
       }
     }
