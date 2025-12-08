@@ -63,7 +63,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 160.251.250.48 >> ~/.ssh/known_hosts
+          ssh-keyscan -p 10022 -H $CONOHA_VPS_IP >> ~/.ssh/known_hosts
 
       - name: Install gems (念のため)
         run: |
