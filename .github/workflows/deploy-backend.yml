@@ -1,6 +1,10 @@
 name: Deploy Backend via Kamal
 
 on:
+  pull_request:
+    branches:
+      - main
+
   push:
     branches:
       - main
