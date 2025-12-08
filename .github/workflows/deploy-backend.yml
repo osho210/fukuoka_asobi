@@ -85,6 +85,5 @@ jobs:
           EOF
 
       - name: Deploy with Kamal
-        if: github.ref == 'refs/heads/main'
         run: |
           bundle exec kamal setup
