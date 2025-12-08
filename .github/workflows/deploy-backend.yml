@@ -73,6 +73,18 @@ jobs:
         run: |
           bundle install --without development test
 
+      - name: Prepare Kamal secrets file
+        working-directory: backend
+        run: |
+          mkdir -p .kamal
+          cat <<EOF > .kamal/secrets
+          RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+          SECRET_KEY_BASE=$SECRET_KEY_BASE
+          DB_PASSWORD=$DB_PASSWORD
+          MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+          MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+          EOF
+
       - name: Deploy with Kamal
         run: |
           bundle exec kamal deploy
