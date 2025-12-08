@@ -36,3 +36,6 @@
 /config/credentials/production.key
 
 /config/credentials/development.key
+
+# 鍵情報をuploadしない
+*.key
