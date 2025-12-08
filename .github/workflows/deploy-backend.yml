@@ -32,7 +32,7 @@ jobs:
       DB_USERNAME:      ${{ secrets.DB_USERNAME }}
       DB_PASSWORD:      ${{ secrets.DB_PASSWORD }}
       DB_NAME:          ${{ secrets.DB_NAME }}
-      CONOHA_VPS_IP: ${{ vars.CONOHA_VPS_IP }}
+      CONOHA_VPS_IP:    ${{ secrets.CONOHA_VPS_IP }}
 
     steps:
       - name: Checkout
@@ -63,7 +63,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p 10022 -H $CONOHA_VPS_IP >> ~/.ssh/known_hosts
+          ssh-keyscan -p 10022 -H $CONOHA_VPS_IP >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Install gems (念のため)
         run: |
