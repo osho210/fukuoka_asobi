@@ -66,10 +66,11 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          # 既存のエントリを削除（あってもなくてもOK）
+          # 古いエントリを削除（あってもなくてもOK）
           ssh-keygen -R "[$CONOHA_VPS_IP]:10022" 2>/dev/null || true
-          # 改めて 10022 ポートのホストキーを取得して登録
-          ssh-keyscan -p 10022 -H $CONOHA_VPS_IP >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh-keygen -R "$CONOHA_VPS_IP" 2>/dev/null || true
+          # 新しい鍵を書き込む（-H なしで素のホスト名で保存）
+          ssh-keyscan -p 10022 $CONOHA_VPS_IP >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Install gems (念のため)
         run: |
