@@ -3,7 +3,7 @@ service: fukuoka-asobi-backend
 
 # Name of the container image.
 # GitHub Container Registry: ghcr.io/<github-user-or-org>/fukuoka-asobi-backend
-image: ghcr.io/osho210/fukuoka-asobi-backend
+image: osho210/fukuoka-asobi-backend
 
 # Deploy to these servers.
 # ConoHa VPS の IP アドレスを環境変数から注入
