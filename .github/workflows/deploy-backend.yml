@@ -33,7 +33,9 @@ jobs:
       DB_PASSWORD:      ${{ secrets.DB_PASSWORD }}
       DB_NAME:          ${{ secrets.DB_NAME }}
       CONOHA_VPS_IP:    ${{ secrets.CONOHA_VPS_IP }}
+      MINIO_ROOT_USER:     ${{ secrets.MINIO_ROOT_USER }}
       MYSQL_ROOT_PASSWORD:     ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MINIO_ROOT_PASSWORD:     ${{ secrets.MINIO_ROOT_PASSWORD }}
 
 
     steps:
