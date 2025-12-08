@@ -23,7 +23,9 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development test"
+    BUNDLE_WITHOUT="development test" \
+    BUNDLE_JOBS="4" \
+    BUNDLE_RETRY="3"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -35,18 +37,33 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+
+# ここで「どこで止まってるか」をはっきりさせるためにステップを分割
+RUN echo "=== STEP 1: bundle install ===" && \
+    bundle install --jobs="${BUNDLE_JOBS}" --retry="${BUNDLE_RETRY}" && \
+    echo "=== STEP 1 DONE: bundle install ===" && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# ※ 元々あった gem 全体の bootsnap precompile は一旦オフ
+#    ビルドが重くなる原因になりがちなので、動くことを優先してコメントアウト
+RUN echo "=== STEP 2: bootsnap precompile (gems) ===" && \
     bundle exec bootsnap precompile --gemfile
 
 # Copy application code
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Precompile bootsnap code for faster boot times (app/lib だけは残しておく）
+RUN echo "=== STEP 3: bootsnap precompile app/lib ===" && \
+    bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN echo "=== STEP 4: assets:precompile ===" && \
+    DB_USERNAME=dummy \
+    DB_PASSWORD=dummy \
+    DB_HOST=localhost \
+    DB_NAME=dummy \
+    SECRET_KEY_BASE_DUMMY=1 \
+    ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base

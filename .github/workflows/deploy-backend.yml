@@ -1,0 +1,70 @@
+name: Deploy Backend via Kamal
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+      - "backend/config/deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      # Kamal の registry 設定用
+      KAMAL_REGISTRY_USER: ${{ github.actor }}
+      KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      # Rails / DB の環境変数
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      DB_HOST:          ${{ secrets.DB_HOST }}
+      DB_USERNAME:      ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD:      ${{ secrets.DB_PASSWORD }}
+      DB_NAME:          ${{ secrets.DB_NAME }}
+      CONOHA_VPS_IP: ${{ vars.CONOHA_VPS_IP }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.1"
+          bundler-cache: true
+          working-directory: backend
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ env.KAMAL_REGISTRY_USER }}
+          password: ${{ env.KAMAL_REGISTRY_PASSWORD }}
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 160.251.250.48 >> ~/.ssh/known_hosts
+
+      - name: Install gems (念のため)
+        run: |
+          bundle install --without development test
+
+      - name: Deploy with Kamal
+        run: |
+          bundle exec kamal deploy
