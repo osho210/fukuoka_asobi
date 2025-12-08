@@ -29,28 +29,23 @@ registry:
 # Inject ENV variables into containers
 env:
   secret:
-    RAILS_MASTER_KEY:     <%= ENV["RAILS_MASTER_KEY"] %>
-    SECRET_KEY_BASE:      <%= ENV["SECRET_KEY_BASE"] %>
-    DB_PASSWORD:          <%= ENV["DB_PASSWORD"] %>
-    MINIO_ROOT_PASSWORD:  <%= ENV["MINIO_ROOT_PASSWORD"] %>
+    - RAILS_MASTER_KEY
+    - SECRET_KEY_BASE
+    - DB_PASSWORD
+    - MINIO_ROOT_PASSWORD
+    - MYSQL_ROOT_PASSWORD
 
   clear:
-    # Rails 環境
     RAILS_ENV: production
-
-    # Solid Queue を web コンテナ内で動かす
     SOLID_QUEUE_IN_PUMA: true
 
-    # DB 接続設定（Kamal accessories の db を使用）
     DB_HOST: fukuoka-asobi-backend-db
     DB_PORT: 3306
     DB_USERNAME: fukuoka_asobi
     DB_NAME: fukuoka_asobi_production
 
-    # MinIO 設定（Kamal accessories の minio を使用）
     MINIO_ENDPOINT: http://fukuoka-asobi-backend-minio:9000
     MINIO_ROOT_USER: fukuoka_asobi
-    # Active Storage 設定
     ACTIVE_STORAGE_SERVICE: minio
 
 # Aliases

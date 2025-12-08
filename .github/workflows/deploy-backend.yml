@@ -27,16 +27,15 @@ jobs:
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       # Rails / DB の環境変数
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-      DB_HOST:          ${{ secrets.DB_HOST }}
-      DB_USERNAME:      ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD:      ${{ secrets.DB_PASSWORD }}
-      DB_NAME:          ${{ secrets.DB_NAME }}
-      CONOHA_VPS_IP:    ${{ secrets.CONOHA_VPS_IP }}
-      MINIO_ROOT_USER:     ${{ secrets.MINIO_ROOT_USER }}
-      MYSQL_ROOT_PASSWORD:     ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      MINIO_ROOT_PASSWORD:     ${{ secrets.MINIO_ROOT_PASSWORD }}
-
+      RAILS_MASTER_KEY:     ${{ secrets.RAILS_MASTER_KEY }}
+      SECRET_KEY_BASE:      ${{ secrets.SECRET_KEY_BASE }}
+      DB_HOST:              ${{ secrets.DB_HOST }}
+      DB_USERNAME:          ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD:          ${{ secrets.DB_PASSWORD }}
+      DB_NAME:              ${{ secrets.DB_NAME }}
+      CONOHA_VPS_IP:        ${{ secrets.CONOHA_VPS_IP }}
+      MYSQL_ROOT_PASSWORD:  ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MINIO_ROOT_PASSWORD:  ${{ secrets.MINIO_ROOT_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -86,5 +85,6 @@ jobs:
           EOF
 
       - name: Deploy with Kamal
+        if: github.ref == 'refs/heads/main'
         run: |
           bundle exec kamal deploy
