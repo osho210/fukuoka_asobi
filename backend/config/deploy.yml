@@ -18,8 +18,12 @@ ssh:
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 proxy:
   ssl: true
-  host: 'fukuoka-asobi.com'  # ConoHa VPS に紐付けたドメイン名
+  host: 'api.fukuoka-asobi.com'  # ConoHa VPS に紐付けたドメイン名
   app_port: 3000
+  healthcheck:
+    path: /up
+    interval: 3
+    timeout: 5
 
 # Credentials for your image host.
 registry:
