@@ -37,7 +37,6 @@ env:
 
   clear:
     RAILS_ENV: production
-    SOLID_QUEUE_IN_PUMA: true
 
     DB_HOST: fukuoka-asobi-backend-db
     DB_PORT: 3306
