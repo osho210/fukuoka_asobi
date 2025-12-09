@@ -25,6 +25,7 @@ healthcheck:
 proxy:
   ssl: true
   host: 'fukuoka-asobi.com'  # ConoHa VPS に紐付けたドメイン名
+  app_port: 3000
 
 # Credentials for your image host.
 registry:
