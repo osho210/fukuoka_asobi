@@ -2,7 +2,6 @@
 
 require 'ostruct'
 require 'securerandom'
-require_relative 'validators/search_params_validator'
 
 # プラン自動生成サービスのメインクラス
 # 検索条件に基づいてスポットを検索し、最適なプランを生成する
@@ -63,7 +62,7 @@ class PlanGenerator
   # パラメータのバリデーション
   # @raise [InvalidSearchParametersError] パラメータが不正な場合
   def validate_params
-    SearchParamsValidator.validate!(
+    Validators::SearchParamsValidator.validate!(
       districts: @districts,
       date: @date.to_s,
       member_info: @member_info,
