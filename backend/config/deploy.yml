@@ -24,7 +24,6 @@ proxy:
     path: /up
     interval: 10
     timeout: 10
-    max_attempts: 15  # 150秒 (10秒 x 15回) まで待つ
 
 # Credentials for your image host.
 registry:
@@ -88,11 +87,6 @@ accessories:
     cmd: --default-authentication-plugin=mysql_native_password
     directories:
       - data:/var/lib/mysql
-    options:
-      health-cmd: "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"
-      health-interval: 5s
-      health-timeout: 3s
-      health-retries: 10
 
   minio:
     image: minio/minio

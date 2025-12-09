@@ -21,5 +21,5 @@ Rails.application.routes.draw do
   end
 
   # ヘルスチェック
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "/up", to: proc { [200, {}, ["OK"]] }
 end

@@ -8,19 +8,6 @@ fi
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  # データベース接続を待つ（最大60秒）
-  echo "Waiting for database connection..."
-  for i in {1..60}; do
-    if ./bin/rails runner "ActiveRecord::Base.connection.execute('SELECT 1')" &>/dev/null; then
-      echo "Database is ready!"
-      break
-    fi
-    echo "Database not ready yet, waiting... ($i/60)"
-    sleep 1
-  done
-
-  # データベースのマイグレーション
-  echo "Running database migrations..."
   ./bin/rails db:prepare
 fi
 
