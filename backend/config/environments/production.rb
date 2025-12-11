@@ -97,8 +97,6 @@ Rails.application.configure do
     "localhost"
   ]
 
-  #
   # Skip DNS rebinding protection for the default health check endpoint.
-  config.hosts.clear
   config.host_authorization = { exclude: ["/up"] }
 end
