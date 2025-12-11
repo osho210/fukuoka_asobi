@@ -13,7 +13,9 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development test"
+    BUNDLE_WITHOUT="development test" \
+    BUNDLE_JOBS="4" \
+    BUNDLE_RETRY="3"
 
 FROM base AS build
 
@@ -29,9 +31,18 @@ COPY . .
 
 RUN bundle exec bootsnap precompile app/ lib/
 
-RUN SECRET_KEY_BASE=1 ./bin/rails assets:precompile
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN echo "=== STEP 4: assets:precompile ===" && \
+    DB_USERNAME=dummy \
+    DB_PASSWORD=dummy \
+    DB_HOST=localhost \
+    DB_NAME=dummy \
+    SECRET_KEY_BASE_DUMMY=1 \
+    ./bin/rails assets:precompile
+
 
 FROM base
+
 
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
