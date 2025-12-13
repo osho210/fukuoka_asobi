@@ -13,8 +13,7 @@ import { FileUpload } from '@/components/forms/FileUpload';
 import ImageUpload from '@/components/forms/ImageUpload';
 import SingleImageUpload from '@/components/forms/SingleImageUpload';
 import { Save, Trash2, Search } from 'lucide-react';
-import { createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
-import { ModelInput, PlanDetailInput } from '@/lib/modelGraphQL';
+import { ModelInput, PlanDetailInput, createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
 import { useEnumOptions } from '@/hooks/useEnumOptions';
 import { GET_DISTRICTS } from '@/graphql/queries/getDistricts';
@@ -330,60 +329,60 @@ export function ModelDetailModal({
     fields
       .filter(field => field.type !== 'opening_hours_editor' && field.type !== 'spot_magazines_editor')
       .forEach((field) => {
-      const fieldName = field.name;
-      const value = formData?.[fieldName];
+        const fieldName = field.name;
+        const value = formData?.[fieldName];
 
-      if (field.type === 'relation' && typeof value === 'object' && value !== null) {
-        // リレーションフィールドの場合はIDを取得
-        const relationData = value as RelationData;
-        input[`${fieldName}Id`] = relationData.id;
-      } else if (field.type === 'multiSelect' && Array.isArray(value)) {
-        // 配列の場合は、各要素を適切に処理して数値の配列に変換
-        const ids = value.map(item => {
-          if (typeof item === 'object' && item !== null && 'id' in item) {
-            // RelationItemの場合はidプロパティを数値に変換
-            return Number((item as RelationItem).id);
-          } else if (typeof item === 'string') {
-            // 文字列の場合は数値に変換
-            return Number(item);
-          } else if (typeof item === 'number') {
-            // 数値の場合はそのまま
-            return item;
-          }
-          // その他の場合は0（エラー防止）
-          return 0;
-        });
-
-        input[fieldName] = ids;
-      } else if (field.type === 'datetime') {
-        // datetime型のフィールドの場合、ISO8601形式の文字列として設定
-        if (value !== undefined && value !== null && value !== '') {
-          // 既にISO8601形式の文字列であることを確認
-          try {
-            // 日付として解析できるか確認
-            const date = new Date(value as string);
-            if (!isNaN(date.getTime())) {
-              // 有効な日付の場合はそのまま設定
-              input[fieldName] = value as string;
+        if (field.type === 'relation' && typeof value === 'object' && value !== null) {
+          // リレーションフィールドの場合はIDを取得
+          const relationData = value as RelationData;
+          input[`${fieldName}Id`] = relationData.id;
+        } else if (field.type === 'multiSelect' && Array.isArray(value)) {
+          // 配列の場合は、各要素を適切に処理して数値の配列に変換
+          const ids = value.map(item => {
+            if (typeof item === 'object' && item !== null && 'id' in item) {
+              // RelationItemの場合はidプロパティを数値に変換
+              return Number((item as RelationItem).id);
+            } else if (typeof item === 'string') {
+              // 文字列の場合は数値に変換
+              return Number(item);
+            } else if (typeof item === 'number') {
+              // 数値の場合はそのまま
+              return item;
             }
-          } catch (e) {
-            console.error(`日付変換エラー (${fieldName}):`, e);
+            // その他の場合は0（エラー防止）
+            return 0;
+          });
+
+          input[fieldName] = ids;
+        } else if (field.type === 'datetime') {
+          // datetime型のフィールドの場合、ISO8601形式の文字列として設定
+          if (value !== undefined && value !== null && value !== '') {
+            // 既にISO8601形式の文字列であることを確認
+            try {
+              // 日付として解析できるか確認
+              const date = new Date(value as string);
+              if (!isNaN(date.getTime())) {
+                // 有効な日付の場合はそのまま設定
+                input[fieldName] = value as string;
+              }
+            } catch (e) {
+              console.error(`日付変換エラー (${fieldName}):`, e);
+            }
+          }
+        } else if (field.type === 'number') {
+          if (value !== undefined && value !== null && value !== '') {
+            const num = parseFloat(value as string);
+            if (!isNaN(num)) {
+              input[fieldName] = num;
+            }
+          }
+        } else {
+          // 通常のフィールドの場合はそのまま設定
+          if (value !== undefined && value !== null) {
+            input[fieldName] = value as string | number | boolean;
           }
         }
-      } else if (field.type === 'number') {
-        if (value !== undefined && value !== null && value !== '') {
-          const num = parseFloat(value as string);
-          if (!isNaN(num)) {
-            input[fieldName] = num;
-          }
-        }
-      } else {
-        // 通常のフィールドの場合はそのまま設定
-        if (value !== undefined && value !== null) {
-          input[fieldName] = value as string | number | boolean;
-        }
-      }
-    });
+      });
 
     // 雑誌掲載情報のデータを追加
     if (modelRoute === 'spots') {
