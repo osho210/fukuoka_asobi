@@ -112,7 +112,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { spot: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       input = args.compact
 

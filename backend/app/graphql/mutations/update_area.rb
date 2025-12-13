@@ -16,7 +16,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { area: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       area = Area.find_by(id: id)
       return { area: nil, errors: ["指定されたエリアが見つかりません"] } unless area

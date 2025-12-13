@@ -15,7 +15,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { spot_ambiance: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       spot_ambiance = SpotAmbiance.find_by(id: id)
       return { spot_ambiance: nil, errors: ["指定された雰囲気が見つかりません"] } unless spot_ambiance

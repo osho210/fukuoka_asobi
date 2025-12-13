@@ -14,8 +14,8 @@ module Mutations
         def resolve(id:, name: nil, description: nil, active: nil, train_line: nil)
             # 管理者権限チェック
             unless context[:current_user]&.admin?
-        return { station: nil, errors: ["管理者権限が必要です"] }
-      end
+              return { station: nil, errors: ["管理者権限が必要です"] }
+            end
 
             station = Station.find_by(id: id)
             return { station: nil, errors: ["指定された駅が見つかりません"] } unless station

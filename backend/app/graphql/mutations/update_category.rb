@@ -15,7 +15,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { category: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       category = Category.find_by(id: id)
       return { category: nil, errors: ["指定されたカテゴリーが見つかりません"] } unless category

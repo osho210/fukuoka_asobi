@@ -16,7 +16,7 @@ module Mutations
         # 管理者権限チェック
         unless context[:current_user]&.admin?
           return { menu: nil, errors: ["管理者権限が必要です"] }
-          end
+        end
 
         menu = Menu.find_by(id: id)
         return { menu: nil, errors: ["メニューが見つかりません"] } unless menu

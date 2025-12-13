@@ -15,7 +15,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { hashtag: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       hashtag = Hashtag.find_by(id: id)
       return { hashtag: nil, errors: ["指定されたハッシュタグが見つかりません"] } unless hashtag

@@ -15,7 +15,7 @@ module Mutations
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { recommended_for: nil, errors: ["管理者権限が必要です"] }
-        end
+      end
 
       recommended_for = RecommendedFor.find_by(id: id)
       return { recommended_for: nil, errors: ["指定されたおすすめ対象が見つかりません"] } unless recommended_for
