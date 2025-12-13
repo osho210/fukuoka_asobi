@@ -17,6 +17,8 @@ ssh:
 
 # Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
 proxy:
+  ssl: true
+  host: 'api.fukuoka-asobi.com'
   app_port: 3000
 
 # Credentials for your image host.
@@ -70,7 +72,7 @@ accessories:
   db:
     image: mysql:8.0
     host: <%= ENV["CONOHA_VPS_IP"] %>
-    port: 3306
+    port: "127.0.0.1:3306:3306"
     env:
       clear:
         MYSQL_ROOT_HOST: '%'
@@ -85,7 +87,7 @@ accessories:
   minio:
     image: minio/minio
     host: <%= ENV["CONOHA_VPS_IP"] %>
-    port: 9000
+    port: "127.0.0.1:9000:9000"
     env:
       clear:
         MINIO_ROOT_USER:     fukuoka_asobi

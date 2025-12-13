@@ -28,8 +28,9 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [ :id ]
 
-  # 👍 一旦 Host チェックは全部オフ（Kamal proxy 信頼）
-  config.hosts.clear
+  config.hosts << "api.fukuoka-asobi.com"
+  config.hosts << "www.fukuoka-asobi.com"
+  config.hosts << "fukuoka-asobi.com"
 
   # 👍 /up は HostAuthorization もスキップ
   config.host_authorization = {

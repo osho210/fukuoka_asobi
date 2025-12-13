@@ -72,7 +72,7 @@ registry:
   # GitHub Container Registry を使用する場合
   server: ghcr.io
   username: your-github-username
-  
+
   # または Docker Hub を使用する場合（server 行をコメントアウト）
   # username: your-dockerhub-username
 
@@ -123,7 +123,7 @@ source ~/.bashrc  # または source ~/.zshrc
 cd backend
 
 # VPS への SSH 接続を確認
-bin/kamal server exec "echo 'Connection successful'"
+ssh -p 10022 deploy@YOUR_CONOHA_VPS_IP "echo 'Connection successful'"'"
 ```
 
 ## 📦 デプロイ手順
@@ -275,17 +275,19 @@ bin/kamal app exec "env | grep RAILS"
 ### トラブルシューティング
 
 ```bash
-# VPS の Docker プロセスを確認
-bin/kamal server exec "docker ps -a"
-
-# VPS のディスク使用状況を確認
-bin/kamal server exec "df -h"
-
-# VPS のメモリ使用状況を確認
-bin/kamal server exec "free -h"
-
 # Docker のログを確認
 bin/kamal server exec "docker logs fukuoka-asobi-backend-web-<container_id>"
+
+ssh deploy@YOUR_VPS_IP -p 10022 "docker ps -a"
+
+# VPS のディスク使用状況を確認
+ssh deploy@YOUR_VPS_IP -p 10022 "df -h"
+
+# VPS のメモリ使用状況を確認
+ssh deploy@YOUR_VPS_IP -p 10022 "free -h"
+
+# Docker のログを確認
+ssh deploy@YOUR_VPS_IP -p 10022 "docker logs fukuoka-asobi-backend-web-<container_id>"
 ```
 
 ## 🔒 セキュリティ設定
@@ -353,8 +355,10 @@ bin/kamal app logs --since 2h  # 2時間前から
 ### データベースのバックアップ
 
 ```bash
-# MySQL のバックアップを取得
-bin/kamal accessory exec db "mysqldump -u fukuoka_asobi -p fukuoka_asobi_production" > backup_$(date +%Y%m%d).sql
+# MySQL のバックアップを取得（VPS 上で直接実行する方が確実）
+ssh deploy@YOUR_CONOHA_VPS_IP -p 10022 \
+  "docker exec fukuoka-asobi-backend-db mysqldump -u fukuoka_asobi -p fukuoka_asobi_production" \
+  > backup_$(date +%Y%m%d).sql
 
 # または VPS 上で直接実行
 ssh root@YOUR_CONOHA_VPS_IP "docker exec fukuoka-asobi-backend-db mysqldump -u fukuoka_asobi -p'${DB_PASSWORD}' fukuoka_asobi_production" > backup_$(date +%Y%m%d).sql
@@ -499,5 +503,5 @@ bin/kamal app exec "bin/rails runner 'puts User.count'"
 
 ---
 
-**最終更新日**: 2025-12-06  
+**最終更新日**: 2025-12-06
 **作成者**: GitHub Copilot

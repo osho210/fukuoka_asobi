@@ -53,10 +53,10 @@ RUN groupadd -g 1000 rails && \
 
 USER rails:rails
 
-# 🔥 重要：Rails は志愿的に PORT=3000 で listen
 ENV PORT=3000
 EXPOSE 3000
 
+# 本番環境用の Rails サーバーを全てのインターフェース (0.0.0.0) でポート3000番に起動
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]

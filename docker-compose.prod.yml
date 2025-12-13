@@ -55,8 +55,6 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-    # ポート 80 を公開（本番環境では Nginx などのリバースプロキシ経由を推奨）
-    # SSL 終端、セキュリティヘッダー、ロードバランシングは Nginx で実施
     ports:
       - "80:80"
     environment:
