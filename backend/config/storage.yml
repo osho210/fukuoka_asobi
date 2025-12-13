@@ -6,55 +6,24 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-# 開発環境用Minio設定
+# 開発環境用MinIO設定
 minio:
   service: S3
-  access_key_id: minioadmin
-  secret_access_key: minioadmin
+  access_key_id: <%= ENV.fetch("MINIO_ROOT_USER", "minioadmin") %>
+  secret_access_key: <%= ENV.fetch("MINIO_ROOT_PASSWORD", "minioadmin") %>
   region: us-east-1
-  endpoint: 'http://minio:9000'
+  endpoint: <%= ENV.fetch("MINIO_ENDPOINT", "http://minio:9000") %>
   force_path_style: true
-  bucket: fukuoka-asobi-dev
+  bucket: <%= ENV.fetch("MINIO_BUCKET", "fukuoka-asobi-dev") %>
   public: true
 
 # 本番環境用MinIO設定
 minio_production:
   service: S3
-  access_key_id: <%= ENV.fetch("MINIO_ROOT_USER") %>
-  secret_access_key: <%= ENV.fetch("MINIO_ROOT_PASSWORD") %>
+  access_key_id: <%= ENV.fetch("MINIO_ROOT_USER", "") %>
+  secret_access_key: <%= ENV.fetch("MINIO_ROOT_PASSWORD", "") %>
   region: us-east-1
-  endpoint: <%= ENV.fetch("MINIO_ENDPOINT") %>
+  endpoint: <%= ENV.fetch("MINIO_ENDPOINT", "") %>
   force_path_style: true
-  bucket: fukuoka-asobi-production
+  bucket: <%= ENV.fetch("MINIO_BUCKET", "fukuoka-asobi-production") %>
   public: false
-
-# 本番環境用S3設定（将来の拡張用）
-# TODO: 本番環境では、S3バケットを公開設定にし、CDN（CloudFrontなど）を経由して画像を配信する
-# その際、以下の `public: true` のコメントアウトを解除し、
-# 一旦コメントアウト
-# public: true
-# amazon:
-#   service: S3
-#   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-#   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-#   region: ap-northeast-1
-#   bucket: fukuoka-asobi-<%= Rails.env %>
-
-# Remember not to checkin your GCS keyfile to a repository
-# google:
-#   service: GCS
-#   project: your_project
-#   credentials: <%= Rails.root.join("path/to/gcs.keyfile") %>
-#   bucket: your_own_bucket-<%= Rails.env %>
-
-# Use bin/rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
-# microsoft:
-#   service: AzureStorage
-#   storage_account_name: your_account_name
-#   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
-#   container: your_container_name-<%= Rails.env %>
-
-# mirror:
-#   service: Mirror
-#   primary: local
-#   mirrors: [ amazon, google, microsoft ]
