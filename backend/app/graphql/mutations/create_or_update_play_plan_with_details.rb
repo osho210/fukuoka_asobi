@@ -56,8 +56,7 @@ module Mutations
       }
     rescue StandardError => e
       Rails.logger.error "CreateOrUpdatePlayPlanWithDetails Error: #{e.message}"
-      Rails.logger.error e.backtrace.join("
-")
+      Rails.logger.error e.backtrace.join("\n")
 
       {
         play_plan: nil,
