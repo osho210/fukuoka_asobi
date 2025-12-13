@@ -84,7 +84,9 @@ const Login = () => {
       setError(errors.join(', '));
       setIsLoading(false);
     } catch (error) {
-      console.error('Google login error:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Google login error:', error);
+      }
       setError('ログイン中にエラーが発生しました。もう一度お試しください。');
       setIsLoading(false);
     }
