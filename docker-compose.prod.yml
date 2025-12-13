@@ -68,7 +68,8 @@ services:
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ENDPOINT: https://fukuoka-asobi-backend-minio:9000
+      MINIO_BUCKET: 'fukuoka-asobi-production'
     volumes:
       - rails_storage_prod:/rails/storage
     tty: true
