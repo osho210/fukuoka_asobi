@@ -27,7 +27,11 @@ export default function LogoutButton() {
     setIsLoggingOut(true);
 
     try {
-      const { data } = await logout();
+      const { data } = await logout({
+        variables: {
+          input: {},
+        },
+      });
 
       if (data?.userLogout.success) {
         // ログアウト成功時、ログイン画面にリダイレクト
