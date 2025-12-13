@@ -38,6 +38,9 @@ RUN echo "=== STEP 4: assets:precompile ===" && \
     DB_HOST=localhost \
     DB_NAME=dummy \
     SECRET_KEY_BASE_DUMMY=1 \
+    MINIO_ROOT_USER=dummy \
+    MINIO_ROOT_PASSWORD=dummy \
+    MINIO_ENDPOINT=http://dummy:9000 \
     ./bin/rails assets:precompile
 
 
