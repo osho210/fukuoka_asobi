@@ -46,7 +46,7 @@ env:
 
     MINIO_ENDPOINT: http://fukuoka-asobi-backend-minio:9000
     MINIO_ROOT_USER: fukuoka_asobi
-    ACTIVE_STORAGE_SERVICE: minio
+    ACTIVE_STORAGE_SERVICE: minio_production
 
 # Aliases
 aliases:

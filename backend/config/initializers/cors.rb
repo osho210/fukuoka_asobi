@@ -1,18 +1,17 @@
-# Be sure to restart your server when you modify this file.
-
-# Avoid CORS issues when API is called from the frontend app.
-# Handle Cross-Origin Resource Sharing (CORS) in order to accept cross-origin AJAX requests.
-
-# Read more: https://github.com/cyu/rack-cors
-
+# config/initializers/cors.rb
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # 通常のリクエストと管理画面用のリクエストを追加
-    origins 'http://localhost:8200', 'http://localhost:9200'
+    origins "https://fukuoka-asobi.com",
+            "https://www.fukuoka-asobi.com",
+            "http://localhost:8200",
+            "http://localhost:9200",
+            "https://fukuoka-asobi.vercel.app"
 
-    resource '*',
+    resource "*",
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head],
-      credentials: true
+      methods: %i[get post put patch delete options head],
+      credentials: true,
+      max_age: 600
   end
 end
+
