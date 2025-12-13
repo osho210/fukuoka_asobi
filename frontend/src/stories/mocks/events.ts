@@ -89,7 +89,7 @@ export const mockEventDetail = {
   capacity: null,
   isOnline: false,
   sourceUrl: 'https://example.com/dontaku',
-  bannerImage: '/itoshima.png',
+  bannerImage: '/default-image.png',
   status: 'PUBLISHED',
   eventCategory: {
     id: '1',

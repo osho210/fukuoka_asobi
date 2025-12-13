@@ -9,7 +9,7 @@ import { GET_NEWS_LIST, GetNewsListQuery, GetNewsListQueryVariables } from '../g
 
 // ニュース画像URLを取得するヘルパー関数
 const getImageUrl = (imageUrl: string | null | undefined): string => {
-    if (!imageUrl) return '/itoshima.png';
+    if (!imageUrl) return '/default-image.png';
     return imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`;
 };
 
