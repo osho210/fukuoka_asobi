@@ -56,8 +56,7 @@ module Mutations
       rescue StandardError => e
         # 予期しないエラーの場合
         Rails.logger.error("プラン生成中に予期しないエラーが発生しました: #{e.message}")
-        Rails.logger.error(e.backtrace.join("
-"))
+        Rails.logger.error(e.backtrace.join("\n"))
         { plan: nil, errors: [I18n.t('errors.plan_generation.internal_error')] }
       end
     end

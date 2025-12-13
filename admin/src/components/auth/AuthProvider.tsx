@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '@/graphql/queries/getCurrentUser';
+import '@styles/Auth.css';
 
 interface User {
   id: string;
@@ -58,14 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 認証チェック中はローディング表示
   if (isChecking || loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh',
-        fontSize: '1.2rem',
-        color: '#666'
-      }}>
+      <div className="auth-checking">
         認証を確認中...
       </div>
     );

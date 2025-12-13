@@ -163,27 +163,27 @@ const Login = () => {
         管理者権限を持つGoogleアカウントでログインしてください
       </p>
 
-      {error && <div className="form-error" style={{ marginBottom: '1rem' }}>{error}</div>}
+      {error && <div className="form-error auth-error">{error}</div>}
 
       {isLoading && (
-        <div style={{ textAlign: 'center', padding: '1rem' }}>
+        <div className="auth-loading">
           <p>ログイン中...</p>
         </div>
       )}
 
       <div className="social-buttons">
         {!isGoogleLoaded && !error && (
-          <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
+          <div className="auth-loading-message">
             <p>Google認証を読み込み中...</p>
           </div>
         )}
-        <div id="google-signin-button" style={{ width: '100%' }}></div>
+        <div id="google-signin-button"></div>
       </div>
 
-      <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
+      <div className="auth-footer">
         <p>
           このページは管理者専用です。<br />
-          一般ユーザーの方は<a href={process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:8200'} style={{ color: '#3b82f6', textDecoration: 'underline' }}>こちら</a>からアクセスしてください。
+          一般ユーザーの方は<a href={process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:8200'}>こちら</a>からアクセスしてください。
         </p>
       </div>
     </div>

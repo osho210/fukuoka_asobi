@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { USER_LOGOUT } from '@/graphql/mutations/userLogout';
 import { useState } from 'react';
+import '@styles/Auth.css';
 
 interface LogoutResponse {
   userLogout: {
@@ -54,18 +55,7 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={isLoggingOut}
-      style={{
-        marginTop: '1rem',
-        padding: '0.5rem 1rem',
-        backgroundColor: '#ef4444',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: isLoggingOut ? 'not-allowed' : 'pointer',
-        fontSize: '0.875rem',
-        fontWeight: '500',
-        opacity: isLoggingOut ? 0.6 : 1,
-      }}
+      className="logout-button"
     >
       {isLoggingOut ? 'ログアウト中...' : 'ログアウト'}
     </button>
