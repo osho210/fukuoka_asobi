@@ -10,8 +10,8 @@ module Mutations
     def resolve(id:)
       # 管理者権限チェック
       unless context[:current_user]&.admin?
-      #   return { success: false, errors: ["管理者権限が必要です"] }
-      # end
+        return { success: false, errors: ["管理者権限が必要です"] }
+      end
 
       recommended_for = RecommendedFor.find_by(id: id)
       return { success: false, errors: ["指定されたおすすめ対象が見つかりません"] } unless recommended_for
