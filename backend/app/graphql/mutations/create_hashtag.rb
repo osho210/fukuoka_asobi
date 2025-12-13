@@ -12,9 +12,9 @@ module Mutations
 
     def resolve(hashtag_name:)
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { hashtag: nil, errors: ["管理者権限が必要です"] }
-      # end
+      unless context[:current_user]&.admin?
+        return { hashtag: nil, errors: ["管理者権限が必要です"] }
+        end
 
       hashtag = Hashtag.new(hashtag_name: hashtag_name)
 

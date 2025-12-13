@@ -20,6 +20,7 @@
       "@/*": ["./src/*"],
       "@graphql/*": ["./src/graphql/*"],
       "@graphql_types/*": ["./src/__generated__/*"],
+      "@styles/*": ["./public/styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

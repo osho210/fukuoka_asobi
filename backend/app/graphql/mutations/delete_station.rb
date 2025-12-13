@@ -10,7 +10,7 @@ module Mutations
     def resolve(id:)
       # TODO: 管理者アカウント作成時に復活させる
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
+      unless context[:current_user]&.admin?
       #   return { success: false, errors: ["管理者権限が必要です"] }
       # end
 

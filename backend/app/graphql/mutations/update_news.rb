@@ -15,9 +15,9 @@ module Mutations
 
         def resolve(**args)
             # 管理者権限チェック
-            # unless context[:current_user]&.admin?
-            #   return { news: nil, errors: ["管理者権限が必要です"] }
-            # end
+            unless context[:current_user]&.admin?
+              return { news: nil, errors: ["管理者権限が必要です"] }
+              end
 
             id = args.delete(:id)
             update_attrs = args.compact # nil を除外

@@ -13,7 +13,7 @@ module Mutations
 
         def resolve(id:, name: nil, description: nil, active: nil, train_line: nil)
             # 管理者権限チェック
-            # unless context[:current_user]&.admin?
+            unless context[:current_user]&.admin?
             #     return { station: nil, errors: ["管理者権限が必要です"] }
             # end
 

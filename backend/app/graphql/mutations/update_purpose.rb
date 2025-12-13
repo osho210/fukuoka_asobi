@@ -13,9 +13,9 @@ module Mutations
 
     def resolve(id:, purpose_name: nil)
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { purpose: nil, errors: ["管理者権限が必要です"] }
-      # end
+      unless context[:current_user]&.admin?
+        return { purpose: nil, errors: ["管理者権限が必要です"] }
+        end
 
       purpose = Purpose.find_by(id: id)
       return { purpose: nil, errors: ["指定された目的が見つかりません"] } unless purpose
