@@ -9,7 +9,7 @@
   padding: 1rem;
 }
 
-/* Google認証読み込み中の表示 */
+/* Google認証読込中の表示 */
 .auth-loading-message {
   text-align: center;
   padding: 1rem;
