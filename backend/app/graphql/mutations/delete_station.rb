@@ -10,9 +10,9 @@ module Mutations
     def resolve(id:)
       # TODO: 管理者アカウント作成時に復活させる
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { success: false, errors: ["管理者権限が必要です"] }
-      # end
+      unless context[:current_user]&.admin?
+        return { success: false, errors: ["管理者権限が必要です"] }
+      end
 
       station = Station.find_by(id: id)
       return { success: false, errors: ["指定された駅が見つかりません"] } unless station

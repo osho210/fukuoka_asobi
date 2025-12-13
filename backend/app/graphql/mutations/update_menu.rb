@@ -14,9 +14,9 @@ module Mutations
 
         def resolve(id:, menu_name: nil, price: nil, description: nil, menu_category_id: nil, image: nil, delete_image: false)
         # 管理者権限チェック
-        # unless context[:current_user]&.admin?
-        #   return { menu: nil, errors: ["管理者権限が必要です"] }
-        # end
+        unless context[:current_user]&.admin?
+          return { menu: nil, errors: ["管理者権限が必要です"] }
+        end
 
         menu = Menu.find_by(id: id)
         return { menu: nil, errors: ["メニューが見つかりません"] } unless menu

@@ -3371,6 +3371,13 @@ export type CreateOrUpdatePlayPlanWithDetailsMutationVariables = Exact<{
 
 export type CreateOrUpdatePlayPlanWithDetailsMutation = { __typename?: 'Mutation', createOrUpdatePlayPlanWithDetails?: { __typename?: 'CreateOrUpdatePlayPlanWithDetailsPayload', success: boolean, playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, status: StatusEnum, tripType: TripTypeEnum, totalBudget: number, departure?: string | null, departureTime?: string | null, travelMethodToFirstSpot?: string | null, travelTimeToFirstSpot?: number | null, location: string, startTime: string, endTime: string, imageUrl?: string | null, isRecommended: boolean, plannerTitle: string, plannerDescription: string, tags: string, favoriteCount: number, publishedAt?: any | null, rating: number, reviewCount: number, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, plannerTitle: string, startTime: string, endTime: string, durationMinutes: number, budget: number, comment: string, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string } | null, travelDetails: Array<{ __typename?: 'TravelDetail', id: string, sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }> }> | null } | null, errors: Array<{ __typename?: 'FieldError', field: string, message: string }> } | null };
 
+export type UserLogoutMutationVariables = Exact<{
+  input: UserLogoutInput;
+}>;
+
+
+export type UserLogoutMutation = { __typename?: 'Mutation', userLogout?: { __typename?: 'UserLogoutPayload', success: boolean, errors: Array<string> } | null };
+
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3387,6 +3394,11 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }> };
+
+export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, email: string, username: string, role?: string | null } | null };
 
 export type GetDistrictsQueryVariables = Exact<{ [key: string]: never; }>;
 

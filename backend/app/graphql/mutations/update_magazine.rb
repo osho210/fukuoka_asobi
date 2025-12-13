@@ -18,9 +18,9 @@ module Mutations
 
     def resolve(id:, **args)
       # TODO: 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { magazine: nil, errors: ['管理者権限が必要です'] }
-      # end
+      unless context[:current_user]&.admin?
+        return { magazine: nil, errors: ["管理者権限が必要です"] }
+      end
 
       magazine = Magazine.find_by(id: id)
       return { magazine: nil, errors: ['雑誌が見つかりません'] } unless magazine

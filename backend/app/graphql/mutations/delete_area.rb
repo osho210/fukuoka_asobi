@@ -12,9 +12,9 @@ module Mutations
 
     def resolve(id:)
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { success: false, errors: ["管理者権限が必要です"] }
-      # end
+      unless context[:current_user]&.admin?
+        return { success: false, errors: ["管理者権限が必要です"] }
+      end
 
       area = Area.find_by(id: id)
       return { success: false, errors: ["指定されたエリアが見つかりません"] } unless area

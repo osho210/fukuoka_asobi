@@ -1,37 +1,14 @@
 'use client';
 
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { ReactNode, useMemo } from 'react';
+import { ApolloProvider } from '@apollo/client';
+import { ReactNode } from 'react';
+import { apolloClient } from '@/lib/apolloClient';
 
+/**
+ * Apollo Provider ラッパー
+ * 全体で統一された Apollo Client インスタンスを使用
+ * Cookie ベースの認証により、すべてのリクエストで自動的に認証情報が送信される
+ */
 export function ApolloWrapper({ children }: { children: ReactNode }) {
-  const client = useMemo(() => {
-    const httpLink = createHttpLink({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:3000/graphql',
-    });
-
-    const authLink = setContext((_, { headers }) => {
-      // ブラウザ環境でのみ localStorage にアクセス
-      const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
-
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : '',
-        },
-      };
-    });
-
-    return new ApolloClient({
-      link: authLink.concat(httpLink),
-      cache: new InMemoryCache(),
-      defaultOptions: {
-        watchQuery: {
-          fetchPolicy: 'cache-and-network',
-        },
-      },
-    });
-  }, []);
-
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }

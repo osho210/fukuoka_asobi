@@ -113,9 +113,9 @@ module Mutations
     def resolve(**args)
       # TODO: リリース前にコメントアウトを解除する
       # 管理者権限チェック
-      # unless context[:current_user]&.admin?
-      #   return { spot: nil, errors: ["管理者権限が必要です"] }
-      # end
+      unless context[:current_user]&.admin?
+        return { spot: nil, errors: ["管理者権限が必要です"] }
+      end
 
       spot = Spot.find(args[:id])
       update_attrs = args.compact
