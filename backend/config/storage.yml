@@ -25,7 +25,7 @@ minio_production:
   region: us-east-1
   endpoint: "http://fukuoka-asobi-backend-minio:9000"
   force_path_style: true
-  bucket: <%= ENV.fetch("MINIO_BUCKET") %>
+  bucket: fukuoka-asobi-production
   public: false
 
 # 本番環境用S3設定（将来の拡張用）
