@@ -42,7 +42,9 @@ export default function LogoutButton() {
         setIsLoggingOut(false);
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Logout error:', error);
+      }
       alert('ログアウト中にエラーが発生しました');
       setIsLoggingOut(false);
     }
