@@ -23,7 +23,7 @@ minio_production:
   access_key_id: <%= ENV.fetch("MINIO_ROOT_USER") %>
   secret_access_key: <%= ENV.fetch("MINIO_ROOT_PASSWORD") %>
   region: us-east-1
-  endpoint: "http://fukuoka-asobi-backend-minio:9000"
+  endpoint: <%= ENV.fetch("MINIO_ENDPOINT") %>
   force_path_style: true
   bucket: fukuoka-asobi-production
   public: false
