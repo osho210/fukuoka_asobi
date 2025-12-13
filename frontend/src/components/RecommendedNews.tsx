@@ -25,7 +25,7 @@ export default function RecommendedNews() {
                     <Link key={news.id} href={`/news/${news.id}`} className="news-card">
                         <div className="news-container">
                             <Image
-                                src={news.imageUrl?.startsWith('http') ? news.imageUrl : `/${news.imageUrl}`}
+                                src={news.imageUrl && news.imageUrl.startsWith('http') ? news.imageUrl : `/${news.imageUrl || 'itoshima.png'}`}
                                 alt={news.title}
                                 width={50}
                                 height={50}
@@ -37,9 +37,11 @@ export default function RecommendedNews() {
                                     {news.category && (
                                         <p className="news-category">{news.category.name}</p>
                                     )}
-                                    <time className="news-date">
-                                        {news.publishedAt && format(new Date(news.publishedAt), 'yyyy年MM月dd日', { locale: ja })}
-                                    </time>
+                                    {news.publishedAt && (
+                                        <time className="news-date">
+                                            {format(new Date(news.publishedAt), 'yyyy年MM月dd日', { locale: ja })}
+                                        </time>
+                                    )}
                                 </div>
                             </div>
                         </div>
