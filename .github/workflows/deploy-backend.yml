@@ -1,17 +1,11 @@
 name: Deploy Backend via Kamal
 
 on:
-  pull_request:
-    branches:
-      - main
-
-  push:
-    branches:
-      - main
-    paths:
-      - "backend/**"
-      - ".github/workflows/deploy-backend.yml"
-      - "backend/config/deploy.yml"
+  workflow_dispatch:
+    version:
+      description: 'デプロイするバージョンを入力してください'
+      required: true
+      type: string
 
 permissions:
   contents: read
@@ -76,7 +70,7 @@ jobs:
           # 新しい鍵を書き込む（-H なしで素のホスト名で保存）
           ssh-keyscan -p 10022 $CONOHA_VPS_IP >> ~/.ssh/known_hosts 2>/dev/null || true
 
-      - name: Install gems (念のため)
+      - name: Install gems
         run: |
           bundle install --without development test
 
