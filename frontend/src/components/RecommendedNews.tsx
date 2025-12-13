@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { useQuery } from '@apollo/client';
-import { GET_NEWS_LIST, GetNewsListQuery, GetNewsListQueryVariables } from '@/graphql/queries/getNewsList';
+import { GET_NEWS_LIST, GetNewsListQuery, GetNewsListQueryVariables } from '../graphql/queries/getNewsList';
 
 // ニュース画像URLを取得するヘルパー関数
 const getImageUrl = (imageUrl: string | null | undefined): string => {
