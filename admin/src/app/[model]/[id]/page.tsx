@@ -13,10 +13,9 @@ import OpeningHoursEditor, { EditableOpeningHour } from '@/components/forms/Open
 import ImageUpload from '@/components/forms/ImageUpload';
 import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
 import { ArrowLeft, Save, Trash2, Search } from 'lucide-react';
-import { createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { GET_NEAREST_STATION } from '@/graphql/queries/getNearestStation';
 import { GetNearestStationQuery, GetNearestStationQueryVariables } from '@/__generated__/graphql';
-import { ModelInput } from '@/lib/modelGraphQL';
+import { ModelInput, createModel, updateModel, deleteModel } from '@/lib/modelGraphQL';
 import { useEnumOptions } from '@/hooks/useEnumOptions';
 
 // 選択項目の型定義（MultiSelectコンポーネントと同じ定義）
