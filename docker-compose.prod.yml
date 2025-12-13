@@ -1,0 +1,83 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: fukuoka_asobi_db_prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-fukuoka_asobi_production}
+      MYSQL_USER: ${DB_USERNAME:-fukuoka_asobi}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PWD: ${DB_ROOT_PASSWORD:-root}
+    # ポート 3306 は本番環境では公開しない（Docker ネットワーク経由で接続）
+    # ports:
+    #   - "3306:3306"
+    volumes:
+      - fukuoka_asobi_mysql_data_prod:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    container_name: fukuoka_asobi_minio_prod
+    restart: always
+    # MinIO ポートは本番環境では公開しない（Docker ネットワーク経由で接続）
+    # 管理コンソールが必要な場合のみポートを公開してください
+    # ports:
+    #   - "9000:9000"
+    #   - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data_prod:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        RUBY_VERSION: 3.3.1
+    container_name: fukuoka_asobi_backend_prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    environment:
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      DB_USERNAME: ${DB_USERNAME:-fukuoka_asobi}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-fukuoka_asobi_production}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ENDPOINT: http://minio:9000
+    volumes:
+      - rails_storage_prod:/rails/storage
+    tty: true
+    stdin_open: true
+
+volumes:
+  # MySQL の本番用ボリューム（external: false で Docker が自動作成）
+  # VPS 初回構築時は未作成のため、external を無効化
+  fukuoka_asobi_mysql_data_prod:
+
+  minio_data_prod:
+  rails_storage_prod:

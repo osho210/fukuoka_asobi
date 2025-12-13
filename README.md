@@ -57,12 +57,29 @@
 - **データベース**: MySQL 8.0
 - **ストレージ**: MinIO（S3互換）
 
-#### 本番環境
+#### 本番環境（オプション 1: クラウド）
 - **バックエンド**: Fly.io
 - **フロントエンド**: Vercel
 - **データベース**: TiDB Cloud (Serverless)
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
+
+#### 本番環境（オプション 2: VPS with Kamal - 推奨）
+- **サーバー**: ConoHa VPS など
+- **デプロイツール**: Kamal（37signals製）
+- **データベース**: MySQL 8.0 (Docker accessory)
+- **ストレージ**: MinIO (Docker accessory)
+- **SSL**: Let's Encrypt（自動取得・更新）
+- **デプロイ方式**: Blue-Green（ゼロダウンタイム）
+- **コスト**: VPS 料金のみ（月額 1,000円〜）
+
+#### 本番環境（オプション 3: VPS with Docker Compose）
+- **サーバー**: ConoHa VPS など
+- **コンテナ化**: Docker Compose (本番用構成)
+- **データベース**: MySQL 8.0 (Docker)
+- **ストレージ**: MinIO (Docker)
+- **構成**: `docker-compose.prod.yml` 使用
+- **コスト**: VPS 料金のみ（月額 1,000円〜）
 
 ## 📦 プロジェクト構成とライブラリ管理
 
@@ -255,6 +272,60 @@ CHROMATIC_PROJECT_TOKEN_ADMIN=<your-token> npm run chromatic:admin
 - **中規模運用**: 月額 **3,000〜5,000円程度**
 
 詳細は[デプロイガイド](./docs/deployment_guide.md)を参照してください。
+
+### ConoHa VPS への Kamal デプロイ（推奨）
+
+**Kamal を使用した VPS への本番デプロイが最もシンプルで推奨されます**：
+
+#### 特徴
+- ✅ **ゼロダウンタイムデプロイ**: Blue-Green デプロイメントを自動化
+- ✅ **SSL 自動設定**: Let's Encrypt による証明書の自動取得・更新
+- ✅ **簡単なロールバック**: 問題発生時に即座に前バージョンに戻せる
+- ✅ **一元管理**: MySQL と MinIO を accessories として統合管理
+
+#### クイックスタート
+
+```bash
+# 1. 環境変数を設定
+export KAMAL_REGISTRY_PASSWORD="your_token"
+export MYSQL_ROOT_PASSWORD="secure_password"
+export DB_PASSWORD="secure_password"
+export MINIO_ROOT_PASSWORD="secure_password"
+
+# 2. ConoHa VPS の IP とドメインを設定
+cd backend
+nano config/deploy.yml  # IP とドメインを編集
+
+# 3. デプロイ実行
+bin/kamal setup
+bin/kamal app exec "bin/rails db:setup"
+bin/kamal deploy
+```
+
+詳細は以下を参照：
+- **クイックスタート**: [KAMAL_QUICKSTART.md](./KAMAL_QUICKSTART.md)
+- **完全ガイド**: [KAMAL_DEPLOYMENT_GUIDE.md](./KAMAL_DEPLOYMENT_GUIDE.md)
+
+### ConoHa VPS への Docker Compose デプロイ（代替手段）
+
+**手動で Docker Compose を使用したデプロイも可能です**：
+
+1. **本番用 Docker 構成を使用**
+   - `docker-compose.prod.yml` で本番環境を構築
+   - MySQL 8.0 + MinIO + Rails の構成
+   - 環境変数による柔軟な設定管理
+
+2. **デプロイ手順**
+   - [DEPLOYMENT_GUIDE_VPS.md](./DEPLOYMENT_GUIDE_VPS.md) の詳細な手順に従う
+   - `.env.example` をベースに環境変数を設定
+   - `docker compose -f docker-compose.prod.yml` で起動
+
+3. **特徴**
+   - 開発環境 (`docker-compose.yml`) と本番環境 (`docker-compose.prod.yml`) の分離
+   - 本番用 Dockerfile は Rails 8 + MySQL に最適化
+   - ボリューム管理の柔軟性（external 設定可能）
+
+詳細は[VPS デプロイガイド](./DEPLOYMENT_GUIDE_VPS.md)を参照してください。
 
 ---
 

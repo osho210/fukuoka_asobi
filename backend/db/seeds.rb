@@ -8,6 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# 本番環境ではシードデータを実行しない
+return if Rails.env.production?
+
 puts "シードデータの作成を開始します..."
 
 # カテゴリーのシードデータを読み込む
