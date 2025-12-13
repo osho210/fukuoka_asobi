@@ -147,7 +147,9 @@ const Login = () => {
         });
       }
     } catch (error) {
-      console.error('Failed to initialize Google Sign-In:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Failed to initialize Google Sign-In:', error);
+      }
       setError('Google認証の初期化に失敗しました');
     }
   }, [isGoogleLoaded, handleGoogleLogin]);
