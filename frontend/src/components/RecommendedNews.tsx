@@ -7,6 +7,12 @@ import { ja } from 'date-fns/locale';
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST, GetNewsListQuery, GetNewsListQueryVariables } from '@/graphql/queries/getNewsList';
 
+// ニュース画像URLを取得するヘルパー関数
+const getImageUrl = (imageUrl: string | null | undefined): string => {
+    if (!imageUrl) return '/itoshima.png';
+    return imageUrl.startsWith('http') ? imageUrl : `/${imageUrl}`;
+};
+
 export default function RecommendedNews() {
     const { loading, error, data } = useQuery<GetNewsListQuery, GetNewsListQueryVariables>(GET_NEWS_LIST, {
         variables: {
@@ -25,7 +31,7 @@ export default function RecommendedNews() {
                     <Link key={news.id} href={`/news/${news.id}`} className="news-card">
                         <div className="news-container">
                             <Image
-                                src={news.imageUrl && news.imageUrl.startsWith('http') ? news.imageUrl : `/${news.imageUrl || 'itoshima.png'}`}
+                                src={getImageUrl(news.imageUrl)}
                                 alt={news.title}
                                 width={50}
                                 height={50}

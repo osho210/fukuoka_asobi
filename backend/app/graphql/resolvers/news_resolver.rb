@@ -8,10 +8,9 @@ module Resolvers
     argument :limit, Integer, required: false
 
     def resolve(category_id: nil, limit: nil)
-      scope = News.published
-      scope = scope.where(category_id: category_id) if category_id.present?
+      scope = News.published.by_category(category_id).recent
       scope = scope.limit(limit) if limit.present?
-      scope.order(published_at: :desc)
+      scope
     end
   end
 end
