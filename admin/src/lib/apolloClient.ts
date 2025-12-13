@@ -1,24 +1,17 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 
+/**
+ * Apollo Client の設定
+ * Cookie ベースの認証を使用してリクエストを送信
+ * credentials: 'include' により、すべてのリクエストで自動的に Cookie が含まれる
+ */
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:3000/graphql',
+  credentials: 'include',
 });
 
-const authLink = setContext((_, { headers }) => {
-  // ブラウザ環境でのみ localStorage にアクセス
-  const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
-
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
-
-export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+export const apolloClient = new ApolloClient({
+  link: httpLink,
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {

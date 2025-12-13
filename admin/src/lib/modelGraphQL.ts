@@ -1,4 +1,4 @@
-import { client } from '@/lib/apolloClient';
+import { apolloClient } from '@/lib/apolloClient';
 import { getModelNameFromRoute } from './modelRouteMap';
 import { toCamelCase } from '@/app/utils/stringUtils';
 import { omitTypename } from '@/app/utils/omitTypename';
@@ -150,7 +150,7 @@ export const fetchModelList = async (
   }
 
   try {
-    const response = await client.query({
+    const response = await apolloClient.query({
       query,
       variables,
       fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
@@ -189,7 +189,7 @@ export const fetchRelationOptions = async (
     }
 
     try {
-      const response = await client.query({
+      const response = await apolloClient.query({
         query,
         fetchPolicy: 'cache-first',
       });
@@ -227,7 +227,7 @@ export const createModel = async (modelRoute: string, input: ModelInput) => {
     // __typename を削除
     const cleanedInput = omitTypename(input);
     console.log('クリーンな入力データ:', cleanedInput);
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation,
       variables: { input: cleanedInput },
     });
@@ -273,7 +273,7 @@ export const updateModel = async (modelRoute: string, id: string, input: ModelIn
       cleanedInput.planDetails = processedPlanDetails;
     }
 
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation,
       variables: { input: { id, ...cleanedInput } },
     });
@@ -307,7 +307,7 @@ export const deleteModel = async (modelRoute: string, id: string) => {
   const mutationName = `delete${modelName}`;
 
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation,
       variables: { id },
     });
@@ -324,7 +324,7 @@ export const deleteModel = async (modelRoute: string, id: string) => {
  */
 export const addSpotArea = async (spotId: string, areaId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_AREA,
       variables: { spotId, areaId },
     });
@@ -340,7 +340,7 @@ export const addSpotArea = async (spotId: string, areaId: string) => {
  */
 export const removeSpotArea = async (spotId: string, areaId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_AREA,
       variables: { spotId, areaId },
     });
@@ -356,7 +356,7 @@ export const removeSpotArea = async (spotId: string, areaId: string) => {
  */
 export const addSpotCategory = async (spotId: string, categoryId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_CATEGORY,
       variables: { spotId, categoryId },
     });
@@ -372,7 +372,7 @@ export const addSpotCategory = async (spotId: string, categoryId: string) => {
  */
 export const removeSpotCategory = async (spotId: string, categoryId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_CATEGORY,
       variables: { spotId, categoryId },
     });
@@ -388,7 +388,7 @@ export const removeSpotCategory = async (spotId: string, categoryId: string) => 
  */
 export const addSpotHashtag = async (spotId: string, hashtagId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_HASHTAG,
       variables: { spotId, hashtagId },
     });
@@ -404,7 +404,7 @@ export const addSpotHashtag = async (spotId: string, hashtagId: string) => {
  */
 export const removeSpotHashtag = async (spotId: string, hashtagId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_HASHTAG,
       variables: { spotId, hashtagId },
     });
@@ -420,7 +420,7 @@ export const removeSpotHashtag = async (spotId: string, hashtagId: string) => {
  */
 export const addSpotMenu = async (spotId: string, menuId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_MENU,
       variables: { spotId, menuId },
     });
@@ -436,7 +436,7 @@ export const addSpotMenu = async (spotId: string, menuId: string) => {
  */
 export const removeSpotMenu = async (spotId: string, menuId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_MENU,
       variables: { spotId, menuId },
     });
@@ -452,7 +452,7 @@ export const removeSpotMenu = async (spotId: string, menuId: string) => {
  */
 export const addSpotPurpose = async (spotId: string, purposeId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_PURPOSE,
       variables: { spotId, purposeId },
     });
@@ -468,7 +468,7 @@ export const addSpotPurpose = async (spotId: string, purposeId: string) => {
  */
 export const removeSpotPurpose = async (spotId: string, purposeId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_PURPOSE,
       variables: { spotId, purposeId },
     });
@@ -484,7 +484,7 @@ export const removeSpotPurpose = async (spotId: string, purposeId: string) => {
  */
 export const addSpotAmbiance = async (spotId: string, ambianceId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: ADD_SPOT_AMBIANCE,
       variables: { spotId, ambianceId },
     });
@@ -500,7 +500,7 @@ export const addSpotAmbiance = async (spotId: string, ambianceId: string) => {
  */
 export const removeSpotAmbiance = async (spotId: string, ambianceId: string) => {
   try {
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: REMOVE_SPOT_AMBIANCE,
       variables: { spotId, ambianceId },
     });
@@ -551,7 +551,7 @@ export const updatePlanDetails = async (planId: string, planDetails: (PlanDetail
 
     console.log('プラン詳細データの処理後:', processedPlanDetails);
 
-    const { data } = await client.mutate({
+    const { data } = await apolloClient.mutate({
       mutation: UPDATE_PLAN_DETAILS,
       variables: {
         input: {
