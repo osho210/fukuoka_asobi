@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import '@styles/Auth.css';
 
 type CredentialResponse = {
@@ -10,6 +11,7 @@ type CredentialResponse = {
 
 // 管理画面ログインコンポーネント
 const Login = () => {
+  const router = useRouter();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
@@ -74,7 +76,7 @@ const Login = () => {
         }
 
         // 管理画面のダッシュボードにリダイレクト
-        window.location.href = '/';
+        router.push('/');
         return;
       }
 
@@ -86,7 +88,7 @@ const Login = () => {
       setError('ログイン中にエラーが発生しました。もう一度お試しください。');
       setIsLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // Google OAuth scriptの読み込み
