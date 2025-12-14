@@ -3119,14 +3119,14 @@ export type CreateMenuMutationVariables = Exact<{
 }>;
 
 
-export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', menuName: string } | null } | null };
+export type CreateMenuMutation = { __typename?: 'Mutation', createMenu?: { __typename?: 'CreateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, menuCategory: { __typename?: 'MenuCategory', id: string, name: string } } | null } | null };
 
 export type UpdateMenuMutationVariables = Exact<{
   input: UpdateMenuInput;
 }>;
 
 
-export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string } | null } | null };
+export type UpdateMenuMutation = { __typename?: 'Mutation', updateMenu?: { __typename?: 'UpdateMenuPayload', errors: Array<string>, menu?: { __typename?: 'Menu', id: string, menuName: string, price?: number | null, description?: string | null, imageUrl?: { __typename?: 'Image', id: string, url: string } | null, menuCategory: { __typename?: 'MenuCategory', id: string, name: string } } | null } | null };
 
 export type DeleteMenuMutationVariables = Exact<{
   input: DeleteMenuInput;
