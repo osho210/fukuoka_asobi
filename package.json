@@ -19,7 +19,9 @@
     "build-storybook:frontend": "npm run build-storybook -w frontend",
     "build-storybook:admin": "npm run build-storybook -w admin",
     "chromatic:frontend": "npm run chromatic -w frontend",
-    "chromatic:admin": "npm run chromatic -w admin"
+    "chromatic:admin": "npm run chromatic -w admin",
+    "deploy:frontend": "cd frontend && npm run build && npx wrangler pages deploy .next --project-name=fukuoka-asobi-frontend",
+    "deploy:admin": "cd admin && npm run build && npx wrangler pages deploy .next --project-name=fukuoka-asobi-admin"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",

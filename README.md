@@ -64,7 +64,7 @@
 - **データベース**: TiDB Cloud (Serverless)
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
-- **メリット**: 
+- **メリット**:
   - 帯域幅無制限
   - 商用利用可能（無料プラン）
   - Cloudflare CDN による高速配信
@@ -699,6 +699,7 @@ Vercel から Cloudflare Pages への移行を検討している場合、以下�
 - **[ビルド設定ガイド](docs/CLOUDFLARE_PAGES_BUILD_CONFIGURATION.md)** - npm workspaces 対応の詳細
 - **[Vercel vs Cloudflare Pages 比較](docs/VERCEL_VS_CLOUDFLARE_COMPARISON.md)** - 機能比較とリスク評価
 - **[移行完了報告書](docs/CLOUDFLARE_PAGES_MIGRATION_SUMMARY.md)** - 移行対応のサマリー
+- **[デプロイエラー修正ガイド](docs/CLOUDFLARE_PAGES_DEPLOYMENT_FIX.md)** - デプロイエラーのトラブルシューティング
 
 #### クイックスタート
 
