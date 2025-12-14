@@ -76,7 +76,7 @@ fukuoka-asobi/
    
    Build settings:
    - Framework preset: Next.js
-   - Build command: cd frontend && npm install && npm run build
+   - Build command: npm install && cd frontend && npm run build
    - Build output directory: frontend/.next
    - Root directory: (空欄 - ルートディレクトリを使用)
    ```
@@ -97,7 +97,7 @@ fukuoka-asobi/
    
    Build settings:
    - Framework preset: Next.js
-   - Build command: cd admin && npm install && npm run build
+   - Build command: npm install && cd admin && npm run build
    - Build output directory: admin/.next
    - Root directory: (空欄 - ルートディレクトリを使用)
    ```
