@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '@/graphql/queries/getCurrentUser';
-import '@styles/Auth.css';
 
 interface User {
   id: string;
