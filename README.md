@@ -11,6 +11,7 @@
 - [開発ワークフロー](#開発ワークフロー)
 - [ディレクトリ構造](#ディレクトリ構造)
 - [API仕様](#api仕様)
+- [デプロイ](#デプロイ)
 - [貢献ガイドライン](#貢献ガイドライン)
 
 ## 📝 概要
@@ -57,14 +58,28 @@
 - **データベース**: MySQL 8.0
 - **ストレージ**: MinIO（S3互換）
 
-#### 本番環境（オプション 1: クラウド）
+#### 本番環境（オプション 1: クラウド - Cloudflare Pages + Fly.io - 推奨）
+- **バックエンド**: Fly.io
+- **フロントエンド**: Cloudflare Pages（Frontend / Admin）
+- **データベース**: TiDB Cloud (Serverless)
+- **ストレージ**: Cloudflare R2
+- **コスト**: 無料枠内で運用可能（月額 0円〜）
+- **メリット**: 
+  - 帯域幅無制限
+  - 商用利用可能（無料プラン）
+  - Cloudflare CDN による高速配信
+  - DDoS 保護標準搭載
+- **移行ガイド**: `docs/CLOUDFLARE_PAGES_MIGRATION.md` 参照
+
+#### 本番環境（オプション 2: クラウド - Vercel + Fly.io）
 - **バックエンド**: Fly.io
 - **フロントエンド**: Vercel
 - **データベース**: TiDB Cloud (Serverless)
 - **ストレージ**: Cloudflare R2
 - **コスト**: 無料枠内で運用可能（月額 0円〜）
+- **注意**: Vercel 無料枠は帯域幅 100GB/月の制限あり
 
-#### 本番環境（オプション 2: VPS with Kamal - 推奨）
+#### 本番環境（オプション 3: VPS with Kamal）
 - **サーバー**: ConoHa VPS など
 - **デプロイツール**: Kamal（37signals製）
 - **データベース**: MySQL 8.0 (Docker accessory)
@@ -73,7 +88,7 @@
 - **デプロイ方式**: Blue-Green（ゼロダウンタイム）
 - **コスト**: VPS 料金のみ（月額 1,000円〜）
 
-#### 本番環境（オプション 3: VPS with Docker Compose）
+#### 本番環境（オプション 4: VPS with Docker Compose）
 - **サーバー**: ConoHa VPS など
 - **コンテナ化**: Docker Compose (本番用構成)
 - **データベース**: MySQL 8.0 (Docker)
@@ -668,6 +683,61 @@ fukuoka-asobi/
 
 - **マイグレーション**: データベーススキーマを定義・更新
 - **SchemaSpy**: データベース構造を可視化
+
+## 🚀 デプロイ
+
+### Cloudflare Pages へのデプロイ（推奨）
+
+Cloudflare Pages は、無料枠での帯域幅無制限、商用利用可能、Cloudflare CDN による高速配信など、多くのメリットがあります。
+
+#### 📚 移行ドキュメント
+
+Vercel から Cloudflare Pages への移行を検討している場合、以下のドキュメントを参照してください：
+
+- **[Cloudflare Pages 移行ガイド](docs/CLOUDFLARE_PAGES_MIGRATION.md)** - 包括的な移行手順
+- **[移行チェックリスト](docs/CLOUDFLARE_PAGES_MIGRATION_CHECKLIST.md)** - 実作業用チェックリスト
+- **[ビルド設定ガイド](docs/CLOUDFLARE_PAGES_BUILD_CONFIGURATION.md)** - npm workspaces 対応の詳細
+- **[Vercel vs Cloudflare Pages 比較](docs/VERCEL_VS_CLOUDFLARE_COMPARISON.md)** - 機能比較とリスク評価
+- **[移行完了報告書](docs/CLOUDFLARE_PAGES_MIGRATION_SUMMARY.md)** - 移行対応のサマリー
+
+#### クイックスタート
+
+**Frontend のデプロイ:**
+
+```bash
+# Cloudflare Pages でプロジェクト作成後、以下の設定を使用
+Framework preset: Next.js
+Build command: npm install && cd frontend && npm run build
+Build output directory: frontend/.next
+Root directory: (空欄)
+```
+
+**Admin のデプロイ:**
+
+```bash
+# Cloudflare Pages でプロジェクト作成後、以下の設定を使用
+Framework preset: Next.js
+Build command: npm install && cd admin && npm run build
+Build output directory: admin/.next
+Root directory: (空欄)
+```
+
+**環境変数:**
+
+- `NEXT_PUBLIC_BACKEND_URL` - バックエンド API の URL
+- `NEXT_PUBLIC_GRAPHQL_ENDPOINT` - GraphQL エンドポイント
+- `NEXT_PUBLIC_GOOGLE_CLIENT_ID` - Google OAuth クライアント ID
+- `NODE_ENV` - 環境設定（production/development）
+- `NODE_VERSION` - Node.js バージョン（20.11.0）
+
+詳細は `frontend/.env.cloudflare.example` と `admin/.env.cloudflare.example` を参照してください。
+
+### その他のデプロイオプション
+
+- **Vercel**: 従来のデプロイ先（帯域幅 100GB/月の制限あり）
+- **VPS with Kamal**: フルスタックアプリケーションのデプロイ（KAMAL_DEPLOYMENT_GUIDE.md 参照）
+- **VPS with Docker Compose**: シンプルな Docker ベースのデプロイ（docker-compose.prod.yml 使用）
+
 ## 👥 貢献ガイドライン
 
 ### コーディング規約
