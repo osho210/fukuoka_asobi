@@ -238,14 +238,16 @@ origins "https://fukuoka-asobi.com",
 
 1. **Cloudflare Pages デフォルトドメインを追加**
    
-   `backend/config/initializers/cors.rb` を編集して、コメントアウトされている2行のコメントを外します：
+   `backend/config/initializers/cors.rb` を編集：
    
    ```ruby
    # 変更前
    "https://fukuoka-asobi.vercel.app"
-   # Cloudflare Pages への移行時は以下の2行のコメントを外してください：
-   # ,"https://fukuoka-asobi-frontend.pages.dev"
-   # ,"https://fukuoka-asobi-admin.pages.dev"
+   # Cloudflare Pages への移行時は以下を実施：
+   # 1. 上の行の末尾にカンマを追加
+   # 2. 以下の2行のコメントを外す：
+   # "https://fukuoka-asobi-frontend.pages.dev",
+   # "https://fukuoka-asobi-admin.pages.dev"
    
    # 変更後
    "https://fukuoka-asobi.vercel.app",

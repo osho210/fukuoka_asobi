@@ -74,12 +74,14 @@
 
 - [ ] **CORS 設定の更新準備**
   - [ ] `backend/config/initializers/cors.rb` を確認
-  - [ ] Cloudflare Pages ドメインのコメントを外す準備
+  - [ ] Cloudflare Pages ドメイン追加の手順を確認
   
   ```ruby
-  # コメントアウトされている以下の2行を有効化：
-  # ,"https://fukuoka-asobi-frontend.pages.dev"
-  # ,"https://fukuoka-asobi-admin.pages.dev"
+  # 手順:
+  # 1. Vercel URL の末尾にカンマを追加
+  # 2. 以下の2行のコメントを外す：
+  # "https://fukuoka-asobi-frontend.pages.dev",
+  # "https://fukuoka-asobi-admin.pages.dev"
   ```
 
 - [ ] **ステージング環境の確認**
@@ -198,14 +200,16 @@
 
 - [ ] **CORS にテストドメイン追加**
   
-  `backend/config/initializers/cors.rb` を編集して、コメントアウトされている2行のコメントを外します：
+  `backend/config/initializers/cors.rb` を編集：
   
   ```ruby
   # 変更前
   "https://fukuoka-asobi.vercel.app"
-  # Cloudflare Pages への移行時は以下の2行のコメントを外してください：
-  # ,"https://fukuoka-asobi-frontend.pages.dev"
-  # ,"https://fukuoka-asobi-admin.pages.dev"
+  # Cloudflare Pages への移行時は以下を実施：
+  # 1. 上の行の末尾にカンマを追加
+  # 2. 以下の2行のコメントを外す：
+  # "https://fukuoka-asobi-frontend.pages.dev",
+  # "https://fukuoka-asobi-admin.pages.dev"
   
   # 変更後
   "https://fukuoka-asobi.vercel.app",

@@ -9,10 +9,13 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "http://localhost:9200",
             # Vercel（現行）
             "https://fukuoka-asobi.vercel.app"
-            # Cloudflare Pages への移行時は以下の2行のコメントを外してください：
-            # ,"https://fukuoka-asobi-frontend.pages.dev"
-            # ,"https://fukuoka-asobi-admin.pages.dev"
-            # 移行完了後、上の Vercel ドメインは削除してください
+            # Cloudflare Pages への移行時は以下を実施：
+            # 1. 上の行の末尾にカンマを追加: "https://fukuoka-asobi.vercel.app",
+            # 2. 以下の2行のコメントを外す：
+            # "https://fukuoka-asobi-frontend.pages.dev",
+            # "https://fukuoka-asobi-admin.pages.dev"
+            # 移行完了後、Vercel ドメインは削除してください
+
 
 
     resource "*",
