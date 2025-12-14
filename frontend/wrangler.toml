@@ -1,12 +1,11 @@
-# Cloudflare Pages 設定ファイル
-# https://developers.cloudflare.com/pages/
-
 name = "fukuoka-asobi-frontend"
 compatibility_date = "2025-12-14"
+compatibility_flags = ["nodejs_compat"]
 
-# Pages プロジェクト設定
-pages_build_output_dir = ".next"
+main = ".open-next/worker.js"
 
-# Node.js バージョン
+[assets]
+directory = ".open-next/assets"
+
 [vars]
 NODE_VERSION = "20.11.0"
