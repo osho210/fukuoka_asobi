@@ -1,67 +1,48 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '@/graphql/queries/getCurrentUser';
 
-interface User {
-  id: string;
-  email: string;
-  username: string;
-  role: string;
-}
-
-interface CurrentUserData {
-  currentUser: User | null;
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isChecking, setIsChecking] = useState(true);
-  const { data, loading, error } = useQuery<CurrentUserData>(GET_CURRENT_USER, {
+
+  const { data, loading, error } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
     // ログインページは認証チェックをスキップ
-    if (pathname === '/login') {
-      setIsChecking(false);
+    if (pathname === '/login') return;
+    if (loading) return;
+
+    // APIが別ドメインのため、エラー発生時のみ弾く
+    if (error) {
+      router.replace('/login');
       return;
     }
 
-    if (loading) {
+    // ログインユーザー が確定して存在しない場合のみ弾く
+    if (data && data.currentUser === null) {
+      router.replace('/login');
       return;
     }
 
-    // 認証エラーまたはユーザーが存在しない場合
-    if (error || !data?.currentUser) {
-      router.push('/login');
+    // 管理者チェック
+    if (data?.currentUser && data.currentUser.role !== 'admin') {
+      router.replace('/login');
       return;
     }
+  }, [loading, data, error, pathname, router]);
 
-    // admin権限チェック
-    if (data.currentUser.role !== 'admin') {
-      router.push('/login');
-      return;
-    }
-
-    setIsChecking(false);
-  }, [data, loading, error, pathname, router]);
-
-  // ログインページの場合は認証チェックをスキップ
   if (pathname === '/login') {
     return <>{children}</>;
   }
 
-  // 認証チェック中はローディング表示
-  if (isChecking || loading) {
-    return (
-      <div className="auth-checking">
-        認証を確認中...
-      </div>
-    );
+  if (loading) {
+    return <div className="auth-checking">認証を確認中...</div>;
   }
 
   return <>{children}</>;
