@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { USER_LOGOUT } from '@/graphql/mutations/userLogout';
 import { useState } from 'react';
-import '@styles/Auth.css';
 
 interface LogoutResponse {
   userLogout: {
