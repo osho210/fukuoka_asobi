@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname, basename } from 'path';
 
+export const runtime = 'nodejs';
+
 export async function POST(req: NextRequest) {
     const data = await req.formData();
     const file: File | null = data.get('file') as unknown as File;

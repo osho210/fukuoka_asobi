@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { DataTable } from '@/components/tables/DataTable';
