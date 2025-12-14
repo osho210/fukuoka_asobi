@@ -74,12 +74,12 @@
 
 - [ ] **CORS 設定の更新準備**
   - [ ] `backend/config/initializers/cors.rb` を確認
-  - [ ] Cloudflare Pages ドメインを追加する内容を準備
+  - [ ] Cloudflare Pages ドメインのコメントを外す準備
   
   ```ruby
-  # 追加するドメイン例
-  "https://fukuoka-asobi-frontend.pages.dev",
-  "https://fukuoka-asobi-admin.pages.dev"
+  # コメントアウトされている以下の2行を有効化：
+  # ,"https://fukuoka-asobi-frontend.pages.dev"
+  # ,"https://fukuoka-asobi-admin.pages.dev"
   ```
 
 - [ ] **ステージング環境の確認**
@@ -197,15 +197,20 @@
 ### 2.5 バックエンド CORS 設定更新
 
 - [ ] **CORS にテストドメイン追加**
+  
+  `backend/config/initializers/cors.rb` を編集して、コメントアウトされている2行のコメントを外します：
+  
   ```ruby
-  # backend/config/initializers/cors.rb
-  origins "https://fukuoka-asobi.com",
-          "https://www.fukuoka-asobi.com",
-          "http://localhost:8200",
-          "http://localhost:9200",
-          "https://fukuoka-asobi.vercel.app",
-          "https://fukuoka-asobi-frontend.pages.dev",  # 追加
-          "https://fukuoka-asobi-admin.pages.dev"      # 追加
+  # 変更前
+  "https://fukuoka-asobi.vercel.app"
+  # Cloudflare Pages への移行時は以下の2行のコメントを外してください：
+  # ,"https://fukuoka-asobi-frontend.pages.dev"
+  # ,"https://fukuoka-asobi-admin.pages.dev"
+  
+  # 変更後
+  "https://fukuoka-asobi.vercel.app",
+  "https://fukuoka-asobi-frontend.pages.dev",
+  "https://fukuoka-asobi-admin.pages.dev"
   ```
 
 - [ ] **Rails アプリケーション再起動**

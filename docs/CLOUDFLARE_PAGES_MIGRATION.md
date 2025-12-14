@@ -237,14 +237,20 @@ origins "https://fukuoka-asobi.com",
 **必要な対応:**
 
 1. **Cloudflare Pages デフォルトドメインを追加**
+   
+   `backend/config/initializers/cors.rb` を編集して、コメントアウトされている2行のコメントを外します：
+   
    ```ruby
-   origins "https://fukuoka-asobi.com",
-           "https://www.fukuoka-asobi.com",
-           "http://localhost:8200",
-           "http://localhost:9200",
-           "https://fukuoka-asobi.vercel.app",  # 移行期間中は残す
-           "https://fukuoka-asobi-frontend.pages.dev",  # 追加
-           "https://fukuoka-asobi-admin.pages.dev"      # 追加
+   # 変更前
+   "https://fukuoka-asobi.vercel.app"
+   # Cloudflare Pages への移行時は以下の2行のコメントを外してください：
+   # ,"https://fukuoka-asobi-frontend.pages.dev"
+   # ,"https://fukuoka-asobi-admin.pages.dev"
+   
+   # 変更後
+   "https://fukuoka-asobi.vercel.app",
+   "https://fukuoka-asobi-frontend.pages.dev",
+   "https://fukuoka-asobi-admin.pages.dev"
    ```
 
 2. **カスタムドメイン設定後**
