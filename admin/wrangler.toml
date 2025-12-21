@@ -11,5 +11,5 @@ compatibility_flags = ["nodejs_compat"]
 
 # Node.js バージョン
 [vars]
-NODE_VERSION = "20.18.1"
+NODE_VERSION = "20.11.0"
 
