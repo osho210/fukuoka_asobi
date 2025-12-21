@@ -14,8 +14,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "https://fukuoka-asobi-admin.pages.dev"
             # 移行完了後、Vercel ドメインは削除してください
 
-
-
     resource "*",
       headers: :any,
       methods: %i[get post put patch delete options head],
