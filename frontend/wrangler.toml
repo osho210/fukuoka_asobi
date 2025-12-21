@@ -9,3 +9,4 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID="947171054306-1qo9cseh8ke9kl55s2ipfpdocmlmvfmp.apps
 NODE_ENV="production"
 NEXT_PUBLIC_GRAPHQL_ENDPOINT="https://api.fukuoka-asobi.com/graphql"
 NEXT_PUBLIC_BACKEND_URL="https://api.fukuoka-asobi.com"
+NPM_CONFIG_PRODUCTION=false
