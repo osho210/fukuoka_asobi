@@ -9,10 +9,6 @@ pages_build_output_dir = ".vercel/output/static"
 
 compatibility_flags = ["nodejs_compat"]
 
-name = "fukuoka-asobi-frontend"
-compatibility_date = "2025-12-14"
-compatibility_flags = ["nodejs_compat"]
-
 # Node.js バージョン
 [vars]
 NODE_VERSION = "20.11.0"
@@ -21,5 +17,5 @@ NEXT_PUBLIC_FRONTEND_URL="https://www.fukuoka-asobi.com/"
 NODE_ENV="production"
 NEXT_PUBLIC_GRAPHQL_ENDPOINT="https://api.fukuoka-asobi.com/graphql"
 NEXT_PUBLIC_BACKEND_URL="https://api.fukuoka-asobi.com"
-
+NPM_CONFIG_PRODUCTION=false
 
