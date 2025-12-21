@@ -10,8 +10,8 @@
     "generate": "graphql-codegen",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build:cf": "npx @opennextjs/cloudflare build",
-    "deploy:cf": "npm run build:cf && npx wrangler deploy --config wrangler.toml",
+    "build:cf": "opennextjs-cloudflare build",
+    "deploy:cf": "npm run build:cf && wrangler deploy --config wrangler.toml",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND --exit-zero-on-changes"
   },
   "dependencies": {
@@ -35,7 +35,6 @@
     "@graphql-codegen/typescript": "^4.1.6",
     "@graphql-codegen/typescript-operations": "^4.6.0",
     "@opennextjs/cloudflare": "^1.14.7",
-    "esbuild": "^0.24.0",
     "@types/axios": "^0.14.0",
     "@types/node": "^20",
     "@types/react": "^19",
