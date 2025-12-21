@@ -8,7 +8,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "http://localhost:8200",
             "http://localhost:9200",
             # Cloudflare Pages (管理画面)
-            "https://fukuoka-asobi.pages.dev"
+            "https://fukuoka-asobi.pages.dev",
+            "https://admin.fukuoka-asobi.com"
 
     resource "*",
       headers: :any,
