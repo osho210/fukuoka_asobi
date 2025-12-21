@@ -2,7 +2,10 @@ name = "fukuoka-asobi-frontend"
 compatibility_date = "2025-12-14"
 compatibility_flags = ["nodejs_compat"]
 
-pages_build_output_dir = ".vercel/output/static"
-[vars]
-NODE_VERSION = "20.11.0"
+main = ".open-next/worker.js"
 
+[vars]
+NEXT_PUBLIC_GOOGLE_CLIENT_ID="947171054306-1qo9cseh8ke9kl55s2ipfpdocmlmvfmp.apps.googleusercontent.com"
+NODE_ENV="production"
+NEXT_PUBLIC_GRAPHQL_ENDPOINT="https://api.fukuoka-asobi.com/graphql"
+NEXT_PUBLIC_BACKEND_URL="https://api.fukuoka-asobi.com"
