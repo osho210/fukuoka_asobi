@@ -2,7 +2,7 @@ name = "fukuoka-asobi-frontend"
 compatibility_date = "2025-12-14"
 compatibility_flags = ["nodejs_compat"]
 
-main = "frontend/.open-next/worker.js"
+main = ".open-next/worker.js"
 
 [vars]
 NEXT_PUBLIC_GOOGLE_CLIENT_ID="947171054306-1qo9cseh8ke9kl55s2ipfpdocmlmvfmp.apps.googleusercontent.com"
