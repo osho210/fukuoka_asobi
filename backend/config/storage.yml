@@ -38,3 +38,7 @@ r2_production:
   force_path_style: true
   bucket: <%= ENV.fetch("R2_BUCKET", "fukuoka-asobi-production") %>
   public: false
+  # ✅ 追加（R2のchecksumエラー対策）
+  request_checksum_calculation: "when_required"
+  response_checksum_validation: "when_required"
+
