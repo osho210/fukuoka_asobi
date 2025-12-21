@@ -4,6 +4,8 @@ compatibility_flags = ["nodejs_compat"]
 
 main = ".open-next/worker.js"
 
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
 [vars]
 NEXT_PUBLIC_GOOGLE_CLIENT_ID="947171054306-1qo9cseh8ke9kl55s2ipfpdocmlmvfmp.apps.googleusercontent.com"
 NODE_ENV="production"
