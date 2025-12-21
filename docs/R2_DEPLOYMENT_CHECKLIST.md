@@ -13,13 +13,13 @@
   - [ ] Account ID
   - [ ] Access Key ID
   - [ ] Secret Access Key
-- [ ] R2 エンドポイント URL を確認済み：`https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
+- [ ] R2 エンドポイント URL を確認済み：`https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com`
 
 ### ローカル環境の準備
 
 - [ ] 環境変数 `R2_ENDPOINT` を設定済み（デプロイ実行マシン）
   ```bash
-  export R2_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+  export R2_ENDPOINT=https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com
   ```
 - [ ] `.kamal/secrets` ファイルに以下を設定済み：
   ```
@@ -88,7 +88,7 @@ ENV['ACTIVE_STORAGE_SERVICE']
 # => "r2_production"
 
 ENV['R2_ENDPOINT']
-# => "https://<ACCOUNT_ID>.r2.cloudflarestorage.com"
+# => "https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com"
 
 ENV['R2_BUCKET']
 # => "fukuoka-asobi-production"
@@ -109,7 +109,7 @@ blob = ActiveStorage::Blob.create_and_upload!(
 # URL の生成確認
 url = blob.url
 puts url
-# => 署名付き URL が返される（https://<ACCOUNT_ID>.r2.cloudflarestorage.com/...）
+# => 署名付き URL が返される（https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com/...）
 
 # クリーンアップ
 blob.purge

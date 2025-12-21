@@ -69,10 +69,10 @@
 R2 のエンドポイントは以下の形式です：
 
 ```
-https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com
 ```
 
-`<ACCOUNT_ID>` は、上記で取得した Account ID に置き換えてください。
+`YOUR_ACCOUNT_ID` は、上記で取得した Account ID に置き換えてください。
 
 ### 4. CORS 設定（オプション）
 
@@ -335,7 +335,11 @@ R2 への移行後、MinIO は不要になりますが、**既存データのバ
 ### バックアップ手順
 
 ```bash
+# コンテナ名を確認
+docker ps -a | grep minio
+
 # MinIO コンテナ内のデータをローカルにバックアップ
+# コンテナ名は環境により異なる場合があるため、上記で確認してください
 docker cp fukuoka-asobi-backend-minio:/data /path/to/backup/minio-data
 ```
 
