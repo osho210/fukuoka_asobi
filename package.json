@@ -19,7 +19,9 @@
     "build-storybook:frontend": "npm run build-storybook -w frontend",
     "build-storybook:admin": "npm run build-storybook -w admin",
     "chromatic:frontend": "npm run chromatic -w frontend",
-    "chromatic:admin": "npm run chromatic -w admin"
+    "chromatic:admin": "npm run chromatic -w admin",
+    "deploy:frontend": "npm run build:frontend",
+    "deploy:admin": "npm run build:admin"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
@@ -29,6 +31,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@eslint/eslintrc": "^3",
     "@graphql-codegen/cli": "^5.0.5",
     "@graphql-codegen/client-preset": "^4.8.0",
@@ -48,7 +51,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "storybook": "^8.6.14",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "wrangler": "^4.47.0"
   },
   "config": {
     "commitizen": {

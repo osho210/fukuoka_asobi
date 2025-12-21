@@ -1,0 +1,8 @@
+name = "fukuoka-asobi-frontend"
+compatibility_date = "2025-12-14"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = ".vercel/output/static"
+[vars]
+NODE_VERSION = "20.11.0"
+
