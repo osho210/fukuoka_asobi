@@ -11,7 +11,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "https://fukuoka-asobi.vercel.app",
             # Cloudflare Pages（移行先）
             "https://fukuoka-asobi-frontend.pages.dev",
-            "https://fukuoka-asobi-admin.pages.dev"
+            "https://fukuoka-asobi-admin.pages.dev",
             # 移行完了後、Vercel ドメインは削除してください
 
     resource "*",
