@@ -17,7 +17,7 @@ minio:
   bucket: <%= ENV.fetch("MINIO_BUCKET", "fukuoka-asobi-dev") %>
   public: true
 
-# 本番環境用MinIO設定
+# 本番環境用MinIO設定（廃止予定 - R2移行完了・動作確認後に削除）
 minio_production:
   service: S3
   access_key_id: <%= ENV.fetch("MINIO_ROOT_USER", "") %>
@@ -26,4 +26,15 @@ minio_production:
   endpoint: <%= ENV.fetch("MINIO_ENDPOINT", "") %>
   force_path_style: true
   bucket: <%= ENV.fetch("MINIO_BUCKET", "fukuoka-asobi-production") %>
+  public: false
+
+# 本番環境用Cloudflare R2設定
+r2_production:
+  service: S3
+  access_key_id: <%= ENV.fetch("R2_ACCESS_KEY_ID", "") %>
+  secret_access_key: <%= ENV.fetch("R2_SECRET_ACCESS_KEY", "") %>
+  region: auto
+  endpoint: <%= ENV.fetch("R2_ENDPOINT", "") %>
+  force_path_style: true
+  bucket: <%= ENV.fetch("R2_BUCKET", "fukuoka-asobi-production") %>
   public: false

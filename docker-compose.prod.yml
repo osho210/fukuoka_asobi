@@ -21,27 +21,6 @@ services:
       timeout: 5s
       retries: 5
 
-  minio:
-    image: minio/minio
-    container_name: fukuoka_asobi_minio_prod
-    restart: always
-    # MinIO ポートは本番環境では公開しない（Docker ネットワーク経由で接続）
-    # 管理コンソールが必要な場合のみポートを公開してください
-    # ports:
-    #   - "9000:9000"
-    #   - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    volumes:
-      - minio_data_prod:/data
-    command: server /data --console-address ":9001"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
   backend:
     build:
       context: ./backend
@@ -52,8 +31,6 @@ services:
     restart: always
     depends_on:
       db:
-        condition: service_healthy
-      minio:
         condition: service_healthy
     ports:
       - "80:80"
@@ -66,10 +43,11 @@ services:
       DB_PORT: 3306
       DB_NAME: ${DB_NAME:-fukuoka_asobi_production}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_ENDPOINT: https://fukuoka-asobi-backend-minio:9000
-      MINIO_BUCKET: 'fukuoka-asobi-production'
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_ENDPOINT: ${R2_ENDPOINT}
+      R2_BUCKET: ${R2_BUCKET:-fukuoka-asobi-production}
+      ACTIVE_STORAGE_SERVICE: r2_production
     volumes:
       - rails_storage_prod:/rails/storage
     tty: true
@@ -79,6 +57,4 @@ volumes:
   # MySQL の本番用ボリューム（external: false で Docker が自動作成）
   # VPS 初回構築時は未作成のため、external を無効化
   fukuoka_asobi_mysql_data_prod:
-
-  minio_data_prod:
   rails_storage_prod:
