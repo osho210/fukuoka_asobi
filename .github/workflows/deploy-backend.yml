@@ -34,6 +34,10 @@ jobs:
       CONOHA_VPS_IP:        ${{ secrets.CONOHA_VPS_IP }}
       MYSQL_ROOT_PASSWORD:  ${{ secrets.MYSQL_ROOT_PASSWORD }}
       MINIO_ROOT_PASSWORD:  ${{ secrets.MINIO_ROOT_PASSWORD }}
+      R2_ENDPOINT:          ${{ secrets.R2_ENDPOINT }}
+      R2_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
 
     steps:
       - name: Checkout
