@@ -10,6 +10,7 @@
     "generate": "graphql-codegen",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build:cf": "opennextjs-cloudflare build",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND --exit-zero-on-changes"
   },
   "dependencies": {
