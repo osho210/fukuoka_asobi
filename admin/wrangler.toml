@@ -10,6 +10,4 @@ pages_build_output_dir = ".vercel/output/static"
 compatibility_flags = ["nodejs_compat"]
 
 # Node.js バージョン
-[vars]
-NODE_VERSION = "20.11.0"
 
