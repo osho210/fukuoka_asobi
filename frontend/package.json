@@ -10,7 +10,7 @@
     "generate": "graphql-codegen",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build:cf": "npx opennextjs-cloudflare build",
+    "build:cf": "npx @opennextjs/cloudflare build",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND --exit-zero-on-changes"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@types/react-slick": "^0.23.13",
     "axios": "^1.6.7",
     "date-fns": "^4.1.0",
+    "esbuild": "^0.27.2",
     "graphql": "^16.11.0",
     "next": "15.3.8",
     "react": "^19.0.0",
