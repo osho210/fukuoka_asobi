@@ -5,6 +5,10 @@ module Types
     field :id, ID, null: false
     field :username, String, null: false
     field :profile_image_url, String
+    def profile_image_url
+      convert_storage_url(object.profile_image_url)
+    end
+
     field :bio, String
     field :role, String
     field :email, String, null: false

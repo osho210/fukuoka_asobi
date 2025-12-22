@@ -504,20 +504,18 @@ export default function PlayPlanForm({
           </div>
 
           {/* 画像プロパティ編集 */}
-          {formData.imageProperties && formData.imageProperties.length > 0 && (
-            <div className="play-plan-form__field play-plan-form__field--full-width">
-              <ImagePropertiesEditor
-                imageProperties={formData.imageProperties}
-                onChange={(properties) => {
-                  setFormData(prev => ({
-                    ...prev,
-                    imageProperties: properties,
-                  }));
-                }}
-                maxSelected={3}
-              />
-            </div>
-          )}
+          <div className="play-plan-form__field play-plan-form__field--full-width">
+            <ImagePropertiesEditor
+              imageProperties={(formData.imageProperties || [])}
+              onChange={(properties) => {
+                setFormData(prev => ({
+                  ...prev,
+                  imageProperties: properties,
+                }));
+              }}
+              maxSelected={3}
+            />
+          </div>
 
           <div className="play-plan-form__field">
             <label htmlFor="startTime" className="play-plan-form__label">

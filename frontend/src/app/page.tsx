@@ -15,9 +15,9 @@ export default function Home() {
     <>
       <div className="image-container">
         {isDesktop ? (
-          <Image src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
+          <Image  src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
         ) : (
-          <Image src={'/kv.jpg'} width={380} height={700} alt="kv" priority />
+          <Image className="kv" src={'/kv.jpg'} width={360} height={700} alt="kv" priority />
         )}
 
         <p className="vertical-text">
