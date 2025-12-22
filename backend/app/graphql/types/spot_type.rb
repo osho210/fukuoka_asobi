@@ -31,7 +31,7 @@ module Types
       first_image = object.images.first
       {
         id: first_image.id,
-        url: first_image.url.gsub("http://minio:9000", "http://localhost:9000")
+        url: convert_storage_url(first_image.url)
       }
     end
 
@@ -219,12 +219,11 @@ module Types
       start_amount.present? ? start_amount : end_amount
     end
 
-    # TODO: 開発環境ではMinIOのURLをローカルに置き換える
     def image_urls
       object.images.map do |image|
         {
           id: image.id,
-          url: image.url.gsub("http://minio:9000", "http://localhost:9000")
+          url: convert_storage_url(image.url)
         }
       end
     end

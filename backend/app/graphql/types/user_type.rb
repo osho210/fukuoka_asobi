@@ -19,9 +19,9 @@ module Types
     # ActiveStorageのアバター画像URL
     field :avatar_url, String, null: true
     def avatar_url
-      if object.avatar.attached?
-        object.avatar.blob.key
-      end
+      return nil unless object.avatar.attached?
+
+      convert_storage_url(object.avatar.url)
     end
 
 

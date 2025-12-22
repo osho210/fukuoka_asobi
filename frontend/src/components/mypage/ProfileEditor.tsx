@@ -92,8 +92,6 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
             });
         }
     };
-    const baseMinioUrl = 'http://localhost:9000/fukuoka-asobi-dev';
-    const fullAvatarUrl = `${baseMinioUrl}/${user.avatarUrl}`;
 
     // 画像アップロード時の処理（Base64変換用）
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,25 +168,9 @@ export const ProfileEditor: React.FC<ProfileEditorProps> = ({ user, onUpdate }) 
                 <div className={'profile-editor-field'}>
                     <label className={'profile-editor-label'}>プロフィール画像</label>
                     <div className={'profile-editor-image-container'}>
-                        {avatarFile ? (
+                        {user.avatarUrl ? (
                             <Image
-                                src={fullAvatarUrl}
-                                alt="プロフィール画像"
-                                className={'profile-editor-image'}
-                                width={100}
-                                height={100}
-                            />
-                        ) : user.avatarUrl ? (
-                            <Image
-                                src={fullAvatarUrl}
-                                alt="プロフィール画像"
-                                className={'profile-editor-image'}
-                                width={100}
-                                height={100}
-                            />
-                        ) : profileImageUrl ? (
-                            <Image
-                                src={fullAvatarUrl}
+                                src={user.avatarUrl}
                                 alt="プロフィール画像"
                                 className={'profile-editor-image'}
                                 width={100}

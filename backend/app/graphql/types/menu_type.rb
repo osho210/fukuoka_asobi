@@ -11,13 +11,12 @@ module Types
 
     field :spots, [Types::SpotType], null: false
 
-    # TODO: 開発環境ではMinIOのURLをローカルに置き換える
     def image_url
       return nil unless object.image.attached?
 
       {
         id: object.image.id,
-        url: object.image.url.gsub("http://minio:9000", "http://localhost:9000")
+        url: convert_storage_url(object.image.url)
       }
     end
   end

@@ -83,7 +83,7 @@ module Types
       object.images.map do |image|
         {
           id: image.id,
-          url: image.url.gsub("http://minio:9000", "http://localhost:9000")
+          url: convert_storage_url(image.url)
         }
       end
     end
@@ -98,7 +98,7 @@ module Types
         prop = properties[image.id]
         {
           attachment_id: image.id,
-          url: image.url.gsub("http://minio:9000", "http://localhost:9000"),
+          url: convert_storage_url(image.url),
           is_selected: prop&.is_selected || false,
           position: prop&.position || index,
           comment: prop&.comment

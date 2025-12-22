@@ -92,6 +92,7 @@ jobs:
           R2_ACCESS_KEY_ID=$R2_ACCESS_KEY_ID
           R2_SECRET_ACCESS_KEY=$R2_SECRET_ACCESS_KEY
           ACTIVE_STORAGE_SERVICE=r2_production
+          ASSET_HOST=https://assets.fukuoka-asobi.com
           EOF
 
       - name: Deploy with Kamal
