@@ -1,0 +1,26 @@
+.image-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  aspect-ratio: 1200 / 400;
+}
+
+.image-container picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .image-container {
+    aspect-ratio: 360 / 700;
+  }
+}

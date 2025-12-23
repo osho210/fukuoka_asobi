@@ -1,24 +1,31 @@
 'use client';
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import PlayPlanList from '@/components/PlayPlanList'
 import RecommendedSpot from '@/components/RecommendedSpot'
 import RecommendedEvent from '@/components/RecommendedEvent'
 import RecommendedNews from '@/components/RecommendedNews'
-import { useIsDesktop } from '@/hooks/useMediaQuery'
+import './home.css';
 
 
 export default function Home() {
-  const isDesktop = useIsDesktop();
-
   return (
     <>
       <div className="image-container">
-        {isDesktop ? (
-          <Image  src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
-        ) : (
-          <Image className="kv" src={'/kv.jpg'} width={360} height={700} alt="kv" priority />
-        )}
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/kv-pc.png" />
+          <img
+            className="kv"
+            src={'/kv.jpg'}
+            alt="kv"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            width={1200}
+            height={400}
+            sizes="(min-width: 768px) 1200px, 100vw"
+          />
+        </picture>
 
         <p className="vertical-text">
           福岡をもっと楽しく、<br />もっと身近に。
