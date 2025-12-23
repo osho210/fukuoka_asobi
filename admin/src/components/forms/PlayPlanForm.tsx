@@ -93,12 +93,11 @@ export default function PlayPlanForm({
   }, [initialData]);
 
   /**
-   * 新しい画像と既存画像から ImagePropertyWithUrl を生成します
-   * アップロード時に自動的にプロパティを作成
+   * 新しい画像と既存画像から ImageProperty を生成します
    * @param newImages - Base64エンコードされた新規画像
    * @param existingImages - 既存画像の配列
    * @param currentProperties - 現在の画像プロパティ
-   * @returns ImagePropertyWithUrl の配列
+   * @returns ImageProperty の配列
    */
   const generateImageProperties = (
     newImages?: string[],
@@ -107,7 +106,6 @@ export default function PlayPlanForm({
   ) => {
     const properties: ImageProperty[] = [];
 
-    // 既存画像のプロパティを保持
     if (existingImages && currentProperties) {
       existingImages.forEach((img) => {
         const existing = currentProperties.find(p => p.attachmentId === img.id);
@@ -131,11 +129,10 @@ export default function PlayPlanForm({
       });
     }
 
-    // 新規画像のプロパティを作成
     if (newImages) {
       newImages.forEach((img, idx) => {
         properties.push({
-          attachmentId: `new-${idx}-${Date.now()}`, // 一時的なID
+          attachmentId: `new-${idx}-${Date.now()}`,
           url: img,
           isSelected: false,
           comment: null,
@@ -159,33 +156,131 @@ export default function PlayPlanForm({
     }, 0);
   };
 
-  /** * 日時をISO形式から入力用の文字列に変換する関数
-   * @param isoString - ISO形式の日時文字列
-   * @returns 入力用の文字列（YYYY-MM-DDTHH:mm）
-   */
   const calculatedBudget = calculateTotalBudget(formData.planDetails);
-
-  // 手動入力値と計算値の差分
   const budgetDifference = (parseFloat(formData.totalBudget || '0') - calculatedBudget);
 
-  const handleInputChange = (field: keyof PlayPlanFormData, value: string | string[]) => {
+  /**
+   * バックエンドのmutation定義に基づく必須フィールドの定義
+   * mutation定義: create_or_update_play_plan_with_details.rb を参照
+   */
+  const REQUIRED_FIELDS: Set<keyof PlayPlanFormData> = new Set([
+    'planName',                    // required: true
+    'catchCopy',                   // required: true
+    'subtitle',                    // required: true
+    'leadText',                    // required: true
+    'description',                 // required: true
+    'departure',                   // required: true
+    'departureTime',               // required: true
+    'travelMethodToFirstSpot',     // required: true
+    'travelTimeToFirstSpot',       // required: true
+    'status',                      // required: true
+    'tripType',                    // required: true
+    'totalBudget',                 // required: true
+    'location',                    // required: true
+    'startTime',                   // required: true
+    'endTime',                     // required: true
+    'tags',                        // required: true
+    'plannerTitle',                // required: true
+    'plannerDescription',          // required: true
+  ]);
+
+  const OPTIONAL_FIELDS: Set<keyof PlayPlanFormData> = new Set([
+    'imageUrl',
+    'imageUrls',
+    'imageProperties',
+    'newImages',
+    'deleteImageIds',
+    'recommendUsers',
+    'isRecommended',
+  ]);
+
+  /**
+   * 個別フィールドのバリデーションを実行します
+   * バックエンドのrequired設定に合わせて実装
+   * @param field - フィールド名
+   * @param value - 入力値
+   * @returns エラーメッセージ（エラーがない場合はnull）
+   */
+  const validateField = (field: keyof PlayPlanFormData, value: unknown): string | null => {
+    const stringValue = String(value ?? '').trim();
+
+    // 必須フィールド（バックエンドで required: true）
+    if (REQUIRED_FIELDS.has(field)) {
+      switch (field) {
+        case 'planName':
+          return !stringValue ? 'プラン名は必須です' : null;
+        case 'catchCopy':
+          return !stringValue ? 'キャッチコピーは必須です' : null;
+        case 'subtitle':
+          return !stringValue ? 'サブタイトルは必須です' : null;
+        case 'leadText':
+          return !stringValue ? 'リードテキストは必須です' : null;
+        case 'description':
+          return !stringValue ? 'プラン説明は必須です' : null;
+        case 'departure':
+          return !stringValue ? '集合場所は必須です' : null;
+        case 'departureTime':
+          return !stringValue ? '集合時間は必須です' : null;
+        case 'travelMethodToFirstSpot':
+          return !stringValue ? '最初の目的地までの移動手段は必須です' : null;
+        case 'travelTimeToFirstSpot':
+          return !stringValue ? '最初の目的地までの移動時間は必須です' : null;
+        case 'status':
+          return !value ? 'ステータスは必須です' : null;
+        case 'tripType':
+          return !value ? '旅行タイプは必須です' : null;
+        case 'totalBudget':
+          return !value ? '総予算は必須です' : null;
+        case 'location':
+          return !stringValue ? 'エリアは必須です' : null;
+        case 'startTime':
+          return !stringValue ? '開始時刻は必須です' : null;
+        case 'endTime':
+          return !stringValue ? '終了時刻は必須です' : null;
+        case 'tags':
+          return !stringValue ? 'タグは必須です' : null;
+        case 'plannerTitle':
+          return !stringValue ? 'プランナータイトルは必須です' : null;
+        case 'plannerDescription':
+          return !stringValue ? 'プランナー説明は必須です' : null;
+        default:
+          return null;
+      }
+    }
+
+    // オプションフィールド（バックエンドで required: false）
+    if (OPTIONAL_FIELDS.has(field)) {
+      return null;
+    }
+
+    return null;
+  };
+
+  /**
+   * フィールド入力時のハンドラー（リアルタイムバリデーション付き）
+   * @param field - フィールド名
+   * @param value - 入力値
+   */
+  const handleInputChangeWithValidation = (field: keyof PlayPlanFormData, value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
 
-    // エラーをクリア
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: '',
-      }));
-    }
+    // リアルタイムバリデーションを実行
+    const error = validateField(field, value);
+    setErrors(prev => {
+      if (error) {
+        return { ...prev, [field]: error };
+      } else {
+        const { [field]: _, ...rest } = prev;
+        return rest;
+      }
+    });
   };
 
   const handlePlanDetailsChange = (planDetails: PlanDetailFormData[]) => {
     const newCalculatedBudget = calculateTotalBudget(planDetails);
-
     setFormData(prev => ({
       ...prev,
       planDetails,
@@ -193,7 +288,6 @@ export default function PlayPlanForm({
     }));
   };
 
-  // 最後のステップの終了時刻を受け取ってプランの終了時刻を更新
   const handlePlanEndTimeChange = (endTime: string) => {
     setFormData(prev => ({
       ...prev,
@@ -201,13 +295,11 @@ export default function PlayPlanForm({
     }));
   };
 
-  // 総予算の手動入力処理
   const handleTotalBudgetChange = (value: string) => {
     setIsManualBudget(true);
-    handleInputChange('totalBudget', value);
+    handleInputChangeWithValidation('totalBudget', value);
   };
 
-  // 自動計算に戻すボタンの処理
   const resetToCalculatedBudget = () => {
     setIsManualBudget(false);
     setFormData(prev => ({
@@ -219,31 +311,67 @@ export default function PlayPlanForm({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.planName.trim()) {
+    // 必須フィールドのバリデーション（バックエンドのrequired: trueに対応）
+    if (!formData.planName?.trim()) {
       newErrors.planName = 'プラン名は必須です';
     }
-
+    if (!formData.catchCopy?.trim()) {
+      newErrors.catchCopy = 'キャッチコピーは必須です';
+    }
+    if (!formData.subtitle?.trim()) {
+      newErrors.subtitle = 'サブタイトルは必須です';
+    }
+    if (!formData.leadText?.trim()) {
+      newErrors.leadText = 'リードテキストは必須です';
+    }
+    if (!formData.description?.trim()) {
+      newErrors.description = 'プラン説明は必須です';
+    }
+    if (!formData.departure?.trim()) {
+      newErrors.departure = '集合場所は必須です';
+    }
+    if (!formData.departureTime) {
+      newErrors.departureTime = '集合時間は必須です';
+    }
+    if (!formData.travelMethodToFirstSpot) {
+      newErrors.travelMethodToFirstSpot = '最初の目的地までの移動手段は必須です';
+    }
+    if (!formData.travelTimeToFirstSpot) {
+      newErrors.travelTimeToFirstSpot = '最初の目的地までの移動時間は必須です';
+    }
     if (!formData.status) {
       newErrors.status = 'ステータスは必須です';
     }
-
-    if (!formData.departure) {
-      newErrors.departure = '出発地点は必須です';
-    }
-
     if (!formData.tripType) {
       newErrors.tripType = '旅行タイプは必須です';
     }
+    if (!formData.totalBudget) {
+      newErrors.totalBudget = '総予算は必須です';
+    }
+    if (!formData.location?.trim()) {
+      newErrors.location = 'エリアは必須です';
+    }
+    if (!formData.startTime) {
+      newErrors.startTime = '開始時刻は必須です';
+    }
+    if (!formData.endTime) {
+      newErrors.endTime = '終了時刻は必須です';
+    }
+    if (!formData.tags?.trim()) {
+      newErrors.tags = 'タグは必須です';
+    }
+    if (!formData.plannerTitle?.trim()) {
+      newErrors.plannerTitle = 'プランナータイトルは必須です';
+    }
+    if (!formData.plannerDescription?.trim()) {
+      newErrors.plannerDescription = 'プランナー説明は必須です';
+    }
 
+    // プラン詳細のバリデーション
     if (formData.planDetails.length === 0) {
       newErrors.planDetails = '少なくとも1つのステップが必要です';
     }
 
-    if (!formData.totalBudget) {
-      newErrors.totalBudget = '総予算は入力必須です';
-    }
-
-    // プラン詳細のバリデーション
     formData.planDetails.forEach((detail, index) => {
       if (!detail.stepName.trim()) {
         newErrors[`planDetails.${index}.stepName`] = 'ステップ名は必須です';
@@ -252,13 +380,33 @@ export default function PlayPlanForm({
 
     // 日付の整合性チェック
     if (formData.startTime && formData.endTime) {
-      if (new Date(formData.startTime) >= new Date(formData.endTime)) {
-        newErrors.endTime = '終了日は開始日より後である必要があります';
+      if (new Date(`2000-01-01T${formData.startTime}`) >= new Date(`2000-01-01T${formData.endTime}`)) {
+        newErrors.endTime = '終了時刻は開始時刻より後である必要があります';
       }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  /**
+   * フォームデータをクリーンアップして送信します
+   * 空の値をundefinedに変換し、GraphQLエラーを防止します
+   * @param data - 送信するフォームデータ
+   * @returns クリーンアップされたデータ
+   */
+  const cleanFormData = (data: PlayPlanFormData): PlayPlanFormData => {
+    return {
+      ...data,
+      catchCopy: data.catchCopy?.trim() || undefined,
+      subtitle: data.subtitle?.trim() || undefined,
+      leadText: data.leadText?.trim() || undefined,
+      description: data.description?.trim() || undefined,
+      tags: data.tags?.trim() || undefined,
+      location: data.location?.trim() || undefined,
+      plannerTitle: data.plannerTitle?.trim() || undefined,
+      plannerDescription: data.plannerDescription?.trim() || undefined,
+    };
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -268,12 +416,12 @@ export default function PlayPlanForm({
       return;
     }
 
-    onSubmit(formData);
+    const cleanedData = cleanFormData(formData);
+    onSubmit(cleanedData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="play-plan-form">
-      {/* 基本情報 */}
       <div className="play-plan-form__section">
         <h2 className="play-plan-form__section-title">公開情報</h2>
         <div className="play-plan-form__grid">
@@ -295,8 +443,8 @@ export default function PlayPlanForm({
             </label>
           </div>
         </div>
-        <h2 className="play-plan-form__section-title">基本情報</h2>
 
+        <h2 className="play-plan-form__section-title">基本情報</h2>
         <div className="play-plan-form__grid">
           <div className="play-plan-form__field">
             <label htmlFor="planName" className="play-plan-form__label play-plan-form__label--required">
@@ -306,63 +454,67 @@ export default function PlayPlanForm({
               type="text"
               id="planName"
               value={formData.planName}
-              onChange={(e) => handleInputChange('planName', e.target.value)}
-              className={`play-plan-form__input ${errors.planName ? 'play-plan-form__input--error' : ''
-                }`}
+              onChange={(e) => handleInputChangeWithValidation('planName', e.target.value)}
+              className={`play-plan-form__input ${errors.planName ? 'play-plan-form__input--error' : ''}`}
               placeholder="プラン名を入力"
             />
-            {errors.planName && (
-              <p className="play-plan-form__error">{errors.planName}</p>
-            )}
+            {errors.planName && <p className="play-plan-form__error">{errors.planName}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="catchCopy" className="play-plan-form__label">
+            <label htmlFor="catchCopy" className="play-plan-form__label play-plan-form__label--required">
               キャッチコピー
             </label>
             <input
               type="text"
               id="catchCopy"
               value={formData.catchCopy || ''}
-              onChange={(e) => handleInputChange('catchCopy', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('catchCopy', e.target.value)}
+              className={`play-plan-form__input ${errors.catchCopy ? 'play-plan-form__input--error' : ''}`}
               placeholder="キャッチコピーを入力"
             />
+            {errors.catchCopy && <p className="play-plan-form__error">{errors.catchCopy}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="subtitle" className="play-plan-form__label">
+            <label htmlFor="subtitle" className="play-plan-form__label play-plan-form__label--required">
               サブタイトル
             </label>
             <input
               type="text"
               id="subtitle"
               value={formData.subtitle || ''}
-              onChange={(e) => handleInputChange('subtitle', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('subtitle', e.target.value)}
+              className={`play-plan-form__input ${errors.subtitle ? 'play-plan-form__input--error' : ''}`}
               placeholder="サブタイトルを入力"
             />
+            {errors.subtitle && <p className="play-plan-form__error">{errors.subtitle}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="leadText" className="play-plan-form__label">
+            <label htmlFor="leadText" className="play-plan-form__label play-plan-form__label--required">
               リードテキスト
             </label>
             <textarea
               id="leadText"
               rows={4}
               value={formData.leadText || ''}
-              onChange={(e) => handleInputChange('leadText', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('leadText', e.target.value)}
+              className={`play-plan-form__input ${errors.leadText ? 'play-plan-form__input--error' : ''}`}
               placeholder="リードテキストを入力"
             />
+            {errors.leadText && <p className="play-plan-form__error">{errors.leadText}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="districts" className="play-plan-form__label">
+            <label htmlFor="location" className="play-plan-form__label play-plan-form__label--required">
               エリア選択
             </label>
             <select
               id="location"
               value={formData.location || ''}
-              onChange={(e) => handleInputChange('location', e.target.value)}
-              className="play-plan-form__select"
+              onChange={(e) => handleInputChangeWithValidation('location', e.target.value)}
+              className={`play-plan-form__select ${errors.location ? 'play-plan-form__select--error' : ''}`}
             >
               <option value="">選択してください</option>
               {districts?.map((district) => (
@@ -371,20 +523,22 @@ export default function PlayPlanForm({
                 </option>
               ))}
             </select>
+            {errors.location && <p className="play-plan-form__error">{errors.location}</p>}
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="description" className="play-plan-form__label">
+            <label htmlFor="description" className="play-plan-form__label play-plan-form__label--required">
               プラン説明
             </label>
             <textarea
               id="description"
               value={formData.description || ''}
-              onChange={(e) => handleInputChange('description', e.target.value)}
+              onChange={(e) => handleInputChangeWithValidation('description', e.target.value)}
               rows={4}
-              className="play-plan-form__textarea"
+              className={`play-plan-form__textarea ${errors.description ? 'play-plan-form__input--error' : ''}`}
               placeholder="プランの説明を入力"
             />
+            {errors.description && <p className="play-plan-form__error">{errors.description}</p>}
           </div>
 
           <div className="play-plan-form__field">
@@ -394,16 +548,14 @@ export default function PlayPlanForm({
             <select
               id="status"
               value={formData.status}
-              onChange={(e) => handleInputChange('status', e.target.value)}
-              className={`play-plan-form__select ${errors.status ? 'play-plan-form__select--error' : ''
-                }`}
+              onChange={(e) => handleInputChangeWithValidation('status', e.target.value)}
+              className={`play-plan-form__select ${errors.status ? 'play-plan-form__select--error' : ''}`}
             >
+              <option value="">選択してください</option>
               <option value="DRAFT">下書き</option>
               <option value="PUBLISHED">公開</option>
             </select>
-            {errors.status && (
-              <p className="play-plan-form__error">{errors.status}</p>
-            )}
+            {errors.status && <p className="play-plan-form__error">{errors.status}</p>}
           </div>
 
           <div className="play-plan-form__field">
@@ -413,56 +565,54 @@ export default function PlayPlanForm({
             <select
               id="tripType"
               value={formData.tripType}
-              onChange={(e) => handleInputChange('tripType', e.target.value)}
-              className={`play-plan-form__select ${errors.tripType ? 'play-plan-form__select--error' : ''
-                }`}
+              onChange={(e) => handleInputChangeWithValidation('tripType', e.target.value)}
+              className={`play-plan-form__select ${errors.tripType ? 'play-plan-form__select--error' : ''}`}
             >
+              <option value="">選択してください</option>
               <option value="DAY_TRIP">日帰り</option>
               <option value="OVERNIGHT">泊まり</option>
             </select>
-            {errors.tripType && (
-              <p className="play-plan-form__error">{errors.tripType}</p>
-            )}
+            {errors.tripType && <p className="play-plan-form__error">{errors.tripType}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="departure" className="play-plan-form__label">
+            <label htmlFor="departure" className="play-plan-form__label play-plan-form__label--required">
               集合場所
             </label>
             <input
               type="text"
               id="departure"
               value={formData.departure || ''}
-              onChange={(e) => handleInputChange('departure', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('departure', e.target.value)}
+              className={`play-plan-form__input ${errors.departure ? 'play-plan-form__input--error' : ''}`}
               placeholder="集合場所を入力"
             />
-            {errors.departure && (
-              <p className="play-plan-form__error">{errors.departure}</p>
-            )}
+            {errors.departure && <p className="play-plan-form__error">{errors.departure}</p>}
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="departureTime" className="play-plan-form__label">
+            <label htmlFor="departureTime" className="play-plan-form__label play-plan-form__label--required">
               集合時間
             </label>
             <input
               type="time"
               id="departureTime"
               value={formData.departureTime || ''}
-              onChange={(e) => handleInputChange('departureTime', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('departureTime', e.target.value)}
+              className={`play-plan-form__input ${errors.departureTime ? 'play-plan-form__input--error' : ''}`}
             />
+            {errors.departureTime && <p className="play-plan-form__error">{errors.departureTime}</p>}
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="travelMethodToFirstSpot" className="play-plan-form__label">
+            <label htmlFor="travelMethodToFirstSpot" className="play-plan-form__label play-plan-form__label--required">
               最初の目的地までの移動手段
             </label>
             <select
               id="travelMethodToFirstSpot"
               value={formData.travelMethodToFirstSpot || ''}
-              onChange={(e) => handleInputChange('travelMethodToFirstSpot', e.target.value)}
-              className="play-plan-form__select"
+              onChange={(e) => handleInputChangeWithValidation('travelMethodToFirstSpot', e.target.value)}
+              className={`play-plan-form__select ${errors.travelMethodToFirstSpot ? 'play-plan-form__select--error' : ''}`}
             >
               <option value="">選択してください</option>
               <option value="徒歩">徒歩</option>
@@ -471,22 +621,25 @@ export default function PlayPlanForm({
               <option value="自転車">自転車</option>
               <option value="その他">その他</option>
             </select>
+            {errors.travelMethodToFirstSpot && <p className="play-plan-form__error">{errors.travelMethodToFirstSpot}</p>}
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="travelTimeToFirstSpot" className="play-plan-form__label">
+            <label htmlFor="travelTimeToFirstSpot" className="play-plan-form__label play-plan-form__label--required">
               最初の目的地までの移動時間（分）
             </label>
             <input
               type="number"
               id="travelTimeToFirstSpot"
               value={formData.travelTimeToFirstSpot || ''}
-              onChange={(e) => handleInputChange('travelTimeToFirstSpot', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('travelTimeToFirstSpot', e.target.value)}
+              className={`play-plan-form__input ${errors.travelTimeToFirstSpot ? 'play-plan-form__input--error' : ''}`}
               placeholder="移動時間を入力"
               min="0"
             />
+            {errors.travelTimeToFirstSpot && <p className="play-plan-form__error">{errors.travelTimeToFirstSpot}</p>}
           </div>
+
           <div className="play-plan-form__field">
             <label htmlFor="totalBudget" className="play-plan-form__label play-plan-form__label--required">
               総予算
@@ -532,15 +685,11 @@ export default function PlayPlanForm({
                 </p>
               )}
             </div>
-            {errors.totalBudget && (
-              <p className="play-plan-form__error">{errors.totalBudget}</p>
-            )}
+            {errors.totalBudget && <p className="play-plan-form__error">{errors.totalBudget}</p>}
           </div>
 
           <div className="play-plan-form__field play-plan-form__field--full-width">
-            <label className="play-plan-form__label">
-              画像
-            </label>
+            <label className="play-plan-form__label">画像</label>
             <ImageUpload
               onImagesChange={(base64Images) => {
                 const updatedProperties = generateImageProperties(
@@ -564,7 +713,6 @@ export default function PlayPlanForm({
             />
           </div>
 
-          {/* 画像プロパティ編集 */}
           <div className="play-plan-form__field play-plan-form__field--full-width">
             <ImagePropertiesEditor
               imageProperties={(formData.imageProperties || [])}
@@ -579,116 +727,106 @@ export default function PlayPlanForm({
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="startTime" className="play-plan-form__label">
+            <label htmlFor="startTime" className="play-plan-form__label play-plan-form__label--required">
               開始時刻
             </label>
             <input
               type="time"
               id="startTime"
               value={formData.startTime || ''}
-              onChange={(e) => handleInputChange('startTime', e.target.value)}
-              className="play-plan-form__input"
+              onChange={(e) => handleInputChangeWithValidation('startTime', e.target.value)}
+              className={`play-plan-form__input ${errors.startTime ? 'play-plan-form__input--error' : ''}`}
             />
+            {errors.startTime && <p className="play-plan-form__error">{errors.startTime}</p>}
           </div>
 
           <div className="play-plan-form__field">
-            <label htmlFor="endTime" className="play-plan-form__label">
+            <label htmlFor="endTime" className="play-plan-form__label play-plan-form__label--required">
               終了時刻
             </label>
             <input
               type="time"
               id="endTime"
               value={formData.endTime || ''}
-              onChange={(e) => handleInputChange('endTime', e.target.value)}
-              className={`play-plan-form__input ${errors.endTime ? 'play-plan-form__input--error' : ''
-                }`}
+              onChange={(e) => handleInputChangeWithValidation('endTime', e.target.value)}
+              className={`play-plan-form__input ${errors.endTime ? 'play-plan-form__input--error' : ''}`}
             />
-            {errors.endTime && (
-              <p className="play-plan-form__error">{errors.endTime}</p>
-            )}
+            {errors.endTime && <p className="play-plan-form__error">{errors.endTime}</p>}
           </div>
-        </div>
 
-        <div className="play-plan-form__field">
-          <label htmlFor="tags" className="play-plan-form__label">
-            タグ
-          </label>
-          <input
-            type="text"
-            id="tags"
-            value={formData.tags || ''}
-            onChange={(e) => handleInputChange('tags', e.target.value)}
-            className="play-plan-form__input"
-            placeholder="タグをカンマ区切りで入力"
-          />
-        </div>
-
-        <div className="play-plan-form__field">
-          <label className="play-plan-form__label">
-            おすすめ対象
-          </label>
-          <div className="play-plan-form__checkbox-grid">
-            {recommendedFors.map((recommendedFor) => (
-              <label key={recommendedFor.id} className="play-plan-form__checkbox-item">
-                <input
-                  type="checkbox"
-                  checked={formData.recommendUsers.includes(recommendedFor.id)}
-                  onChange={(e) => {
-                    const newIds = e.target.checked
-                      ? [...formData.recommendUsers, recommendedFor.id]
-                      : formData.recommendUsers.filter(id => id !== recommendedFor.id);
-                    handleInputChange('recommendUsers', newIds);
-                  }}
-                  className="play-plan-form__checkbox"
-                />
-                <span className="play-plan-form__checkbox-label">{recommendedFor.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* プランナーコンテンツ */}
-        <div className='play-plan-planner-content'>
-          <h2 className="play-plan-form__section-title">プランナーコンテンツ</h2>
           <div className="play-plan-form__field">
-            <label htmlFor="plannerTitle" className="play-plan-form__label">
-              プランナータイトル
+            <label htmlFor="tags" className="play-plan-form__label play-plan-form__label--required">
+              タグ
             </label>
             <input
               type="text"
-              id="plannerTitle"
-              value={formData.plannerTitle || ''}
-              onChange={(e) => handleInputChange('plannerTitle', e.target.value)}
-              className="play-plan-form__input"
-              placeholder="プランナーのタイトルを入力"
+              id="tags"
+              value={formData.tags || ''}
+              onChange={(e) => handleInputChangeWithValidation('tags', e.target.value)}
+              className={`play-plan-form__input ${errors.tags ? 'play-plan-form__input--error' : ''}`}
+              placeholder="タグをカンマ区切りで入力"
             />
-            {errors.plannerDescription && (
-              <p className="play-plan-form__error">{errors.plannerDescription}</p>
-            )}
+            {errors.tags && <p className="play-plan-form__error">{errors.tags}</p>}
           </div>
+
           <div className="play-plan-form__field">
-            <label htmlFor="plannerDescription" className="play-plan-form__label">
-              プランナー説明
-            </label>
-            <textarea
-              id="plannerDescription"
-              value={formData.plannerDescription || ''}
-              onChange={(e) => handleInputChange('plannerDescription', e.target.value)}
-              rows={4}
-              className="play-plan-form__textarea"
-              placeholder="プランナーの説明を入力"
-            />
+            <label className="play-plan-form__label">おすすめ対象</label>
+            <div className="play-plan-form__checkbox-grid">
+              {recommendedFors.map((recommendedFor) => (
+                <label key={recommendedFor.id} className="play-plan-form__checkbox-item">
+                  <input
+                    type="checkbox"
+                    checked={formData.recommendUsers.includes(recommendedFor.id)}
+                    onChange={(e) => {
+                      const newIds = e.target.checked
+                        ? [...formData.recommendUsers, recommendedFor.id]
+                        : formData.recommendUsers.filter(id => id !== recommendedFor.id);
+                      handleInputChangeWithValidation('recommendUsers', newIds);
+                    }}
+                    className="play-plan-form__checkbox"
+                  />
+                  <span className="play-plan-form__checkbox-label">{recommendedFor.name}</span>
+                </label>
+              ))}
+            </div>
           </div>
-          {errors.plannerTitle && (
-            <p className="play-plan-form__error">{errors.plannerTitle}</p>
-          )}
+
+          <div className='play-plan-planner-content'>
+            <h2 className="play-plan-form__section-title">プランナーコンテンツ</h2>
+            <div className="play-plan-form__field">
+              <label htmlFor="plannerTitle" className="play-plan-form__label play-plan-form__label--required">
+                プランナータイトル
+              </label>
+              <input
+                type="text"
+                id="plannerTitle"
+                value={formData.plannerTitle || ''}
+                onChange={(e) => handleInputChangeWithValidation('plannerTitle', e.target.value)}
+                className={`play-plan-form__input ${errors.plannerTitle ? 'play-plan-form__input--error' : ''}`}
+                placeholder="プランナーのタイトルを入力"
+              />
+              {errors.plannerTitle && <p className="play-plan-form__error">{errors.plannerTitle}</p>}
+            </div>
+            <div className="play-plan-form__field">
+              <label htmlFor="plannerDescription" className="play-plan-form__label play-plan-form__label--required">
+                プランナー説明
+              </label>
+              <textarea
+                id="plannerDescription"
+                value={formData.plannerDescription || ''}
+                onChange={(e) => handleInputChangeWithValidation('plannerDescription', e.target.value)}
+                rows={4}
+                className={`play-plan-form__textarea ${errors.plannerDescription ? 'play-plan-form__input--error' : ''}`}
+                placeholder="プランナーの説明を入力"
+              />
+              {errors.plannerDescription && <p className="play-plan-form__error">{errors.plannerDescription}</p>}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* プラン詳細 */}
       <div className="play-plan-form__section">
         <h2 className="play-plan-form__section-title">プラン詳細</h2>
-
         <PlanDetailForm
           planDetails={formData.planDetails}
           spots={spots}
@@ -698,13 +836,9 @@ export default function PlayPlanForm({
           departureTime={formData.departureTime}
           travelTimeToFirstSpot={formData.travelTimeToFirstSpot}
         />
-
-        {errors.planDetails && (
-          <p className="play-plan-form__error">{errors.planDetails}</p>
-        )}
+        {errors.planDetails && <p className="play-plan-form__error">{errors.planDetails}</p>}
       </div>
 
-      {/* 送信ボタン */}
       <div className="play-plan-form__actions">
         <button
           type="button"
@@ -725,9 +859,3 @@ export default function PlayPlanForm({
     </form>
   );
 }
-
-
-// "startDatetime": "2025-08-01T15:40:00.000Z",
-// "endDatetime": "2025-08-02T17:40:00.000Z",
-// "startDatetime": "2025-07-31T21:40:00.000Z",
-// "endDatetime": "2025-08-01T23:40:00.000Z",
