@@ -93,6 +93,61 @@ export default function PlayPlanForm({
   }, [initialData]);
 
   /**
+   * 新しい画像と既存画像から ImagePropertyWithUrl を生成します
+   * アップロード時に自動的にプロパティを作成
+   * @param newImages - Base64エンコードされた新規画像
+   * @param existingImages - 既存画像の配列
+   * @param currentProperties - 現在の画像プロパティ
+   * @returns ImagePropertyWithUrl の配列
+   */
+  const generateImageProperties = (
+    newImages?: string[],
+    existingImages?: ExistingImage[],
+    currentProperties?: ImageProperty[]
+  ) => {
+    const properties: ImageProperty[] = [];
+
+    // 既存画像のプロパティを保持
+    if (existingImages && currentProperties) {
+      existingImages.forEach((img) => {
+        const existing = currentProperties.find(p => p.attachmentId === img.id);
+        if (existing) {
+          properties.push({
+            attachmentId: existing.attachmentId,
+            url: img.url,
+            isSelected: existing.isSelected,
+            comment: existing.comment || null,
+            position: existing.position,
+          });
+        } else {
+          properties.push({
+            attachmentId: img.id,
+            url: img.url,
+            isSelected: false,
+            comment: null,
+            position: properties.length,
+          });
+        }
+      });
+    }
+
+    // 新規画像のプロパティを作成
+    if (newImages) {
+      newImages.forEach((img, idx) => {
+        properties.push({
+          attachmentId: `new-${idx}-${Date.now()}`, // 一時的なID
+          url: img,
+          isSelected: false,
+          comment: null,
+          position: properties.length,
+        });
+      });
+    }
+
+    return properties;
+  };
+
+  /**
    * 各spotの総予算を計算する関数
    * @param planDetails - プラン詳細の配列
    * @returns 総予算の合計
@@ -488,9 +543,15 @@ export default function PlayPlanForm({
             </label>
             <ImageUpload
               onImagesChange={(base64Images) => {
+                const updatedProperties = generateImageProperties(
+                  base64Images,
+                  formData.imageUrls,
+                  formData.imageProperties
+                );
                 setFormData(prev => ({
                   ...prev,
                   newImages: base64Images,
+                  imageProperties: updatedProperties,
                 }));
               }}
               onDeleteImage={(id) => {
