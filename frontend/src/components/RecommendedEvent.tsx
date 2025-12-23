@@ -12,7 +12,7 @@ const RecommendedEvent = () => {
 
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました: {error.message}</p>;
-  if (!data || !data.events || data.events.length === 0) return <p>おすすめイベントが見つかりません</p>;
+  if (!data || !data.events || data.events.length === 0) return <p className='noContentFound'>おすすめイベントが見つかりません</p>;
 
   return (
     <div className="recommended-events">

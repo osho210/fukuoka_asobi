@@ -52,7 +52,7 @@
 }
 
 .play-plan-content {
-  padding: 15px;
+  padding: 0px 15px 15px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -120,7 +120,7 @@
 }
 
 .plan-budget {
-  background-color: #f8f0e8;
+  background-color: #F4EDE4;
   color: #d4a373;
 }
 

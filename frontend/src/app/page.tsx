@@ -15,7 +15,7 @@ export default function Home() {
     <>
       <div className="image-container">
         {isDesktop ? (
-          <Image  src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
+          <Image src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
         ) : (
           <Image className="kv" src={'/kv.jpg'} width={360} height={700} alt="kv" priority />
         )}
@@ -28,15 +28,15 @@ export default function Home() {
         <h2 className="section-title">福岡って、最高さ。</h2>
         <p className="section-text">
           まだ出会っていないだけで、福岡には最高なお店が眠っている。
-          地元の人しか知らない「通」なお店、今までの自分ではいかなかった「一歩背伸び」するお店
-          心の琴線に触れるお店探しのお手伝いをするメディアを、あなたと作っていきたい。
+          地元の人しか知らない<b>通</b>なお店、今までの自分ではいかなかった<b>一歩背伸び</b>するお店
+          心の琴線に触れるお店探しのお手伝いをするメディアをあなたと作っていきたい。
         </p>
       </div>
       <div className="section section-content">
-        <p className="section-bubble-title">福岡遊び日記日記とは？</p>
+        <p className="section-bubble-title">福岡遊び日記とは？</p>
         <h3 className="section-subheading">ディープな福岡の魅力を多くの人に伝えて、もっと福岡の魅力を伝えたい。</h3>
         <p className="section-content-text">
-          福岡遊び日記日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
+          福岡遊び日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
           普段の暮らしでは知ることができない、一歩踏み込んだ情報を発信しています。
         </p>
         <Link href={'/about'} className="section-link concept">コンセプトについて</Link>
@@ -60,11 +60,43 @@ export default function Home() {
         <Link href={'/events'} className="section-link">開催中のイベントを見る</Link>
       </div>
       <div className="section official-sns">
-        <Link href={'https://www.instagram.com/fukuoka___cafe/'}>
-          <Image src={'/official-banner.png'} width={392} height={263} alt="official-banner" />
+        <Link href="https://www.instagram.com/fukuoka___cafe/" target="_blank">
+          <Image
+            className="official-banner"
+            src="/instagram-banner.png"
+            width={392}
+            height={263}
+            alt="福岡の遊び・カフェ情報を発信するInstagram"
+          />
         </Link>
-        <p className="section-title">公式SNSでも福岡の情報を発信中！</p>
+
+        <p className="section-title">
+          今日の「どこ行く？」は公式Instagramで
+        </p>
+        <p className="section-sub">
+          福岡のカフェ・おでかけスポットをリアルタイムで紹介中
+        </p>
       </div>
+
+      <div className="section official-sns">
+        <Link href="https://fukuoka-cafenikki.com" target="_blank">
+          <Image
+            className="official-banner"
+            src="/official-banner.png"
+            width={392}
+            height={263}
+            alt="福岡カフェ日記｜福岡のカフェ情報メディア"
+          />
+        </Link>
+
+        <p className="section-title">
+          福岡のカフェ探しなら<br></br>「福岡カフェ日記」
+        </p>
+        <p className="section-sub">
+          エリア・シーン別に探せるローカルカフェメディア
+        </p>
+      </div>
+
       <div className="section news">
         <h2 className="section-title">News</h2>
         <RecommendedNews />

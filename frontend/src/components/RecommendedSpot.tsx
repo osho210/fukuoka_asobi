@@ -30,9 +30,9 @@ const RecommendedSpot = () => {
                   <span>No Image</span>
                 </div>
               )}
-              <div className="spot-type-badge">{spot.spotType}</div>
             </div>
             <div className="spot-content">
+              <div className="spot-type-badge">{spot.spotType}</div>
               <h3 className="spot-name">{spot.spotName}</h3>
               <div className="spot-meta">
                 <span className="spot-location">{spot.district?.districtName}</span>
