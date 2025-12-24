@@ -22,7 +22,7 @@ export default function RecommendedNews() {
 
     if (loading) return <p>読み込み中...</p>;
     if (error) return <p>エラーが発生しました: {error.message}</p>;
-    if (!data || !data.news || data.news.length === 0) return <p>ニュースが見つかりません</p>;
+    if (!data || !data.news || data.news.length === 0) return <p className='noContentFound'>ニュースが見つかりません</p>;
 
     return (
         <div className="recommended-news">

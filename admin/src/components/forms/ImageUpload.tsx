@@ -8,6 +8,13 @@ interface ExistingImage {
     url: string;
 }
 
+// 新規画像を管理する型
+interface NewImagePreview {
+    id: string;
+    preview: string;
+    base64: string;
+}
+
 interface ImageUploadProps {
     onImagesChange: (base64Images: string[]) => void;
     onDeleteImage: (id: string) => void; // 削除用コールバック
@@ -15,37 +22,72 @@ interface ImageUploadProps {
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage, existingImages = [] }) => {
-    const [newPreviews, setNewPreviews] = useState<string[]>([]);
+    const [newPreviews, setNewPreviews] = useState<NewImagePreview[]>([]);
     const [currentImages, setCurrentImages] = useState<ExistingImage[]>(existingImages);
 
     useEffect(() => {
         setCurrentImages(existingImages);
     }, [existingImages]);
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        const newBase64Promises: Promise<string>[] = [];
+    /**
+     * 新規画像の追加時にすべてのBase64画像をコールバックに渡す
+     * @param images - 新規画像プレビューの配列
+     */
+    const notifyImagesChange = useCallback((images: NewImagePreview[]) => {
+        const base64Images = images.map(img => img.base64);
+        onImagesChange(base64Images);
+    }, [onImagesChange]);
 
-        acceptedFiles.forEach(file => {
-            setNewPreviews(prev => [...prev, URL.createObjectURL(file)]);
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        const newBase64Promises: Promise<NewImagePreview>[] = [];
+
+        acceptedFiles.forEach((file) => {
+            const previewUrl = URL.createObjectURL(file);
             newBase64Promises.push(
                 new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result as string);
+                    reader.onload = () => {
+                        resolve({
+                            id: `new-${Date.now()}-${Math.random()}`,
+                            preview: previewUrl,
+                            base64: reader.result as string,
+                        });
+                    };
                     reader.onerror = error => reject(error);
                 })
             );
         });
 
-        Promise.all(newBase64Promises).then(base64Images => {
-            onImagesChange(base64Images);
+        Promise.all(newBase64Promises).then((newImages) => {
+            setNewPreviews(prev => {
+                const updated = [...prev, ...newImages];
+                // 状態更新後にコールバックを呼び出す
+                notifyImagesChange(updated);
+                return updated;
+            });
         });
+    }, [notifyImagesChange]);
 
-    }, [onImagesChange]);
-
+    /**
+     * 既存画像を削除する
+     * @param id - 画像ID
+     */
     const handleRemoveExistingImage = (id: string) => {
         setCurrentImages(prev => prev.filter(image => image.id !== id));
         onDeleteImage(id);
+    };
+
+    /**
+     * 新規画像を削除する
+     * @param id - 新規画像ID
+     */
+    const handleRemoveNewImage = (id: string) => {
+        setNewPreviews(prev => {
+            const updated = prev.filter(img => img.id !== id);
+            notifyImagesChange(updated);
+            return updated;
+        });
     };
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -58,26 +100,41 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
     return (
         <div>
             {/* 既存の画像プレビュー */}
-            <div className='preview-image-container'>
-                {currentImages.map((image, index) => (
-                    <div key={image.id} style={previewStyle}>
-                        <Image src={image.url} alt={`Preview ${index}`} width={150} height={150} style={imageStyle} />
-                        <button onClick={() => handleRemoveExistingImage(image.id)} style={deleteButtonStyle}>×</button>
+            {currentImages.length > 0 && (
+                <div>
+                    <h4 className="play-plan-form__label">既存画像</h4>
+                    <div className='preview-image-container'>
+                        {currentImages.map((image, index) => (
+                            <div key={image.id} style={previewStyle}>
+                                <Image src={image.url} alt={`Existing ${index}`} width={150} height={150} style={imageStyle} />
+                                <button onClick={() => handleRemoveExistingImage(image.id)} style={deleteButtonStyle} type="button">×</button>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </div>
+            )}
+
+            {/* ドラッグ＆ドロップエリア */}
             <div {...getRootProps()} style={dropzoneStyle}>
                 <input {...getInputProps()} />
                 <p>画像をドラッグ＆ドロップするか、クリックしてファイルを選択してください</p>
+                <small>複数ファイルの選択に対応しています</small>
             </div>
-            <div style={previewContainerStyle}>
-                {/* 新しく追加された画像プレビュー */}
-                {newPreviews.map((preview, index) => (
-                    <div key={index} style={previewStyle}>
-                        <Image src={preview} alt={`Preview ${index}`} width={150} height={150} style={imageStyle} />
+
+            {/* 新規画像プレビュー */}
+            {newPreviews.length > 0 && (
+                <div>
+                    <h4 className="play-plan-form__label">新規画像（{newPreviews.length}件）</h4>
+                    <div style={previewContainerStyle}>
+                        {newPreviews.map((image) => (
+                            <div key={image.id} style={previewStyle}>
+                                <Image src={image.preview} alt="New preview" width={150} height={150} style={imageStyle} />
+                                <button onClick={() => handleRemoveNewImage(image.id)} style={deleteButtonStyle} type="button">×</button>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -88,35 +145,39 @@ const dropzoneStyle: React.CSSProperties = {
     padding: '20px',
     textAlign: 'center',
     cursor: 'pointer',
+    backgroundColor: '#fafafa',
+    transition: 'border-color 0.3s',
 };
 
 const previewContainerStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
     marginTop: '20px',
+    gap: '10px',
 };
 
 const previewStyle: React.CSSProperties = {
     position: 'relative',
-    margin: '10px',
 };
 
 const deleteButtonStyle: React.CSSProperties = {
     position: 'absolute',
-    top: '5px',
-    right: '5px',
-    background: 'rgba(0, 0, 0, 0.5)',
+    top: '-10px',
+    right: '-10px',
+    background: 'rgba(255, 0, 0, 0.7)',
     color: 'white',
     border: 'none',
     borderRadius: '50%',
-    width: '20px',
-    height: '20px',
+    width: '24px',
+    height: '24px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    lineHeight: '20px',
+    lineHeight: '1',
     padding: '0',
+    fontSize: '16px',
+    fontWeight: 'bold',
 };
 
 const imageStyle: React.CSSProperties = {
@@ -124,6 +185,7 @@ const imageStyle: React.CSSProperties = {
     height: '150px',
     objectFit: 'cover',
     borderRadius: '4px',
+    border: '1px solid #ddd',
 };
 
 export default ImageUpload;

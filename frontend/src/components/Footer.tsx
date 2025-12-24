@@ -17,9 +17,10 @@ export const Footer = () => {
                 <li className="footer-nav-item">
                     <a href="/faq" className="footer-nav-link">よくある質問</a>
                 </li>
-                <li className="footer-nav-item">
+                {/* TODO: 現状はサービス拡張を目指すのでコメントアウト */}
+                {/* <li className="footer-nav-item">
                     <a href="/advertising" className="footer-nav-link">広告掲載について</a>
-                </li>
+                </li> */}
                 <li className="footer-nav-item">
                     <a href="/terms-of-service" className="footer-nav-link">利用規約</a>
                 </li>

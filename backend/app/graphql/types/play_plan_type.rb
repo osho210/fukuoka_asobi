@@ -15,10 +15,10 @@ module Types
     field :start_time, String, null: false
     field :end_time, String, null: false
     field :description, String, null: false
-    field :departure, String, null: true
-    field :departure_time, String, null: true
-    field :travel_method_to_first_spot, String, null: true
-    field :travel_time_to_first_spot, Integer, null: true
+    field :departure, String, null: false
+    field :departure_time, String, null: false
+    field :travel_method_to_first_spot, String, null: false
+    field :travel_time_to_first_spot, Integer, null: false
     field :status, Types::StatusEnumType, null: false
     field :favorite_count, Integer, null: false
     field :rating, Float, null: false
