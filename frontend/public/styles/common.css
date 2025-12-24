@@ -12,7 +12,7 @@ li {
 
 .container {
     max-width: 1200px;
-    margin: 100px auto 0px;
+    margin: 75px auto 0px;
     padding: 0px 20px;
 }
 
@@ -35,6 +35,12 @@ li {
 .image-container {
     position: relative;
     text-align: center;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
 }
 
 .kv {
@@ -93,7 +99,7 @@ li {
 .section-title {
     font-size: 22px;
     font-weight: bold;
-    margin: 25px 0;
+    margin: 20px 0;
     text-align: center;
 }
 
@@ -128,6 +134,12 @@ li {
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 10px;
+}
+
+.section-text span,
+.section-content-text span {
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .section-content-text {

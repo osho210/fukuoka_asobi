@@ -17,27 +17,28 @@ export default function Home() {
         {isDesktop ? (
           <Image src={'/kv-pc.png'} width={1200} height={400} alt="kv" priority />
         ) : (
-          <Image className="kv" src={'/kv.jpg'} width={360} height={700} alt="kv" priority />
+          <Image className="kv" src={'/kv.png'} width={360} height={700} alt="kv" priority />
         )}
-
-        <p className="vertical-text">
-          福岡をもっと楽しく、<br />もっと身近に。
-        </p>
       </div>
       <div className="section">
-        <h2 className="section-title">福岡って、最高さ。</h2>
+        <h2 className="section-title">福岡を、まだ半分も知らない。</h2>
         <p className="section-text">
-          まだ出会っていないだけで、福岡には最高なお店が眠っている。
-          地元の人しか知らない<b>通</b>なお店、今までの自分ではいかなかった<b>一歩背伸び</b>するお店
-          心の琴線に触れるお店探しのお手伝いをするメディアをあなたと作っていきたい。
+          <span>正直</span>もう遊び尽くしたと思ってた。でも、この街にはまだ出会っていない物語がそこら中に溢れてる。
+          地元の通が夜な夜な集う場所。少しの緊張感と、それ以上の高揚感をくれる<b>背伸び</b>の一軒。
+          ここはあなたの日常をワクワクさせる<b>「最高の福岡」と出会うための手引きとなる場所。</b>
         </p>
       </div>
       <div className="section section-content">
         <p className="section-bubble-title">福岡遊び日記とは？</p>
-        <h3 className="section-subheading">ディープな福岡の魅力を多くの人に伝えて、もっと福岡の魅力を伝えたい。</h3>
+        <h3 className="section-subheading">「いつもの福岡」に新しい1ページを。</h3>
         <p className="section-content-text">
-          福岡遊び日記は、福岡を愛してやまない博多っ子が運営する、ローカル情報メディアです。
-          普段の暮らしでは知ることができない、一歩踏み込んだ情報を発信しています。
+          <span>ガ</span>イドブックをなぞるだけでは辿り着けない、
+          地元の人に愛され続ける、センスのいい隠れ家。
+          知る人ぞ知る誰かに教えたくなる穴場。
+          ここを覗けばあなたの「いつもの選択肢」は、
+          胸が高鳴るような特別なものへ変わるはず。
+          「今までの自分なら選ばなかった」そんなワクワクする瞬間をお届けます。
+          今日は昨日よりも少しだけディープで、美しい福岡へ。
         </p>
         <Link href={'/about'} className="section-link concept">コンセプトについて</Link>
       </div>
