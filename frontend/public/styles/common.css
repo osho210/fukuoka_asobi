@@ -76,6 +76,10 @@ li {
     max-width: 200px;
 }
 
+.section-link.concept {
+    max-width: none;
+}
+
 .official-sns {
     text-align: center;
     width: 100%;
