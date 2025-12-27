@@ -368,5 +368,33 @@ module Types
       Rails.logger.error "HeartRails Station search error: #{e.message}"
       raise GraphQL::ExecutionError, "最寄駅の取得中にエラーが発生しました: #{e.message}"
     end
+
+    # --------------------------------------------
+    # グループ体験機能
+    # --------------------------------------------
+    field :direction_cards, [Types::DirectionCardType], null: false, description: "方向性カードをランダムに取得します" do
+      argument :limit, Integer, required: false, default_value: 3, description: "取得件数（デフォルト3）"
+    end
+
+    def direction_cards(limit:)
+      DirectionCard.weighted_random(limit)
+    end
+
+    field :experience_cards, [Types::ExperienceCardType], null: false, description: "タグに基づいて体験カードを取得します" do
+      argument :tags, [String], required: false, description: "フィルタリングするタグの配列"
+      argument :limit, Integer, required: false, default_value: 5, description: "取得件数（デフォルト5）"
+      argument :exclude_ids, [ID], required: false, description: "除外するカードID"
+    end
+
+    def experience_cards(tags: nil, limit: 5, exclude_ids: nil)
+      cards = if tags.present?
+                ExperienceCard.order_by_tag_matches(tags)
+              else
+                ExperienceCard.active.order(Arel.sql('RAND()'))
+              end
+
+      cards = cards.where.not(id: exclude_ids) if exclude_ids.present?
+      cards.limit(limit)
+    end
   end
 end
