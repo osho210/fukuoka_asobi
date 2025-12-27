@@ -159,6 +159,20 @@ export default function Dashboard() {
             <h3 className="font-medium">新規ニュース作成</h3>
             <p className="text-sm text-gray-600 mt-1">新しいニュース記事を作成します</p>
           </Link>
+          <Link
+            href="direction_cards"
+            className="block p-4 border border-gray-200 rounded hover:bg-gray-50"
+          >
+            <h3 className="font-medium">方向性カード管理</h3>
+            <p className="text-sm text-gray-600 mt-1">グループ体験の方向性カードを管理します</p>
+          </Link>
+          <Link
+            href="experience_cards"
+            className="block p-4 border border-gray-200 rounded hover:bg-gray-50"
+          >
+            <h3 className="font-medium">体験カード管理</h3>
+            <p className="text-sm text-gray-600 mt-1">グループ体験の体験カードを管理します</p>
+          </Link>
         </div>
       </div>
     </div>

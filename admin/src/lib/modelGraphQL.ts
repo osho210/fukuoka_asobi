@@ -22,6 +22,8 @@ import { GET_STATIONS } from '@/graphql/queries/getStations';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { FilterField } from './modelConstants';
 import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
+import { GET_ALL_DIRECTION_CARDS } from '@/graphql/queries/getDirectionCards';
+import { GET_ALL_EXPERIENCE_CARDS } from '@/graphql/queries/getExperienceCards';
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -37,6 +39,8 @@ import { UPDATE_NEWS, CREATE_NEWS } from '@/graphql/mutations/news';
 import { UPDATE_PLAN_DETAILS } from '@/graphql/mutations/updatePlanDetails';
 import { UPDATE_PLAY_PLAN, processPlanDetailsForInput, PlanDetailWithSpot } from '@/graphql/mutations/planPlans';
 import { CREATE_MAGAZINE, UPDATE_MAGAZINE } from '@/graphql/mutations/magazines';
+import { CREATE_DIRECTION_CARD, UPDATE_DIRECTION_CARD, DELETE_DIRECTION_CARD } from '@/graphql/mutations/directionCards';
+import { CREATE_EXPERIENCE_CARD, UPDATE_EXPERIENCE_CARD, DELETE_EXPERIENCE_CARD } from '@/graphql/mutations/experienceCards';
 
 import {
   CREATE_SPOT,
@@ -81,7 +85,9 @@ const listQueries: Record<string, DocumentNode> = {
   news: GET_NEWS,
   stations: GET_STATIONS,
   menuCategories: GET_MENU_CATEGORIES,
-  magazines: GET_MAGAZINES
+  magazines: GET_MAGAZINES,
+  direction_cards: GET_ALL_DIRECTION_CARDS,
+  experience_cards: GET_ALL_EXPERIENCE_CARDS
 };
 
 // ミューテーションマッピング
@@ -98,6 +104,8 @@ const createMutations: Record<string, DocumentNode> = {
   events: CREATE_EVENT,
   news: CREATE_NEWS,
   magazines: CREATE_MAGAZINE,
+  direction_cards: CREATE_DIRECTION_CARD,
+  experience_cards: CREATE_EXPERIENCE_CARD
 };
 
 const updateMutations: Record<string, DocumentNode> = {
@@ -115,6 +123,8 @@ const updateMutations: Record<string, DocumentNode> = {
   news: UPDATE_NEWS,
   play_plans: UPDATE_PLAY_PLAN,
   magazines: UPDATE_MAGAZINE,
+  direction_cards: UPDATE_DIRECTION_CARD,
+  experience_cards: UPDATE_EXPERIENCE_CARD
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
@@ -127,7 +137,9 @@ const deleteMutations: Record<string, DocumentNode> = {
   recommended_fors: DELETE_RECOMMENDED_FOR,
   spot_ambiances: DELETE_SPOT_AMBIANCE,
   spots: DELETE_SPOT,
-  stations: DELETE_STATION
+  stations: DELETE_STATION,
+  direction_cards: DELETE_DIRECTION_CARD,
+  experience_cards: DELETE_EXPERIENCE_CARD
 };
 
 /**

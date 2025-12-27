@@ -62,6 +62,8 @@ export const modelDisplayNames: Record<string, string> = {
   stations: '駅',
   eventCategories: 'イベントカテゴリー',
   menuCategories: 'メニューカテゴリー',
+  direction_cards: '方向性カード',
+  experience_cards: '体験カード',
 };
 
 // 各モデルの設定を統合
@@ -440,6 +442,50 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'status', type: 'select', required: true, enumKey: 'MagazineStatusEnum' },
     ],
   },
+  direction_cards: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'テキスト', accessorKey: 'text', sortable: true },
+      { header: 'タグ', accessorKey: 'tags', sortable: false },
+      { header: '重み', accessorKey: 'weight', sortable: true },
+      { 
+        header: 'アクティブ', 
+        accessorKey: 'active', 
+        sortable: true,
+        cell: (item) => item.active ? '✓' : '✗'
+      },
+    ],
+    fields: [
+      { name: 'text', type: 'textarea', required: true },
+      { name: 'tags', type: 'text' },
+      { name: 'weight', type: 'number' },
+      { name: 'active', type: 'boolean' },
+    ],
+  },
+  experience_cards: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'タイトル', accessorKey: 'title', sortable: true },
+      { header: 'タグ', accessorKey: 'tags', sortable: false },
+      { header: 'エリア', accessorKey: 'area', sortable: true },
+      { header: '所要時間', accessorKey: 'duration', sortable: true },
+      { 
+        header: 'アクティブ', 
+        accessorKey: 'active', 
+        sortable: true,
+        cell: (item) => item.active ? '✓' : '✗'
+      },
+    ],
+    fields: [
+      { name: 'title', type: 'text', required: true },
+      { name: 'body', type: 'textarea' },
+      { name: 'tags', type: 'text' },
+      { name: 'area', type: 'text' },
+      { name: 'duration', type: 'number' },
+      { name: 'timeSlot', type: 'text' },
+      { name: 'active', type: 'boolean' },
+    ],
+  },
 };
 
 // フィールド名の日本語表示
@@ -576,4 +622,14 @@ export const fieldDisplayNames: Record<string, string> = {
   salesInfo: '販売情報',
   salesUrl: '販売URL',
   coverImageUrl: '表紙画像URL',
+  // Direction Card / Experience Card
+  text: 'テキスト',
+  tags: 'タグ',
+  weight: '重み',
+  active: 'アクティブ',
+  title: 'タイトル',
+  body: '本文',
+  area: 'エリア',
+  duration: '所要時間（分）',
+  timeSlot: '時間帯',
 };
