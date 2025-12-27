@@ -51,9 +51,9 @@ export default function ExperiencePage() {
   };
 
   const handleSaveForLater = (card: ExperienceCard) => {
-    setSavedCards(prev => [...prev, card]);
-    // 保留したカードをセッションストレージに保存
     const updated = [...savedCards, card];
+    setSavedCards(updated);
+    // 保留したカードをセッションストレージに保存
     sessionStorage.setItem('savedCards', JSON.stringify(updated));
   };
 

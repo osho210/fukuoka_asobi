@@ -29,9 +29,12 @@ export default function DirectionPage() {
   const currentCard = cards[currentCardIndex];
 
   const handleResponse = (isMatch: boolean) => {
+    let updatedTags = selectedTags;
+    
     if (isMatch && currentCard) {
       // 「これは合う」を選択した場合、タグを保存
-      setSelectedTags(prev => [...new Set([...prev, ...(currentCard.tags || [])])]);
+      updatedTags = [...new Set([...selectedTags, ...(currentCard.tags || [])])];
+      setSelectedTags(updatedTags);
     }
 
     // 次のカードへ
@@ -40,7 +43,7 @@ export default function DirectionPage() {
 
     if (nextViewedCards >= maxCards || nextIndex >= cards.length) {
       // 最大表示数に達したら体験カード選択へ
-      sessionStorage.setItem('selectedTags', JSON.stringify(selectedTags));
+      sessionStorage.setItem('selectedTags', JSON.stringify(updatedTags));
       router.push('/group-experience/experience');
     } else {
       setCurrentCardIndex(nextIndex);
