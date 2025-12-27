@@ -3,7 +3,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ToastProvider } from '../src/components/common/ToastContext';
 import '../src/app/globals.css';
-import '../public/styles/common.css';
+import '../src/styles/common.css';
 import '../src/styles/AboutPage.css';
 import '../src/styles/AreaMap.css';
 import '../src/styles/Button.css';
@@ -20,17 +20,18 @@ import '../src/styles/TabSelector.css';
 import '../src/styles/UserBookmarks.css';
 import '../src/styles/UserComponents.css';
 import '../src/styles/UserPlayPlans.css';
-import '../public/styles/AboutPage.css';
-import '../public/styles/Auth.css';
-import '../public/styles/BusinessHour.css';
-import '../public/styles/ContentDetail.css';
-import '../public/styles/EventsPage.css';
-import '../public/styles/HamburgerMenu.css';
-import '../public/styles/NewsPage.css';
-import '../public/styles/PlayPlanDetail.css';
-import '../public/styles/RecommendedEvent.css';
-import '../public/styles/RecommendedSpot.css';
-import '../public/styles/SpotsPage.css';
+import '../src/styles/Auth.css';
+import '../src/styles/BusinessHour.css';
+import '../src/styles/ContentDetail.css';
+import '../src/styles/EventsPage.css';
+import '../src/styles/HamburgerMenu.css';
+import '../src/styles/NewsPage.css';
+import '../src/styles/PlayPlanDetail.css';
+import '../src/styles/PlayPlanList.css';
+import '../src/styles/RecommendedEvent.css';
+import '../src/styles/RecommendedNews.css';
+import '../src/styles/RecommendedSpot.css';
+import '../src/styles/SpotsPage.css';
 
 
 
