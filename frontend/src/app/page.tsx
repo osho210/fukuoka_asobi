@@ -42,6 +42,15 @@ export default function Home() {
         </p>
         <Link href={'/about'} className="section-link concept">コンセプトについて</Link>
       </div>
+      <div className="section group-experience-promo">
+        <h2 className="section-title">友達と遊びを決める</h2>
+        <p className="section-subtitle">日常が愛しくなる、遊び心</p>
+        <p className="section-content-text">
+          「どこ行く？」の前に、方向性を揃えてみませんか？<br />
+          会話が生まれるグループ体験機能を無料で提供中。
+        </p>
+        <Link href={'/group-experience'} className="section-link">友達と遊びを決める</Link>
+      </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
         <p className="section-subtitle">編集部イチオシプラン</p>

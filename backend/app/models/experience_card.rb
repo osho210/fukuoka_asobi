@@ -20,8 +20,9 @@ class ExperienceCard < ApplicationRecord
     return active if tag_array.blank?
 
     # タグの一致数を計算してソート
+    sanitized_tags = tag_array.map { |tag| ActiveRecord::Base.connection.quote(tag) }
     select_clause = "experience_cards.*, (#{
-      tag_array.map { |tag| "FIND_IN_SET('#{sanitize_sql(tag)}', tags) > 0" }.join(' + ')
+      sanitized_tags.map { |tag| "FIND_IN_SET(#{tag}, tags) > 0" }.join(' + ')
     }) as tag_match_count"
 
     select(Arel.sql(select_clause)).order(Arel.sql('tag_match_count DESC, RAND()'))
