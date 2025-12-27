@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_SPOTS } from '@/graphql/queries/getSpots';
 import { GetSpotsQuery } from '@/__generated__/types';
-import '@styles/SpotsPage.css';
+import '@/styles/SpotsPage.css';
 
 export default function SpotsPage() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);

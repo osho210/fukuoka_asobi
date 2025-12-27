@@ -1,317 +1,805 @@
-/* プラン詳細ページのスタイル */
 .play-plan-detail {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* プランヘッダー */
 .plan-header {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.plan-header-tag {
+  background: #cb6b52;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.plan-departure-section {
+  border-top: 1px dashed #cb6b52;
+  margin-bottom: 20px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.plan-departure-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #cb6b52;
+  margin-bottom: 10px;
+}
+
+.plan-departure-departure-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #cb6b52;
+}
+
+.plan-departure-container {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #cb6b52;
+  max-width: 200px;
+  margin: 0 auto 20px;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+
+.plan-departure-location {
+  font-size: 16px;
+  color: #cb6b52;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.catch-copy,
+.plan-subtitle {
+  font-size: 12px;
+  color: #cb6b52;
+  text-align: center;
+}
+
+.plan-subtitle {
+  margin-bottom: 20px;
 }
 
 .plan-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  font-size: 24px;
+  position: relative;
+  color: #cb6b52;
+  font-family: "source-han-sans-japanese", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  text-align: center;
+  font-size: 40px;
 }
 
-.plan-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.plan-lead-text {
+  font-family: "source-han-sans-japanese", sans-serif;
+  font-style: normal;
+  color: #cb6b52;
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  margin: 20px 0;
 }
 
 .plan-description {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
 }
 
-/* プラン推奨対象 */
-.plan-recommendation {
-    background-color: #f5f5f5;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+.plan-meta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #cb6b52, transparent);
 }
 
-.recommendation-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+.plan-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 10px 0;
+  position: relative;
 }
 
-.recommendation-content {
-    font-size: 16px;
+.plan-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
 }
 
-/* プラン統計情報 */
+.plan-meta-icon {
+  color: #cb6b52;
+}
+
+.plan-image-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.plan-image {
+  object-fit: cover;
+}
+
+.plan-planner-title {
+  margin-bottom: 15px;
+}
+
+.plan-planner-title h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #cb6b52;
+  margin-bottom: 10px;
+}
+
+.plan-planner-description {
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #333;
+  padding: 15px;
+  background-color: #fff8f6;
+  border-left: 4px solid #cb6b52;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.plan-recommended-for {
+  margin-bottom: 20px;
+}
+
+.plan-recommended-for h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.plan-recommended-for-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.plan-recommended-for-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  background: #cb6b52;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
 .plan-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
 }
 
-.stat-item {
-    background-color: #fff;
-    padding: 10px 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    min-width: 120px;
+.plan-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.stat-label {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
+.plan-stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #cb6b52;
 }
 
-.stat-value {
-    font-size: 18px;
-    font-weight: bold;
+.plan-stat-label {
+  font-size: 12px;
+  color: #666;
 }
 
-/* プラン詳細セクション */
+.plan-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.plan-user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.plan-user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-user-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.plan-user-role {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: #cb6b52;
+  color: white;
+  margin-top: 5px;
+}
+
 .plan-details-section {
-    margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .plan-details-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-/* プランステップリスト */
-.plan-step-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #cb6b52;
 }
 
 .plan-step {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  position: relative;
 }
 
-.step-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+.plan-step-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+  margin-right: 15px;
+  position: relative;
 }
 
-.step-number {
-    background-color: #007bff;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 10px;
+.plan-step-timeline-image {
+  position: absolute;
+  width: 35px;
+  top: -20px;
+  left: -2px;
 }
 
-.step-title {
-    font-size: 18px;
-    font-weight: bold;
+.plan-step-number {
+  font-weight: bold;
+  color: #cb6b52;
 }
 
-.step-description {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 15px;
+
+.plan-step-line {
+  width: 2px;
+  flex-grow: 1;
+  background-color: #ddd;
+  margin: 5px 0;
 }
 
-.step-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
+.plan-step-content {
+  flex: 1;
+  border-radius: 8px;
+  padding: 15px;
 }
 
-.step-detail-item {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 6px;
-    flex: 1;
-    min-width: 150px;
+.plan-step-header {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 5px;
+  align-items: center;
 }
 
-.detail-label {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
+.plan-step-header-item {
+  display: flex;
 }
 
-.detail-value {
-    font-size: 16px;
-    font-weight: 500;
+.plan-step-header-label {
+  font-size: 12px;
+  font-weight: bold;
 }
 
-/* 合計予算 */
-.total-budget {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    text-align: center;
+.plan-step-header-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #cb6b52;
 }
 
-.budget-title {
-    font-size: 18px;
-    margin-bottom: 10px;
+.plan-step-time {
+  font-size: 14px;
+  color: #666;
 }
 
-.budget-amount {
-    font-size: 24px;
-    font-weight: bold;
-    color: #007bff;
+.plan-step-description {
+  margin-bottom: 15px;
 }
 
-/* アクションボタン */
+.plan-step-planner-title {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.plan-step-planner-title h4 {
+  font-size: 16px;
+  color: #cb6b52;
+  padding-left: 10px;
+  border-left: 3px solid #cb6b52;
+}
+
+.plan-step-planner-description {
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: #fff8f6;
+  border-radius: 6px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.plan-step-spot {
+  position: relative;
+}
+
+.plan-step-name {
+  position: absolute;
+  background: #fff;
+  font-weight: bold;
+  color: #cb6b52;
+  top: 0px;
+  right: 0px;
+  font-size: 20px;
+  padding: 5px 15px;
+  font-family: "source-han-sans-japanese", sans-serif;
+  font-style: normal;
+  z-index: 1;
+}
+
+.plan-step-description {
+  position: absolute;
+  background: #fff;
+  font-weight: bold;
+  color: #cb6b52;
+  top: 50px;
+  right: 0px;
+  font-size: 16px;
+  padding: 5px 15px;
+  z-index: 1;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-feature-settings: "vert";
+}
+
+.plan-spot-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cb6b52;
+  font-family: "source-han-sans-japanese", sans-serif;
+  margin-bottom: 10px;
+  border-bottom: 1px solid;
+}
+
+.plan-step-spot-catchphrase {
+  font-size: 12px;
+  color: #cb6b52;
+}
+
+.plan-step-spot-header {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.plan-step-spot-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.plan-step-spot-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.plan-step-spot-detail {
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.spot-hours {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 8px;
+  padding: 6px 4px;
+}
+
+/* 曜日を“丸バッジ”で */
+.spot-hours-day {
+  color: #cb6b52;
+  border: 1px solid #cb6b52;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.spot-hours-time {
+  font-size: 13px;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #f2c9bd;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.spot-hours-row {
+  display: contents;
+}
+
+.spot-item-lists {
+  display: flex;
+  gap: 4px;
+}
+
+.spot-item-list {
+  padding: 2px 5px;
+  background: #cb6b52;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.spot-extra-value {
+  color: #cb6b52;
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid #cb6b52;
+  align-items: center;
+  display: flex;
+}
+
+.spot-hours-row:nth-child(odd) .spot-hours-time {
+  background: #fff9f7;
+}
+
+.spot-tab-body .plan-step-spot-details {
+  padding-top: 18px;
+}
+
+.plan-step-spot-option {
+  font-weight: bold;
+  font-size: 14px;
+  color: #cb6b52;
+}
+
+/* ラベルの見栄え微調整（既存からの差分） */
+.plan-step-spot-title {
+  left: 12px;
+  top: -12px;
+  background: #fff;
+  color: #cb6b52;
+  border: 1px solid #cb6b52;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.plan-step-spot-image img {
+  object-fit: cover;
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.plan-step-spot-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.plan-step-spot-description-container {
+  margin-top: 10px;
+  /* padding: 10px; */
+}
+
+.plan-step-spot-description {
+  font-size: 14px;
+  color: #000;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.plan-step-budget {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.plan-step-budget-value {
+  font-weight: bold;
+  color: #cb6b52;
+}
+
+.plan-total-section {
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.plan-total-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.plan-total-budget {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+.plan-total-budget-value {
+  font-weight: bold;
+  color: #cb6b52;
+}
+
 .plan-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
 }
 
-.action-button {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.plan-action-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.favorite-button {
-    background-color: transparent !important;
-    color: inherit;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    color: #cb6b52;
+/* ───────── タブ ───────── */
+.spot-tabs {
+  display: flex;
 }
 
-.favorite-button .heart-icon {
-    font-size: 20px;
-    line-height: 1;
-    color: '#56b6f7';
+.spot-tab {
+  appearance: none;
+  border: 1px solid #cb6b52;
+  background: #fff;
+  color: #cb6b52;
+  padding: 6px 12px;
+  border-radius: 6px 6px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
 }
 
-.favorite-button:hover {
-    background-color: transparent !important;
+.spot-tab:hover {
+  background: #fff5f1;
 }
 
-.share-button {
-    background-color: #4dabf7;
-    color: white;
-    border: none;
+.spot-tab.is-active {
+  background: #cb6b52;
+  color: #fff;
+  border-bottom-color: transparent;
 }
 
-.share-button:hover {
-    background-color: #339af0;
+/* ───────── 情報枠（既存を微修正） ───────── */
+.plan-step-spot-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #cb6b52;
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
 }
 
-/* エラー表示用スタイル */
-.error-container {
-    background-color: #fff;
-    border-radius: 10px;
-    border: 0.5px solid #000;
-    padding: 40px 30px;
-    margin: 60px auto;
-    max-width: 640px;
-    text-align: center;
+/* 枠タイトル（重なり改善＆読みやすく） */
+.plan-step-spot-title {
+  position: absolute;
+  left: 12px;
+  top: -12px;
+  z-index: 1;
+  background: #fff;
 }
 
-.error-container h2 {
-    font-size: 26px;
-    color: #222;
-    margin-bottom: 16px;
+
+.plan-action-button.secondary {
+  background-color: white;
+  color: #cb6b52;
+  border: 1px solid #cb6b52;
 }
 
-.error-container p {
-    font-size: 17px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 22px;
+.plan-action-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
-/* アクションボタン配置 */
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 30px;
+.plan-images {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
 }
 
-/* ボタン共通スタイル */
-.primary-button,
-.secondary-button {
-    display: inline-block;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    min-width: 160px;
-    transition: all 0.3s ease;
+.plan-image-item {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
-/* 有償登録ボタン */
-.primary-button {
-    background-color: #CB6B52;
-    color: #fff;
-    border: none;
+/* 吹き出し本体 */
+.plan-image-bubble {
+  position: absolute;
+  bottom: 0px;
+  /* 画像から少しはみ出す */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 3px;
+  border-radius: 16px;
+  font-size: 11px;
+  color: #333;
+  white-space: nowrap;
+  /* 文字数に応じて可変にしたい場合は削除 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-width: 95%;
+  text-align: center;
 }
 
-.primary-button:hover {
-    background-color: #b55a43;
+/* 吹き出しの三角形部分 */
+.plan-image-bubble::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 6px 6px 6px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
 }
 
-/* 他のプランへ戻るなどのセカンダリ */
-.secondary-button {
-    background-color: #fff;
-    color: #333;
-    border: 0.5px solid #000;
+/* ちょっと“手描き風”のあしらい（オプション） */
+.plan-image-bubble--hand {
+  border: 1.5px solid #222;
+  /* ざっくり線 */
+  box-shadow: 2px 2px 0 #222, 0 4px 12px rgba(0, 0, 0, .08);
 }
 
-.secondary-button:hover {
-    background-color: #f9f9f9;
+.plan-image-bubble--hand::after {
+  border-bottom-color: #ffffff;
+  /* しっぽを白 */
+  /* しっぽの縁取りを疑似：細い影を入れる */
+  filter: drop-shadow(0 -1px 0 #222);
 }
 
-/* スマホ対応 */
+/* tags */
+.plan-tags-container {
+  margin-bottom: 30px;
+}
+
+.plan-tags-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.plan-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.plan-tag-item {
+  position: relative;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  margin-left: 20px;
+  border-bottom: 2px solid #cb6b52;
+}
+
+.plan-tag-item ::before {
+  content: '・';
+  position: absolute;
+  top: 0;
+  left: -15px;
+}
+
+.instagram-media {
+  margin: 1px auto;
+  max-width: 540px;
+  min-height: 300px;
+  padding: 0;
+  width: 100%;
+  width: -webkit-calc(100% - 2px);
+  width: calc(100% - 2px);
+}
+
+
 @media (max-width: 768px) {
-    .plan-image {
-        height: 150px
-    }
+  .plan-image-container {
+    height: 200px;
+  }
 
-    .action-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .plan-step {
+    flex-direction: column;
+  }
 
-    .primary-button,
-    .secondary-button {
-        width: 100%;
-        min-width: unset;
-    }
+  .plan-step-timeline {
+    flex-direction: row;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 
-    .error-container {
-        padding: 30px 20px;
-        margin: 40px 16px;
-    }
+  .plan-step-line {
+    width: auto;
+    height: 2px;
+    flex-grow: 1;
+    margin: 0 5px;
+  }
+}
+
+@media (min-width: 769px) {
+  .plan-step {
+    display: block;
+  }
+
+  .spot-image {
+    height: 400px;
+  }
+
+  .plan-image-bubble {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

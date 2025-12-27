@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import '@styles/EventsPage.css';
-import '@styles/RecommendedSpot.css';
+import '@/styles/EventsPage.css';
+import '@/styles/RecommendedSpot.css';
 
 // 共通のセクション型定義
 type Section = {

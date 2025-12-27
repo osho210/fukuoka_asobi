@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { formatDateRange } from '../lib/dateUtils';
-import '@styles/EventsPage.css';
+import '@/styles/EventsPage.css';
 import { Event } from '@/__generated__/graphql';
 
 type EventDetailProps = {

@@ -1,6 +1,6 @@
 import EventList from '@/components/EventList';
 import EventCategoryList from '@/components/EventCategoryList';
-import '@styles/EventsPage.css';
+import '@/styles/EventsPage.css';
 
 export const metadata = {
   title: 'イベント一覧 | 福岡遊び日記',

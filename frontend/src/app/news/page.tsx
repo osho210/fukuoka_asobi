@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_NEWS_LIST } from '@/graphql/queries/getNewsList';
 import { GetNewsListQuery } from '@/__generated__/types';
-import '@styles/NewsPage.css';
+import '@/styles/NewsPage.css';
 
 export default function NewsPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);

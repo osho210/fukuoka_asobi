@@ -1,5 +1,5 @@
 'use client';
-import '@styles/BusinessHour.css';
+import '@/styles/BusinessHour.css';
 import { formatTimeFromIso } from '../lib/dateUtils';
 
 interface BusinessHoursProps {

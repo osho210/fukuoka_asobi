@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import '@styles/EventsPage.css';
+import '@/styles/EventsPage.css';
 
 type EventCategory = {
   id: string;
