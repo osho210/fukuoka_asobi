@@ -94,5 +94,15 @@ module Types
 
     # Google Places API関連
     field :sync_spot_with_google_places, mutation: Mutations::SyncSpotWithGooglePlaces
+
+    # レイアウトバケット関連
+    field :create_layout_bucket, mutation: Mutations::CreateLayoutBucket
+    field :update_layout_bucket, mutation: Mutations::UpdateLayoutBucket
+    field :delete_layout_bucket, mutation: Mutations::DeleteLayoutBucket
+
+    # バケットリスト企画関連
+    field :create_bucket_list_item, mutation: Mutations::CreateBucketListItem
+    field :update_bucket_list_item, mutation: Mutations::UpdateBucketListItem
+    field :delete_bucket_list_item, mutation: Mutations::DeleteBucketListItem
   end
 end
