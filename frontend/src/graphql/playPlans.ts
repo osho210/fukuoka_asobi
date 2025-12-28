@@ -79,7 +79,7 @@ export const GET_PLAY_PLAN = gql`
       user {
         id
         username
-        profileImageUrl
+        avatarUrl
         role
       }
       plannerTitle
