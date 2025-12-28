@@ -62,6 +62,8 @@ export const modelDisplayNames: Record<string, string> = {
   stations: '駅',
   eventCategories: 'イベントカテゴリー',
   menuCategories: 'メニューカテゴリー',
+  layout_buckets: 'レイアウトバケット',
+  bucket_list_items: 'バケットリスト企画',
 };
 
 // 各モデルの設定を統合
@@ -440,6 +442,63 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'status', type: 'select', required: true, enumKey: 'MagazineStatusEnum' },
     ],
   },
+  layout_buckets: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'キー', accessorKey: 'key', sortable: true },
+      { header: '名前', accessorKey: 'name', sortable: true },
+      { header: 'テンプレ', accessorKey: 'templateKey', sortable: false },
+      { header: 'ステータス', accessorKey: 'status', sortable: true },
+    ],
+    fields: [
+      { name: 'key', type: 'text', required: true },
+      { name: 'name', type: 'text', required: true },
+      { name: 'templateKey', type: 'text', required: true },
+      { name: 'themeKey', type: 'text', required: false },
+      { name: 'shift', type: 'select', required: true, enumKey: 'ShiftEnum' },
+      { name: 'tilt', type: 'select', required: true, enumKey: 'TiltEnum' },
+      { name: 'depth', type: 'select', required: true, enumKey: 'DepthEnum' },
+      { name: 'status', type: 'select', required: true, enumKey: 'LayoutBucketStatusEnum' },
+      { name: 'sortOrder', type: 'number', required: true },
+    ],
+  },
+  bucket_list_items: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'タイトル', accessorKey: 'title', sortable: true },
+      { header: 'エリア', accessorKey: 'areaText', sortable: false },
+      { header: '天気', accessorKey: 'weather', sortable: true },
+      { header: 'ステータス', accessorKey: 'status', sortable: true },
+      {
+        header: '公開日',
+        accessorKey: 'publishedAt',
+        sortable: true,
+        cell: (item) => item.publishedAt ? formatDateTimeToJapanese(item.publishedAt as string) : '-'
+      },
+    ],
+    fields: [
+      { name: 'layoutBucketId', type: 'relation', required: true, relationModel: 'layout_buckets' },
+      { name: 'title', type: 'text', required: true },
+      { name: 'content', type: 'textarea', required: false },
+      { name: 'areaText', type: 'text', required: false },
+      { name: 'meetingPlaceName', type: 'text', required: false },
+      { name: 'meetingPlaceAddress', type: 'text', required: false },
+      { name: 'meetingPlaceGooglePlaceId', type: 'text', required: false },
+      { name: 'stayMinutes', type: 'number', required: false },
+      { name: 'meetingTime', type: 'datetime', required: false },
+      { name: 'startTime', type: 'datetime', required: false },
+      { name: 'endTime', type: 'datetime', required: false },
+      { name: 'costMin', type: 'number', required: false },
+      { name: 'costMax', type: 'number', required: false },
+      { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
+      { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
+      { name: 'publishedAt', type: 'datetime', required: false },
+    ],
+    filters: [
+      { name: 'weather', label: '天気', model: 'bucket_list_items', labelField: 'weather' },
+      { name: 'status', label: 'ステータス', model: 'bucket_list_items', labelField: 'status' },
+    ],
+  },
 };
 
 // フィールド名の日本語表示
@@ -576,4 +635,30 @@ export const fieldDisplayNames: Record<string, string> = {
   salesInfo: '販売情報',
   salesUrl: '販売URL',
   coverImageUrl: '表紙画像URL',
+
+  // Layout Bucket関連
+  key: 'キー',
+  templateKey: 'テンプレート識別子',
+  themeKey: 'テーマ識別子',
+  shift: 'ズレ方向',
+  tilt: '傾き',
+  depth: '奥行き表現',
+  sortOrder: '表示順',
+
+  // Bucket List Item関連
+  layoutBucketId: 'レイアウトバケット',
+  areaText: '抽象エリア名',
+  meetingPlaceName: '集合場所名',
+  meetingPlaceAddress: '集合場所住所',
+  meetingPlaceGooglePlaceId: 'Google Place ID',
+  stayMinutes: '滞在時間（分）',
+  meetingTime: '集合時間',
+  startTime: '開始時間',
+  endTime: '終了時間',
+  costMin: '最小費用（円）',
+  costMax: '最大費用（円）',
+  weather: '推奨天気',
+  bucketListItemBelongings: 'もちもの一覧',
+  bucketListItemReferences: '参考リンク一覧',
+  content: 'コンテンツ',
 };
