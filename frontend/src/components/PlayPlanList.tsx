@@ -52,7 +52,7 @@ const PlayPlanList = () => {
                     <span className="mag-price">予算: <br />¥{plan.totalBudget.toLocaleString()}</span>
                     <span className="mag-issue">
                       <span className="mag-issue-number">
-                        {new Date(plan.createdAt).toLocaleString('ja-JP', { month: 'numeric' })}
+                        {new Date(plan.updatedAt).toLocaleString('ja-JP', { month: 'numeric' })}
                       </span>
                     </span>
                   </div>

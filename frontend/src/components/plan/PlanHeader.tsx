@@ -62,8 +62,7 @@ const PlanHeader: React.FC<PlanHeaderProps> = ({ plan }) => {
           <div className="plan-user-info">
             <Image
               className="plan-user-image"
-              // TODO: seedにデータを登録していないため、一旦固定の画像を表示
-              src={plan.user.profileImageUrl ? `/${plan.user.profileImageUrl}` : `/${plan.imageUrls}`}
+              src={plan.user.avatarUrl ? `/${plan.user.avatarUrl}` : `/${plan.imageUrls}`}
               alt={`${plan.user.username}のプロフィール画像`}
               width={50}
               height={50}

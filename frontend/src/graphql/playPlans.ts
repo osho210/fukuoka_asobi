@@ -23,6 +23,7 @@ export const GET_PLAY_PLANS = gql`
       status
       leadText
       createdAt
+      updatedAt
       imageUrls {
         id
         url
@@ -30,7 +31,7 @@ export const GET_PLAY_PLANS = gql`
       user {
         id
         username
-        profileImageUrl
+        avatarUrl
         role
       }
     }
@@ -79,7 +80,7 @@ export const GET_PLAY_PLAN = gql`
       user {
         id
         username
-        profileImageUrl
+        avatarUrl
         role
       }
       plannerTitle
