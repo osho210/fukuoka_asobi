@@ -16,16 +16,191 @@
   transform: translateY(-5px);
 }
 
-.play-plan-card {
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 16px;
+.mag-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mag-card-inner {
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 2px solid #ddd;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.mag-top {
+  padding: 14px 16px 6px 16px;
+  position: relative;
+}
+
+.mag-lead {
+  position: absolute;
+  font-size: 6px;
+  line-height: 1.5;
+  color: #c05a3d;
+  letter-spacing: 0.02em;
+  font-family: source-han-sans-japanese, sans-serif;
+}
+
+.mag-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.mag-price {
+  position: absolute;
+  font-size: 8px;
+  font-weight: bold;
+  color: #c05a3d;
   text-align: center;
+  top: 75px;
+  left: 9px;
+}
+
+.mag-issue {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c05a3d;
+  top: 20px;
+  right: 20px;
+}
+
+
+.mag-title-block {
+  padding: 16px 10px;
+  text-align: center;
+  color: #c05a3d;
+}
+
+.mag-kicker {
+  margin: 0;
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  color: #c05a3d;
+  font-family: source-han-sans-japanese, sans-serif;
+}
+
+.mag-title {
+  margin: 6px 0;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  font-family: source-han-sans-japanese, sans-serif;
+}
+
+.mag-subtitle {
+  margin: 0;
+  font-size: 6px;
+  letter-spacing: 0.1em;
+  color: #c05a3d;
+}
+
+/* ===== Photo ===== */
+.mag-photo {
+  position: relative;
+  height: 250px;
+  background: #eee;
+}
+
+.mag-photo-img {
+  object-fit: cover;
+}
+
+.mag-photo-placeholder {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #666;
+}
+
+.mag-bottom {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+}
+
+/* 黒い帯のキャプション */
+.mag-caption {
+  color: #fff;
+  font-family: source-han-sans-japanese, sans-serif;
+  font-weight: bold;
+}
+
+.mag-label {
+  display: inline-block;
+  font-size: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 3px;
+  background: none;
+  border: 1px solid #fff;
+}
+
+.mag-caption-title {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* 著者行 */
+.mag-author {
+  display: flex;
+  align-items: center;
+}
+
+.mag-author-avatar {
+  border-radius: 999px;
+}
+
+.mag-author-meta {
+  min-width: 0;
+}
+
+.mag-author-name {
+  margin: 0;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mag-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.mag-badge.editor {
+  background: #c05a3d;
+  color: #ffe6de;
+}
+
+.mag-badge.admin {
+  background: #e6f0ff;
+  color: #2d5bd1;
+}
+
+.mag-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.mag-tag {
+  font-size: 10px;
+  color: #444;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 999px;
 }
 
 .play-plan-image {
@@ -38,7 +213,7 @@
 .plan-image {
   object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: 400px;
 }
 
 .plan-image-placeholder {
@@ -51,37 +226,7 @@
   color: #999;
 }
 
-.play-plan-content {
-  padding: 0px 15px 15px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
 
-.play-plan-title {
-  margin: 0 0 10px 0;
-  font-size: 18px;
-  font-weight: 600;
-  position: relative;
-  margin: 15px 0px 5px;
-  padding: 10px 0;
-}
-
-.play-plan-title::before {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(135deg, #000 25%, transparent 25%) -5px 0/10px 10px,
-    linear-gradient(225deg, #000 25%, transparent 25%) -5px 0/10px 10px,
-    linear-gradient(315deg, #000 25%, transparent 25%),
-    linear-gradient(45deg, #000 25%, transparent 25%);
-  background-size: 20px 0.5px;
-  background-repeat: repeat-x;
-}
 
 .play-plan-description {
   margin: 0 0 15px 0;
@@ -228,6 +373,8 @@
 .play-plan-slider .swiper-slide {
   display: flex;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  border-radius: 14px;
 }
 
 .play-plan-slider .swiper-pagination-bullet {

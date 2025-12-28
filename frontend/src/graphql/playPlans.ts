@@ -7,7 +7,10 @@ export const GET_PLAY_PLANS = gql`
     playPlans(limit: $limit, isRecommended: $isRecommended) {
       id
       planName
+      catchCopy
       description
+      plannerTitle
+      subtitle
       imageUrl
       location
       tripType
@@ -18,6 +21,8 @@ export const GET_PLAY_PLANS = gql`
       isFavorite
       isRecommended
       status
+      leadText
+      createdAt
       imageUrls {
         id
         url
