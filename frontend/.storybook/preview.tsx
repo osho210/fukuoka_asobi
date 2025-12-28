@@ -3,7 +3,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ToastProvider } from '../src/components/common/ToastContext';
 import '../src/app/globals.css';
-import '../src/styles/Common.css';
+import '../src/styles/CommonStyle.css';
 import '../src/styles/AboutPage.css';
 import '../src/styles/AreaMap.css';
 import '../src/styles/Button.css';
