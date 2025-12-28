@@ -20,8 +20,8 @@ module Types
     field :weather, String, null: false
     field :status, String, null: false
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :bucket_list_item_belongings, [Types::BucketListItemBelongingType], null: false
-    field :bucket_list_item_references, [Types::BucketListItemReferenceType], null: false
+    field :bucket_list_item_belongings, [ Types::BucketListItemBelongingType ], null: false
+    field :bucket_list_item_references, [ Types::BucketListItemReferenceType ], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

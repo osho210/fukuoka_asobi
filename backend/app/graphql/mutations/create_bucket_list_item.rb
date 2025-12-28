@@ -5,12 +5,12 @@ module Mutations
     argument :input, Types::Input::CreateBucketListItemInputType, required: true
 
     field :bucket_list_item, Types::BucketListItemType, null: true
-    field :errors, [String], null: false
+    field :errors, [ String ], null: false
 
     def resolve(input:)
       # 管理者権限チェック
       unless context[:current_user]&.admin?
-        return { bucket_list_item: nil, errors: ["管理者権限が必要です"] }
+        return { bucket_list_item: nil, errors: [ "管理者権限が必要です" ] }
       end
 
       bucket_list_item = BucketListItem.new(input.to_h)

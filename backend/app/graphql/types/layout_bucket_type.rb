@@ -12,7 +12,7 @@ module Types
     field :depth, String, null: false
     field :status, String, null: false
     field :sort_order, Integer, null: false
-    field :bucket_list_items, [Types::BucketListItemType], null: false
+    field :bucket_list_items, [ Types::BucketListItemType ], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end

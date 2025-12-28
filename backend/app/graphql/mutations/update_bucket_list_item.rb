@@ -6,16 +6,16 @@ module Mutations
     argument :input, Types::Input::UpdateBucketListItemInputType, required: true
 
     field :bucket_list_item, Types::BucketListItemType, null: true
-    field :errors, [String], null: false
+    field :errors, [ String ], null: false
 
     def resolve(id:, input:)
       # 管理者権限チェック
       unless context[:current_user]&.admin?
-        return { bucket_list_item: nil, errors: ["管理者権限が必要です"] }
+        return { bucket_list_item: nil, errors: [ "管理者権限が必要です" ] }
       end
 
       bucket_list_item = BucketListItem.find_by(id: id)
-      return { bucket_list_item: nil, errors: ['バケットリスト企画が見つかりません'] } unless bucket_list_item
+      return { bucket_list_item: nil, errors: [ "バケットリスト企画が見つかりません" ] } unless bucket_list_item
 
       if bucket_list_item.update(input.to_h)
         { bucket_list_item: bucket_list_item, errors: [] }

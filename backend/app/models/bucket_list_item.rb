@@ -12,8 +12,8 @@ class BucketListItem < ApplicationRecord
   accepts_nested_attributes_for :bucket_list_item_references, allow_destroy: true
 
   # Enum定義
-  enum :weather, { any: 'any', sunny: 'sunny', cloudy: 'cloudy', rainy: 'rainy', snowy: 'snowy' }, default: :any
-  enum :status, { draft: 'draft', published: 'published', archived: 'archived' }, default: :draft
+  enum :weather, { any: "any", sunny: "sunny", cloudy: "cloudy", rainy: "rainy", snowy: "snowy" }, default: :any
+  enum :status, { draft: "draft", published: "published", archived: "archived" }, default: :draft
 
   # バリデーション
   validates :title, presence: true, length: { maximum: 255 }
@@ -38,6 +38,6 @@ class BucketListItem < ApplicationRecord
     return if cost_min.nil? || cost_max.nil?
     return if cost_max >= cost_min
 
-    errors.add(:cost_max, 'は最小費用以上である必要があります')
+    errors.add(:cost_max, "は最小費用以上である必要があります")
   end
 end

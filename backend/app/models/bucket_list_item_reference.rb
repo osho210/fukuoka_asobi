@@ -6,11 +6,11 @@ class BucketListItemReference < ApplicationRecord
 
   # Enum定義
   enum :reference_type, {
-    official: 'official',
-    map: 'map',
-    article: 'article',
-    reservation: 'reservation',
-    other: 'other'
+    official: "official",
+    map: "map",
+    article: "article",
+    reservation: "reservation",
+    other: "other"
   }, default: :other, prefix: true
 
   # バリデーション

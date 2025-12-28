@@ -6,10 +6,10 @@ class LayoutBucket < ApplicationRecord
   has_many :bucket_list_items, dependent: :restrict_with_error
 
   # Enum定義
-  enum :shift, { none: 'none', up: 'up', down: 'down', left: 'left', right: 'right' }, default: :none
-  enum :tilt, { none: 'none', cw: 'cw', ccw: 'ccw' }, default: :none
-  enum :depth, { flat: 'flat', lift: 'lift' }, default: :flat
-  enum :status, { active: 'active', inactive: 'inactive' }, default: :active
+  enum :shift, { none: "none", up: "up", down: "down", left: "left", right: "right" }, default: :none
+  enum :tilt, { none: "none", cw: "cw", ccw: "ccw" }, default: :none
+  enum :depth, { flat: "flat", lift: "lift" }, default: :flat
+  enum :status, { active: "active", inactive: "inactive" }, default: :active
 
   # バリデーション
   validates :key, presence: true, uniqueness: true, length: { maximum: 64 }
