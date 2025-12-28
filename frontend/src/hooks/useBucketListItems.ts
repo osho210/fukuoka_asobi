@@ -78,7 +78,7 @@ export function useCreateBucketListItem() {
   );
 
   return {
-    create: (input: any) => mutate({ variables: { input } }),
+    create: (input: Record<string, unknown>) => mutate({ variables: { input } }),
     loading,
     error,
   };
@@ -96,7 +96,7 @@ export function useUpdateBucketListItem() {
   );
 
   return {
-    update: (id: string, input: any) => mutate({ variables: { id, input } }),
+    update: (id: string, input: Record<string, unknown>) => mutate({ variables: { id, input } }),
     loading,
     error,
   };
