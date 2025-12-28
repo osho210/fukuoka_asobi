@@ -3002,7 +3002,7 @@ export type GetPlayPlansQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, description: string, plannerTitle: string, subtitle: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, isRecommended: boolean, status: StatusEnum, leadText: string, createdAt: any, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, user?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, role?: string | null } | null }> };
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, description: string, plannerTitle: string, subtitle: string, imageUrl?: string | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, isRecommended: boolean, status: StatusEnum, leadText: string, createdAt: any, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, user?: { __typename?: 'User', id: string, username: string, avatarUrl?: string | null, role?: string | null } | null }> };
 
 export type GetPlayPlanQueryVariables = Exact<{
   id: Scalars['Int']['input'];
