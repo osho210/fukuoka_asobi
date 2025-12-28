@@ -4,7 +4,7 @@ import "./globals.css";
 import ApolloWrapper from '@/components/ApolloWrapper';
 import { Header } from '@/components/Header'
 import Footer from '@/components/Footer'
-import '@/styles/common.css';
+import '@/styles/CommonStyle.css';
 import '@/styles/PlayPlanList.css';
 import '@/styles/RecommendedSpot.css';
 import '@/styles/RecommendedEvent.css';
