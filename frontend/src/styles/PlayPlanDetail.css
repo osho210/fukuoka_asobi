@@ -124,6 +124,10 @@
   color: #cb6b52;
 }
 
+.play-plan-card {
+  position: relative;
+}
+
 .plan-image-container {
   width: 100%;
   height: 300px;
@@ -135,6 +139,7 @@
 
 .plan-image {
   object-fit: cover;
+  height: 400px;
 }
 
 .plan-planner-title {
