@@ -1511,7 +1511,7 @@ export type OpeningHourAttributes = {
 export type OpeningHourList = {
   __typename?: 'OpeningHourList';
   /** 現在営業中か */
-  openNow: Scalars['Boolean']['output'];
+  openNow?: Maybe<Scalars['Boolean']['output']>;
   /** 営業時間の期間リスト */
   periods?: Maybe<Array<OpeningHourPeriod>>;
   /** 曜ごとの営業時間テキスト */
@@ -1551,10 +1551,10 @@ export type ParkingOptions = {
 
 export type PaymentOptions = {
   __typename?: 'PaymentOptions';
-  acceptsCashOnly: Scalars['Boolean']['output'];
-  acceptsCreditCards: Scalars['Boolean']['output'];
-  acceptsDebitCards: Scalars['Boolean']['output'];
-  acceptsNfc: Scalars['Boolean']['output'];
+  acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
+  acceptsCreditCards?: Maybe<Scalars['Boolean']['output']>;
+  acceptsDebitCards?: Maybe<Scalars['Boolean']['output']>;
+  acceptsNfc?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type PlanDetail = Node & {
@@ -2993,7 +2993,7 @@ export type SearchGooglePlacesQueryVariables = Exact<{
 }>;
 
 
-export type SearchGooglePlacesQuery = { __typename?: 'Query', searchGooglePlaces: Array<{ __typename?: 'GooglePlace', placeId: string, name?: string | null, formattedAddress?: string | null, shortFormattedAddress?: string | null, rating?: number | null, userRatingCount?: number | null, types?: Array<string> | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, businessStatus?: string | null, priceLevel?: string | null, googleMapsUri?: string | null, websiteUri?: string | null, nationalPhoneNumber?: string | null, internationalPhoneNumber?: string | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesBrunch?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, curbsidePickup?: boolean | null, reservable?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, generativeSummary?: string | null, editorialSummary?: string | null, location?: { __typename?: 'Location', latitude: number, longitude: number } | null, regularOpeningHours?: { __typename?: 'OpeningHourList', openNow: boolean, weekdayDescriptions?: Array<string> | null, periods?: Array<{ __typename?: 'OpeningHourPeriod', open: { __typename?: 'OpeningHourPeriodDetail', day: number, hour: number, minute: number }, close: { __typename?: 'OpeningHourPeriodDetail', day: number, hour: number, minute: number } }> | null } | null, paymentOptions?: { __typename?: 'PaymentOptions', acceptsCreditCards: boolean, acceptsDebitCards: boolean, acceptsCashOnly: boolean, acceptsNfc: boolean } | null, parkingOptions?: { __typename?: 'ParkingOptions', freeParkingLot: boolean, paidParkingLot: boolean, freeStreetParking: boolean, paidStreetParking: boolean, valetParking: boolean, freeGarageParking: boolean, paidGarageParking: boolean } | null, priceRange?: { __typename?: 'PriceRange', startPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null }, endPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null } } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null }> };
+export type SearchGooglePlacesQuery = { __typename?: 'Query', searchGooglePlaces: Array<{ __typename?: 'GooglePlace', placeId: string, name?: string | null, formattedAddress?: string | null, shortFormattedAddress?: string | null, rating?: number | null, userRatingCount?: number | null, types?: Array<string> | null, primaryType?: string | null, primaryTypeDisplayName?: string | null, businessStatus?: string | null, priceLevel?: string | null, googleMapsUri?: string | null, websiteUri?: string | null, nationalPhoneNumber?: string | null, internationalPhoneNumber?: string | null, servesBreakfast?: boolean | null, servesLunch?: boolean | null, servesDinner?: boolean | null, servesBeer?: boolean | null, servesWine?: boolean | null, servesBrunch?: boolean | null, servesCocktails?: boolean | null, servesDessert?: boolean | null, servesCoffee?: boolean | null, takeout?: boolean | null, delivery?: boolean | null, dineIn?: boolean | null, curbsidePickup?: boolean | null, reservable?: boolean | null, outdoorSeating?: boolean | null, liveMusic?: boolean | null, menuForChildren?: boolean | null, goodForChildren?: boolean | null, allowsDogs?: boolean | null, restroom?: boolean | null, goodForGroups?: boolean | null, goodForWatchingSports?: boolean | null, generativeSummary?: string | null, editorialSummary?: string | null, location?: { __typename?: 'Location', latitude: number, longitude: number } | null, regularOpeningHours?: { __typename?: 'OpeningHourList', openNow?: boolean | null, weekdayDescriptions?: Array<string> | null, periods?: Array<{ __typename?: 'OpeningHourPeriod', open: { __typename?: 'OpeningHourPeriodDetail', day: number, hour: number, minute: number }, close: { __typename?: 'OpeningHourPeriodDetail', day: number, hour: number, minute: number } }> | null } | null, paymentOptions?: { __typename?: 'PaymentOptions', acceptsCreditCards?: boolean | null, acceptsDebitCards?: boolean | null, acceptsCashOnly?: boolean | null, acceptsNfc?: boolean | null } | null, parkingOptions?: { __typename?: 'ParkingOptions', freeParkingLot: boolean, paidParkingLot: boolean, freeStreetParking: boolean, paidStreetParking: boolean, valetParking: boolean, freeGarageParking: boolean, paidGarageParking: boolean } | null, priceRange?: { __typename?: 'PriceRange', startPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null }, endPrice: { __typename?: 'Money', amount?: number | null, currency?: string | null } } | null, reviewSummary?: { __typename?: 'ReviewSummary', text?: string | null, flagContentUri?: string | null, disclosureText?: string | null, reviewsUri?: string | null } | null }> };
 
 export type SyncSpotWithGooglePlacesMutationVariables = Exact<{
   input: SyncSpotWithGooglePlacesInput;
