@@ -1,6 +1,6 @@
 import EventList from '@/components/EventList';
-import '@styles/EventsPage.css';
-import '@styles/ContentDetail.css';
+import '@/styles/EventsPage.css';
+import '@/styles/ContentDetail.css';
 import EventDetailContainer from './event-detail.container';
 
 type EventPageProps = {

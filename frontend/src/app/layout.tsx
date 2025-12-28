@@ -4,11 +4,11 @@ import "./globals.css";
 import ApolloWrapper from '@/components/ApolloWrapper';
 import { Header } from '@/components/Header'
 import Footer from '@/components/Footer'
-import '@styles/common.css';
-import '@styles/PlayPlanList.css';
-import '@styles/RecommendedSpot.css';
-import '@styles/RecommendedEvent.css';
-import '@styles/RecommendedNews.css';
+import '@/styles/Common.css';
+import '@/styles/PlayPlanList.css';
+import '@/styles/RecommendedSpot.css';
+import '@/styles/RecommendedEvent.css';
+import '@/styles/RecommendedNews.css';
 import Script from "next/script"; // ←追加
 
 const geistSans = Geist({

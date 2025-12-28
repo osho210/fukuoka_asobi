@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
-import '@styles/RecommendedEvent.css';
+import '@/styles/RecommendedEvent.css';
 import { GET_RECOMMENDED_EVENTS, GetRecommendedEventsQuery } from '@/graphql/getRecommendedEvents';
 
 const RecommendedEvent = () => {

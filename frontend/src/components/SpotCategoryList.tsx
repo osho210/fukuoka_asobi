@@ -1,5 +1,5 @@
 'use client';
-import '@styles/SpotsPage.css';
+import '@/styles/SpotsPage.css';
 import { Category } from '@/__generated__/graphql';
 
 type SpotCategory = Category;

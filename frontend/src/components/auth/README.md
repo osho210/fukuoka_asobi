@@ -88,7 +88,7 @@ export default function RegisterPage() {
 
 ## スタイリング
 
-スタイルは `public/styles/Auth.css` に定義されています。このCSSファイルには、認証関連のコンポーネントで使用されるすべてのスタイルが含まれています。
+スタイルは `src/styles/Auth.css` に定義されています。このCSSファイルには、認証関連のコンポーネントで使用されるすべてのスタイルが含まれています。
 
 ## バックエンド連携
 

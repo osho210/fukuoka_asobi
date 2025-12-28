@@ -2,7 +2,7 @@ import { GetSpotQuery } from '@/__generated__/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';
-import '@styles/RecommendedSpot.css'
+import '@/styles/RecommendedSpot.css'
 
 type SpotFromQuery = NonNullable<GetSpotQuery['spot']>;
 

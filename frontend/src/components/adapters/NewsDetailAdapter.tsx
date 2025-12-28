@@ -5,7 +5,7 @@ import { News } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
-import '@styles/ContentDetail.css';
+import '@/styles/ContentDetail.css';
 import Image from "next/image";
 import { StatusEnum } from '@/__generated__/types';
 

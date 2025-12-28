@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { formatDate } from '../lib/dateUtils';
-import '@styles/EventsPage.css';
+import '@/styles/EventsPage.css';
 import Image from 'next/image';
 import { Event, StatusEnum } from '@/__generated__/graphql';
 

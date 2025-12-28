@@ -1,5 +1,5 @@
 'use client';
-import '@styles/ContentDetail.css';
+import '@/styles/ContentDetail.css';
 import { useParams } from 'next/navigation';
 import NewsDetailContainer from './news-detail.container';
 
