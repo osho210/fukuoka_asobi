@@ -30,7 +30,7 @@ export const GET_PLAY_PLANS = gql`
       user {
         id
         username
-        avatarUrl
+        profileImageUrl
         role
       }
     }
