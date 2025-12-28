@@ -23,6 +23,7 @@ export const GET_PLAY_PLANS = gql`
       status
       leadText
       createdAt
+      updatedAt
       imageUrls {
         id
         url
