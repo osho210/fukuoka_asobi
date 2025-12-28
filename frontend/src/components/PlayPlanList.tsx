@@ -49,7 +49,7 @@ const PlayPlanList = () => {
                     {plan.leadText}
                   </p>
                   <div className="mag-meta">
-                    <span className="mag-price">予算: <br></br>¥{plan.totalBudget.toLocaleString()}</span>
+                    <span className="mag-price">予算: <br />¥{plan.totalBudget.toLocaleString()}</span>
                     <span className="mag-issue">
                       <span className="mag-issue-number">
                         {new Date(plan.createdAt).toLocaleString('ja-JP', { month: 'numeric' })}
