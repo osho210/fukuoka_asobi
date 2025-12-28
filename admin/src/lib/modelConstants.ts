@@ -448,9 +448,9 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { header: 'テキスト', accessorKey: 'text', sortable: true },
       { header: 'タグ', accessorKey: 'tags', sortable: false },
       { header: '重み', accessorKey: 'weight', sortable: true },
-      { 
-        header: 'アクティブ', 
-        accessorKey: 'active', 
+      {
+        header: 'アクティブ',
+        accessorKey: 'active',
         sortable: true,
         cell: (item) => item.active ? '✓' : '✗'
       },
@@ -469,9 +469,9 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { header: 'タグ', accessorKey: 'tags', sortable: false },
       { header: 'エリア', accessorKey: 'area', sortable: true },
       { header: '所要時間', accessorKey: 'duration', sortable: true },
-      { 
-        header: 'アクティブ', 
-        accessorKey: 'active', 
+      {
+        header: 'アクティブ',
+        accessorKey: 'active',
         sortable: true,
         cell: (item) => item.active ? '✓' : '✗'
       },
@@ -627,7 +627,6 @@ export const fieldDisplayNames: Record<string, string> = {
   tags: 'タグ',
   weight: '重み',
   active: 'アクティブ',
-  title: 'タイトル',
   body: '本文',
   area: 'エリア',
   duration: '所要時間（分）',

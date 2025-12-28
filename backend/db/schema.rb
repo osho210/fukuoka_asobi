@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_30_041027) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_27_105615) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -89,6 +89,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_041027) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "direction_cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "text", null: false
+    t.string "tags"
+    t.integer "weight", default: 1
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_direction_cards_on_active"
+  end
+
   create_table "districts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "district_name", null: false
     t.datetime "created_at", null: false
@@ -127,6 +137,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_041027) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
+  end
+
+  create_table "experience_cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body"
+    t.string "tags"
+    t.string "area"
+    t.integer "duration"
+    t.string "time_slot"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_experience_cards_on_active"
+    t.index ["tags"], name: "index_experience_cards_on_tags"
   end
 
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

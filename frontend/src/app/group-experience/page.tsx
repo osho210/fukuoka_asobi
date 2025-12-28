@@ -1,151 +1,363 @@
 'use client';
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
+
+const ACCENT = '#cb6b52';
+
+const sampleDirectionCards = [
+  { title: '今日は、静かめがいい', sub: '言葉を詰め込まない、余白のある時間。' },
+  { title: '少しだけ、冒険したい', sub: 'いつもの道から、一本外れてみる。' },
+  { title: '観光っぽくない福岡', sub: '地元の人が愛する、素顔の街へ。' },
+  { title: '朝を贅沢に使う', sub: '澄んだ空気と、丁寧なコーヒー。' },
+  { title: '背伸び、ちょっとだけ', sub: '少しの緊張感と、それ以上の高揚感。' },
+];
 
 export default function GroupExperiencePage() {
   const isDesktop = useIsDesktop();
+  const [demoIndex, setDemoIndex] = useState(0);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  const demoCard = useMemo(() => sampleDirectionCards[demoIndex], [demoIndex]);
+
+  const flipNext = () => {
+    if (isFlipping) return;
+    setIsFlipping(true);
+    window.setTimeout(() => {
+      setDemoIndex((prev) => (prev + 1) % sampleDirectionCards.length);
+      setIsFlipping(false);
+    }, 260);
+  };
 
   return (
-    <div className="group-experience-container">
-      <div className="section">
-        <h1 className="section-title">友達と遊びを決める</h1>
-        <p className="section-subtitle">日常が愛しくなる、遊び心</p>
-        
-        <div className="group-experience-content">
-          <p className="group-experience-description">
-            「どこ行く？」の前に、<br />
-            <strong>何がしたいか</strong>の方向性を揃えてみませんか？
-          </p>
-          
-          <div className="group-experience-features">
-            <div className="feature-item">
-              <h3>1. 方向性を揃える</h3>
-              <p>カードで今日の気分を共有</p>
-            </div>
-            <div className="feature-item">
-              <h3>2. 体験を選ぶ</h3>
-              <p>方向性に合った体験を提案</p>
-            </div>
-            <div className="feature-item">
-              <h3>3. 会話が生まれる</h3>
-              <p>決定より、納得感を大切に</p>
-            </div>
-          </div>
+    <div className="page">
+      <div className="hero">
+        <div className="heroLeft">
+          <p className="kicker">福岡遊び日記</p>
 
-          <div className="group-experience-buttons">
-            <Link href="/group-experience/direction" className="button-primary">
-              方向をそろえる
+          <h1 className="title">
+            普段とは違う<span className="accent">ワクワクする体験</span>してみない？
+          </h1>
+
+          <p className="lead">
+            1枚引いて、「それアリだね」を重ねるだけ。<br />
+            いつものメンバーで、まだ知らない福岡に出会える。
+          </p>
+
+          <div className="ctaRow">
+            <Link href="/group-experience/direction" className="primary">
+              まず1枚、引いてみる
             </Link>
           </div>
+        </div>
 
-          <div className="group-experience-note">
-            <p>※ この機能は無料でご利用いただけます</p>
-            <p>決まらなくても大丈夫。会話のきっかけづくりが目的です。</p>
+        <div className="heroRight">
+          {/* Demo card */}
+          <div className="demoWrap" onClick={flipNext} style={{ cursor: 'pointer' }}>
+            <div className={`demoCard ${isFlipping ? 'flip' : ''}`}>
+              <div className="cardTop">
+                <span className="brand">福岡遊び日記</span>
+                <span className="dot" />
+                <span className="line" />
+              </div>
+
+              <div className="cardBody">
+                <p className="cardTitle">{demoCard.title}</p>
+                <p className="cardSub">{demoCard.sub}</p>
+              </div>
+
+              <div className="cardBottom">
+                <span className="miniLine" />
+                <span className="en">STORY DISCOVERY CARD</span>
+              </div>
+            </div>
+
+            <div className="demoHint">
+              <span className="hintDot" />
+              <span>カードをタップして今の気分を探す（デモ）</span>
+            </div>
+          </div>
+
+          {/* Flow chips - 体験ベースの洗練された表現へ */}
+          <div className="flow">
+            <div className="chip">
+              <span className="num">01</span>
+              <div>
+                <p className="chipTitle">気分をそろえる</p>
+                <p className="chipSub">合う / 違う を言うだけ</p>
+              </div>
+            </div>
+
+            <div className="chip">
+              <span className="num">02</span>
+              <div>
+                <p className="chipTitle">候補をしぼる</p>
+                <p className="chipSub">方向に合う体験だけ出す</p>
+              </div>
+            </div>
+
+            <div className="chip">
+              <span className="num">03</span>
+              <div>
+                <p className="chipTitle">会話で決める</p>
+                <p className="chipSub">押しつけず、納得で決まる</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
       <style jsx>{`
-        .group-experience-container {
-          max-width: 800px;
+        .page {
+          max-width: 980px;
           margin: 0 auto;
-          padding: 2rem 1rem;
+          padding: ${isDesktop ? '3.5rem 1.25rem' : '2.2rem 1rem'};
         }
 
-        .section {
-          margin-bottom: 2rem;
-        }
-
-        .section-title {
-          font-size: ${isDesktop ? '2.5rem' : '2rem'};
-          font-weight: bold;
-          text-align: center;
-          margin-bottom: 0.5rem;
-          color: #333;
-        }
-
-        .section-subtitle {
-          font-size: ${isDesktop ? '1.2rem' : '1rem'};
-          text-align: center;
-          color: #666;
-          margin-bottom: 2rem;
-        }
-
-        .group-experience-content {
-          background: #f9f9f9;
-          padding: ${isDesktop ? '3rem' : '2rem'};
-          border-radius: 12px;
-        }
-
-        .group-experience-description {
-          font-size: ${isDesktop ? '1.3rem' : '1.1rem'};
-          text-align: center;
-          line-height: 1.8;
-          margin-bottom: 2.5rem;
-          color: #444;
-        }
-
-        .group-experience-features {
+        .hero {
           display: grid;
-          grid-template-columns: ${isDesktop ? 'repeat(3, 1fr)' : '1fr'};
-          gap: 1.5rem;
-          margin-bottom: 2.5rem;
+          grid-template-columns: ${isDesktop ? '1.05fr 0.95fr' : '1fr'};
+          gap: ${isDesktop ? '2.2rem' : '1.4rem'};
+          align-items: start;
         }
 
-        .feature-item {
-          text-align: center;
-          padding: 1.5rem;
-          background: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-item h3 {
-          font-size: 1.1rem;
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-          color: #333;
-        }
-
-        .feature-item p {
+        .kicker {
           font-size: 0.9rem;
-          color: #666;
+          letter-spacing: 0.08em;
+          color: rgba(0, 0, 0, 0.55);
+          margin: 0 0 0.8rem 0;
         }
 
-        .group-experience-buttons {
-          text-align: center;
-          margin-bottom: 1.5rem;
+        .title {
+          font-size: ${isDesktop ? '2.4rem' : '1.85rem'};
+          line-height: 1.25;
+          margin: 0 0 1rem 0;
+          color: #151515;
+          font-weight: 800;
         }
 
-        .button-primary {
-          display: inline-block;
-          padding: 1rem 3rem;
-          font-size: 1.2rem;
-          font-weight: bold;
-          color: white;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 50px;
+        .accent {
+          color: ${ACCENT};
+        }
+
+        .lead {
+          font-size: ${isDesktop ? '1.08rem' : '14px'};
+          line-height: 1.8;
+          margin: 0 0 1.35rem 0;
+          color: rgba(0, 0, 0, 0.7);
+        }
+
+        .ctaRow {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .primary {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.95rem 1.35rem;
+          border-radius: 999px;
+          background: ${ACCENT};
+          color: #fff;
           text-decoration: none;
-          transition: transform 0.2s, box-shadow 0.2s;
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          font-weight: 800;
+          letter-spacing: 0.02em;
+          box-shadow: 0 10px 22px rgba(203, 107, 82, 0.24);
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .button-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+        .primary:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 14px 28px rgba(203, 107, 82, 0.32);
         }
 
-        .group-experience-note {
-          text-align: center;
-          margin-top: 2rem;
+        .ghost {
+          padding: 0.9rem 1.1rem;
+          border-radius: 999px;
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          background: rgba(255, 255, 255, 0.7);
+          color: rgba(0, 0, 0, 0.75);
+          font-weight: 700;
+          cursor: pointer;
+          transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+        .ghost:hover {
+          transform: translateY(-1px);
+          border-color: rgba(0, 0, 0, 0.22);
         }
 
-        .group-experience-note p {
-          font-size: 0.85rem;
-          color: #999;
-          margin: 0.25rem 0;
+        .note {
+          display: flex;
+          gap: 0.6rem;
+          align-items: center;
+          color: rgba(0, 0, 0, 0.55);
+          font-size: 0.9rem;
+        }
+
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.2rem 0.55rem;
+          border-radius: 999px;
+          border: 1px solid rgba(203, 107, 82, 0.35);
+          color: ${ACCENT};
+          font-weight: 800;
+          background: rgba(203, 107, 82, 0.06);
+        }
+
+        /* Right side */
+        .demoWrap {
+          border-radius: 18px;
+          padding: 1.25rem;
+          background: radial-gradient(
+              1200px 400px at 20% 0%,
+              rgba(203, 107, 82, 0.14),
+              transparent 55%
+            ),
+            rgba(0, 0, 0, 0.03);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .demoCard {
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.75);
+          border: 1px solid rgba(0, 0, 0, 0.07);
+          box-shadow: 0 18px 36px rgba(0, 0, 0, 0.08);
+          padding: 1.1rem 1.05rem 1rem 1.05rem;
+          transform-origin: center;
+          transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .demoCard.flip {
+          transform: rotateY(18deg) scale(0.99);
+          opacity: 0.88;
+        }
+
+        .cardTop {
+          display: grid;
+          grid-template-columns: auto 10px 1fr;
+          align-items: center;
+          gap: 0.6rem;
+          margin-bottom: 0.9rem;
+        }
+        .brand {
+          font-weight: 900;
+          color: ${ACCENT};
+          letter-spacing: 0.02em;
+          font-size: 0.95rem;
+        }
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: ${ACCENT};
+          opacity: 0.75;
+        }
+        .line {
+          height: 2px;
+          background: rgba(203, 107, 82, 0.35);
+          border-radius: 999px;
+        }
+
+        .cardBody {
+          padding: 0.25rem 0.1rem 1.1rem 0.1rem;
+        }
+        .cardTitle {
+          margin: 0;
+          font-size: ${isDesktop ? '1.55rem' : '1.35rem'};
+          line-height: 1.25;
+          font-weight: 900;
+          color: #111;
+          letter-spacing: 0.01em;
+        }
+        .cardSub {
+          margin: 0.65rem 0 0 0;
+          color: rgba(0, 0, 0, 0.62);
+          line-height: 1.7;
+          font-size: 0.98rem;
+        }
+
+        .cardBottom {
+          display: grid;
+          grid-template-columns: 80px 1fr;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .miniLine {
+          height: 2px;
+          background: rgba(203, 107, 82, 0.25);
+          border-radius: 999px;
+        }
+        .en {
+          font-weight: 800;
+          letter-spacing: 0.14em;
+          font-size: 0.8rem;
+          color: rgba(0, 0, 0, 0.45);
+          text-align: right;
+        }
+
+        .demoHint {
+          margin-top: 0.9rem;
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          color: rgba(0, 0, 0, 0.55);
+          font-size: 0.88rem;
+        }
+        .hintDot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: ${ACCENT};
+          opacity: 0.55;
+        }
+
+        .flow {
+          margin-top: 1rem;
+          display: grid;
+          gap: 0.75rem;
+        }
+
+        .chip {
+          display: grid;
+          grid-template-columns: 34px 1fr;
+          gap: 0.75rem;
+          align-items: start;
+          padding: 0.9rem 0.95rem;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .num {
+          width: 34px;
+          height: 34px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          color: ${ACCENT};
+          background: rgba(203, 107, 82, 0.08);
+          border: 1px solid rgba(203, 107, 82, 0.22);
+        }
+
+        .chipTitle {
+          margin: 0;
+          font-weight: 900;
+          color: rgba(0, 0, 0, 0.78);
+          font-size: 1rem;
+        }
+        .chipSub {
+          margin: 0.25rem 0 0 0;
+          color: rgba(0, 0, 0, 0.55);
+          font-size: 0.92rem;
+          line-height: 1.5;
         }
       `}</style>
-    </div>
+    </div >
   );
 }

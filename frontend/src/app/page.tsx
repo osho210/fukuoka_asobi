@@ -43,13 +43,14 @@ export default function Home() {
         <Link href={'/about'} className="section-link concept">コンセプトについて</Link>
       </div>
       <div className="section group-experience-promo">
-        <h2 className="section-title">友達と遊びを決める</h2>
-        <p className="section-subtitle">日常が愛しくなる、遊び心</p>
+        <h2 className="section-title">「次、ここじゃない？」を形にする</h2>
+        <p className="section-subtitle">いつもの遊びに、新しいスパイスを</p>
         <p className="section-content-text">
-          「どこ行く？」の前に、方向性を揃えてみませんか？<br />
-          会話が生まれるグループ体験機能を無料で提供中。
+          ガイドブックには載っていない、私たちだけの隠れ家。<br />
+          直感で選ぶプロセスが、今日を特別なものに変えてくれる。<br />
+          友達を誘って、新しい一ページをめくりに行こう。
         </p>
-        <Link href={'/group-experience'} className="section-link">友達と遊びを決める</Link>
+        <Link href={'/group-experience'} className="section-link">友達と遊びを企てる</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>

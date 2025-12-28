@@ -800,6 +800,25 @@ export type DeleteStationPayload = {
   success: Scalars['Boolean']['output'];
 };
 
+/** 方向性カード */
+export type DirectionCard = {
+  __typename?: 'DirectionCard';
+  /** アクティブ状態 */
+  active: Scalars['Boolean']['output'];
+  /** 作成日時 */
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  /** カードID */
+  id: Scalars['ID']['output'];
+  /** タグ配列 */
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  /** カードのテキスト（1〜2行の短文） */
+  text: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  /** 重み（表示される確率に影響） */
+  weight: Scalars['Int']['output'];
+};
+
 export type District = {
   __typename?: 'District';
   areas: Array<Area>;
@@ -844,6 +863,39 @@ export type EventCategory = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+/** 体験カード */
+export type ExperienceCard = {
+  __typename?: 'ExperienceCard';
+  /** アクティブ状態 */
+  active: Scalars['Boolean']['output'];
+  /** エリア */
+  area?: Maybe<Scalars['String']['output']>;
+  /** 本文 */
+  body?: Maybe<Scalars['String']['output']>;
+  /** 作成日時 */
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  /** 所要時間（分） */
+  duration?: Maybe<Scalars['Int']['output']>;
+  /** カードID */
+  id: Scalars['ID']['output'];
+  /** タグ配列 */
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  /** 時間帯（朝、昼、夜など） */
+  timeSlot?: Maybe<Scalars['String']['output']>;
+  /** タイトル */
+  title: Scalars['String']['output'];
+  /** 省略された本文 */
+  truncatedBody?: Maybe<Scalars['String']['output']>;
+  /** 更新日時 */
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+
+/** 体験カード */
+export type ExperienceCardTruncatedBodyArgs = {
+  length?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Favorite = {
@@ -1698,6 +1750,8 @@ export type Query = {
   /** 現在ログインしているユーザーを取得します */
   currentUser?: Maybe<User>;
   dashboardStats: DashboardStats;
+  /** 方向性カードをランダムに取得します */
+  directionCards: Array<DirectionCard>;
   district?: Maybe<District>;
   districts: Array<District>;
   event?: Maybe<Event>;
@@ -1706,6 +1760,8 @@ export type Query = {
   events: Array<Event>;
   /** イベントの総数 */
   eventsCount: Scalars['Int']['output'];
+  /** タグに基づいて体験カードを取得します */
+  experienceCards: Array<ExperienceCard>;
   /** 検索条件に基づいてプランを自動生成 */
   generatePlan: GeneratedPlan;
   hashtag?: Maybe<Hashtag>;
@@ -1764,6 +1820,11 @@ export type QueryCategoryArgs = {
 };
 
 
+export type QueryDirectionCardsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryDistrictArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1782,6 +1843,13 @@ export type QueryEventCategoryArgs = {
 export type QueryEventsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   upcoming?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryExperienceCardsArgs = {
+  excludeIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -3021,6 +3089,13 @@ export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }> };
 
+export type GetDirectionCardsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetDirectionCardsQuery = { __typename?: 'Query', directionCards: Array<{ __typename?: 'DirectionCard', id: string, text: string, tags?: Array<string> | null, weight: number, active: boolean }> };
+
 export type GetDistrictsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3032,6 +3107,15 @@ export type GetEventQueryVariables = Exact<{
 
 
 export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, description: string, location: string, latitude?: number | null, longitude?: number | null, startDatetime: any, endDatetime: any, recurringRule?: string | null, price?: string | null, organizer?: string | null, contactEmail?: string | null, contactPhone?: string | null, capacity?: number | null, isOnline: boolean, sourceUrl?: string | null, bannerImage?: string | null, status?: StatusEnum | null, eventCategoryId: number, createdAt: any, updatedAt: any, eventCategory: { __typename?: 'EventCategory', id: string, name: string, description?: string | null } } | null };
+
+export type GetExperienceCardsQueryVariables = Exact<{
+  tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  excludeIds?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
+}>;
+
+
+export type GetExperienceCardsQuery = { __typename?: 'Query', experienceCards: Array<{ __typename?: 'ExperienceCard', id: string, title: string, body?: string | null, truncatedBody?: string | null, tags?: Array<string> | null, area?: string | null, duration?: number | null, timeSlot?: string | null, active: boolean }> };
 
 export type GetHashtagsQueryVariables = Exact<{ [key: string]: never; }>;
 

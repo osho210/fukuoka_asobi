@@ -12,7 +12,7 @@ module Types
     end
     field :tags, [String], null: true, description: "タグ配列"
     field :area, String, null: true, description: "エリア"
-    field :duration, Integer, null: true, description: "所要時間（分）"
+    field :duration, String, null: true, description: "所要時間（例：2時間、30分など）"
     field :time_slot, String, null: true, description: "時間帯（朝、昼、夜など）"
     field :active, Boolean, null: false, description: "アクティブ状態"
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false, description: "作成日時"

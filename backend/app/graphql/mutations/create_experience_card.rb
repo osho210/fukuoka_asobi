@@ -4,9 +4,9 @@ module Mutations
   class CreateExperienceCard < BaseMutation
     argument :title, String, required: true
     argument :body, String, required: false
-    argument :tags, String, required: false
+    argument :tags, [String], required: false, description: "タグ配列"
     argument :area, String, required: false
-    argument :duration, Integer, required: false
+    argument :duration, String, required: false, description: "所要時間（例：2時間、30分など）"
     argument :time_slot, String, required: false
     argument :active, Boolean, required: false
 
