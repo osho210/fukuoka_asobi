@@ -167,8 +167,6 @@ export const fetchModelList = async (
       fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
     });
 
-    console.log('GraphQLレスポンス:', response);
-
     // レスポンスの構造を確認
     if (response.data) {
       return response.data[toCamelCase(modelRoute)];
