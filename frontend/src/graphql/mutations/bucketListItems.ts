@@ -17,8 +17,8 @@ export const CREATE_BUCKET_LIST_ITEM = gql`
 
 // バケットリスト企画更新
 export const UPDATE_BUCKET_LIST_ITEM = gql`
-  mutation UpdateBucketListItem($id: ID!, $input: UpdateBucketListItemInput!) {
-    updateBucketListItem(id: $id, input: $input) {
+  mutation UpdateBucketListItem($input: UpdateBucketListItemInput!) {
+    updateBucketListItem(input: $input) {
       bucketListItem {
         id
         title
@@ -36,8 +36,8 @@ export const UPDATE_BUCKET_LIST_ITEM = gql`
 
 // バケットリスト企画削除
 export const DELETE_BUCKET_LIST_ITEM = gql`
-  mutation DeleteBucketListItem($id: ID!) {
-    deleteBucketListItem(id: $id) {
+  mutation DeleteBucketListItem($input: DeleteBucketListItemInput!) {
+    deleteBucketListItem(input: $input) {
       success
       errors
     }
