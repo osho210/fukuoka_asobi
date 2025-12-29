@@ -40,7 +40,7 @@ import { UPDATE_NEWS, CREATE_NEWS } from '@/graphql/mutations/news';
 import { UPDATE_PLAN_DETAILS } from '@/graphql/mutations/updatePlanDetails';
 import { UPDATE_PLAY_PLAN, processPlanDetailsForInput, PlanDetailWithSpot } from '@/graphql/mutations/planPlans';
 import { CREATE_MAGAZINE, UPDATE_MAGAZINE } from '@/graphql/mutations/magazines';
-import {CREATE_BUCKET_LIST_ITEM, UPDATE_BUCKET_LIST_ITEM} from "@/graphql/mutations/bucketListItems";
+import { CREATE_BUCKET_LIST_ITEM, UPDATE_BUCKET_LIST_ITEM } from "@/graphql/mutations/bucketListItems";
 import { CREATE_LAYOUT_BUCKET, UPDATE_LAYOUT_BUCKET } from '@/graphql/mutations/layoutBuckets';
 
 import {

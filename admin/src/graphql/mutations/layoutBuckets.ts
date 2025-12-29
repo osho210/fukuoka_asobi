@@ -4,7 +4,6 @@ export const CREATE_LAYOUT_BUCKET = gql`
   mutation CreateLayoutBucket($input: CreateLayoutBucketInput!) {
     createLayoutBucket(input: $input) {
       layoutBucket {
-        id
         key
         name
         templateKey

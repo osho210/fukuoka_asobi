@@ -140,6 +140,13 @@ export function ModelDetailModal({
   const { options: priceLevelOptions } = useEnumOptions("PriceLevelEnum");
   const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
   const { options: magazineStatusOptions } = useEnumOptions("MagazineStatusEnum");
+  const { options: layoutBucketShiftOptions } = useEnumOptions("LayoutBucketShiftEnum");
+  const { options: LayoutBucketTiltEnumOptions } = useEnumOptions("LayoutBucketTiltEnum");
+  const { options: LayoutBucketDepthEnumOptions } = useEnumOptions("LayoutBucketDepthEnum");
+  const { options: WeatherEnumOptions } = useEnumOptions("WeatherEnum");
+  const { options: LayoutBucketStatusOptions } = useEnumOptions("LayoutBucketStatusEnum");
+  const { options: BucketListItemStatusEnum } = useEnumOptions("BucketListItemStatusEnum");
+
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -167,7 +174,13 @@ export function ModelDetailModal({
     PriceLevelEnum: priceLevelOptions,
     BusinessStatusTypeEnum: businessStatusOptions,
     MagazineStatusEnum: magazineStatusOptions,
-  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions, magazineStatusOptions]);
+    LayoutBucketShiftEnum: layoutBucketShiftOptions,
+    LayoutBucketTiltEnum: LayoutBucketTiltEnumOptions,
+    LayoutBucketDepthEnum: LayoutBucketDepthEnumOptions,
+    LayoutBucketStatusEnum: LayoutBucketStatusOptions,
+    WeatherEnum: WeatherEnumOptions,
+    BucketListItemStatusEnum: BucketListItemStatusEnum,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions, magazineStatusOptions, layoutBucketShiftOptions, LayoutBucketTiltEnumOptions, LayoutBucketDepthEnumOptions, WeatherEnumOptions, LayoutBucketStatusOptions, BucketListItemStatusEnum]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
@@ -316,6 +329,7 @@ export function ModelDetailModal({
   };
 
   const prepareFormData = (): ModelInput => {
+    // その他のモデルの場合の通常処理
     const input: ModelInput = {};
 
     if (newImages.length > 0) {
