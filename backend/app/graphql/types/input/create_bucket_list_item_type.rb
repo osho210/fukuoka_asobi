@@ -16,8 +16,8 @@ module Types
       argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
       argument :cost_min, Integer, required: false
       argument :cost_max, Integer, required: false
-      argument :weather, String, required: false
-      argument :status, String, required: false
+      argument :weather, Types::WeatherEnumType, required: false
+      argument :status, Types::BucketListItemStatusEnumType, required: false
       argument :published_at, GraphQL::Types::ISO8601DateTime, required: false
       argument :bucket_list_item_belongings_attributes, [Types::Input::BucketListItemBelongingInputType], required: false
       argument :bucket_list_item_references_attributes, [Types::Input::BucketListItemReferenceInputType], required: false

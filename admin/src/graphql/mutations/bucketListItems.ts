@@ -7,8 +7,21 @@ export const CREATE_BUCKET_LIST_ITEM = gql`
       bucketListItem {
         id
         title
+        content
+        areaText
+        meetingPlaceName
+        meetingPlaceAddress
+        meetingPlaceGooglePlaceId
+        startTime
+        endTime
+        costMin
+        costMax
+        meetingTime
+        stayMinutes
+        weather
         status
-        createdAt
+        publishedAt
+        layoutBucketId
       }
       errors
     }
@@ -24,10 +37,19 @@ export const UPDATE_BUCKET_LIST_ITEM = gql`
         title
         content
         areaText
+        meetingPlaceName
+        meetingPlaceAddress
+        meetingPlaceGooglePlaceId
+        startTime
+        endTime
+        costMin
+        costMax
+        meetingTime
+        stayMinutes
         weather
         status
         publishedAt
-        updatedAt
+        layoutBucketId
       }
       errors
     }

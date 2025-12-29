@@ -4,7 +4,7 @@ module Types
   class BucketListItemType < Types::BaseObject
     field :id, ID, null: false
     field :layout_bucket, Types::LayoutBucketType, null: false
-    field :layout_bucket_id, ID, null: false
+    field :layout_bucket_id, [ID], null: false
     field :title, String, null: false
     field :content, String, null: true
     field :area_text, String, null: true
@@ -24,5 +24,10 @@ module Types
     field :bucket_list_item_references, [ Types::BucketListItemReferenceType ], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    # layout_bucket_id を配列で返す resolver
+    def layout_bucket_id
+      [object.layout_bucket_id]
+    end
   end
 end

@@ -477,7 +477,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       },
     ],
     fields: [
-      { name: 'layoutBucketId', type: 'relation', required: true, relationModel: 'layout_buckets' },
+      { name: 'layoutBucketId', type: 'multiSelect', required: true, relationModel: 'layout_buckets' },
       { name: 'title', type: 'text', required: true },
       { name: 'content', type: 'textarea', required: false },
       { name: 'areaText', type: 'text', required: false },
