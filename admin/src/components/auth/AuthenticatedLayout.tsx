@@ -72,7 +72,7 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
                 <Link href="/layout_buckets" className="admin-sidebar-nav-link">レイアウトバケット</Link>
               </li>
               <li className="admin-sidebar-nav-item">
-                <Link href="/bucket_list_items" className="admin-sidebar-nav-link">バケットリスト企画</Link>
+                <Link href="/bucket_list_items" className="admin-sidebar-nav-link">福岡でやりたいこと</Link>
               </li>
             </ul>
           </nav>

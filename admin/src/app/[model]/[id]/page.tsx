@@ -56,7 +56,7 @@ const modelDisplayNames: Record<string, string> = {
   news: 'ニュース',
   station: '駅マスタ',
   magazines: '雑誌マスタ',
-  bucket_list_items: 'バケットリスト企画',
+  bucket_list_items: '福岡でやりたいこと',
 };
 
 // 各モデルのフィールド定義
