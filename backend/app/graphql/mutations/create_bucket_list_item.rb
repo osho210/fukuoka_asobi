@@ -2,7 +2,7 @@
 
 module Mutations
   class CreateBucketListItem < BaseMutation
-    argument :input, Types::Input::CreateBucketListItemInputType, required: true
+    argument :bucket_list_item, Types::Input::CreateBucketListItemType, required: true
 
     field :bucket_list_item, Types::BucketListItemType, null: true
     field :errors, [ String ], null: false

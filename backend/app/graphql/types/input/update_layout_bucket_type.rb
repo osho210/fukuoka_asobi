@@ -2,7 +2,7 @@
 
 module Types
   module Input
-    class UpdateLayoutBucketInputType < Types::BaseInputObject
+    class UpdateLayoutBucketType < Types::BaseInputObject
       argument :key, String, required: false
       argument :name, String, required: false
       argument :template_key, String, required: false

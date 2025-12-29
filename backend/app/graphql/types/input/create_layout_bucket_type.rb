@@ -2,7 +2,7 @@
 
 module Types
   module Input
-    class CreateLayoutBucketInputType < Types::BaseInputObject
+    class CreateLayoutBucketType < Types::BaseInputObject
       argument :key, String, required: true
       argument :name, String, required: true
       argument :template_key, String, required: true

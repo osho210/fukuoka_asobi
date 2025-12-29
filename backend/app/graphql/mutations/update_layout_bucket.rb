@@ -3,7 +3,7 @@
 module Mutations
   class UpdateLayoutBucket < BaseMutation
     argument :id, ID, required: true
-    argument :input, Types::Input::UpdateLayoutBucketInputType, required: true
+    argument :layout_bucket, Types::Input::UpdateLayoutBucketType, required: true
 
     field :layout_bucket, Types::LayoutBucketType, null: true
     field :errors, [ String ], null: false

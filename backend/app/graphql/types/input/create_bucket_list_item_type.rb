@@ -2,7 +2,7 @@
 
 module Types
   module Input
-    class CreateBucketListItemInputType < Types::BaseInputObject
+    class CreateBucketListItemType < Types::BaseInputObject
       argument :layout_bucket_id, ID, required: true
       argument :title, String, required: true
       argument :content, String, required: false

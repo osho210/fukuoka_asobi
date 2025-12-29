@@ -3,7 +3,7 @@
 module Mutations
   class UpdateBucketListItem < BaseMutation
     argument :id, ID, required: true
-    argument :input, Types::Input::UpdateBucketListItemInputType, required: true
+    argument :bucket_list_item, Types::Input::UpdateBucketListItemType, required: true
 
     field :bucket_list_item, Types::BucketListItemType, null: true
     field :errors, [ String ], null: false

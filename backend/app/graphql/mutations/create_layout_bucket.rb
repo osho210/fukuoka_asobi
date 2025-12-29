@@ -2,7 +2,7 @@
 
 module Mutations
   class CreateLayoutBucket < BaseMutation
-    argument :input, Types::Input::CreateLayoutBucketInputType, required: true
+    argument :input, Types::Input::CreateLayoutBucketType, required: true
 
     field :layout_bucket, Types::LayoutBucketType, null: true
     field :errors, [ String ], null: false
