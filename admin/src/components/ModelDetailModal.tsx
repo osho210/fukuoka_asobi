@@ -9,6 +9,7 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
+import { TimePicker } from '@/components/forms/TimePicker';
 import { FileUpload } from '@/components/forms/FileUpload';
 import ImageUpload from '@/components/forms/ImageUpload';
 import SingleImageUpload from '@/components/forms/SingleImageUpload';
@@ -891,6 +892,20 @@ export function ModelDetailModal({
               case 'datetime':
                 return (
                   <DateTimePicker
+                    key={fieldName}
+                    id={fieldName}
+                    name={fieldName}
+                    label={fieldLabel}
+                    value={value as string || ''}
+                    onChange={(val) => handleChange(fieldName, val)}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
+                );
+              case 'time':
+                return (
+                  <TimePicker
                     key={fieldName}
                     id={fieldName}
                     name={fieldName}

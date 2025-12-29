@@ -13,9 +13,9 @@ class CreateBucketListItems < ActiveRecord::Migration[8.0]
       t.string :meeting_place_google_place_id, limit: 128
 
       t.integer :stay_minutes, comment: '滞在時間（分）'
-      t.datetime :meeting_time
-      t.datetime :start_time
-      t.datetime :end_time
+      t.time :meeting_time, comment: '集合時刻'
+      t.time :start_time, comment: '開始時刻'
+      t.time :end_time, comment: '終了時刻'
 
       t.integer :cost_min, comment: '最小費用（円）'
       t.integer :cost_max, comment: '最大費用（円）'

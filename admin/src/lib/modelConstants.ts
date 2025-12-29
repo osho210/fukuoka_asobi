@@ -63,7 +63,7 @@ export const modelDisplayNames: Record<string, string> = {
   eventCategories: 'イベントカテゴリー',
   menuCategories: 'メニューカテゴリー',
   layout_buckets: 'レイアウトバケット',
-  bucket_list_items: 'バケットリスト企画',
+  bucket_list_items: '福岡でやりたいこと',
 };
 
 // 各モデルの設定を統合
@@ -485,9 +485,9 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'meetingPlaceAddress', type: 'text', required: false },
       { name: 'meetingPlaceGooglePlaceId', type: 'text', required: false },
       { name: 'stayMinutes', type: 'number', required: false },
-      { name: 'meetingTime', type: 'datetime', required: false },
-      { name: 'startTime', type: 'datetime', required: false },
-      { name: 'endTime', type: 'datetime', required: false },
+      { name: 'meetingTime', type: 'time', required: false },
+      { name: 'startTime', type: 'time', required: false },
+      { name: 'endTime', type: 'time', required: false },
       { name: 'costMin', type: 'number', required: false },
       { name: 'costMax', type: 'number', required: false },
       { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
