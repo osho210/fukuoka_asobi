@@ -7,10 +7,10 @@ module Types
     field :name, String, null: false
     field :template_key, String, null: false
     field :theme_key, String, null: false
-    field :shift, String, null: false
-    field :tilt, String, null: false
-    field :depth, String, null: false
-    field :status, String, null: false
+    field :shift, Types::LayoutBucketShiftEnumType, null: false
+    field :tilt, Types::LayoutBucketTiltEnumType, null: false
+    field :depth, Types::LayoutBucketDepthEnumType, null: false
+    field :status, Types::LayoutBucketStatusEnumType, null: false
     field :sort_order, Integer, null: false
     field :bucket_list_items, [ Types::BucketListItemType ], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

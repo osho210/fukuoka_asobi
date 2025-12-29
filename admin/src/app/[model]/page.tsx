@@ -157,6 +157,8 @@ export default function ModelListPage() {
     setFilters,
   } = useModelData(modelRoute, pageSize);
 
+  console.log('Fetched data:', data);
+  console.log(modelConfigs[modelRoute],)
   const modelConfig = useMemo(() => modelConfigs[modelRoute], [modelRoute]);
   const columns = useMemo(() => modelConfig?.columns || [], [modelConfig]);
   const filterFields = useMemo(() => modelConfig?.filters || [], [modelConfig]);

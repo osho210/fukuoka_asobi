@@ -1226,18 +1226,58 @@ export type LayoutBucket = {
   __typename?: 'LayoutBucket';
   bucketListItems: Array<BucketListItem>;
   createdAt: Scalars['ISO8601DateTime']['output'];
-  depth: Scalars['String']['output'];
+  depth: LayoutBucketDepthEnum;
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  shift: Scalars['String']['output'];
+  shift: LayoutBucketShiftEnum;
   sortOrder: Scalars['Int']['output'];
-  status: Scalars['String']['output'];
+  status: LayoutBucketStatusEnum;
   templateKey: Scalars['String']['output'];
   themeKey: Scalars['String']['output'];
-  tilt: Scalars['String']['output'];
+  tilt: LayoutBucketTiltEnum;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+/** レイアウトバケットの奥行き表現 */
+export enum LayoutBucketDepthEnum {
+  /** フラット */
+  Flat = 'FLAT',
+  /** 浮かせ */
+  Lift = 'LIFT'
+}
+
+/** レイアウトバケットのズレ方向 */
+export enum LayoutBucketShiftEnum {
+  /** 下にズレ */
+  Down = 'DOWN',
+  /** 左にズレ */
+  Left = 'LEFT',
+  /** ズレなし */
+  Neutral = 'NEUTRAL',
+  /** 右にズレ */
+  Right = 'RIGHT',
+  /** 上にズレ */
+  Up = 'UP'
+}
+
+/** レイアウトバケットステータス */
+export enum LayoutBucketStatusEnum {
+  /** 有効 */
+  Active = 'ACTIVE',
+  /** 無効 */
+  Inactive = 'INACTIVE'
+}
+
+/** レイアウトバケットの傾き */
+export enum LayoutBucketTiltEnum {
+  /** 反時計回り */
+  Ccw = 'CCW',
+  /** 時計回り */
+  Cw = 'CW',
+  /** 傾きなし */
+  None = 'NONE'
+}
 
 /** 位置情報 */
 export type Location = {
@@ -3344,6 +3384,20 @@ export type DeleteAreaMutationVariables = Exact<{
 
 export type DeleteAreaMutation = { __typename?: 'Mutation', deleteArea?: { __typename?: 'DeleteAreaPayload', success: boolean, errors: Array<string> } | null };
 
+export type CreateBucketListItemMutationVariables = Exact<{
+  input: CreateBucketListItemInput;
+}>;
+
+
+export type CreateBucketListItemMutation = { __typename?: 'Mutation', createBucketListItem?: { __typename?: 'CreateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, status: string, createdAt: any } | null } | null };
+
+export type UpdateBucketListItemMutationVariables = Exact<{
+  input: UpdateBucketListItemInput;
+}>;
+
+
+export type UpdateBucketListItemMutation = { __typename?: 'Mutation', updateBucketListItem?: { __typename?: 'UpdateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, weather: string, status: string, publishedAt?: any | null, updatedAt: any } | null } | null };
+
 export type CreateCategoryMutationVariables = Exact<{
   input: CreateCategoryInput;
 }>;
@@ -3420,6 +3474,20 @@ export type DeleteHashtagMutationVariables = Exact<{
 
 
 export type DeleteHashtagMutation = { __typename?: 'Mutation', deleteHashtag?: { __typename?: 'DeleteHashtagPayload', success: boolean, errors: Array<string> } | null };
+
+export type CreateLayoutBucketMutationVariables = Exact<{
+  input: CreateLayoutBucketInput;
+}>;
+
+
+export type CreateLayoutBucketMutation = { __typename?: 'Mutation', createLayoutBucket?: { __typename?: 'CreateLayoutBucketPayload', errors: Array<string>, layoutBucket?: { __typename?: 'LayoutBucket', id: string, key: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum, status: LayoutBucketStatusEnum, sortOrder: number, createdAt: any } | null } | null };
+
+export type UpdateLayoutBucketMutationVariables = Exact<{
+  input: UpdateLayoutBucketInput;
+}>;
+
+
+export type UpdateLayoutBucketMutation = { __typename?: 'Mutation', updateLayoutBucket?: { __typename?: 'UpdateLayoutBucketPayload', errors: Array<string>, layoutBucket?: { __typename?: 'LayoutBucket', id: string, key: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum, status: LayoutBucketStatusEnum, sortOrder: number, updatedAt: any } | null } | null };
 
 export type CreateMagazineMutationVariables = Exact<{
   input: CreateMagazineInput;
@@ -3711,6 +3779,11 @@ export type GetAreaQueryVariables = Exact<{
 
 export type GetAreaQuery = { __typename?: 'Query', area?: { __typename?: 'Area', id: string, areaName: string, createdAt: any, updatedAt: any, district: { __typename?: 'District', id: string, districtName: string } } | null };
 
+export type GetBucketListItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, layoutBucketId: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string }> }> };
+
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3754,6 +3827,13 @@ export type GetHashtagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetHashtagsQuery = { __typename?: 'Query', hashtags: Array<{ __typename?: 'Hashtag', id: string, hashtagName: string }> };
+
+export type GetLayoutBucketsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetLayoutBucketsQuery = { __typename?: 'Query', layoutBuckets: Array<{ __typename?: 'LayoutBucket', id: string, key: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum, status: LayoutBucketStatusEnum, sortOrder: number, createdAt: any, updatedAt: any, bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, status: string }> }> };
 
 export type GetMagazinesQueryVariables = Exact<{ [key: string]: never; }>;
 

@@ -1230,18 +1230,58 @@ export type LayoutBucket = {
   __typename?: 'LayoutBucket';
   bucketListItems: Array<BucketListItem>;
   createdAt: Scalars['ISO8601DateTime']['output'];
-  depth: Scalars['String']['output'];
+  depth: LayoutBucketDepthEnum;
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  shift: Scalars['String']['output'];
+  shift: LayoutBucketShiftEnum;
   sortOrder: Scalars['Int']['output'];
-  status: Scalars['String']['output'];
+  status: LayoutBucketStatusEnum;
   templateKey: Scalars['String']['output'];
   themeKey: Scalars['String']['output'];
-  tilt: Scalars['String']['output'];
+  tilt: LayoutBucketTiltEnum;
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+/** レイアウトバケットの奥行き表現 */
+export enum LayoutBucketDepthEnum {
+  /** フラット */
+  Flat = 'FLAT',
+  /** 浮かせ */
+  Lift = 'LIFT'
+}
+
+/** レイアウトバケットのズレ方向 */
+export enum LayoutBucketShiftEnum {
+  /** 下にズレ */
+  Down = 'DOWN',
+  /** 左にズレ */
+  Left = 'LEFT',
+  /** ズレなし */
+  Neutral = 'NEUTRAL',
+  /** 右にズレ */
+  Right = 'RIGHT',
+  /** 上にズレ */
+  Up = 'UP'
+}
+
+/** レイアウトバケットステータス */
+export enum LayoutBucketStatusEnum {
+  /** 有効 */
+  Active = 'ACTIVE',
+  /** 無効 */
+  Inactive = 'INACTIVE'
+}
+
+/** レイアウトバケットの傾き */
+export enum LayoutBucketTiltEnum {
+  /** 反時計回り */
+  Ccw = 'CCW',
+  /** 時計回り */
+  Cw = 'CW',
+  /** 傾きなし */
+  None = 'NONE'
+}
 
 /** 位置情報 */
 export type Location = {
@@ -3307,13 +3347,6 @@ export type UpdateBucketListItemMutationVariables = Exact<{
 
 export type UpdateBucketListItemMutation = { __typename?: 'Mutation', updateBucketListItem?: { __typename?: 'UpdateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, weather: string, status: string, publishedAt?: any | null, updatedAt: any } | null } | null };
 
-export type DeleteBucketListItemMutationVariables = Exact<{
-  input: DeleteBucketListItemInput;
-}>;
-
-
-export type DeleteBucketListItemMutation = { __typename?: 'Mutation', deleteBucketListItem?: { __typename?: 'DeleteBucketListItemPayload', success: boolean, errors: Array<string> } | null };
-
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3365,14 +3398,14 @@ export type GetBucketListItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: string, tilt: string, depth: string } }> };
+export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum } }> };
 
 export type GetBucketListItemQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBucketListItemQuery = { __typename?: 'Query', bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: string, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: string, tilt: string, depth: string }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, note?: string | null, sortOrder: number }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string, title?: string | null, url: string, referenceType: string, sortOrder: number }> } | null };
+export type GetBucketListItemQuery = { __typename?: 'Query', bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: string, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, note?: string | null, sortOrder: number }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string, title?: string | null, url: string, referenceType: string, sortOrder: number }> } | null };
 
 export type GetPublishedBucketListItemsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -3381,7 +3414,7 @@ export type GetPublishedBucketListItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetPublishedBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, weather: string, costMin?: number | null, costMax?: number | null, publishedAt?: any | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: string, tilt: string, depth: string }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, sortOrder: number }> }> };
+export type GetPublishedBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, weather: string, costMin?: number | null, costMax?: number | null, publishedAt?: any | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, sortOrder: number }> }> };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3478,7 +3511,6 @@ export const GetRecommendedEventsDocument = {"kind":"Document","definitions":[{"
 export const GetRecommendedSpotsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRecommendedSpots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spots"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"spotName"}},{"kind":"Field","name":{"kind":"Name","value":"spotType"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"reviewRating"}},{"kind":"Field","name":{"kind":"Name","value":"reviewCount"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"district"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"districtName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetRecommendedSpotsQuery, GetRecommendedSpotsQueryVariables>;
 export const CreateBucketListItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBucketListItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateBucketListItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBucketListItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucketListItem"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"}}]}}]}}]} as unknown as DocumentNode<CreateBucketListItemMutation, CreateBucketListItemMutationVariables>;
 export const UpdateBucketListItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBucketListItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateBucketListItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBucketListItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucketListItem"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"areaText"}},{"kind":"Field","name":{"kind":"Name","value":"weather"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"}}]}}]}}]} as unknown as DocumentNode<UpdateBucketListItemMutation, UpdateBucketListItemMutationVariables>;
-export const DeleteBucketListItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteBucketListItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteBucketListItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteBucketListItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"errors"}}]}}]}}]} as unknown as DocumentNode<DeleteBucketListItemMutation, DeleteBucketListItemMutationVariables>;
 export const GetCurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"profileImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"instagramUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isPaidMember"}},{"kind":"Field","name":{"kind":"Name","value":"paidStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"paidEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]} as unknown as DocumentNode<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
 export const GetUserPlayPlansDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserPlayPlans"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPlayPlans"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"planName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"totalBudget"}}]}}]}}]} as unknown as DocumentNode<GetUserPlayPlansQuery, GetUserPlayPlansQueryVariables>;
 export const UpdateUserProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUserProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"instagramUrl"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bio"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profileImageUrl"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"avatar"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUserProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"instagramUrl"},"value":{"kind":"Variable","name":{"kind":"Name","value":"instagramUrl"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"bio"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bio"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"profileImageUrl"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profileImageUrl"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"avatar"},"value":{"kind":"Variable","name":{"kind":"Name","value":"avatar"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"instagramUrl"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"profileImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"}}]}}]}}]} as unknown as DocumentNode<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;

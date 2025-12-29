@@ -22,6 +22,9 @@ import { GET_STATIONS } from '@/graphql/queries/getStations';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { FilterField } from './modelConstants';
 import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
+import { GET_BUCKET_LIST_ITEMS } from '@/graphql/queries/getBucketListItems';
+import { GET_LAYOUT_BUCKETS } from '@/graphql/queries/getLayoutBuckets';
+
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -37,6 +40,8 @@ import { UPDATE_NEWS, CREATE_NEWS } from '@/graphql/mutations/news';
 import { UPDATE_PLAN_DETAILS } from '@/graphql/mutations/updatePlanDetails';
 import { UPDATE_PLAY_PLAN, processPlanDetailsForInput, PlanDetailWithSpot } from '@/graphql/mutations/planPlans';
 import { CREATE_MAGAZINE, UPDATE_MAGAZINE } from '@/graphql/mutations/magazines';
+import {CREATE_BUCKET_LIST_ITEM, UPDATE_BUCKET_LIST_ITEM} from "@/graphql/mutations/bucketListItems";
+import { CREATE_LAYOUT_BUCKET, UPDATE_LAYOUT_BUCKET } from '@/graphql/mutations/layoutBuckets';
 
 import {
   CREATE_SPOT,
@@ -81,7 +86,9 @@ const listQueries: Record<string, DocumentNode> = {
   news: GET_NEWS,
   stations: GET_STATIONS,
   menuCategories: GET_MENU_CATEGORIES,
-  magazines: GET_MAGAZINES
+  magazines: GET_MAGAZINES,
+  bucket_list_items: GET_BUCKET_LIST_ITEMS,
+  layout_buckets: GET_LAYOUT_BUCKETS
 };
 
 // ミューテーションマッピング
@@ -98,6 +105,8 @@ const createMutations: Record<string, DocumentNode> = {
   events: CREATE_EVENT,
   news: CREATE_NEWS,
   magazines: CREATE_MAGAZINE,
+  bucket_list_items: CREATE_BUCKET_LIST_ITEM,
+  layout_buckets: CREATE_LAYOUT_BUCKET,
 };
 
 const updateMutations: Record<string, DocumentNode> = {
@@ -115,6 +124,8 @@ const updateMutations: Record<string, DocumentNode> = {
   news: UPDATE_NEWS,
   play_plans: UPDATE_PLAY_PLAN,
   magazines: UPDATE_MAGAZINE,
+  bucket_list_items: UPDATE_BUCKET_LIST_ITEM,
+  layout_buckets: UPDATE_LAYOUT_BUCKET,
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
@@ -127,7 +138,7 @@ const deleteMutations: Record<string, DocumentNode> = {
   recommended_fors: DELETE_RECOMMENDED_FOR,
   spot_ambiances: DELETE_SPOT_AMBIANCE,
   spots: DELETE_SPOT,
-  stations: DELETE_STATION
+  stations: DELETE_STATION,
 };
 
 /**

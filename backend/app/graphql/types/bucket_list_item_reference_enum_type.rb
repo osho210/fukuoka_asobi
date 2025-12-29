@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Types
-  class BucketListItemReferenceTypeEnumType < Types::BaseEnum
+  class BucketListItemReferenceEnumType < Types::BaseEnum
     description "参考リンク種別"
     value "OFFICIAL", value: "official", description: "公式サイト"
     value "MAP", value: "map", description: "地図"

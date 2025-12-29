@@ -33,13 +33,3 @@ export const UPDATE_BUCKET_LIST_ITEM = gql`
     }
   }
 `;
-
-// バケットリスト企画削除
-export const DELETE_BUCKET_LIST_ITEM = gql`
-  mutation DeleteBucketListItem($input: DeleteBucketListItemInput!) {
-    deleteBucketListItem(input: $input) {
-      success
-      errors
-    }
-  }
-`;
