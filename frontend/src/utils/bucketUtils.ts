@@ -64,3 +64,45 @@ export const renderTextWithLineBreaks = (
 export const isSpineBookTemplate = (templateKey: string): boolean => {
   return templateKey.includes('spine_book');
 };
+
+/**
+ * 場所の名前からGoogle Maps URLを生成
+ * 例: "福岡市鮮魚市場市場会館" => "https://www.google.com/maps/search/..."
+ */
+export const generateGoogleMapsUrl = (placeName: string): string => {
+  const encodedPlace = encodeURIComponent(placeName);
+  return `https://www.google.com/maps/search/${encodedPlace}`;
+};
+
+/**
+ * Google Maps URLをクリップボードにコピー
+ */
+export const copyGoogleMapsUrlToClipboard = async (placeName: string): Promise<boolean> => {
+  try {
+    const url = generateGoogleMapsUrl(placeName);
+    await navigator.clipboard.writeText(url);
+    return true;
+  } catch (error) {
+    console.error('クリップボードへのコピーに失敗しました:', error);
+    return false;
+  }
+};
+
+/**
+ * spine_book テンプレートから色情報を抽出し、base テンプレートの画像パスを生成
+ * 例: "spine_book_pink" → "base_pink.png"
+ * 例: "base_pink" → "base_pink.png"
+ */
+export const getBaseImagePath = (templateKey: string): string => {
+  // spine_book_* の形式から色情報を抽出
+  if (templateKey.startsWith('spine_book_')) {
+    const color = templateKey.replace('spine_book_', '');
+    return `base_${color}.png`;
+  }
+  // base_* の形式はそのまま使用
+  if (templateKey.startsWith('base_')) {
+    return `${templateKey}.png`;
+  }
+  // デフォルトフォールバック
+  return `${templateKey}.png`;
+};

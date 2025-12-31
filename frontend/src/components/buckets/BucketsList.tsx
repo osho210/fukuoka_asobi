@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useBucketListItems } from './useBuckets';
 import { BucketListItem } from '@/__generated__/graphql';
-import Link from 'next/link';
+import BucketDetailModal from './BucketDetailModal';
 import Image from 'next/image';
 import { formatPublishedDate, renderTextWithLineBreaks, isSpineBookTemplate } from '@/utils/bucketUtils';
 import '@/styles/BucketsPage.css';
@@ -18,6 +18,27 @@ interface BucketsListProps {
  */
 export const BucketsList: React.FC<BucketsListProps> = ({ onSelectItem }) => {
     const { bucketListItems, loading, error } = useBucketListItems();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBucketId, setSelectedBucketId] = useState<string | null>(null);
+    const [selectedBucket, setSelectedBucket] = useState<BucketListItem | null>(null);
+
+    // バケットアイテムをクリック時の処理
+    const handleBucketClick = (item: BucketListItem) => {
+
+        console.log(item);
+        setSelectedBucket(item);
+        setSelectedBucketId(item.id);
+        setIsModalOpen(true);
+        onSelectItem?.(item);
+    };
+
+
+    // モーダルを閉じる処理
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedBucketId(null);
+        setSelectedBucket(null);
+    };
 
     // ローディング中の表示
     if (loading) {
@@ -47,19 +68,26 @@ export const BucketsList: React.FC<BucketsListProps> = ({ onSelectItem }) => {
     }
 
     return (
-        <div className="buckets-list-container">
-            <div className="buckets-grid">
-                {bucketListItems.map((item) => {
-                    // テンプレートタイプに応じた条件分岐
-                    const isSpineBook = isSpineBookTemplate(item.layoutBucket.templateKey);
+        <>
+            <div className="buckets-list-container">
+                <div className="buckets-grid">
+                    {bucketListItems.map((item) => {
+                        // テンプレートタイプに応じた条件分岐
+                        const isSpineBook = isSpineBookTemplate(item.layoutBucket.templateKey);
 
-                    return (
-                        <div
-                            key={item.id}
-                            className="bucket-card"
-                            onClick={() => onSelectItem?.(item as BucketListItem)}
-                        >
-                            <Link href={`/buckets/${item.id}`}>
+                        return (
+                            <div
+                                key={item.id}
+                                className="bucket-card"
+                                onClick={() => handleBucketClick(item as BucketListItem)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        handleBucketClick(item as BucketListItem);
+                                    }
+                                }}
+                            >
                                 <div className="bucket-card-content">
                                     <div className={isSpineBook ? 'spine-book' : 'bucket-image-box'}>
                                         <Image
@@ -99,12 +127,20 @@ export const BucketsList: React.FC<BucketsListProps> = ({ onSelectItem }) => {
                                         )}
                                     </div>
                                 </div>
-                            </Link>
-                        </div>
-                    );
-                })}
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-        </div>
+
+            {/* バケット詳細モーダル */}
+            <BucketDetailModal
+                isOpen={isModalOpen}
+                bucketListItem={selectedBucket}
+                id={selectedBucketId || undefined}
+                onClose={handleCloseModal}
+            />
+        </>
     );
 };
 
