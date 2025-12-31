@@ -7,7 +7,6 @@ import {
 import {
   CREATE_BUCKET_LIST_ITEM,
   UPDATE_BUCKET_LIST_ITEM,
-  DELETE_BUCKET_LIST_ITEM,
 } from '@/graphql/mutations/bucketListItems';
 
 /**
@@ -97,24 +96,6 @@ export function useUpdateBucketListItem() {
 
   return {
     update: (id: string, input: Record<string, unknown>) => mutate({ variables: { id, input } }),
-    loading,
-    error,
-  };
-}
-
-/**
- * バケットリスト企画を削除するミューテーション
- */
-export function useDeleteBucketListItem() {
-  const [mutate, { loading, error }] = useMutation(
-    DELETE_BUCKET_LIST_ITEM,
-    {
-      refetchQueries: [{ query: GET_BUCKET_LIST_ITEMS }],
-    }
-  );
-
-  return {
-    delete: (id: string) => mutate({ variables: { id } }),
     loading,
     error,
   };
