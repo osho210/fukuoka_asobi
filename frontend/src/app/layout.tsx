@@ -57,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             s.parentNode.insertBefore(tk,s)
           })(document);
         `}</Script>
+        <link href="https://db.onlinewebfonts.com/c/aac28a8d3a17309e7f5bd19aadcd7915?family=Post+No+Bills+Colombo+ExtraBold" rel="stylesheet"></link>
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>

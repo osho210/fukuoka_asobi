@@ -56,6 +56,7 @@ const modelDisplayNames: Record<string, string> = {
   news: 'ニュース',
   station: '駅マスタ',
   magazines: '雑誌マスタ',
+  bucket_list_items: '福岡でやりたいこと',
 };
 
 // 各モデルのフィールド定義
@@ -182,6 +183,24 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'description', type: 'textarea' },
     { name: 'active', type: 'boolean' },
   ],
+  bucket_list_items: [
+    { name: 'layoutBucketId', type: 'multirelation', modelName: 'layout_buckets', labelField: 'name', required: true },
+    { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
+    { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
+    { name: 'title', type: 'text', required: true },
+    { name: 'content', type: 'textarea' },
+    { name: 'areaText', type: 'text' },
+    { name: 'meetingPlaceName', type: 'text' },
+    { name: 'meetingPlaceAddress', type: 'text' },
+    { name: 'meetingPlaceGooglePlaceId', type: 'text' },
+    { name: 'stayMinutes', type: 'number' },
+    { name: 'meetingTime', type: 'datetime' },
+    { name: 'startTime', type: 'datetime' },
+    { name: 'endTime', type: 'datetime' },
+    { name: 'costMin', type: 'number' },
+    { name: 'costMax', type: 'number' },
+    { name: 'publishedAt', type: 'datetime' },
+  ],
 };
 
 // フィールド名の日本語表示
@@ -267,6 +286,24 @@ const fieldDisplayNames: Record<string, string> = {
   priceRangeStartAmount: '価格下限',
   priceRangeEndAmount: '価格上限',
   images: '画像',
+
+  // バケットリスト企画
+  layoutBucketId: 'レイアウトバケット',
+  title: 'タイトル',
+  content: 'コンテンツ',
+  areaText: 'エリア',
+  meetingPlaceName: 'ミーティング場所名',
+  meetingPlaceAddress: 'ミーティング場所住所',
+  meetingPlaceGooglePlaceId: 'ミーティング場所Google Place ID',
+  stayMinutes: '滞在時間（分）',
+  meetingTime: 'ミーティング時刻',
+  startTime: '開始時刻',
+  endTime: '終了時刻',
+  costMin: '最小費用',
+  costMax: '最大費用',
+  weather: '天気',
+  status: 'ステータス',
+  publishedAt: '公開日時',
 };
 
 export default function ModelDetailPage() {
@@ -282,6 +319,9 @@ export default function ModelDetailPage() {
   const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
   // const { options: statusOptions } = useEnumOptions("StatusEnum");
   const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
+  const { options: weatherOptions } = useEnumOptions("WeatherEnum");
+  const { options: statusOptions } = useEnumOptions("StatusEnum");
+  const { options: bucketListItemStatusOptions } = useEnumOptions("BucketListItemStatusEnum");
 
   const [getNearestStation, { loading: nearestStationLoading, error: nearestStationError }] = useLazyQuery<GetNearestStationQuery, GetNearestStationQueryVariables>(GET_NEAREST_STATION);
 
@@ -291,6 +331,8 @@ export default function ModelDetailPage() {
     businessStatus: businessStatusOptions,
     priceLevel: priceLevelOptions,
     spotType: spotTypeOptions,
+    weather: weatherOptions,
+    status: bucketListItemStatusOptions.length > 0 ? bucketListItemStatusOptions : statusOptions,
   };
 
   const [formData, setFormData] = useState<ModelData | null>(null);
@@ -360,8 +402,63 @@ export default function ModelDetailPage() {
       };
       setFormData(initialData);
       setIsLoading(false);
+    } else {
+      // 編集時のデータ取得
+      const fetchData = async () => {
+        try {
+          const { fetchModelList } = await import('@/lib/modelGraphQL');
+          const items = await fetchModelList(modelRoute);
+          const item = items.find((i: { id: string }) => i.id === id);
+
+          if (item) {
+            const initialData: ModelData = {
+              id: item.id,
+              ...fields.reduce((acc, field) => {
+                const fieldName = field.name;
+                const value = item[fieldName];
+
+                switch (field.type) {
+                  case 'relation':
+                  case 'multirelation':
+                    // 配列で返されるフィールドの処理
+                    if (Array.isArray(value)) {
+                      acc[fieldName] = value.map((v: Record<string, unknown>) => ({
+                        id: String(v.id),
+                        ...v,
+                      }));
+                    } else if (value && typeof value === 'object') {
+                      // 単一オブジェクトの場合は配列にラップ
+                      const objValue = value as Record<string, unknown>;
+                      acc[fieldName] = [{
+                        id: String(objValue.id),
+                        ...objValue,
+                      }];
+                    } else {
+                      acc[fieldName] = [];
+                    }
+                    break;
+                  case 'boolean':
+                    acc[fieldName] = Boolean(value);
+                    break;
+                  default:
+                    acc[fieldName] = value || '';
+                }
+                return acc;
+              }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[]>)
+            };
+            setFormData(initialData);
+          }
+        } catch (err) {
+          console.error('データの読み込みに失敗しました:', err);
+          setError('データの読み込みに失敗しました');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
     }
-  }, [isNew, fields]);
+  }, [isNew, id, modelRoute, fields]);
 
   const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[] | EditableOpeningHour[]) => {
     if (!formData) return;

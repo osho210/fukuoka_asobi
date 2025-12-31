@@ -40,7 +40,7 @@ export default function Home() {
           「今までの自分なら選ばなかった」そんなワクワクする瞬間をお届けます。
           今日は昨日よりも少しだけディープで、美しい福岡へ。
         </p>
-        <Link href={'/about'} className="section-link concept">この街で、やりたい100のこと。</Link>
+        <Link href={'/buckets'} className="section-link concept">この街で、やりたい100のこと。</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
