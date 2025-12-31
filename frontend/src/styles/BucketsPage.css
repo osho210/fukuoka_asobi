@@ -1,0 +1,125 @@
+.buckets-page-kv-content {
+    display: flex;
+}
+
+/* 奇数番目の画像要素にスタイルを適用 */
+.buckets-page-kv-content>img:nth-child(odd) {
+    transform: scale(1.05);
+    margin-top: 20px;
+}
+
+.buckets-page-content {
+    margin-top: 50px;
+}
+
+.buckets-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+}
+
+.bucket-card-content {
+    position: relative;
+}
+
+.bucket-image {
+    object-fit: cover;
+}
+
+.bucket-image-box {
+    position: relative;
+    width: 112px;
+    height: 168px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+/* 背表紙テンプレート用の幅調整 */
+.spine-book {
+    width: 35px;
+    min-width: 35px;
+    overflow: visible;
+    position: relative;
+    margin-top: 28px;
+}
+
+.bucket-image-title {
+    color: #000;
+    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    position: absolute;
+    top: 34px;
+    left: 12px;
+    line-height: 20px;
+    font-size: 10px;
+}
+
+.bucket-image-content {
+    color: #cb6b52;
+    width: 90%;
+    font-size: 5px;
+    position: absolute;
+    top: 114px;
+    left: 5px;
+    right: 5px;
+}
+
+/* 背表紙テンプレート用スタイル */
+.bucket-spine-book-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 12px;
+    gap: 8px;
+}
+
+.bucket-spine-book-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    color: #000;
+    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+    word-break: break-word;
+    text-align: center;
+    line-height: 1.3;
+    max-height: 70%;
+    overflow: hidden;
+    position: absolute;
+    top: 25px;
+}
+
+/* 背表紙テンプレート用の日付表示 */
+.bucket-spine-book-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 100%;
+    position: absolute;
+    bottom: 22px;
+    left: 8px;
+}
+
+.bucket-spine-book-month {
+    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    line-height: 1;
+}
+
+.bucket-spine-book-day {
+    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    line-height: 1;
+}
