@@ -46,7 +46,7 @@
 
 .bucket-image-title {
     color: #000;
-    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-family: "Post No Bills Colombo ExtraBold";
     font-weight: bold;
     position: absolute;
     top: 34px;
@@ -81,7 +81,7 @@
     writing-mode: vertical-rl;
     text-orientation: mixed;
     color: #000;
-    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-family: "Post No Bills Colombo ExtraBold";
     font-size: 9px;
     font-weight: bold;
     word-break: break-word;
@@ -107,7 +107,7 @@
 }
 
 .bucket-spine-book-month {
-    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-family: "Post No Bills Colombo ExtraBold";
     font-size: 7px;
     font-weight: bold;
     color: #000;
@@ -116,7 +116,7 @@
 }
 
 .bucket-spine-book-day {
-    font-family: 'Post No Bills Colombo ExtraBold', Arial, Helvetica, sans-serif;
+    font-family: "Post No Bills Colombo ExtraBold";
     font-size: 11px;
     font-weight: bold;
     color: #000;
