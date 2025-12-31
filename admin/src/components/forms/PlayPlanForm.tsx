@@ -273,8 +273,9 @@ export default function PlayPlanForm({
       if (error) {
         return { ...prev, [field]: error };
       } else {
-        const { [field]: _, ...rest } = prev;
-        return rest;
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
       }
     });
   };
