@@ -348,15 +348,17 @@ export default function MenuDetailPage() {
                   ? existingImageUrls.map((url) => ({ id: url, url }))
                   : [];
                 
+                const handleDeleteImage = () => {
+                  // Handle image deletion if needed
+                };
+                
                 return (
                   <div key={field.name} className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
                     <ImageUpload
                       onImagesChange={setNewImages}
                       existingImages={existingImages}
-                      onDeleteImage={(url: string) => {
-                        // Handle image deletion if needed
-                      }}
+                      onDeleteImage={handleDeleteImage}
                     />
                   </div>
                 );

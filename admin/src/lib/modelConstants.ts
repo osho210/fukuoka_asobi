@@ -455,6 +455,10 @@ export const modelConfigs: Record<string, ModelConfig> = {
         accessorKey: 'active',
         sortable: true,
         cell: (item) => item.active ? '✓' : '✗'
+      }
+    ],
+    fields: [],
+  },
   layout_buckets: {
     columns: [
       { header: 'ID', accessorKey: 'id', sortable: true },

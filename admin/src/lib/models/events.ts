@@ -1,7 +1,6 @@
 /**
  * イベントモデルの設定
  */
-import React from 'react';
 import { ModelConfig, ModelData } from '../modelConfig';
 import { formatDateTimeToJapanese } from '@/lib/utils';
 

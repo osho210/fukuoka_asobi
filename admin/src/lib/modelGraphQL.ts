@@ -92,7 +92,7 @@ const listQueries: Record<string, DocumentNode> = {
   menuCategories: GET_MENU_CATEGORIES,
   magazines: GET_MAGAZINES,
   direction_cards: GET_ALL_DIRECTION_CARDS,
-  experience_cards: GET_ALL_EXPERIENCE_CARDS
+  experience_cards: GET_ALL_EXPERIENCE_CARDS,
   bucket_list_items: GET_BUCKET_LIST_ITEMS,
   layout_buckets: GET_LAYOUT_BUCKETS
 };
@@ -112,7 +112,7 @@ const createMutations: Record<string, DocumentNode> = {
   news: CREATE_NEWS,
   magazines: CREATE_MAGAZINE,
   direction_cards: CREATE_DIRECTION_CARD,
-  experience_cards: CREATE_EXPERIENCE_CARD
+  experience_cards: CREATE_EXPERIENCE_CARD,
   bucket_list_items: CREATE_BUCKET_LIST_ITEM,
   layout_buckets: CREATE_LAYOUT_BUCKET,
 };
@@ -133,7 +133,7 @@ const updateMutations: Record<string, DocumentNode> = {
   play_plans: UPDATE_PLAY_PLAN,
   magazines: UPDATE_MAGAZINE,
   direction_cards: UPDATE_DIRECTION_CARD,
-  experience_cards: UPDATE_EXPERIENCE_CARD
+  experience_cards: UPDATE_EXPERIENCE_CARD,
   bucket_list_items: UPDATE_BUCKET_LIST_ITEM,
   layout_buckets: UPDATE_LAYOUT_BUCKET,
 };
