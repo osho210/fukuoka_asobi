@@ -332,6 +332,24 @@ export function ModelDetailModal({
         const fieldName = field.name;
         const value = formData?.[fieldName];
 
+        // バケットリストアイテムの特別処理
+        if (modelRoute === 'bucket_list_items' && fieldName === 'layoutBucketId') {
+          // layoutBucketIdは配列から最初の要素を取得
+          if (Array.isArray(value) && value.length > 0) {
+            const relationItem = value[0];
+            if (typeof relationItem === 'object' && relationItem !== null && 'id' in relationItem) {
+              input.layoutBucketId = [relationItem.id as string];
+            } else if (typeof relationItem === 'string') {
+              input.layoutBucketId = [relationItem];
+            }
+          } else if (typeof value === 'object' && value !== null && 'id' in value) {
+            input.layoutBucketId = [(value as RelationData).id as string];
+          } else if (typeof value === 'string') {
+            input.layoutBucketId = [value];
+          }
+          return;
+        }
+
         if (field.type === 'relation' && typeof value === 'object' && value !== null) {
           // リレーションフィールドの場合はIDを取得
           const relationData = value as RelationData;
@@ -383,6 +401,34 @@ export function ModelDetailModal({
           }
         }
       });
+
+    // バケットリストアイテムの持ち物と参考資料を処理
+    if (modelRoute === 'bucket_list_items') {
+      // 持ち物データを追加
+      if (formData?.bucket_list_item_belongings && Array.isArray(formData.bucket_list_item_belongings)) {
+        input.bucketListItemBelongingsAttributes = (formData.bucket_list_item_belongings as EditableBelonging[])
+          .map(belonging => ({
+            id: belonging.id,
+            name: belonging.name,
+            note: belonging.note,
+            sortOrder: belonging.sort_order,
+            _destroy: belonging._destroy
+          }));
+      }
+
+      // 参考資料データを追加
+      if (formData?.bucket_list_item_references && Array.isArray(formData.bucket_list_item_references)) {
+        input.bucketListItemReferencesAttributes = (formData.bucket_list_item_references as EditableReference[])
+          .map(reference => ({
+            id: reference.id,
+            title: reference.title,
+            url: reference.url,
+            referenceType: reference.reference_type,
+            sortOrder: reference.sort_order,
+            _destroy: reference._destroy
+          }));
+      }
+    }
 
     // 雑誌掲載情報のデータを追加
     if (modelRoute === 'spots') {

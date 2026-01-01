@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_27_105614) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_28_163200) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -70,6 +70,49 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_105614) do
     t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
     t.index ["user_id", "bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_user_and_bookmarkable", unique: true
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
+
+  create_table "bucket_list_item_belongings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "bucket_list_item_id", null: false
+    t.string "name", null: false
+    t.string "note"
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bucket_list_item_id"], name: "index_bucket_list_item_belongings_on_bucket_list_item_id"
+  end
+
+  create_table "bucket_list_item_references", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "bucket_list_item_id", null: false
+    t.string "title"
+    t.text "url", null: false
+    t.string "reference_type", limit: 32, default: "other", null: false, comment: "参考リンク種別（official, map, article, reservation, other）"
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bucket_list_item_id"], name: "index_bucket_list_item_references_on_bucket_list_item_id"
+  end
+
+  create_table "bucket_list_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "layout_bucket_id", null: false
+    t.string "title", null: false
+    t.text "content"
+    t.string "area_text", comment: "抽象的なエリア名（例：福岡タワー周辺）"
+    t.string "meeting_place_name"
+    t.string "meeting_place_address"
+    t.string "meeting_place_google_place_id", limit: 128
+    t.integer "stay_minutes", comment: "滞在時間（分）"
+    t.datetime "meeting_time"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "cost_min", comment: "最小費用（円）"
+    t.integer "cost_max", comment: "最大費用（円）"
+    t.string "weather", limit: 32, default: "any", null: false, comment: "推奨天気（any, sunny, cloudy, rainy, snowy）"
+    t.string "status", limit: 32, default: "draft", null: false, comment: "ステータス（draft, published, archived）"
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["layout_bucket_id"], name: "index_bucket_list_items_on_layout_bucket_id"
   end
 
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -139,6 +182,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_105614) do
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
   end
 
+  create_table "experience_cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body"
+    t.string "tags"
+    t.string "area"
+    t.integer "duration"
+    t.string "time_slot"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_experience_cards_on_active"
+    t.index ["tags"], name: "index_experience_cards_on_tags"
+  end
+
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "play_plan_id", null: false
@@ -163,6 +220,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_105614) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["instagram_embed_name"], name: "index_instagram_embeds_on_instagram_embed_name", unique: true
+  end
+
+  create_table "layout_buckets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "key", limit: 64, null: false
+    t.string "name", limit: 128, null: false
+    t.string "template_key", limit: 64, null: false, comment: "テンプレート識別子（例：card, magazine, feature）"
+    t.string "theme_key", limit: 32, default: "default", null: false, comment: "テーマ識別子（例：default, warm, cool）"
+    t.string "shift", limit: 32, default: "none", null: false, comment: "ズレ方向（none, up, down, left, right）"
+    t.string "tilt", limit: 32, default: "none", null: false, comment: "傾き（none, cw, ccw）"
+    t.string "depth", limit: 32, default: "flat", null: false, comment: "奥行き表現（flat, lift）"
+    t.string "status", limit: 32, default: "active", null: false, comment: "ステータス（active, inactive）"
+    t.integer "sort_order", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_layout_buckets_on_key", unique: true
   end
 
   create_table "magazines", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -604,6 +676,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_105614) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "areas", "districts"
   add_foreign_key "bookmarks", "users"
+  add_foreign_key "bucket_list_item_belongings", "bucket_list_items", on_delete: :cascade
+  add_foreign_key "bucket_list_item_references", "bucket_list_items", on_delete: :cascade
+  add_foreign_key "bucket_list_items", "layout_buckets"
   add_foreign_key "events", "event_categories"
   add_foreign_key "favorites", "play_plans", on_delete: :cascade
   add_foreign_key "favorites", "users", on_delete: :cascade
