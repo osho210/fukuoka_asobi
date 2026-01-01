@@ -4,11 +4,11 @@ import "./globals.css";
 import ApolloWrapper from '@/components/ApolloWrapper';
 import { Header } from '@/components/Header'
 import Footer from '@/components/Footer'
-import '@styles/common.css';
-import '@styles/PlayPlanList.css';
-import '@styles/RecommendedSpot.css';
-import '@styles/RecommendedEvent.css';
-import '@styles/RecommendedNews.css';
+import '@/styles/CommonStyle.css';
+import '@/styles/PlayPlanList.css';
+import '@/styles/RecommendedSpot.css';
+import '@/styles/RecommendedEvent.css';
+import '@/styles/RecommendedNews.css';
 import Script from "next/script"; // ←追加
 
 const geistSans = Geist({
@@ -57,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             s.parentNode.insertBefore(tk,s)
           })(document);
         `}</Script>
+        <link href="https://db.onlinewebfonts.com/c/aac28a8d3a17309e7f5bd19aadcd7915?family=Post+No+Bills+Colombo+ExtraBold" rel="stylesheet"></link>
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>

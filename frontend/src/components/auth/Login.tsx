@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import '@styles/Auth.css';
+import '@/styles/Auth.css';
 
 type CredentialResponse = {
   credential: string;

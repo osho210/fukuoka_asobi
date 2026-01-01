@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { Event } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import { formatDateRange } from '../../lib/dateUtils';
-import '@styles/ContentDetail.css';
+import '@/styles/ContentDetail.css';
 
 type EventDetailAdapterProps = {
   event: Event;

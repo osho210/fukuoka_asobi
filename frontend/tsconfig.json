@@ -20,7 +20,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@graphql/*": ["./src/graphql/*"],
-      "@styles/*": ["./public/styles/*"],
+      "@styles/*": ["./src/styles/*"],
       "@graphql_types/*": ["./src/__generated__/graphql.ts"],
     }
   },

@@ -31,6 +31,9 @@ module Mutations
         input.layout_bucket_ids.first
       else
         input.layout_bucket_ids
+      # layout_bucket_id が配列の場合は最初の要素を取得
+      if input.layout_bucket_id.is_a?(Array)
+        input.layout_bucket_id = input.layout_bucket_id.first
       end
 
       # 管理者権限チェック
@@ -56,6 +59,7 @@ module Mutations
           bucket_list_item.bucket_list_item_references.build(attr.to_h)
         end
       end
+      bucket_list_item = BucketListItem.new(input.to_h)
 
       if bucket_list_item.save
         { bucket_list_item: bucket_list_item, errors: [] }

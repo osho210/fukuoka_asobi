@@ -74,6 +74,12 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
               <li className="admin-sidebar-nav-item">
                 <Link href="/magazines" className="admin-sidebar-nav-link">雑誌マスタ</Link>
               </li>
+              <li className="admin-sidebar-nav-item">
+                <Link href="/layout_buckets" className="admin-sidebar-nav-link">レイアウトバケット</Link>
+              </li>
+              <li className="admin-sidebar-nav-item">
+                <Link href="/bucket_list_items" className="admin-sidebar-nav-link">福岡でやりたいこと</Link>
+              </li>
             </ul>
           </nav>
         </aside>

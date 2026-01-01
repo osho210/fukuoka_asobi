@@ -423,6 +423,55 @@ module Types
 
     def all_experience_cards
       ExperienceCard.order(created_at: :desc)
+    # レイアウトバケット
+    # --------------------------------------------
+    field :layout_buckets, [Types::LayoutBucketType], null: false, description: "レイアウトバケット一覧を取得" do
+      argument :limit, Integer, required: false, description: "取得件数"
+      argument :offset, Integer, required: false, description: "オフセット"
+      argument :sort_field, String, required: false, description: "ソートフィールド"
+      argument :sort_direction, String, required: false, description: "ソート方向（asc/desc）"
+    end
+    def layout_buckets(limit: nil, offset: nil, sort_field: nil, sort_direction: nil)
+      query = LayoutBucket.all
+      query = query.order("#{sort_field} #{sort_direction}") if sort_field && sort_direction
+      query = query.limit(limit) if limit
+      query = query.offset(offset) if offset
+      query
+    end
+
+    field :layout_bucket, Types::LayoutBucketType, null: true, description: "レイアウトバケット詳細を取得" do
+      argument :id, ID, required: true, description: "レイアウトバケットID"
+    end
+    def layout_bucket(id:)
+      LayoutBucket.find_by(id: id)
+    end
+
+    # --------------------------------------------
+    # バケットリスト企画
+    # --------------------------------------------
+    field :bucket_list_items, [Types::BucketListItemType], null: false, description: "バケットリスト企画一覧を取得" do
+      argument :limit, Integer, required: false, description: "取得件数"
+      argument :offset, Integer, required: false, description: "オフセット"
+      argument :sort_field, String, required: false, description: "ソートフィールド"
+      argument :sort_direction, String, required: false, description: "ソート方向（asc/desc）"
+      argument :status, String, required: false, description: "ステータスフィルタ"
+      argument :weather, String, required: false, description: "天気フィルタ"
+    end
+    def bucket_list_items(limit: nil, offset: nil, sort_field: nil, sort_direction: nil, status: nil, weather: nil)
+      query = BucketListItem.includes(:layout_bucket, :bucket_list_item_belongings, :bucket_list_item_references)
+      query = query.where(status: status) if status.present?
+      query = query.where(weather: weather) if weather.present?
+      query = query.order("#{sort_field} #{sort_direction}") if sort_field && sort_direction
+      query = query.limit(limit) if limit
+      query = query.offset(offset) if offset
+      query
+    end
+
+    field :bucket_list_item, Types::BucketListItemType, null: true, description: "バケットリスト企画詳細を取得" do
+      argument :id, ID, required: true, description: "バケットリスト企画ID"
+    end
+    def bucket_list_item(id:)
+      BucketListItem.includes(:layout_bucket, :bucket_list_item_belongings, :bucket_list_item_references).find_by(id: id)
     end
   end
 end

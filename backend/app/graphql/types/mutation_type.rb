@@ -104,5 +104,14 @@ module Types
     field :create_experience_card, mutation: Mutations::CreateExperienceCard
     field :update_experience_card, mutation: Mutations::UpdateExperienceCard
     field :delete_experience_card, mutation: Mutations::DeleteExperienceCard
+    # レイアウトバケット関連
+    field :create_layout_bucket, mutation: Mutations::CreateLayoutBucket
+    field :update_layout_bucket, mutation: Mutations::UpdateLayoutBucket
+    field :delete_layout_bucket, mutation: Mutations::DeleteLayoutBucket
+
+    # バケットリスト企画関連
+    field :create_bucket_list_item, mutation: Mutations::CreateBucketListItem
+    field :update_bucket_list_item, mutation: Mutations::UpdateBucketListItem
+    field :delete_bucket_list_item, mutation: Mutations::DeleteBucketListItem
   end
 end

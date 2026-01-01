@@ -5,7 +5,7 @@ import { formatTravelTime, formatTime } from '@/utils/dateUtils';
 import SpotDetail from './SpotDetail';
 import '@/styles/GeneratedPlan.css';
 import Image from 'next/image';
-import '@styles/PlayPlanDetail.css';
+import '@/styles/PlayPlanDetail.css';
 
 interface PlanStepProps {
   detail: PlanDetail;
@@ -18,7 +18,6 @@ interface TravelMethodInfo {
 }
 
 const getTravelMethodInfo = (method: string): TravelMethodInfo => {
-  console.log(method)
   switch (method.toLowerCase()) {
     case '徒歩':
       return { name: '徒歩', icon: '/walk-icon.png' };

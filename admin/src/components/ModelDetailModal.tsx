@@ -9,6 +9,7 @@ import { TextArea } from '@/components/forms/TextArea';
 import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { DateTimePicker } from '@/components/forms/DateTimePicker';
+import { TimePicker } from '@/components/forms/TimePicker';
 import { FileUpload } from '@/components/forms/FileUpload';
 import ImageUpload from '@/components/forms/ImageUpload';
 import SingleImageUpload from '@/components/forms/SingleImageUpload';
@@ -26,6 +27,7 @@ import { GET_MENUS } from '@/graphql/queries/getMenus';
 import { GET_MENU_CATEGORIES } from '@/graphql/queries/getMenuCategories';
 import { GET_EVENT_CATEGORIES } from '@/graphql/queries/getEventCategories';
 import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
+import { GET_LAYOUT_BUCKETS } from '@/graphql/queries/getLayoutBuckets';
 import { modelDisplayNames, fieldDisplayNames, modelConfigs, ModelData } from '@/lib/modelConstants';
 import { OpeningHour } from '@/__generated__/graphql';
 
@@ -121,8 +123,6 @@ export function ModelDetailModal({
 
   const handleFetchNearestStation = async () => {
     setNearestStationLoading(true);
-    // TODO: Implement station search logic
-    console.log("Fetching nearest station...");
     // Simulating an API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     setNearestStationLoading(false);
@@ -140,6 +140,12 @@ export function ModelDetailModal({
   const { options: priceLevelOptions } = useEnumOptions("PriceLevelEnum");
   const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
   const { options: magazineStatusOptions } = useEnumOptions("MagazineStatusEnum");
+  const { options: layoutBucketShiftOptions } = useEnumOptions("LayoutBucketShiftEnum");
+  const { options: LayoutBucketTiltEnumOptions } = useEnumOptions("LayoutBucketTiltEnum");
+  const { options: LayoutBucketDepthEnumOptions } = useEnumOptions("LayoutBucketDepthEnum");
+  const { options: WeatherEnumOptions } = useEnumOptions("WeatherEnum");
+  const { options: LayoutBucketStatusOptions } = useEnumOptions("LayoutBucketStatusEnum");
+  const { options: BucketListItemStatusEnum } = useEnumOptions("BucketListItemStatusEnum");
 
   // マスタデータの取得
   const { data: districtsData } = useQuery(GET_DISTRICTS);
@@ -152,6 +158,7 @@ export function ModelDetailModal({
   const { data: menuCategoriesData } = useQuery(GET_MENU_CATEGORIES);
   const { data: eventCategoriesData } = useQuery(GET_EVENT_CATEGORIES);
   const { data: magazinesData } = useQuery(GET_MAGAZINES);
+  const { data: layoutBucketsData } = useQuery(GET_LAYOUT_BUCKETS)
 
   // useMemo でマッピングをキャッシュ
   type EnumOption = { value: string; label: string };
@@ -167,7 +174,13 @@ export function ModelDetailModal({
     PriceLevelEnum: priceLevelOptions,
     BusinessStatusTypeEnum: businessStatusOptions,
     MagazineStatusEnum: magazineStatusOptions,
-  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions, magazineStatusOptions]);
+    LayoutBucketShiftEnum: layoutBucketShiftOptions,
+    LayoutBucketTiltEnum: LayoutBucketTiltEnumOptions,
+    LayoutBucketDepthEnum: LayoutBucketDepthEnumOptions,
+    LayoutBucketStatusEnum: LayoutBucketStatusOptions,
+    WeatherEnum: WeatherEnumOptions,
+    BucketListItemStatusEnum: BucketListItemStatusEnum,
+  }), [spotTypeOptions, budgetOptions, trainLineOptions, statusOptions, tripTypeOptions, priceLevelOptions, businessStatusOptions, magazineStatusOptions, layoutBucketShiftOptions, LayoutBucketTiltEnumOptions, LayoutBucketDepthEnumOptions, WeatherEnumOptions, LayoutBucketStatusOptions, BucketListItemStatusEnum]);
 
   // マスタとformフィールドの紐付けを行う
   // フィールド名をキーにして、マスタデータの選択肢を生成
@@ -217,7 +230,11 @@ export function ModelDetailModal({
       value: magazine.id,
       label: magazine.name,
     })) ?? [],
-  }), [districtsData, categoriesData, areasData, hashtagsData, purposesData, spotAmbiancesData, menusData, menuCategoriesData, eventCategoriesData, magazinesData]);
+    layoutBuckets: layoutBucketsData?.layoutBuckets.map((bucket: { id: string, title: string }) => ({
+      value: bucket.id,
+      label: bucket.title,
+    })) ?? [],
+  }), [districtsData?.districts, categoriesData?.categories, areasData?.areas, hashtagsData?.hashtags, purposesData?.purposes, spotAmbiancesData?.spotAmbiances, menusData?.menus, menuCategoriesData?.menuCategories, eventCategoriesData?.eventCategories, magazinesData?.magazines, layoutBucketsData?.layoutBuckets]);
 
   // モーダルが開かれたときに初期データをセット
   useEffect(() => {
@@ -316,6 +333,7 @@ export function ModelDetailModal({
   };
 
   const prepareFormData = (): ModelInput => {
+    // その他のモデルの場合の通常処理
     const input: ModelInput = {};
 
     if (newImages.length > 0) {
@@ -874,6 +892,17 @@ export function ModelDetailModal({
                 const labelField = relationConfig.fields.find(f => f.name === 'name' || f.name.endsWith('Name'))?.name || 'id';
                 const isMenuField = modelRoute === 'spots' && fieldName === 'menus';
 
+                // selectedValuesの変換処理を強化
+                let selectedValues: RelationItem[] = [];
+                if (Array.isArray(value)) {
+                  selectedValues = value.map(item => {
+                    if (typeof item === 'object' && item !== null && 'id' in item) {
+                      return item as RelationItem;
+                    }
+                    return { id: String(item) } as RelationItem;
+                  });
+                }
+
                 return (
                   <div key={fieldName} className="admin-col-span-2">
                     {isMenuField && (
@@ -894,7 +923,7 @@ export function ModelDetailModal({
                       label={fieldLabel}
                       modelName={relationModelName}
                       labelField={labelField}
-                      selectedValues={(value as RelationItem[]) || []}
+                      selectedValues={selectedValues}
                       onChange={(values: RelationItem[]) => {
                         handleChange(fieldName, values);
                       }}
@@ -909,6 +938,20 @@ export function ModelDetailModal({
               case 'datetime':
                 return (
                   <DateTimePicker
+                    key={fieldName}
+                    id={fieldName}
+                    name={fieldName}
+                    label={fieldLabel}
+                    value={value as string || ''}
+                    onChange={(val) => handleChange(fieldName, val)}
+                    required={field.required}
+                    error={error}
+                    fullWidth
+                  />
+                );
+              case 'time':
+                return (
+                  <TimePicker
                     key={fieldName}
                     id={fieldName}
                     name={fieldName}

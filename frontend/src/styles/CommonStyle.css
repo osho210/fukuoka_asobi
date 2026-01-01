@@ -76,6 +76,10 @@ li {
     max-width: 200px;
 }
 
+.section-link.concept {
+    max-width: none;
+}
+
 .official-sns {
     text-align: center;
     width: 100%;
@@ -94,6 +98,8 @@ li {
     margin: 50px 0 30px;
     border-radius: 10px;
     padding: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
 .section-title {
@@ -160,8 +166,8 @@ li {
 }
 
 .concept {
-    position: absolute;
-    right: 0px;
+    margin-top: auto;
+    align-self: flex-end;
 }
 
 .footer {

@@ -1,14 +1,6 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@styles": path.resolve(__dirname, "./public/styles"),
-    };
-    return config;
-  },
   images: {
     domains: ["localhost"], // 外部画像のホスト名を追加
     remotePatterns: [
@@ -66,6 +58,41 @@ const nextConfig: NextConfig = {
       ];
     }
     return [];
+  },
+  // BFCache対策のためのHTTPキャッシュヘッダー設定
+  async headers() {
+    return [
+      {
+        // 全てのページに対してキャッシュ制御ヘッダーを設定
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, must-revalidate',
+          },
+        ],
+      },
+      {
+        // APIエンドポイントにはキャッシュを無効化
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, max-age=0, no-cache',
+          },
+        ],
+      },
+      {
+        // GraphQLエンドポイントにもキャッシュを無効化
+        source: '/graphql',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, max-age=0, no-cache',
+          },
+        ],
+      },
+    ];
   },
 };
 

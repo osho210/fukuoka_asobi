@@ -60,6 +60,7 @@ const modelDisplayNames: Record<string, string> = {
   news: 'ニュース',
   station: '駅マスタ',
   magazines: '雑誌マスタ',
+  bucket_list_items: '福岡でやりたいこと',
 };
 
 // 各モデルのフィールド定義
@@ -326,6 +327,9 @@ export default function ModelDetailPage() {
   const { options: budgetOptions } = useEnumOptions("BudgetTypeRangeEnum");
   // const { options: statusOptions } = useEnumOptions("StatusEnum");
   const { options: businessStatusOptions } = useEnumOptions("BusinessStatusEnum");
+  const { options: weatherOptions } = useEnumOptions("WeatherEnum");
+  const { options: statusOptions } = useEnumOptions("StatusEnum");
+  const { options: bucketListItemStatusOptions } = useEnumOptions("BucketListItemStatusEnum");
 
   const [getNearestStation, { loading: nearestStationLoading, error: nearestStationError }] = useLazyQuery<GetNearestStationQuery, GetNearestStationQueryVariables>(GET_NEAREST_STATION);
 
@@ -335,6 +339,8 @@ export default function ModelDetailPage() {
     businessStatus: businessStatusOptions,
     priceLevel: priceLevelOptions,
     spotType: spotTypeOptions,
+    weather: weatherOptions,
+    status: bucketListItemStatusOptions.length > 0 ? bucketListItemStatusOptions : statusOptions,
   };
 
   const [formData, setFormData] = useState<ModelData | null>(null);

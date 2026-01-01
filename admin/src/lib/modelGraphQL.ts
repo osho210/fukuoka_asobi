@@ -24,6 +24,9 @@ import { FilterField } from './modelConstants';
 import { GET_MAGAZINES } from '@/graphql/queries/getMagazines';
 import { GET_ALL_DIRECTION_CARDS } from '@/graphql/queries/getDirectionCards';
 import { GET_ALL_EXPERIENCE_CARDS } from '@/graphql/queries/getExperienceCards';
+import { GET_BUCKET_LIST_ITEMS } from '@/graphql/queries/getBucketListItems';
+import { GET_LAYOUT_BUCKETS } from '@/graphql/queries/getLayoutBuckets';
+
 
 // ミューテーションのインポート
 import { CREATE_AREA, UPDATE_AREA, DELETE_AREA } from '@/graphql/mutations/areas';
@@ -41,6 +44,8 @@ import { UPDATE_PLAY_PLAN, processPlanDetailsForInput, PlanDetailWithSpot } from
 import { CREATE_MAGAZINE, UPDATE_MAGAZINE } from '@/graphql/mutations/magazines';
 import { CREATE_DIRECTION_CARD, UPDATE_DIRECTION_CARD, DELETE_DIRECTION_CARD } from '@/graphql/mutations/directionCards';
 import { CREATE_EXPERIENCE_CARD, UPDATE_EXPERIENCE_CARD, DELETE_EXPERIENCE_CARD } from '@/graphql/mutations/experienceCards';
+import { CREATE_BUCKET_LIST_ITEM, UPDATE_BUCKET_LIST_ITEM } from "@/graphql/mutations/bucketListItems";
+import { CREATE_LAYOUT_BUCKET, UPDATE_LAYOUT_BUCKET } from '@/graphql/mutations/layoutBuckets';
 
 import {
   CREATE_SPOT,
@@ -88,6 +93,8 @@ const listQueries: Record<string, DocumentNode> = {
   magazines: GET_MAGAZINES,
   direction_cards: GET_ALL_DIRECTION_CARDS,
   experience_cards: GET_ALL_EXPERIENCE_CARDS
+  bucket_list_items: GET_BUCKET_LIST_ITEMS,
+  layout_buckets: GET_LAYOUT_BUCKETS
 };
 
 // ミューテーションマッピング
@@ -106,6 +113,8 @@ const createMutations: Record<string, DocumentNode> = {
   magazines: CREATE_MAGAZINE,
   direction_cards: CREATE_DIRECTION_CARD,
   experience_cards: CREATE_EXPERIENCE_CARD
+  bucket_list_items: CREATE_BUCKET_LIST_ITEM,
+  layout_buckets: CREATE_LAYOUT_BUCKET,
 };
 
 const updateMutations: Record<string, DocumentNode> = {
@@ -125,6 +134,8 @@ const updateMutations: Record<string, DocumentNode> = {
   magazines: UPDATE_MAGAZINE,
   direction_cards: UPDATE_DIRECTION_CARD,
   experience_cards: UPDATE_EXPERIENCE_CARD
+  bucket_list_items: UPDATE_BUCKET_LIST_ITEM,
+  layout_buckets: UPDATE_LAYOUT_BUCKET,
 };
 
 const deleteMutations: Record<string, DocumentNode> = {
@@ -167,8 +178,6 @@ export const fetchModelList = async (
       variables,
       fetchPolicy: 'network-only', // キャッシュを使わず常に最新データを取得
     });
-
-    console.log('GraphQLレスポンス:', response);
 
     // レスポンスの構造を確認
     if (response.data) {
