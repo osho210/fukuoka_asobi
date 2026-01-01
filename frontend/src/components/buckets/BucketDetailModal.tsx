@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useBucketListItem } from './useBuckets';
 import { BucketListItem } from '@/__generated__/graphql';
 import Image from 'next/image';
 import { renderTextWithLineBreaks, copyGoogleMapsUrlToClipboard, getBaseImagePath } from '@/utils/bucketUtils';
-import { formatTime, getWeatherLabel } from '@/utils/dateUtils';
+import { formatTime } from '@/utils/dateUtils';
 import '@/styles/BucketDetailModal.css';
 
 interface BucketDetailModalProps {
@@ -18,6 +19,8 @@ interface BucketDetailModalProps {
 /**
  * バケットリストアイテム詳細をモーダルで表示するコンポーネント
  * モーダルが開く際にサーバーからデータを取得する
+ * URLパラメータ(?bucket_id=xxx)がある場合、自動的にモーダルを開く
+ * 別のモーダルを開く際はURLパラメータを更新
  */
 export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     isOpen,
@@ -25,16 +28,44 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     onClose,
     id,
 }) => {
-    // サーバーから詳細データを取得する場合、idから取得
-    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(id || '');
+    const searchParams = useSearchParams();
+    const bucketIdFromUrl = searchParams ? searchParams.get('bucket_id') : null;
+    const [currentBucketId, setCurrentBucketId] = useState<string | null>(bucketIdFromUrl);
+    const [isModalOpen, setIsModalOpen] = useState(!!bucketIdFromUrl);
+
+    // URLパラメータまたはpropsから実効的なIDを決定
+    const effectiveId = currentBucketId || id;
+
+    // サーバーから詳細データを取得
+    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(effectiveId || '');
     const [isVisible, setIsVisible] = useState(false);
 
     // initialBucketListItemが渡されている場合はそれを使用、無い場合はサーバーデータを使用
     const bucketListItem = initialBucketListItem || serverBucketListItem;
 
+    // URLパラメータが変更された場合
+    useEffect(() => {
+        if (bucketIdFromUrl) {
+            setCurrentBucketId(bucketIdFromUrl);
+            setIsModalOpen(true);
+        }
+    }, [bucketIdFromUrl]);
+
+    // propsのisOpenが変更された場合（リスト表示からの選択）
+    useEffect(() => {
+        if (isOpen && id && !bucketIdFromUrl) {
+            // URLパラメータを更新
+            const url = new URL(window.location.href);
+            url.searchParams.set('bucket_id', id);
+            window.history.replaceState({}, document.title, url.toString());
+            setCurrentBucketId(id);
+            setIsModalOpen(true);
+        }
+    }, [isOpen, id, bucketIdFromUrl]);
+
     // モーダルが開く時：スクロール無効化を最優先で実行
     useEffect(() => {
-        if (isOpen) {
+        if (isModalOpen) {
             // 同期的にボディのスクロール無効化（レンダリング前）
             document.body.style.overflow = 'hidden';
             document.body.style.scrollBehavior = 'auto';
@@ -56,16 +87,29 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
             document.body.style.overflow = 'unset';
             document.body.style.scrollBehavior = 'unset';
         };
-    }, [isOpen]);
+    }, [isModalOpen]);
 
-    if (!isOpen) {
+    // モーダルを閉じるハンドラ
+    const handleClose = () => {
+        setIsModalOpen(false);
+        setCurrentBucketId(null);
+        onClose();
+        // URLパラメータをクリア
+        if (bucketIdFromUrl || currentBucketId) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('bucket_id');
+            window.history.replaceState({}, document.title, url.toString());
+        }
+    };
+
+    if (!isModalOpen) {
         return null;
     }
 
     return (
         <div
             className={`bucket-detail-modal-overlay ${isVisible ? 'visible' : ''}`}
-            onClick={onClose}
+            onClick={handleClose}
             role="presentation"
         >
             <div
@@ -76,21 +120,21 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
             >
                 <button
                     className="bucket-detail-modal-close"
-                    onClick={onClose}
+                    onClick={handleClose}
                     aria-label="モーダルを閉じる"
                 >
                     ×
                 </button>
 
                 {/* ローディング中 */}
-                {id && loading && (
+                {effectiveId && loading && (
                     <div className="bucket-detail-modal-loading">
                         <p>読み込み中...</p>
                     </div>
                 )}
 
                 {/* エラー発生 */}
-                {id && error && (
+                {effectiveId && error && (
                     <div className="bucket-detail-modal-error">
                         <p>エラーが発生しました: {error.message}</p>
                     </div>
@@ -152,22 +196,6 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                         </div>
 
                         <div className="bucket-detail-modal-info">
-                            {(bucketListItem.costMin || bucketListItem.costMax) && (
-                                <div className="bucket-detail-section">
-                                    <h4 className="bucket-detail-section-title">費用</h4>
-                                    <p className="bucket-detail-section-content">
-                                        {bucketListItem.costMin && `¥${bucketListItem.costMin} `}
-                                        {bucketListItem.costMax && `~ ¥${bucketListItem.costMax}`}
-                                    </p>
-                                </div>
-                            )}
-                            {/* おすすめの天気 */}
-                            {bucketListItem.weather && (
-                                <div className="bucket-detail-section">
-                                    <h4 className="bucket-detail-section-title">おすすめの天気</h4>
-                                    <p className="bucket-detail-section-content">{getWeatherLabel(bucketListItem.weather)}</p>
-                                </div>
-                            )}
                         </div>
                     </div>
                 )}
