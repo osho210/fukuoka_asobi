@@ -62,6 +62,8 @@ export const modelDisplayNames: Record<string, string> = {
   stations: '駅',
   eventCategories: 'イベントカテゴリー',
   menuCategories: 'メニューカテゴリー',
+  direction_cards: '方向性カード',
+  experience_cards: '体験カード',
   layout_buckets: 'レイアウトバケット',
   bucket_list_items: '福岡でやりたいこと',
 };
@@ -442,6 +444,17 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'status', type: 'select', required: true, enumKey: 'MagazineStatusEnum' },
     ],
   },
+  direction_cards: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'テキスト', accessorKey: 'text', sortable: true },
+      { header: 'タグ', accessorKey: 'tags', sortable: false },
+      { header: '重み', accessorKey: 'weight', sortable: true },
+      {
+        header: 'アクティブ',
+        accessorKey: 'active',
+        sortable: true,
+        cell: (item) => item.active ? '✓' : '✗'
   layout_buckets: {
     columns: [
       { header: 'ID', accessorKey: 'id', sortable: true },
@@ -492,6 +505,33 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'costMax', type: 'number', required: false },
       { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
       { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
+      { name: 'bucket_list_item_belongings', type: 'belongings_editor' },
+      { name: 'bucket_list_item_references', type: 'references_editor' },
+      { name: 'publishedAt', type: 'datetime', required: false },
+    ],
+  },
+  experience_cards: {
+    columns: [
+      { header: 'ID', accessorKey: 'id', sortable: true },
+      { header: 'タイトル', accessorKey: 'title', sortable: true },
+      { header: 'タグ', accessorKey: 'tags', sortable: false },
+      { header: 'エリア', accessorKey: 'area', sortable: true },
+      { header: '所要時間', accessorKey: 'duration', sortable: true },
+      {
+        header: 'アクティブ',
+        accessorKey: 'active',
+        sortable: true,
+        cell: (item) => item.active ? '✓' : '✗'
+      },
+    ],
+    fields: [
+      { name: 'title', type: 'text', required: true },
+      { name: 'body', type: 'textarea' },
+      { name: 'tags', type: 'text' },
+      { name: 'area', type: 'text' },
+      { name: 'duration', type: 'number' },
+      { name: 'timeSlot', type: 'text' },
+      { name: 'active', type: 'boolean' },
       { name: 'publishedAt', type: 'datetime', required: false },
     ],
     filters: [
@@ -635,6 +675,15 @@ export const fieldDisplayNames: Record<string, string> = {
   salesInfo: '販売情報',
   salesUrl: '販売URL',
   coverImageUrl: '表紙画像URL',
+  // Direction Card / Experience Card
+  text: 'テキスト',
+  tags: 'タグ',
+  weight: '重み',
+  active: 'アクティブ',
+  body: '本文',
+  area: 'エリア',
+  duration: '所要時間（分）',
+  timeSlot: '時間帯',
 
   // Layout Bucket関連
   key: 'キー',

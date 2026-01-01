@@ -182,6 +182,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_28_163200) do
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
   end
 
+  create_table "experience_cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body"
+    t.string "tags"
+    t.string "area"
+    t.integer "duration"
+    t.string "time_slot"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_experience_cards_on_active"
+    t.index ["tags"], name: "index_experience_cards_on_tags"
+  end
+
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "play_plan_id", null: false

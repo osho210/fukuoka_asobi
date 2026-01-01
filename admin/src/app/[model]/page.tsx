@@ -249,63 +249,69 @@ export default function ModelListPage() {
         <h1 className="admin-page-title">{displayName}一覧</h1>
         <Button
           // 項目数が多いspotモデルの場合は別ページで作成
-          onClick={modelRoute === 'spots' ? handleSpotCreateClick : handleCreateClick}
+          onClick={modelRoute === 'spots' || modelRoute === 'bucket_list_items' ? handleSpotCreateClick : handleCreateClick}
         >
           <PlusIcon className="admin-mr-2 h-4 w-4" />
           新規作成
         </Button>
       </div>
 
-      {filterFields.length > 0 && (
-        <div className="admin-filter-bar admin-mb-4 admin-p-4 admin-bg-gray-50 admin-rounded-lg">
-          <div className="admin-grid admin-grid-cols-1 md:admin-grid-cols-3 lg:admin-grid-cols-4 admin-gap-4">
-            {filterFields.map(field => (
-              <Select
-                key={field.name}
-                id={`filter-${field.name}`}
-                label={field.label}
-                value={filters[field.name] || ''}
-                onChange={(value) => handleFilterChange(field.name, value)}
-                options={[
-                  { value: '', label: `すべての${field.label}` },
-                  ...(relationOptions[field.model] || [])
-                ]}
-                fullWidth
-              />
-            ))}
+      {
+        filterFields.length > 0 && (
+          <div className="admin-filter-bar admin-mb-4 admin-p-4 admin-bg-gray-50 admin-rounded-lg">
+            <div className="admin-grid admin-grid-cols-1 md:admin-grid-cols-3 lg:admin-grid-cols-4 admin-gap-4">
+              {filterFields.map(field => (
+                <Select
+                  key={field.name}
+                  id={`filter-${field.name}`}
+                  label={field.label}
+                  value={filters[field.name] || ''}
+                  onChange={(value) => handleFilterChange(field.name, value)}
+                  options={[
+                    { value: '', label: `すべての${field.label}` },
+                    ...(relationOptions[field.model] || [])
+                  ]}
+                  fullWidth
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-      {error && (
-        <div className="admin-alert admin-alert-danger admin-mb-4">
-          {error}
-        </div>
-      )}
+      {
+        error && (
+          <div className="admin-alert admin-alert-danger admin-mb-4">
+            {error}
+          </div>
+        )
+      }
 
-      {isLoading ? (
-        <div className="admin-loading">
-          <div className="admin-spinner"></div>
-        </div>
-      ) : (
-        <DataTable
-          columns={columns}
-          data={filteredData}
-          onRowClick={handleRowClick}
-          keyField="id"
-          pagination={{
-            pageSize,
-            totalCount,
-            currentPage,
-            onPageChange: handlePageChange,
-          }}
-          sorting={{
-            field: sortField,
-            direction: sortDirection,
-            onSortChange: handleSortChange,
-          }}
-        />
-      )}
+      {
+        isLoading ? (
+          <div className="admin-loading">
+            <div className="admin-spinner"></div>
+          </div>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={filteredData}
+            onRowClick={handleRowClick}
+            keyField="id"
+            pagination={{
+              pageSize,
+              totalCount,
+              currentPage,
+              onPageChange: handlePageChange,
+            }}
+            sorting={{
+              field: sortField,
+              direction: sortDirection,
+              onSortChange: handleSortChange,
+            }}
+          />
+        )
+      }
 
       {/* モデル詳細モーダル */}
       <ModelDetailModal
@@ -316,6 +322,6 @@ export default function ModelListPage() {
         onSaved={handleDataSaved}
         initialData={selectedItem}
       />
-    </div>
+    </div >
   );
 }

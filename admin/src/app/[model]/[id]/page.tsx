@@ -12,6 +12,8 @@ import { Select } from '@/components/forms/Select';
 import { ToggleSwitch } from '@/components/forms/ToggleSwitch';
 import { MultiSelect } from '@/components/forms/MultiSelect';
 import OpeningHoursEditor, { EditableOpeningHour } from '@/components/forms/OpeningHoursEditor';
+import BelongingsEditor, { EditableBelonging } from '@/components/forms/BelongingsEditor';
+import ReferencesEditor, { EditableReference } from '@/components/forms/ReferencesEditor';
 import ImageUpload from '@/components/forms/ImageUpload';
 import { GooglePlacesSearch, GooglePlace, SyncedSpot } from '@/components/GooglePlacesSearch';
 import { ArrowLeft, Save, Trash2, Search } from 'lucide-react';
@@ -31,7 +33,9 @@ interface RelationItem {
 interface ModelData {
   id: string;
   openingHours?: EditableOpeningHour[];
-  [key: string]: string | number | boolean | object | null | undefined | string[] | number[] | RelationItem[] | EditableOpeningHour[];
+  bucket_list_item_belongings?: EditableBelonging[];
+  bucket_list_item_references?: EditableReference[];
+  [key: string]: string | number | boolean | object | null | undefined | string[] | number[] | RelationItem[] | EditableOpeningHour[] | EditableBelonging[] | EditableReference[];
 }
 
 // 関連データの型定義（RelationItemと互換性を持たせる）
@@ -199,6 +203,8 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'endTime', type: 'datetime' },
     { name: 'costMin', type: 'number' },
     { name: 'costMax', type: 'number' },
+    { name: 'bucket_list_item_belongings', type: 'belongings_editor' },
+    { name: 'bucket_list_item_references', type: 'references_editor' },
     { name: 'publishedAt', type: 'datetime' },
   ],
 };
@@ -304,6 +310,8 @@ const fieldDisplayNames: Record<string, string> = {
   weather: '天気',
   status: 'ステータス',
   publishedAt: '公開日時',
+  bucket_list_item_belongings: '持ち物',
+  bucket_list_item_references: '参考資料',
 };
 
 export default function ModelDetailPage() {
@@ -392,13 +400,15 @@ export default function ModelDetailPage() {
               acc[field.name] = [];
               break;
             case 'opening_hours_editor':
+            case 'belongings_editor':
+            case 'references_editor':
               acc[field.name] = [];
               break;
             default:
               acc[field.name] = '';
           }
           return acc;
-        }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[]>)
+        }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[] | EditableBelonging[] | EditableReference[]>)
       };
       setFormData(initialData);
       setIsLoading(false);
@@ -418,6 +428,33 @@ export default function ModelDetailPage() {
                 const value = item[fieldName];
 
                 switch (field.type) {
+                  case 'belongings_editor':
+                    // 持ち物データを EditableBelonging 形式に変換
+                    if (Array.isArray(value)) {
+                      acc[fieldName] = value.map((v: Record<string, unknown>) => ({
+                        id: v.id as number | undefined,
+                        name: v.name as string || '',
+                        note: v.note as string | null,
+                        sort_order: v.sortOrder as number || v.sort_order as number || 0,
+                      }));
+                    } else {
+                      acc[fieldName] = [];
+                    }
+                    break;
+                  case 'references_editor':
+                    // 参考資料データを EditableReference 形式に変換
+                    if (Array.isArray(value)) {
+                      acc[fieldName] = value.map((v: Record<string, unknown>) => ({
+                        id: v.id as number | undefined,
+                        title: v.title as string | null,
+                        url: v.url as string || '',
+                        reference_type: v.referenceType as string || v.reference_type as string || 'other',
+                        sort_order: v.sortOrder as number || v.sort_order as number || 0,
+                      }));
+                    } else {
+                      acc[fieldName] = [];
+                    }
+                    break;
                   case 'relation':
                   case 'multirelation':
                     // 配列で返されるフィールドの処理
@@ -444,7 +481,7 @@ export default function ModelDetailPage() {
                     acc[fieldName] = value || '';
                 }
                 return acc;
-              }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[]>)
+              }, {} as Record<string, string | boolean | RelationItem[] | EditableOpeningHour[] | EditableBelonging[] | EditableReference[]>)
             };
             setFormData(initialData);
           }
@@ -525,6 +562,51 @@ export default function ModelDetailPage() {
             isClosedDay: boolean;
             _destroy?: boolean;
           } = { dayOfWeek, openTime, closeTime, isClosedDay };
+          if (id) {
+            attributes.id = id;
+          }
+          if (_destroy) {
+            attributes._destroy = _destroy;
+          }
+          return attributes;
+        });
+      } else if (fieldName === 'bucket_list_item_belongings' && Array.isArray(value)) {
+        // 持ち物の処理
+        input.bucketListItemBelongingsAttributes = value.map(belonging => {
+          const { id, name, note, sort_order, _destroy } = belonging;
+          const attributes: {
+            id?: number;
+            name: string;
+            note?: string | null;
+            sortOrder: number;
+            _destroy?: boolean;
+          } = { name, sortOrder: sort_order };
+          if (note) {
+            attributes.note = note;
+          }
+          if (id) {
+            attributes.id = id;
+          }
+          if (_destroy) {
+            attributes._destroy = _destroy;
+          }
+          return attributes;
+        });
+      } else if (fieldName === 'bucket_list_item_references' && Array.isArray(value)) {
+        // 参考資料の処理
+        input.bucketListItemReferencesAttributes = value.map(reference => {
+          const { id, title, url, reference_type, sort_order, _destroy } = reference;
+          const attributes: {
+            id?: number;
+            title?: string | null;
+            url: string;
+            referenceType: string;
+            sortOrder: number;
+            _destroy?: boolean;
+          } = { url, referenceType: reference_type, sortOrder: sort_order };
+          if (title) {
+            attributes.title = title;
+          }
           if (id) {
             attributes.id = id;
           }
@@ -996,6 +1078,24 @@ export default function ModelDetailPage() {
                     <OpeningHoursEditor
                       openingHours={(value as EditableOpeningHour[]) || []}
                       onChange={(hours) => handleChange(fieldName, hours)}
+                    />
+                  </div>
+                );
+              case 'belongings_editor':
+                return (
+                  <div key={fieldName} className="col-span-2">
+                    <BelongingsEditor
+                      belongings={(value as EditableBelonging[]) || []}
+                      onChange={(belongings) => handleChange(fieldName, belongings)}
+                    />
+                  </div>
+                );
+              case 'references_editor':
+                return (
+                  <div key={fieldName} className="col-span-2">
+                    <ReferencesEditor
+                      references={(value as EditableReference[]) || []}
+                      onChange={(references) => handleChange(fieldName, references)}
                     />
                   </div>
                 );

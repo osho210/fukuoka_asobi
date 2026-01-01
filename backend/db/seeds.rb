@@ -112,4 +112,10 @@ require_relative 'seeds/news'
 # 移動手段のシードデータを読み込む
 require_relative 'seeds/travel_methods'
 
+# 方向性カードのシードデータを読み込む
+require_relative 'seeds/direction_cards'
+
+# 体験カードのシードデータを読み込む
+require_relative 'seeds/experience_cards'
+
 puts "シードデータの作成が完了しました！"

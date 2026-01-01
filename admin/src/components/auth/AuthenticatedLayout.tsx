@@ -57,6 +57,12 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
                 <Link href="/play_plans" className="admin-sidebar-nav-link">遊びプラン</Link>
               </li>
               <li className="admin-sidebar-nav-item">
+                <Link href="/direction_cards" className="admin-sidebar-nav-link">方向性カード</Link>
+              </li>
+              <li className="admin-sidebar-nav-item">
+                <Link href="/experience_cards" className="admin-sidebar-nav-link">体験カード</Link>
+              </li>
+              <li className="admin-sidebar-nav-item">
                 <Link href="/events" className="admin-sidebar-nav-link">イベント</Link>
               </li>
               <li className="admin-sidebar-nav-item">
