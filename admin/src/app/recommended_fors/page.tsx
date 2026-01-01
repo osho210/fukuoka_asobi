@@ -7,7 +7,6 @@ import { DataTable } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon } from 'lucide-react';
 import { fetchModelList } from '@/lib/modelGraphQL';
-import { ModelDetailModal } from '@/components/ModelDetailModal';
 import { recommended_forsConfig } from '@/lib/models/recommended_fors';
 import { getModelDisplayName } from '@/lib/modelConfig';
 
@@ -32,10 +31,6 @@ export default function Recommended_forsPage() {
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
 
-  // モーダル関連の状態
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ModelData | null>(null);
-  const [isNewItem, setIsNewItem] = useState(false);
 
   const columns = useMemo(() => recommended_forsConfig.columns, []);
   const displayName = useMemo(() => getModelDisplayName(modelRoute), []);
@@ -61,7 +56,6 @@ export default function Recommended_forsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
 
   useEffect(() => {
     fetchData();
@@ -71,36 +65,18 @@ export default function Recommended_forsPage() {
   const handleSortChange = (field: string, direction: 'asc' | 'desc') => {
     setSortField(field);
     setSortDirection(direction);
-  };
 
   // ページ変更ハンドラ
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
 
-  // 行クリック時にモーダルを表示
+  // 行クリック時に詳細ページへ遷移
   const handleRowClick = (item: ModelData) => {
-    setSelectedItem(item);
-    setIsNewItem(false);
-    setIsModalOpen(true);
-  };
+    window.location.href = `/${modelRoute}/${item.id}`;
 
   // 新規作成ボタンクリック時
   const handleCreateClick = () => {
-    setSelectedItem(null);
-    setIsNewItem(true);
-    setIsModalOpen(true);
-  };
-
-  // モーダルが閉じられたとき
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  // データが保存されたとき
-  const handleDataSaved = () => {
-    fetchData();
-  };
+    window.location.href = `/${modelRoute}/new`;
 
   return (
     <div>
@@ -142,15 +118,6 @@ export default function Recommended_forsPage() {
         />
       )}
 
-      {/* モデル詳細モーダル */}
-      <ModelDetailModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        modelRoute={modelRoute}
-        modelId={isNewItem ? 'new' : selectedItem?.id}
-        onSaved={handleDataSaved}
-        initialData={selectedItem}
-      />
     </div>
   );
 }

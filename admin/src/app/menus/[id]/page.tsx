@@ -277,96 +277,65 @@ export default function MenuDetailPage() {
 
       <form onSubmit={handleSubmit} className="admin-card">
         <div className="admin-form-grid">
-          {fields.map((field) => {
-            const value = formData[field.name];
-            const fieldError = errors[field.name];
-            const label = getFieldDisplayName(field.name);
+          <TextField
+            id="menuName"
+            name="menuName"
+            label="メニュー名"
+            value={(formData?.menuName as string) || ''}
+            onChange={(e) => handleChange('menuName', e.target.value)}
+            required={true}
+            error={errors.menuName}
+            fullWidth
+          />
 
-            switch (field.type) {
-              case 'text':
-                return (
-                  <TextField
-                    key={field.name}
-                    id={field.name}
-                    name={field.name}
-                    label={label}
-                    value={value as string || ''}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    required={field.required}
-                    error={fieldError}
-                    fullWidth
-                  />
-                );
-              case 'number':
-                return (
-                  <TextField
-                    key={field.name}
-                    id={field.name}
-                    name={field.name}
-                    label={label}
-                    type="number"
-                    value={value !== undefined ? String(value) : ''}
-                    onChange={(e) => handleChange(field.name, e.target.value ? Number(e.target.value) : '')}
-                    required={field.required}
-                    error={fieldError}
-                    fullWidth
-                  />
-                );
-              case 'textarea':
-                return (
-                  <TextArea
-                    key={field.name}
-                    id={field.name}
-                    name={field.name}
-                    label={label}
-                    value={value as string || ''}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    required={field.required}
-                    error={fieldError}
-                    fullWidth
-                  />
-                );
-              case 'relation':
-                return (
-                  <MultiSelect
-                    key={field.name}
-                    id={field.name}
-                    label={label}
-                    modelName={field.modelName || field.name}
-                    labelField={field.labelField || 'name'}
-                    selectedValues={(value as RelationItem[]) || []}
-                    onChange={(values) => handleChange(field.name, values)}
-                    required={field.required}
-                    error={fieldError}
-                    fullWidth
-                    maxSelection={1}
-                  />
-                );
-              case 'image_upload': {
-                const existingImageUrls = (formData?.imageUrl as string[] | undefined) || [];
-                const existingImages = Array.isArray(existingImageUrls) 
-                  ? existingImageUrls.map((url) => ({ id: url, url }))
-                  : [];
-                
-                const handleDeleteImage = () => {
-                  // Handle image deletion if needed
-                };
-                
-                return (
-                  <div key={field.name} className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                    <ImageUpload
-                      onImagesChange={setNewImages}
-                      existingImages={existingImages}
-                      onDeleteImage={handleDeleteImage}
-                    />
-                  </div>
-                );
-              }
-              default:
-                return null;
-            }
-          })}
+          <TextField
+            id="price"
+            name="price"
+            label="価格"
+            type="number"
+            value={formData?.price !== undefined ? String(formData.price) : ''}
+            onChange={(e) => handleChange('price', e.target.value ? Number(e.target.value) : '')}
+            required={false}
+            error={errors.price}
+            fullWidth
+          />
+
+          <TextArea
+            id="description"
+            name="description"
+            label="説明"
+            value={(formData?.description as string) || ''}
+            onChange={(e) => handleChange('description', e.target.value)}
+            required={false}
+            error={errors.description}
+            fullWidth
+          />
+
+          <MultiSelect
+            id="menuCategory"
+            label="メニューカテゴリー"
+            modelName="menuCategories"
+            labelField="name"
+            selectedValues={(formData?.menuCategory as RelationItem[]) || []}
+            onChange={(values) => handleChange('menuCategory', values)}
+            required={false}
+            error={errors.menuCategory}
+            fullWidth
+            maxSelection={1}
+          />
+
+          <div className="col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">画像</label>
+            <ImageUpload
+              onImagesChange={setNewImages}
+              existingImages={(Array.isArray(formData?.imageUrl) 
+                ? (formData.imageUrl as string[]).map((url) => ({ id: url, url }))
+                : [])}
+              onDeleteImage={() => {
+                // Handle image deletion if needed
+              }}
+            />
+          </div>
         </div>
 
         <div className="admin-mt-4 admin-flex admin-justify-end">

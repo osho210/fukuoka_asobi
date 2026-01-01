@@ -218,24 +218,16 @@ export default function CategoryDetailPage() {
 
       <form onSubmit={handleSubmit} className="admin-card">
         <div className="admin-form-grid">
-          {fields.map((field) => {
-            const value = formData[field.name];
-            const fieldError = errors[field.name];
-
-            return (
-              <TextField
-                key={field.name}
-                id={field.name}
-                name={field.name}
-                label={field.name === 'name' ? '名前' : field.name}
-                value={value as string || ''}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                error={fieldError}
-                fullWidth
-              />
-            );
-          })}
+          <TextField
+            id="name"
+            name="name"
+            label="名前"
+            value={(formData?.name as string) || ''}
+            onChange={(e) => handleChange('name', e.target.value)}
+            required={true}
+            error={errors.name}
+            fullWidth
+          />
         </div>
 
         <div className="admin-mt-4 admin-flex admin-justify-end">

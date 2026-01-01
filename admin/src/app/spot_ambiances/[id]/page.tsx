@@ -218,25 +218,16 @@ export default function Spot_ambiancesDetailPage() {
 
       <form onSubmit={handleSubmit} className="admin-card">
         <div className="admin-form-grid">
-          {fields.map((field) => {
-            const value = formData[field.name];
-            const fieldError = errors[field.name];
-            const label = getFieldDisplayName(field.name);
-
-            return (
-              <TextField
-                key={field.name}
-                id={field.name}
-                name={field.name}
-                label={label}
-                value={value as string || ''}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                error={fieldError}
-                fullWidth
-              />
-            );
-          })}
+          <TextField
+            id="ambianceName"
+            name="ambianceName"
+            label="雰囲気名"
+            value={(formData?.ambianceName as string) || ''}
+            onChange={(e) => handleChange('ambianceName', e.target.value)}
+            required={true}
+            error={errors.ambianceName}
+            fullWidth
+          />
         </div>
 
         <div className="admin-mt-4 admin-flex admin-justify-end">

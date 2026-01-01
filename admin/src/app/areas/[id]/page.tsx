@@ -7,15 +7,24 @@ import { useParams, useRouter } from 'next/navigation';
 import { ApolloError } from '@apollo/client';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/forms/TextField';
+import { MultiSelect } from '@/components/forms/MultiSelect';
 import { ArrowLeft, Save, Trash2 } from 'lucide-react';
 import { ModelInput, createModel, updateModel, deleteModel, fetchModelList } from '@/lib/modelGraphQL';
-import { areasConfig } from '@/lib/models/areas';
-import { getModelDisplayName, getFieldDisplayName } from '@/lib/modelConfig';
+import { getModelDisplayName } from '@/lib/modelConfig';
+
+// 選択項目の型定義
+interface RelationItem {
+  __typename?: string;
+  id: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
 
 // モデルデータの型定義
 interface ModelData {
   id: string;
-  [key: string]: string | number | boolean | object | null | undefined;
+  areaName?: string;
+  district?: RelationItem[];
+  [key: string]: string | number | boolean | object | null | undefined | RelationItem[];
 }
 
 /**
@@ -35,19 +44,15 @@ export default function AreasDetailPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const displayName = getModelDisplayName(modelRoute);
-  const fields = areasConfig.fields;
 
   // データ取得（編集時）または初期化（新規作成時）
   useEffect(() => {
     if (isNew) {
-      const initialData: ModelData = {
+      setFormData({
         id: 'new',
-        ...fields.reduce((acc, field) => {
-          acc[field.name] = '';
-          return acc;
-        }, {} as Record<string, string>)
-      };
-      setFormData(initialData);
+        areaName: '',
+        district: [],
+      });
       setIsLoading(false);
     } else {
       const fetchData = async () => {
@@ -56,12 +61,13 @@ export default function AreasDetailPage() {
           const item = items.find((i: { id: string }) => i.id === id);
 
           if (item) {
+            const districtValue = item.district;
             const initialData: ModelData = {
               id: item.id,
-              ...fields.reduce((acc, field) => {
-                acc[field.name] = item[field.name] || '';
-                return acc;
-              }, {} as Record<string, string>)
+              areaName: item.areaName || '',
+              district: districtValue && typeof districtValue === 'object'
+                ? [{ id: String((districtValue as Record<string, unknown>).id), ...(districtValue as Record<string, unknown>) }]
+                : [],
             };
             setFormData(initialData);
           }
@@ -77,7 +83,7 @@ export default function AreasDetailPage() {
     }
   }, [isNew, id]);
 
-  const handleChange = (name: string, value: string) => {
+  const handleChange = (name: string, value: string | RelationItem[]) => {
     if (!formData) return;
 
     setFormData({
@@ -97,14 +103,12 @@ export default function AreasDetailPage() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    fields.forEach((field) => {
-      if (field.required) {
-        const value = formData?.[field.name];
-        if (!value) {
-          newErrors[field.name] = '必須項目です';
-        }
-      }
-    });
+    if (!formData?.areaName) {
+      newErrors.areaName = '必須項目です';
+    }
+    if (!formData?.district || (formData.district as RelationItem[]).length === 0) {
+      newErrors.district = '必須項目です';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -122,14 +126,17 @@ export default function AreasDetailPage() {
     setError(null);
 
     try {
-      const input: ModelInput = {};
+      const input: ModelInput = {
+        areaName: formData.areaName,
+      };
       
-      fields.forEach((field) => {
-        const value = formData[field.name];
-        if (value !== undefined && value !== null) {
-          input[field.name] = value;
+      // district relation
+      if (formData.district && Array.isArray(formData.district) && formData.district.length > 0) {
+        const relationItem = formData.district[0];
+        if (relationItem && relationItem.id) {
+          input.districtId = Number(relationItem.id);
         }
-      });
+      }
 
       if (isNew) {
         await createModel(modelRoute, input);
@@ -218,25 +225,29 @@ export default function AreasDetailPage() {
 
       <form onSubmit={handleSubmit} className="admin-card">
         <div className="admin-form-grid">
-          {fields.map((field) => {
-            const value = formData[field.name];
-            const fieldError = errors[field.name];
-            const label = getFieldDisplayName(field.name);
+          <TextField
+            id="areaName"
+            name="areaName"
+            label="エリア名"
+            value={(formData.areaName as string) || ''}
+            onChange={(e) => handleChange('areaName', e.target.value)}
+            required={true}
+            error={errors.areaName}
+            fullWidth
+          />
 
-            return (
-              <TextField
-                key={field.name}
-                id={field.name}
-                name={field.name}
-                label={label}
-                value={value as string || ''}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                error={fieldError}
-                fullWidth
-              />
-            );
-          })}
+          <MultiSelect
+            id="district"
+            label="地区"
+            modelName="districts"
+            labelField="districtName"
+            selectedValues={(formData.district as RelationItem[]) || []}
+            onChange={(values) => handleChange('district', values)}
+            required={true}
+            error={errors.district}
+            fullWidth
+            maxSelection={1}
+          />
         </div>
 
         <div className="admin-mt-4 admin-flex admin-justify-end">

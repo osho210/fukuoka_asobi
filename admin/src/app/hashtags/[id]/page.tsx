@@ -218,25 +218,16 @@ export default function HashtagsDetailPage() {
 
       <form onSubmit={handleSubmit} className="admin-card">
         <div className="admin-form-grid">
-          {fields.map((field) => {
-            const value = formData[field.name];
-            const fieldError = errors[field.name];
-            const label = getFieldDisplayName(field.name);
-
-            return (
-              <TextField
-                key={field.name}
-                id={field.name}
-                name={field.name}
-                label={label}
-                value={value as string || ''}
-                onChange={(e) => handleChange(field.name, e.target.value)}
-                required={field.required}
-                error={fieldError}
-                fullWidth
-              />
-            );
-          })}
+          <TextField
+            id="hashtagName"
+            name="hashtagName"
+            label="ハッシュタグ名"
+            value={(formData?.hashtagName as string) || ''}
+            onChange={(e) => handleChange('hashtagName', e.target.value)}
+            required={true}
+            error={errors.hashtagName}
+            fullWidth
+          />
         </div>
 
         <div className="admin-mt-4 admin-flex admin-justify-end">
