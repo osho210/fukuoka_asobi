@@ -352,18 +352,18 @@ export function ModelDetailModal({
 
         // バケットリストアイテムの特別処理
         if (modelRoute === 'bucket_list_items' && fieldName === 'layoutBucketId') {
-          // layoutBucketIdは配列から最初の要素を取得
+          // layoutBucketIdsは配列として送信（バックエンド仕様に合わせる）
           if (Array.isArray(value) && value.length > 0) {
             const relationItem = value[0];
             if (typeof relationItem === 'object' && relationItem !== null && 'id' in relationItem) {
-              input.layoutBucketId = [relationItem.id as string];
+              input.layoutBucketIds = [relationItem.id as string];
             } else if (typeof relationItem === 'string') {
-              input.layoutBucketId = [relationItem];
+              input.layoutBucketIds = [relationItem];
             }
           } else if (typeof value === 'object' && value !== null && 'id' in value) {
-            input.layoutBucketId = [(value as RelationData).id as string];
+            input.layoutBucketIds = [(value as RelationData).id as string];
           } else if (typeof value === 'string') {
-            input.layoutBucketId = [value];
+            input.layoutBucketIds = [value];
           }
           return;
         }

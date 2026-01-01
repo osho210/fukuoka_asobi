@@ -188,7 +188,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'active', type: 'boolean' },
   ],
   bucket_list_items: [
-    { name: 'layoutBucketId', type: 'multirelation', modelName: 'layout_buckets', labelField: 'name', required: true },
+    { name: 'layoutBucketId', type: 'relation', modelName: 'layout_buckets', labelField: 'name', required: true },
     { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
     { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
     { name: 'title', type: 'text', required: true },

@@ -26,22 +26,20 @@ module Mutations
 
     def resolve(**args)
       input = OpenStruct.new(args)
-      # layout_bucket_ids が配列の場合は最初の要素を取得して layout_bucket_id に変換
-      layout_bucket_id = if input.layout_bucket_ids.is_a?(Array)
-        input.layout_bucket_ids.first
-      else
-        input.layout_bucket_ids
-        # layout_bucket_id が配列の場合は最初の要素を取得
-        if input.layout_bucket_id.is_a?(Array)
-          input.layout_bucket_id = input.layout_bucket_id.first
-        end
-      end
 
       # 管理者権限チェック
       unless context[:current_user]&.admin?
         return { bucket_list_item: nil, errors: [ "管理者権限が必要です" ] }
       end
 
+      # layout_bucket_ids が配列の場合は最初の要素を取得して layout_bucket_id に変換
+      layout_bucket_id = if input.layout_bucket_ids.is_a?(Array) && input.layout_bucket_ids.present?
+        input.layout_bucket_ids.first
+      else
+        input.layout_bucket_ids
+      end
+
+      # BucketListItemを作成（layout_bucket_ids は除外して layout_bucket_id を使用）
       bucket_list_item = BucketListItem.new(
         input.to_h.except(:bucket_list_item_belongings_attributes, :bucket_list_item_references_attributes, :layout_bucket_ids)
           .merge(layout_bucket_id: layout_bucket_id)
@@ -60,7 +58,6 @@ module Mutations
           bucket_list_item.bucket_list_item_references.build(attr.to_h)
         end
       end
-      bucket_list_item = BucketListItem.new(input.to_h)
 
       if bucket_list_item.save
         { bucket_list_item: bucket_list_item, errors: [] }
