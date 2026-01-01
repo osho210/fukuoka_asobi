@@ -31,9 +31,10 @@ module Mutations
         input.layout_bucket_ids.first
       else
         input.layout_bucket_ids
-      # layout_bucket_id が配列の場合は最初の要素を取得
-      if input.layout_bucket_id.is_a?(Array)
-        input.layout_bucket_id = input.layout_bucket_id.first
+        # layout_bucket_id が配列の場合は最初の要素を取得
+        if input.layout_bucket_id.is_a?(Array)
+          input.layout_bucket_id = input.layout_bucket_id.first
+        end
       end
 
       # 管理者権限チェック
