@@ -454,7 +454,16 @@ export const modelConfigs: Record<string, ModelConfig> = {
         header: 'アクティブ',
         accessorKey: 'active',
         sortable: true,
-        cell: (item) => item.active ? '✓' : '✗'
+        cell: (item: ModelData) => item.active ? '✓' : '✗'
+      },
+    ],
+    fields: [
+      { name: 'text', type: 'text', required: true },
+      { name: 'tags', type: 'text' },
+      { name: 'weight', type: 'number' },
+      { name: 'active', type: 'boolean' },
+    ],
+  },
   layout_buckets: {
     columns: [
       { header: 'ID', accessorKey: 'id', sortable: true },
@@ -539,7 +548,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'status', label: 'ステータス', model: 'bucket_list_items', labelField: 'status' },
     ],
   },
-};
+}
 
 // フィールド名の日本語表示
 export const fieldDisplayNames: Record<string, string> = {

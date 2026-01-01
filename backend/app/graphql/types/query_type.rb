@@ -423,6 +423,8 @@ module Types
 
     def all_experience_cards
       ExperienceCard.order(created_at: :desc)
+    end
+
     # レイアウトバケット
     # --------------------------------------------
     field :layout_buckets, [Types::LayoutBucketType], null: false, description: "レイアウトバケット一覧を取得" do
