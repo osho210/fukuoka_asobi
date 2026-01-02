@@ -16,6 +16,7 @@ export const GET_BUCKET_LIST_ITEMS = gql`
       publishedAt
       costMin
       costMax
+      topDisplayFlag
       layoutBucket {
         id
         name

@@ -18,8 +18,13 @@ export const useBucketListItems = (
         fetchPolicy: 'network-only',
     });
 
+    // topDisplayFlagがfalseのアイテムのみをフィルタリング
+    const bucketListItems = data?.bucketListItems.filter(
+        (bucketListItem) => bucketListItem.topDisplayFlag === false
+    ) || [];
+
     return {
-        bucketListItems: data?.bucketListItems,
+        bucketListItems,
         loading,
         error,
         refetch,

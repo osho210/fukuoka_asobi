@@ -478,7 +478,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
     ],
     fields: [
       { name: 'layoutBucketId', type: 'multiSelect', required: true, relationModel: 'layout_buckets' },
-      { name: 'topDisplayFlag', type: 'boolean', required: true },
+      { name: 'topDisplayFlag', type: 'boolean' },
       { name: 'title', type: 'textarea', required: true },
       { name: 'content', type: 'textarea', required: false },
       { name: 'areaText', type: 'text', required: false },

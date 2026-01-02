@@ -3402,7 +3402,7 @@ export type GetBucketListItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingTime?: any | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum } }> };
+export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingTime?: any | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, topDisplayFlag: boolean, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum } }> };
 
 export type GetBucketListItemQueryVariables = Exact<{
   id: Scalars['ID']['input'];
