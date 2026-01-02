@@ -9,9 +9,6 @@ export const Footer = () => {
             </p>
             <ul className="footer-nav">
                 <li className="footer-nav-item">
-                    <a href="/about" className="footer-nav-link">サービスについて</a>
-                </li>
-                <li className="footer-nav-item">
                     <a href="/contact" className="footer-nav-link">お問い合わせ</a>
                 </li>
                 <li className="footer-nav-item">
