@@ -24,8 +24,6 @@ export const BucketsList: React.FC<BucketsListProps> = ({ onSelectItem }) => {
 
     // バケットアイテムをクリック時の処理
     const handleBucketClick = (item: BucketListItem) => {
-
-        console.log(item);
         setSelectedBucket(item);
         setSelectedBucketId(item.id);
         setIsModalOpen(true);
@@ -84,6 +82,7 @@ export const BucketsList: React.FC<BucketsListProps> = ({ onSelectItem }) => {
                                 tabIndex={0}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
                                         handleBucketClick(item as BucketListItem);
                                     }
                                 }}

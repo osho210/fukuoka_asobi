@@ -275,14 +275,14 @@
     outline-offset: 2px;
 }
 
-/* X共有ボタン */
-.bucket-share-line{
+/* Line共有ボタン */
+.bucket-share-line {
     background-color: #00c300;
     border-color: #00c300;
     color: #fff;
 }
 
-.bucket-share-x:hover {
+#b85a42.bucket-share-line:hover {
     background-color: #1a91da;
     border-color: #1a91da;
 }

@@ -29,6 +29,7 @@ export const BucketListItemCard: React.FC<BucketListItemCardProps> = ({
             tabIndex={0}
             onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
                     onClick?.(item);
                 }
             }}
