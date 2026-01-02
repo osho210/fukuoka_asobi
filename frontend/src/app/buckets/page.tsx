@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import BucketsList from '@/components/buckets/BucketsList';
 import BucketDetailModal from '@/components/buckets/BucketDetailModal';
@@ -9,7 +9,7 @@ import Image from 'next/image';
 import '@/styles/BucketsPage.css';
 
 /**
- * バケッツ（福岡でやりたいこと）一覧ページ
+ * バケッツ（福岡でやりたいこと）一覧ページの実装
  *
  * 責務：
  * - URL パラメータ（bucket_id）の一元管理
@@ -17,13 +17,13 @@ import '@/styles/BucketsPage.css';
  * - KV イメージクリック時の処理
  * - 子コンポーネント（BucketsList）への状態の受け渡し
  */
-export default function BucketsPage() {
+function BucketsPageContent() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     // URL パラメータからバケットIDを取得（シングルソースオブトゥルース）
-    const bucketIdFromUrl = searchParams ? searchParams.get('bucket_id') : null;
+    const bucketIdFromUrl = searchParams?.get('bucket_id') || null;
 
     // ローカル状態：選択されたバケット情報
     const [selectedBucket, setSelectedBucket] = React.useState<BucketListItem | null>(null);
@@ -117,5 +117,17 @@ export default function BucketsPage() {
                 onClose={handleCloseModal}
             />
         </div>
+    );
+}
+
+/**
+ * バケッツページ
+ * useSearchParams を使用するコンポーネントを Suspense で囲む
+ */
+export default function BucketsPage() {
+    return (
+        <Suspense fallback={<div>読み込み中...</div>}>
+            <BucketsPageContent />
+        </Suspense>
     );
 }

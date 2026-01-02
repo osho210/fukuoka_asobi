@@ -38,10 +38,7 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     const effectiveId = id || '';
 
     // サーバーから詳細データを取得
-    const shouldSkipQuery = !effectiveId || !!initialBucketListItem;
-    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(effectiveId, {
-        skip: shouldSkipQuery,
-    });
+    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(effectiveId);
 
     // initialBucketListItemが渡されている場合はそれを使用、無い場合はサーバーデータを使用
     const bucketListItem = initialBucketListItem || serverBucketListItem;

@@ -501,7 +501,7 @@ export default function ModelDetailPage() {
     }
   }, [isNew, id, modelRoute, fields]);
 
-  const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[] | EditableOpeningHour[]) => {
+  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[] | EditableBelonging[] | EditableReference[] | EditableOpeningHour[]) => {
     if (!formData) return;
 
     setFormData({

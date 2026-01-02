@@ -13,6 +13,8 @@ import { TimePicker } from '@/components/forms/TimePicker';
 import { FileUpload } from '@/components/forms/FileUpload';
 import ImageUpload from '@/components/forms/ImageUpload';
 import SingleImageUpload from '@/components/forms/SingleImageUpload';
+import { EditableBelonging } from '@/components/forms/BelongingsEditor';
+import { EditableReference } from '@/components/forms/ReferencesEditor';
 import { Save, Trash2, Search } from 'lucide-react';
 import { ModelInput, PlanDetailInput, createModel, updateModel, deleteModel, updatePlanDetails } from '@/lib/modelGraphQL';
 import { useQuery } from '@apollo/client';
@@ -302,7 +304,7 @@ export function ModelDetailModal({
     }
   }, [isOpen, initialData, modelRoute, fields]);
 
-  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[]) => {
+  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[] | EditableBelonging[] | EditableReference[] | OpeningHourWithDestroy[]) => {
     if (!formData) return;
 
     setFormData({
