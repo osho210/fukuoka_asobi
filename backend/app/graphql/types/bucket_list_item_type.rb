@@ -4,6 +4,7 @@ module Types
   class BucketListItemType < Types::BaseObject
     field :id, ID, null: false
     field :layout_bucket, Types::LayoutBucketType, null: false
+    field :top_display_flag, Boolean, null: false
     field :layout_bucket_id, [ID], null: false
     field :title, String, null: false
     field :content, String, null: true

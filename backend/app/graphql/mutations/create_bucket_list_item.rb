@@ -3,6 +3,7 @@
 module Mutations
   class CreateBucketListItem < BaseMutation
     argument :layout_bucket_id, [ID], required: true
+    argument :top_display_flag, Boolean, required: true
     argument :title, String, required: true
     argument :content, String, required: false
     argument :area_text, String, required: false
