@@ -42,6 +42,16 @@ export default function Home() {
         </p>
         <Link href={'/buckets'} className="section-link concept">この街で、やりたい100のこと。</Link>
       </div>
+      <div className="section group-experience-promo">
+        <h2 className="section-title">「次、ここじゃない？」を形にする</h2>
+        <p className="section-subtitle">いつもの遊びに、新しいスパイスを</p>
+        <p className="section-content-text">
+          ガイドブックには載っていない、私たちだけの隠れ家。<br />
+          直感で選ぶプロセスが、今日を特別なものに変えてくれる。<br />
+          友達を誘って、新しい一ページをめくりに行こう。
+        </p>
+        <Link href={'/group-experience'} className="section-link">友達と遊びを企てる</Link>
+      </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
         <p className="section-subtitle">編集部イチオシプラン</p>

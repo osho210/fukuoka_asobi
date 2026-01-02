@@ -49,6 +49,9 @@ export function DataTable<T extends Record<string, unknown>>({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hoveredRowId, setHoveredRowId] = useState<ValueType>(null);
 
+  // data が undefined または null の場合は空配列として扱う
+  const safeData = data ?? [];
+
   // ソート状態の切り替え
   const handleSort = (column: Column<T>) => {
     if (!column.sortable || !sorting) return;
@@ -94,7 +97,7 @@ export function DataTable<T extends Record<string, unknown>>({
             </tr>
           </thead>
           <tbody>
-            {data.length === 0 ? (
+            {safeData.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length}
@@ -104,7 +107,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 </td>
               </tr>
             ) : (
-              data.map((item) => (
+              safeData.map((item) => (
                 <tr
                   key={String(item[keyField])}
                   className={onRowClick ? 'admin-table-clickable' : ''}

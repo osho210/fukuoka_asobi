@@ -370,6 +370,61 @@ module Types
     end
 
     # --------------------------------------------
+    # グループ体験機能
+    # --------------------------------------------
+    field :direction_cards, [Types::DirectionCardType], null: false, description: "方向性カードをランダムに取得します" do
+      argument :limit, Integer, required: false, default_value: 3, description: "取得件数（デフォルト3）"
+    end
+
+    def direction_cards(limit:)
+      DirectionCard.weighted_random(limit)
+    end
+
+    field :direction_card, Types::DirectionCardType, null: true, description: "指定IDの方向性カードを取得します" do
+      argument :id, ID, required: true, description: "方向性カードID"
+    end
+
+    def direction_card(id:)
+      DirectionCard.find_by(id: id)
+    end
+
+    field :all_direction_cards, [Types::DirectionCardType], null: false, description: "すべての方向性カードを取得します（管理画面用）"
+
+    def all_direction_cards
+      DirectionCard.order(created_at: :desc)
+    end
+
+    field :experience_cards, [Types::ExperienceCardType], null: false, description: "タグに基づいて体験カードを取得します" do
+      argument :tags, [String], required: false, description: "フィルタリングするタグの配列"
+      argument :limit, Integer, required: false, default_value: 5, description: "取得件数（デフォルト5）"
+      argument :exclude_ids, [ID], required: false, description: "除外するカードID"
+    end
+
+    def experience_cards(tags: nil, limit: 5, exclude_ids: nil)
+      cards = if tags.present?
+                ExperienceCard.order_by_tag_matches(tags)
+              else
+                ExperienceCard.active.order(Arel.sql('RAND()'))
+              end
+
+      cards = cards.where.not(id: exclude_ids) if exclude_ids.present?
+      cards.limit(limit)
+    end
+
+    field :experience_card, Types::ExperienceCardType, null: true, description: "指定IDの体験カードを取得します" do
+      argument :id, ID, required: true, description: "体験カードID"
+    end
+
+    def experience_card(id:)
+      ExperienceCard.find_by(id: id)
+    end
+
+    field :all_experience_cards, [Types::ExperienceCardType], null: false, description: "すべての体験カードを取得します（管理画面用）"
+
+    def all_experience_cards
+      ExperienceCard.order(created_at: :desc)
+    end
+
     # レイアウトバケット
     # --------------------------------------------
     field :layout_buckets, [Types::LayoutBucketType], null: false, description: "レイアウトバケット一覧を取得" do

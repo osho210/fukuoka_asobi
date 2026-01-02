@@ -95,6 +95,15 @@ module Types
     # Google Places API関連
     field :sync_spot_with_google_places, mutation: Mutations::SyncSpotWithGooglePlaces
 
+    # グループ体験機能 - 方向性カード関連
+    field :create_direction_card, mutation: Mutations::CreateDirectionCard
+    field :update_direction_card, mutation: Mutations::UpdateDirectionCard
+    field :delete_direction_card, mutation: Mutations::DeleteDirectionCard
+
+    # グループ体験機能 - 体験カード関連
+    field :create_experience_card, mutation: Mutations::CreateExperienceCard
+    field :update_experience_card, mutation: Mutations::UpdateExperienceCard
+    field :delete_experience_card, mutation: Mutations::DeleteExperienceCard
     # レイアウトバケット関連
     field :create_layout_bucket, mutation: Mutations::CreateLayoutBucket
     field :update_layout_bucket, mutation: Mutations::UpdateLayoutBucket
