@@ -196,6 +196,49 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                         </div>
 
                         <div className="bucket-detail-modal-info">
+                            {/* 共有 */}
+                            <div className="bucket-share-section">
+                                <div className="bucket-share-buttons">
+                                    {/* LINEシェア - トーク画面に共有 */}
+                                    <button
+                                        className="bucket-share-button bucket-share-line"
+                                        onClick={() => {
+                                            // LINE公式のシェアURL（トーク画面で共有可能）
+                                            const shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(
+                                                `${bucketListItem.title}\n${window.location.href}`
+                                            )}`;
+                                            window.open(shareUrl, '_blank', 'width=500,height=500');
+                                        }}
+                                        title="LINEで共有"
+                                        aria-label="LINEで共有"
+                                    >
+                                        <Image src={'/line-icon.png'} width={20} height={20} alt={'line icon'} />
+                                        LINEで送る
+                                    </button>
+
+                                    {/* URLコピー */}
+                                    <button
+                                        className="bucket-share-button bucket-share-copy"
+                                        onClick={async () => {
+                                            try {
+                                                await navigator.clipboard.writeText(window.location.href);
+                                                alert('体験のURLをコピーしました！');
+                                            } catch (error) {
+                                                console.error('URLコピーに失敗しました:', error);
+                                                alert('コピーに失敗しました');
+                                            }
+                                        }}
+                                        title="URLをコピー"
+                                        aria-label="URLをコピー"
+                                    >
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                        </svg>
+                                        リンクをコピー
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

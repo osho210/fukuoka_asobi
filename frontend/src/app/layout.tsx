@@ -58,6 +58,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           })(document);
         `}</Script>
         <link href="https://db.onlinewebfonts.com/c/aac28a8d3a17309e7f5bd19aadcd7915?family=Post+No+Bills+Colombo+ExtraBold" rel="stylesheet"></link>
+
+        {/* LINE Social Plugins スクリプト - グローバルで一度だけ読み込む */}
+        <Script
+          src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js"
+          strategy="afterInteractive"
+          async
+          defer
+        />
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
