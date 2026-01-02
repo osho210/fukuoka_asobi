@@ -50,6 +50,7 @@ export const GET_BUCKET_LIST_ITEM = gql`
       status
       publishedAt
       layoutBucketId
+      topDisplayFlag
       layoutBucket {
         id
         name

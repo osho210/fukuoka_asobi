@@ -93,6 +93,7 @@ export type BucketListItem = {
   status: Scalars['String']['output'];
   stayMinutes?: Maybe<Scalars['Int']['output']>;
   title: Scalars['String']['output'];
+  topDisplayFlag: Scalars['Boolean']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
   weather: Scalars['String']['output'];
 };
@@ -232,6 +233,7 @@ export type CreateBucketListItemInput = {
   status?: InputMaybe<BucketListItemStatusEnum>;
   stayMinutes?: InputMaybe<Scalars['Int']['input']>;
   title: Scalars['String']['input'];
+  topDisplayFlag: Scalars['Boolean']['input'];
   weather?: InputMaybe<WeatherEnum>;
 };
 
@@ -2619,6 +2621,7 @@ export type UpdateBucketListItemInput = {
   status?: InputMaybe<BucketListItemStatusEnum>;
   stayMinutes?: InputMaybe<Scalars['Int']['input']>;
   title: Scalars['String']['input'];
+  topDisplayFlag: Scalars['Boolean']['input'];
   weather?: InputMaybe<WeatherEnum>;
 };
 
@@ -3394,14 +3397,14 @@ export type CreateBucketListItemMutationVariables = Exact<{
 }>;
 
 
-export type CreateBucketListItemMutation = { __typename?: 'Mutation', createBucketListItem?: { __typename?: 'CreateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, meetingTime?: any | null, stayMinutes?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string> } | null } | null };
+export type CreateBucketListItemMutation = { __typename?: 'Mutation', createBucketListItem?: { __typename?: 'CreateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, meetingTime?: any | null, stayMinutes?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string>, topDisplayFlag: boolean } | null } | null };
 
 export type UpdateBucketListItemMutationVariables = Exact<{
   input: UpdateBucketListItemInput;
 }>;
 
 
-export type UpdateBucketListItemMutation = { __typename?: 'Mutation', updateBucketListItem?: { __typename?: 'UpdateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, meetingTime?: any | null, stayMinutes?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string> } | null } | null };
+export type UpdateBucketListItemMutation = { __typename?: 'Mutation', updateBucketListItem?: { __typename?: 'UpdateBucketListItemPayload', errors: Array<string>, bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, meetingTime?: any | null, stayMinutes?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string>, topDisplayFlag: boolean } | null } | null };
 
 export type CreateCategoryMutationVariables = Exact<{
   input: CreateCategoryInput;
@@ -3787,7 +3790,7 @@ export type GetAreaQuery = { __typename?: 'Query', area?: { __typename?: 'Area',
 export type GetBucketListItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, layoutBucketId: Array<string>, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string }> }> };
+export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, layoutBucketId: Array<string>, topDisplayFlag: boolean, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string }> }> };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

@@ -22,6 +22,7 @@ export const CREATE_BUCKET_LIST_ITEM = gql`
         status
         publishedAt
         layoutBucketId
+        topDisplayFlag
       }
       errors
     }
@@ -50,6 +51,7 @@ export const UPDATE_BUCKET_LIST_ITEM = gql`
         status
         publishedAt
         layoutBucketId
+        topDisplayFlag
       }
       errors
     }
