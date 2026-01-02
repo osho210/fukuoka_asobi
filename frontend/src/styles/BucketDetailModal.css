@@ -13,7 +13,7 @@
     padding: 16px;
     /* 初期状態では透明に */
     opacity: 0;
-    transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: opacity;
 }
 
@@ -32,17 +32,17 @@
     overflow-y: auto;
     position: relative;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    /* 初期状態ではアニメーション無し */
+    /* 初期状態：非表示かつスケール */
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transform: scale(0.95) translateY(10px);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: opacity, transform;
 }
 
 /* モーダルコンテンツが表示される時 */
 .bucket-detail-modal-content.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
 }
 
 /* クローズボタン */
