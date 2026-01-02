@@ -58,3 +58,14 @@ export const getTravelMethodText = (method: string) => {
   };
   return methods[method] || method;
 };
+
+// 天気の日本語表示に変換する関数
+export const getWeatherLabel = (weather: string): string => {
+  const weatherMap: Record<string, string> = {
+    sunny: '晴れ',
+    cloudy: '曇り',
+    rainy: '雨',
+    any: 'いつでも',
+  };
+  return weatherMap[weather] || weather;
+};

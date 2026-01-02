@@ -8,11 +8,15 @@ export const GET_BUCKET_LIST_ITEMS = gql`
       title
       areaText
       content
+      meetingPlaceName
+      meetingPlaceAddress
+      meetingTime
       weather
       status
       publishedAt
       costMin
       costMax
+      topDisplayFlag
       layoutBucket {
         id
         name
@@ -47,6 +51,7 @@ export const GET_BUCKET_LIST_ITEM = gql`
       status
       publishedAt
       layoutBucketId
+      topDisplayFlag
       layoutBucket {
         id
         name

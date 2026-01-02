@@ -9,6 +9,7 @@ export const GET_BUCKET_LIST_ITEMS = gql`
         name
       }
       layoutBucketId
+      topDisplayFlag
       title
       content
       areaText

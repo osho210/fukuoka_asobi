@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_28_163200) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_02_081515) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -112,6 +112,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_28_163200) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "top_display_flag", default: false, null: false
     t.index ["layout_bucket_id"], name: "index_bucket_list_items_on_layout_bucket_id"
   end
 

@@ -18,8 +18,13 @@ export const useBucketListItems = (
         fetchPolicy: 'network-only',
     });
 
+    // topDisplayFlagがfalseのアイテムのみをフィルタリング
+    const bucketListItems = data?.bucketListItems.filter(
+        (bucketListItem) => bucketListItem.topDisplayFlag === false
+    ) || [];
+
     return {
-        bucketListItems: data?.bucketListItems,
+        bucketListItems,
         loading,
         error,
         refetch,
@@ -29,7 +34,7 @@ export const useBucketListItems = (
 /**
  * 特定のバケットリストアイテムを取得するカスタムフック
  */
-export const useBucketListItem = (id: string) => {
+export const useBucketListItem = (id: string, p0: { skip: boolean; }) => {
     const { loading, error, data, refetch } = useQuery<GetBucketListItemQuery, GetBucketListItemQueryVariables>(GET_BUCKET_LIST_ITEM, {
         variables: { id },
         fetchPolicy: 'network-only',

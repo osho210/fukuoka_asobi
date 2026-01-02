@@ -93,6 +93,7 @@ export type BucketListItem = {
   status: Scalars['String']['output'];
   stayMinutes?: Maybe<Scalars['Int']['output']>;
   title: Scalars['String']['output'];
+  topDisplayFlag: Scalars['Boolean']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
   weather: Scalars['String']['output'];
 };
@@ -232,6 +233,7 @@ export type CreateBucketListItemInput = {
   status?: InputMaybe<BucketListItemStatusEnum>;
   stayMinutes?: InputMaybe<Scalars['Int']['input']>;
   title: Scalars['String']['input'];
+  topDisplayFlag: Scalars['Boolean']['input'];
   weather?: InputMaybe<WeatherEnum>;
 };
 
@@ -2815,6 +2817,7 @@ export type UpdateBucketListItemInput = {
   status?: InputMaybe<BucketListItemStatusEnum>;
   stayMinutes?: InputMaybe<Scalars['Int']['input']>;
   title: Scalars['String']['input'];
+  topDisplayFlag: Scalars['Boolean']['input'];
   weather?: InputMaybe<WeatherEnum>;
 };
 
@@ -3640,14 +3643,14 @@ export type GetBucketListItemsQueryVariables = Exact<{
 }>;
 
 
-export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum } }> };
+export type GetBucketListItemsQuery = { __typename?: 'Query', bucketListItems: Array<{ __typename?: 'BucketListItem', id: string, title: string, areaText?: string | null, content?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingTime?: any | null, weather: string, status: string, publishedAt?: any | null, costMin?: number | null, costMax?: number | null, topDisplayFlag: boolean, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum } }> };
 
 export type GetBucketListItemQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetBucketListItemQuery = { __typename?: 'Query', bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string>, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, note?: string | null, sortOrder: number }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string, title?: string | null, url: string, referenceType: string, sortOrder: number }> } | null };
+export type GetBucketListItemQuery = { __typename?: 'Query', bucketListItem?: { __typename?: 'BucketListItem', id: string, title: string, content?: string | null, areaText?: string | null, meetingPlaceName?: string | null, meetingPlaceAddress?: string | null, meetingPlaceGooglePlaceId?: string | null, stayMinutes?: number | null, meetingTime?: any | null, startTime?: any | null, endTime?: any | null, costMin?: number | null, costMax?: number | null, weather: string, status: string, publishedAt?: any | null, layoutBucketId: Array<string>, topDisplayFlag: boolean, createdAt: any, updatedAt: any, layoutBucket: { __typename?: 'LayoutBucket', id: string, name: string, templateKey: string, themeKey: string, shift: LayoutBucketShiftEnum, tilt: LayoutBucketTiltEnum, depth: LayoutBucketDepthEnum }, bucketListItemBelongings: Array<{ __typename?: 'BucketListItemBelonging', id: string, name: string, note?: string | null, sortOrder: number }>, bucketListItemReferences: Array<{ __typename?: 'BucketListItemReference', id: string, title?: string | null, url: string, referenceType: string, sortOrder: number }> } | null };
 
 export type GetPublishedBucketListItemsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;

@@ -188,7 +188,8 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
     { name: 'active', type: 'boolean' },
   ],
   bucket_list_items: [
-    { name: 'layoutBucketId', type: 'relation', modelName: 'layout_buckets', labelField: 'name', required: true },
+    { name: 'layoutBucketId', type: 'multirelation', modelName: 'layout_buckets', labelField: 'name', required: true },
+    { name: 'topDisplayFlag', type: 'boolean', required: true },
     { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
     { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
     { name: 'title', type: 'text', required: true },
@@ -310,6 +311,7 @@ const fieldDisplayNames: Record<string, string> = {
   weather: '天気',
   status: 'ステータス',
   publishedAt: '公開日時',
+  topDisplayFlag: 'トップ表示フラグ',
   bucket_list_item_belongings: '持ち物',
   bucket_list_item_references: '参考資料',
 };
