@@ -143,7 +143,7 @@ const Login = () => {
           theme: 'outline',
           size: 'large',
           text: 'signin_with',
-          width: '100%',
+          width: 'max-content',
           locale: 'ja',
         });
       }
@@ -176,7 +176,7 @@ const Login = () => {
             <p>Google認証を読み込み中...</p>
           </div>
         )}
-        <div id="google-signin-button"></div>
+        <div id="google-signin-button" style={{ display: 'flex', justifyContent: 'center' }}></div>
       </div>
 
       <div className="auth-footer">
