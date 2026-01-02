@@ -6,6 +6,7 @@ import ContentDetail from '../ContentDetail';
 import BusinessHours from '../BusinessHours';
 import '@/styles/ContentDetail.css';
 import Image from 'next/image';
+import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
 
 type SpotDetailAdapterProps = {
   spot: Spot;
@@ -19,7 +20,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
   const badges: ReactNode = (
     <>
       <span className="content-detail-badge">
-        {spot.spotType}
+        {getSpotTypeLabel(spot.spotType)}
       </span>
       {spot.isClosed && (
         <span className="content-detail-badge" style={{ backgroundColor: '#ff4d4d', color: 'white' }}>
@@ -288,7 +289,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
   return (
     <ContentDetail
       title={spot.spotName}
-      imageUrls={[]}
+      imageUrls={spot.imageUrls}
       badges={badges}
       mainSections={mainSections}
       sidebarItems={sidebarItems}

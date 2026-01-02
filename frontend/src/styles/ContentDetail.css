@@ -95,6 +95,7 @@
 
 /* セクション */
 .content-detail-section {
+  margin-top: 10px;
   margin-bottom: 24px;
 }
 
@@ -263,8 +264,6 @@
 .content-detail-image-content {
   width: 100% !important;
   height: auto !important;
-  max-height: 400px;
-  object-fit: cover;
 }
 
 /* Slick dots が下に埋まるのを防止 */

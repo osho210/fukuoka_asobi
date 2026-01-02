@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';
 import '@/styles/RecommendedSpot.css'
+import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
 
 type SpotFromQuery = NonNullable<GetSpotQuery['spot']>;
 
@@ -21,16 +22,16 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
       <div className="spot-detail">
         <div className="spot-header">
           <h1 className="spot-name">{spot.spotName}</h1>
-          <div className="spot-type-badge">{spot.spotType}</div>
+          <div className="spot-type-badge">{getSpotTypeLabel(spot.spotType)}</div>
           {spot.isClosed && <div className="closed-badge">閉店</div>}
         </div>
 
         <div className="spot-info">
           <div className="spot-image">
             {/* 画像があれば表示、なければプレースホルダー */}
-            {spot.imageUrl ? (
+            {spot.imageUrls ? (
               <Image
-                src={spot.imageUrl.url}
+                src={spot.imageUrls[0].url}
                 alt={spot.spotName}
                 className="spot-detail-image"
               />

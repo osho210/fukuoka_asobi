@@ -67,7 +67,7 @@ export default function ContentDetail({
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    adaptiveHeight: false,
+    adaptiveHeight: true,
   };
 
   return (
@@ -99,8 +99,8 @@ export default function ContentDetail({
                         <Image
                           src={imageUrl.url}
                           alt={`${title} ${idx + 1}`}
-                          width={800}
-                          height={400}
+                          width={400}
+                          height={500}
                           className="content-detail-image-content"
                           priority={idx === 0}
                         />
