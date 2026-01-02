@@ -185,6 +185,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
   ],
   bucket_list_items: [
     { name: 'layoutBucketId', type: 'multirelation', modelName: 'layout_buckets', labelField: 'name', required: true },
+    { name: 'topDisplayFlag', type: 'boolean', required: true },
     { name: 'status', type: 'select', required: true, enumKey: 'BucketListItemStatusEnum' },
     { name: 'weather', type: 'select', required: true, enumKey: 'WeatherEnum' },
     { name: 'title', type: 'text', required: true },
@@ -304,6 +305,7 @@ const fieldDisplayNames: Record<string, string> = {
   weather: '天気',
   status: 'ステータス',
   publishedAt: '公開日時',
+  topDisplayFlag: 'トップ表示フラグ',
 };
 
 export default function ModelDetailPage() {

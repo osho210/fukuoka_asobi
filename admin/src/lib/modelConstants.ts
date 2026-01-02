@@ -478,6 +478,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
     ],
     fields: [
       { name: 'layoutBucketId', type: 'multiSelect', required: true, relationModel: 'layout_buckets' },
+      { name: 'topDisplayFlag', type: 'boolean', required: true },
       { name: 'title', type: 'textarea', required: true },
       { name: 'content', type: 'textarea', required: false },
       { name: 'areaText', type: 'text', required: false },
@@ -661,4 +662,5 @@ export const fieldDisplayNames: Record<string, string> = {
   bucketListItemBelongings: 'もちもの一覧',
   bucketListItemReferences: '参考リンク一覧',
   content: 'コンテンツ',
+  topDisplayFlag: 'トップ表示フラグ',
 };
