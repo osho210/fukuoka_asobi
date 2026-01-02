@@ -22,7 +22,6 @@ export default function SpotCard({
   reviewRating,
   reviewCount,
   budgetRange,
-  categoryNames,
 }: SpotCardProps) {
   // キャッチフレーズの短縮表示（100文字まで）
   const shortCatchphrase = catchphrase && catchphrase.length > 100
@@ -44,11 +43,6 @@ export default function SpotCard({
             <div className="spot-card-no-image">
               <span className="spot-card-no-image-text">No Image</span>
             </div>
-          )}
-          {categoryNames && categoryNames.length > 0 && (
-            <span className="spot-card-category">
-              {categoryNames[0]}
-            </span>
           )}
         </div>
         <div className="spot-card-content">

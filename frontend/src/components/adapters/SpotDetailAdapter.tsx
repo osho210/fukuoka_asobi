@@ -7,6 +7,8 @@ import BusinessHours from '../BusinessHours';
 import '@/styles/ContentDetail.css';
 import Image from 'next/image';
 import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
+import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
+
 
 type SpotDetailAdapterProps = {
   spot: Spot;
@@ -202,7 +204,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
   const features = [];
   if (spot.parkingAvailable) features.push('駐車場あり');
   if (spot.isRainyOk) features.push('雨天OK');
-  if (spot.budgetRange) features.push(`予算: ${spot.budgetRange}`);
+  if (spot.budgetRange) features.push(`予算: ${getBudgetRangeLabel(spot.budgetRange)}`);
   if (spot.theme) features.push(`テーマ: ${spot.theme}`);
 
   if (features.length > 0) {

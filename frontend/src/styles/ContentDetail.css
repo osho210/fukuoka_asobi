@@ -77,6 +77,7 @@
   margin-bottom: 24px;
   border-radius: 8px;
   overflow: hidden;
+  max-width: 400px !important;
 }
 
 .content-detail-no-image {
@@ -102,8 +103,7 @@
 .content-detail-section-title {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
+  padding: 8px 0;
   border-bottom: 1px solid #eee;
 }
 
@@ -173,6 +173,7 @@
 }
 
 .content-detail-list li {
+  font-size: 12px;
   margin-bottom: 8px;
   padding-left: 16px;
   position: relative;
@@ -208,13 +209,13 @@
   color: #555;
   padding: 4px 12px;
   border-radius: 16px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* バッジ */
 .content-detail-badge {
   padding: 4px 12px;
-  font-size: 14px;
+  font-size: 12px;
   border-radius: 20px;
   background-color: #f0f0f0;
   color: #333;
