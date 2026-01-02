@@ -6,6 +6,7 @@ import { BucketListItem } from '@/__generated__/graphql';
 import Image from 'next/image';
 import { renderTextWithLineBreaks, copyGoogleMapsUrlToClipboard, getBaseImagePath } from '@/utils/bucketUtils';
 import { formatTime } from '@/utils/dateUtils';
+import { shareToLine, copyUrlToClipboard } from '@/utils/shareUtils';
 import { useToast } from '@/hooks/useToast';
 import { ToastContainer } from '@/components/Toast/ToastContainer';
 import '@/styles/BucketDetailModal.css';
@@ -68,6 +69,23 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     // モーダルを閉じるハンドラー
     const handleClose = () => {
         onClose();
+    };
+
+    // LINEシェアハンドラー
+    const handleShareLine = () => {
+        if (bucketListItem) {
+            shareToLine(bucketListItem.title);
+        }
+    };
+
+    // URLコピーハンドラー
+    const handleShareCopy = async () => {
+        const success = await copyUrlToClipboard();
+        if (success) {
+            showToast('体験のURLをコピーしました！', 'success');
+        } else {
+            showToast('コピーに失敗しました', 'error');
+        }
     };
 
     // モーダルが開いていない場合は何も描画しない
@@ -169,12 +187,7 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                         {/* LINEシェア - トーク画面に共有 */}
                                         <button
                                             className="bucket-share-button bucket-share-line"
-                                            onClick={() => {
-                                                const shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(
-                                                    `${bucketListItem.title}\n${window.location.href}`
-                                                )}`;
-                                                window.open(shareUrl, '_blank', 'width=500,height=500');
-                                            }}
+                                            onClick={handleShareLine}
                                             title="LINEで共有"
                                             aria-label="LINEで共有"
                                         >
@@ -185,15 +198,7 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                         {/* URLコピー */}
                                         <button
                                             className="bucket-share-button bucket-share-copy"
-                                            onClick={async () => {
-                                                try {
-                                                    await navigator.clipboard.writeText(window.location.href);
-                                                    showToast('体験のURLをコピーしました！', 'success');
-                                                } catch (error) {
-                                                    console.error('URLコピーに失敗しました:', error);
-                                                    showToast('コピーに失敗しました', 'error');
-                                                }
-                                            }}
+                                            onClick={handleShareCopy}
                                             title="URLをコピー"
                                             aria-label="URLをコピー"
                                         >
@@ -208,7 +213,7 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                                                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                                             </svg>
-                                            リンクをコピー
+                                            シェアする
                                         </button>
                                     </div>
                                 </div>
