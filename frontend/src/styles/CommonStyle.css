@@ -80,6 +80,11 @@ li {
     max-width: none;
 }
 
+.group-experience-promo{
+    text-align: center;
+    position: relative;
+}
+
 .official-sns {
     text-align: center;
     width: 100%;
