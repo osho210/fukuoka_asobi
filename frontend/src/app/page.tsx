@@ -72,7 +72,7 @@ export default function Home() {
         {/* モダンな矢印ナビゲーション */}
         <div className="bucket-slider-prev"></div>
         <div className="bucket-slider-next"></div>
-        <Link href={'/buckets'} className="section-link">この街の楽しみ方を、のぞいてみる</Link>
+        <Link href={'/buckets'} className="section-link">楽しみ方を、のぞいてみる</Link>
       </div>
       <div className="section">
         <h2 className="section-title">Editor&apos;s Pick Up Plan</h2>
