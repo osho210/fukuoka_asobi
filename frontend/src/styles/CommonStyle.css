@@ -80,6 +80,11 @@ li {
     max-width: none;
 }
 
+.group-experience-promo {
+    text-align: center;
+    position: relative;
+}
+
 .official-sns {
     text-align: center;
     width: 100%;
@@ -237,4 +242,106 @@ li {
     .footer-nav {
         flex-direction: column;
     }
+}
+
+
+.bucket-share-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.bucket-share-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 90px;
+    justify-content: center;
+}
+
+.bucket-share-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.bucket-share-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.bucket-share-button:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Line共有ボタン */
+.bucket-share-line {
+    background-color: #00c300;
+    border-color: #00c300;
+    color: #fff;
+}
+
+#b85a42.bucket-share-line:hover {
+    background-color: #1a91da;
+    border-color: #1a91da;
+}
+
+/* LINE共有ボタン - 公式ボタンのスタイル調整 */
+.line-it-button {
+    flex: 1;
+    min-width: 90px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* LINEボタンのiframeをラッパー内で正しく表示 */
+.line-it-button iframe {
+    max-width: 100%;
+    border: none !important;
+}
+
+/* LINEボタン内のスパン要素の調整 */
+.line-it-button span {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* URLコピーボタン */
+.bucket-share-copy {
+    background-color: #cb6b52;
+    border-color: #cb6b52;
+    color: #fff;
+}
+
+.bucket-share-copy:hover {
+    background-color: #b85a42;
+    border-color: #b85a42;
+}
+
+.bucket-share-button svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.content-detail-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }

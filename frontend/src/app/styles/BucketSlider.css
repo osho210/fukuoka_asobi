@@ -1,0 +1,120 @@
+/* Bucket Slider - モダンなナビゲーション設定 */
+
+.bucket-slider {
+    position: relative;
+    margin: 10px 0;
+}
+
+/* モダンな矢印ボタンのスタイリング */
+.bucket-slider-prev,
+.bucket-slider-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.bucket-slider-prev:hover,
+.bucket-slider-next:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.bucket-slider-prev:active,
+.bucket-slider-next:active {
+    transform: translateY(-50%) scale(0.96);
+}
+
+.bucket-slider-prev {
+    left: 12px;
+}
+
+.bucket-slider-next {
+    right: 12px;
+}
+
+/* 矢印のアイコン表現（SVG相当） */
+.bucket-slider-prev::before,
+.bucket-slider-next::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-top: 2px solid #CB6B52;
+    border-left: 2px solid #CB6B52;
+}
+
+.bucket-slider-prev::before {
+    transform: rotate(-45deg) translateX(2px);
+}
+
+.bucket-slider-next::before {
+    transform: rotate(135deg) translateX(-2px);
+}
+
+/* ページネーション（ドット）のスタイル */
+.bucket-slider .swiper-pagination {
+    position: relative;
+    bottom: 0;
+}
+
+.bucket-slider .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #ddd;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.bucket-slider .swiper-pagination-bullet-active {
+    background: #CB6B52;
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+
+    .bucket-slider-prev,
+    .bucket-slider-next {
+        width: 38px;
+        height: 38px;
+    }
+
+    .bucket-slider-prev {
+        left: 8px;
+    }
+
+    .bucket-slider-next {
+        right: 8px;
+    }
+}
+
+/* 小さい画面用 */
+@media (max-width: 480px) {
+
+    .bucket-slider-prev,
+    .bucket-slider-next {
+        width: 34px;
+        height: 34px;
+    }
+
+    .bucket-slider-prev::before,
+    .bucket-slider-next::before {
+        width: 5px;
+        height: 5px;
+        border-width: 1.5px;
+    }
+}

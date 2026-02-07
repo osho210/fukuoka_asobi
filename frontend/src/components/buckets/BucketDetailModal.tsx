@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import { useBucketListItem } from './useBuckets';
 import { BucketListItem } from '@/__generated__/graphql';
 import Image from 'next/image';
 import { renderTextWithLineBreaks, copyGoogleMapsUrlToClipboard, getBaseImagePath } from '@/utils/bucketUtils';
 import { formatTime } from '@/utils/dateUtils';
+import { shareToLine, copyUrlToClipboard } from '@/utils/shareUtils';
 import { useToast } from '@/hooks/useToast';
 import { ToastContainer } from '@/components/Toast/ToastContainer';
 import '@/styles/BucketDetailModal.css';
@@ -20,9 +20,11 @@ interface BucketDetailModalProps {
 
 /**
  * バケットリストアイテム詳細をモーダルで表示するコンポーネント
- * モーダルが開く際にサーバーからデータを取得する
- * URLパラメータ(?bucket_id=xxx)がある場合、自動的にモーダルを開く
- * 別のモーダルを開く際はURLパラメータを更新
+ *
+ * 設計原則：
+ * - このコンポーネントは単純にpropsの状態を表示するだけ
+ * - URLパラメータとの同期は親コンポーネント（BucketsList）で完全に管理
+ * - isOpen=false になったら、同期的にモーダルを閉じる
  */
 export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     isOpen,
@@ -30,117 +32,83 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
     onClose,
     id,
 }) => {
-    const searchParams = useSearchParams();
-    const bucketIdFromUrl = searchParams ? searchParams.get('bucket_id') : null;
-    const [currentBucketId, setCurrentBucketId] = useState<string | null>(bucketIdFromUrl);
-    const [isModalOpen, setIsModalOpen] = useState(!!bucketIdFromUrl);
+    // アニメーション用の内部状態
+    const [isAnimating, setIsAnimating] = useState(false);
 
-    // URLパラメータまたはpropsから実効的なIDを決定
-    const effectiveId = currentBucketId || id;
+    // idが必ず存在することを保証（親で管理）
+    const effectiveId = id || '';
 
     // サーバーから詳細データを取得
-    // initialBucketListItemが既に存在する場合やIDが無い場合はクエリをスキップ
-    const shouldSkipQuery = !effectiveId || !!initialBucketListItem;
-    // サーバーから詳細データを取得
-    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(effectiveId || '', {
-        skip: shouldSkipQuery,
-    });
-    const [isVisible, setIsVisible] = useState(false);
-    const { toasts, showToast, removeToast } = useToast();
+    const { bucketListItem: serverBucketListItem, loading, error } = useBucketListItem(effectiveId);
 
     // initialBucketListItemが渡されている場合はそれを使用、無い場合はサーバーデータを使用
     const bucketListItem = initialBucketListItem || serverBucketListItem;
+    const { toasts, showToast, removeToast } = useToast();
 
-    // URLパラメータが変更された場合
+    // モーダルの開閉アニメーション制御
     useEffect(() => {
-        if (bucketIdFromUrl) {
-            setCurrentBucketId(bucketIdFromUrl);
-            setIsModalOpen(true);
-        }
-    }, [bucketIdFromUrl]);
-
-    // propsのisOpenが変更された場合（リスト表示からの選択）
-    useEffect(() => {
-        if (isOpen && id && !bucketIdFromUrl) {
-            // URLパラメータを更新
-            const url = new URL(window.location.href);
-            url.searchParams.set('bucket_id', id);
-            window.history.replaceState({}, document.title, url.toString());
-            setCurrentBucketId(id);
-            setIsModalOpen(true);
-        }
-    }, [isOpen, id, bucketIdFromUrl]);
-
-    // モーダルが開く時：スクロール無効化を最優先で実行
-    useEffect(() => {
-        if (isModalOpen) {
-            // 同期的にボディのスクロール無効化（レンダリング前）
-            document.body.style.overflow = 'hidden';
-            document.body.style.scrollBehavior = 'auto';
-
-            // 次のフレームでモーダルを表示（アニメーション開始）
+        if (isOpen) {
+            // モーダルを開く場合、次のフレームでアニメーションを開始
             requestAnimationFrame(() => {
-                setIsVisible(true);
+                setIsAnimating(true);
+                // モーダル表示時のボディスクロール無効化
+                document.body.style.overflow = 'hidden';
             });
         } else {
-            setIsVisible(false);
-            // モーダル閉じる時もスクロール再度有効化
-            setTimeout(() => {
-                document.body.style.overflow = 'unset';
-                document.body.style.scrollBehavior = 'unset';
-            }, 0);
+            // モーダルを閉じる場合、アニメーションをリセット
+            setIsAnimating(false);
+            // スクロール復活
+            document.body.style.overflow = 'unset';
         }
 
         return () => {
             document.body.style.overflow = 'unset';
-            document.body.style.scrollBehavior = 'unset';
         };
-    }, [isModalOpen]);
+    }, [isOpen]);
 
-    // モーダルを閉じるハンドラ
+    // モーダルを閉じるハンドラー
     const handleClose = () => {
-        setIsModalOpen(false);
-        setCurrentBucketId(null);
         onClose();
-        // URLパラメータをクリア
-        if (bucketIdFromUrl || currentBucketId) {
-            const url = new URL(window.location.href);
-            url.searchParams.delete('bucket_id');
-            window.history.replaceState({}, document.title, url.toString());
+    };
+
+    // LINEシェアハンドラー
+    const handleShareLine = () => {
+        if (bucketListItem) {
+            shareToLine(bucketListItem.title);
         }
     };
 
-    if (!isModalOpen) {
+    // URLコピーハンドラー
+    const handleShareCopy = async () => {
+        const success = await copyUrlToClipboard();
+        if (success) {
+            showToast('体験のURLをコピーしました！', 'success');
+        } else {
+            showToast('コピーに失敗しました', 'error');
+        }
+    };
+
+    // モーダルが開いていない場合は何も描画しない
+    if (!isOpen) {
         return null;
     }
 
     return (
         <>
             <div
-                className={`bucket-detail-modal-overlay ${isVisible ? 'visible' : ''}`}
+                className={`bucket-detail-modal-overlay ${isAnimating ? 'visible' : ''}`}
                 onClick={handleClose}
                 role="presentation"
             >
                 <div
-                    className={`bucket-detail-modal-content ${isVisible ? 'visible' : ''}`}
+                    className={`bucket-detail-modal-content ${isAnimating ? 'visible' : ''}`}
                     onClick={(e) => e.stopPropagation()}
                     role="dialog"
                     aria-modal="true"
                 >
-                    <button
-                        className="bucket-detail-modal-close"
-                        onClick={handleClose}
-                        aria-label="モーダルを閉じる"
-                    >
+                    <button className="bucket-detail-modal-close" onClick={handleClose} aria-label="モーダルを閉じる">
                         ×
                     </button>
-
-                    {/* ローディング中 */}
-                    {effectiveId && loading && (
-                        <div className="bucket-detail-modal-loading">
-                            <p>読み込み中...</p>
-                        </div>
-                    )}
 
                     {/* エラー発生 */}
                     {effectiveId && error && (
@@ -170,7 +138,9 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                             className="bucket-detail-image"
                                             priority
                                         />
-                                        <h3 className="bucket-detail-image-title">{renderTextWithLineBreaks(bucketListItem.title)}</h3>
+                                        <h3 className="bucket-detail-image-title">
+                                            {renderTextWithLineBreaks(bucketListItem.title)}
+                                        </h3>
                                         <p className="bucket-detail-image-content">{bucketListItem.content}</p>
                                     </div>
                                     <div className="bucket-detail-image-text">
@@ -179,24 +149,31 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                         {bucketListItem.meetingTime && (
                                             <div className="bucket-detail-section">
                                                 <h4 className="bucket-detail-section-title">待ち合わせ</h4>
-                                                <p className="bucket-detail-section-content">{bucketListItem.meetingTime && `時間: ` + formatTime(bucketListItem.meetingTime)}</p>
-                                                <p className="bucket-detail-section-content">{bucketListItem.meetingPlaceName && `場所: ` + bucketListItem.meetingPlaceName}</p>
-                                                {bucketListItem.meetingPlaceName && <button
-                                                    className="bucket-detail-copy-maps-button"
-                                                    onClick={async () => {
-                                                        const success = await copyGoogleMapsUrlToClipboard(bucketListItem.meetingPlaceName || '');
-                                                        if (success) {
-                                                            showToast('Google MapsのURLをコピーしました！', 'success');
-                                                        } else {
-                                                            showToast('コピーに失敗しました', 'error');
-                                                        }
-                                                    }}
-                                                    title="Google Maps URLをコピー"
-                                                    aria-label="Google Maps URLをコピー"
-                                                >
-                                                    Google Maps URLをコピー
-                                                </button>
-                                                }
+                                                <p className="bucket-detail-section-content">
+                                                    {bucketListItem.meetingTime && `時間: ` + formatTime(bucketListItem.meetingTime)}
+                                                </p>
+                                                <p className="bucket-detail-section-content">
+                                                    {bucketListItem.meetingPlaceName && `場所: ` + bucketListItem.meetingPlaceName}
+                                                </p>
+                                                {bucketListItem.meetingPlaceName && (
+                                                    <button
+                                                        className="bucket-detail-copy-maps-button"
+                                                        onClick={async () => {
+                                                            const success = await copyGoogleMapsUrlToClipboard(
+                                                                bucketListItem.meetingPlaceName || ''
+                                                            );
+                                                            if (success) {
+                                                                showToast('Google MapsのURLをコピーしました！', 'success');
+                                                            } else {
+                                                                showToast('コピーに失敗しました', 'error');
+                                                            }
+                                                        }}
+                                                        title="Google Maps URLをコピー"
+                                                        aria-label="Google Maps URLをコピー"
+                                                    >
+                                                        Google Maps URLをコピー
+                                                    </button>
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -210,13 +187,7 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                         {/* LINEシェア - トーク画面に共有 */}
                                         <button
                                             className="bucket-share-button bucket-share-line"
-                                            onClick={() => {
-                                                // LINE公式のシェアURL（トーク画面で共有可能）
-                                                const shareUrl = `https://line.me/R/msg/text/?${encodeURIComponent(
-                                                    `${bucketListItem.title}\n${window.location.href}`
-                                                )}`;
-                                                window.open(shareUrl, '_blank', 'width=500,height=500');
-                                            }}
+                                            onClick={handleShareLine}
                                             title="LINEで共有"
                                             aria-label="LINEで共有"
                                         >
@@ -227,23 +198,22 @@ export const BucketDetailModal: React.FC<BucketDetailModalProps> = ({
                                         {/* URLコピー */}
                                         <button
                                             className="bucket-share-button bucket-share-copy"
-                                            onClick={async () => {
-                                                try {
-                                                    await navigator.clipboard.writeText(window.location.href);
-                                                    showToast('体験のURLをコピーしました！', 'success');
-                                                } catch (error) {
-                                                    console.error('URLコピーに失敗しました:', error);
-                                                    showToast('コピーに失敗しました', 'error');
-                                                }
-                                            }}
+                                            onClick={handleShareCopy}
                                             title="URLをコピー"
                                             aria-label="URLをコピー"
                                         >
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <svg
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                            >
                                                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                                                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                                             </svg>
-                                            リンクをコピー
+                                            シェアする
                                         </button>
                                     </div>
                                 </div>

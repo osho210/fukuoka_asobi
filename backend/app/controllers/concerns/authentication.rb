@@ -11,18 +11,29 @@ module Authentication
       httponly: true,
       secure: Rails.env.production?,
       same_site: :lax,
-      domain: ".fukuoka-asobi.com",
       path: '/'
     }
+
+    # 開発環境ではドメイン指定なし、本番環境では指定
+    if Rails.env.production?
+      cookie_options[:domain] = ".fukuoka-asobi.com"
+    end
+
     cookies.encrypted[:fukuoka_asobi_auth_token] = cookie_options
   end
 
   # 認証Cookieを削除
   def clear_user_cookie
-    cookies.delete(
-      :fukuoka_asobi_auth_token,
-      domain: ".fukuoka-asobi.com",
-      path: '/')
+    cookie_delete_options = {
+      path: '/'
+    }
+
+    # 本番環境ではドメイン指定
+    if Rails.env.production?
+      cookie_delete_options[:domain] = ".fukuoka-asobi.com"
+    end
+
+    cookies.delete(:fukuoka_asobi_auth_token, cookie_delete_options)
   end
 
   # Cookieからユーザーを取得（JWTトークンをデコード）

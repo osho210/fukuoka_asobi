@@ -92,6 +92,7 @@ const modelFields: Record<string, { name: string; type: string; required?: boole
   ],
   spots: [
     { name: 'spotName', type: 'text', required: true },
+    { name: 'isClosed', type: 'boolean' },
     { name: 'description', type: 'textarea', required: false },
     { name: 'address', type: 'text', required: true },
     { name: 'phoneNumber', type: 'text' },
@@ -221,6 +222,7 @@ const fieldDisplayNames: Record<string, string> = {
   purposeName: '目的名',
   ambianceName: '雰囲気名',
   spotName: 'スポット名',
+  isClosed: '閉店フラグ',
   description: '説明',
   address: '住所',
   phoneNumber: '電話番号',
@@ -499,7 +501,7 @@ export default function ModelDetailPage() {
     }
   }, [isNew, id, modelRoute, fields]);
 
-  const handleChange = (name: string, value: string | number | boolean | RelationData | string[] | number[] | RelationItem[] | EditableOpeningHour[]) => {
+  const handleChange = (name: string, value: string | boolean | number | null | RelationData | string[] | number[] | RelationItem[] | EditableBelonging[] | EditableReference[] | EditableOpeningHour[]) => {
     if (!formData) return;
 
     setFormData({
@@ -789,6 +791,7 @@ export default function ModelDetailPage() {
                   };
 
                   updateField('spotName', place.name || '');
+                  updateField('isClosed', false);
                   updateField('address', place.formattedAddress || '');
                   updateField('phoneNumber', place.nationalPhoneNumber || '');
                   updateField('website', place.websiteUri || '');

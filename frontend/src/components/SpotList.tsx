@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { GET_SPOTS } from '../graphql/queries/getSpots';
 import Link from 'next/link';
 import { Spot, Category, Area, Hashtag } from '@/__generated__/graphql';
+import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
 
 interface SpotsData {
   spots: Spot[];
@@ -36,7 +37,7 @@ export default function SpotList() {
                   {spot.areas.map((area: Area) => area.areaName).join(', ')}
                 </p>
                 <p className="spot-card-budget">
-                  <span className="spot-card-label">予算:</span> {spot.budgetRange}
+                  <span className="spot-card-label">予算:</span> {getBudgetRangeLabel(spot.budgetRange)}
                 </p>
                 {spot.reviewRating && (
                   <p className="spot-card-rating">

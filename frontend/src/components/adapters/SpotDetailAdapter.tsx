@@ -4,8 +4,14 @@ import { ReactNode } from 'react';
 import { Spot } from '@/__generated__/graphql';
 import ContentDetail from '../ContentDetail';
 import BusinessHours from '../BusinessHours';
+import { shareToLine, copyUrlToClipboard } from '@/utils/shareUtils';
+import { useToast } from '@/hooks/useToast';
+import { ToastContainer } from '@/components/Toast/ToastContainer';
 import '@/styles/ContentDetail.css';
 import Image from 'next/image';
+import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
+import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
+
 
 type SpotDetailAdapterProps = {
   spot: Spot;
@@ -15,11 +21,28 @@ type SpotDetailAdapterProps = {
  * スポット詳細をContentDetailコンポーネントに適応させるアダプター
  */
 export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
+  const { toasts, showToast, removeToast } = useToast();
+
+  // LINEシェアハンドラー
+  const handleShareLine = () => {
+    shareToLine(spot.spotName);
+  };
+
+  // URLコピーハンドラー
+  const handleShareCopy = async () => {
+    const success = await copyUrlToClipboard();
+    if (success) {
+      showToast('スポットのURLをコピーしました！', 'success');
+    } else {
+      showToast('コピーに失敗しました', 'error');
+    }
+  };
+
   // バッジ要素の作成
   const badges: ReactNode = (
     <>
       <span className="content-detail-badge">
-        {spot.spotType}
+        {getSpotTypeLabel(spot.spotType)}
       </span>
       {spot.isClosed && (
         <span className="content-detail-badge" style={{ backgroundColor: '#ff4d4d', color: 'white' }}>
@@ -201,7 +224,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
   const features = [];
   if (spot.parkingAvailable) features.push('駐車場あり');
   if (spot.isRainyOk) features.push('雨天OK');
-  if (spot.budgetRange) features.push(`予算: ${spot.budgetRange}`);
+  if (spot.budgetRange) features.push(`予算: ${getBudgetRangeLabel(spot.budgetRange)}`);
   if (spot.theme) features.push(`テーマ: ${spot.theme}`);
 
   if (features.length > 0) {
@@ -280,21 +303,41 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
 
   // アクションボタン
   const actions = (
-    <button className="content-detail-button">
-      シェアする
-    </button>
+    <div className="content-detail-actions">
+      <button className="bucket-share-button bucket-share-line" onClick={handleShareLine}>
+        <Image src={'/line-icon.png'} width={20} height={20} alt={'line icon'} />
+        LINEで送る
+      </button>
+      <button className="bucket-share-button bucket-share-copy" onClick={handleShareCopy}>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg>
+        シェアする
+      </button>
+    </div>
   );
 
   return (
-    <ContentDetail
-      title={spot.spotName}
-      imageUrls={[]}
-      badges={badges}
-      mainSections={mainSections}
-      sidebarItems={sidebarItems}
-      backLink="/spots"
-      backLinkText="スポット一覧に戻る"
-      actions={actions}
-    />
+    <>
+      <ContentDetail
+        title={spot.spotName}
+        imageUrls={spot.imageUrls}
+        badges={badges}
+        mainSections={mainSections}
+        sidebarItems={sidebarItems}
+        backLink="/spots"
+        backLinkText="スポット一覧に戻る"
+        actions={actions}
+      />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+    </>
   );
 }

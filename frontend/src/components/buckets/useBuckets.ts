@@ -34,7 +34,7 @@ export const useBucketListItems = (
 /**
  * 特定のバケットリストアイテムを取得するカスタムフック
  */
-export const useBucketListItem = (id: string, p0: { skip: boolean; }) => {
+export const useBucketListItem = (id: string) => {
     const { loading, error, data, refetch } = useQuery<GetBucketListItemQuery, GetBucketListItemQueryVariables>(GET_BUCKET_LIST_ITEM, {
         variables: { id },
         fetchPolicy: 'network-only',

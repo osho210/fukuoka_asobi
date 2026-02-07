@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BusinessHours from '@/components/BusinessHours';
 import '@/styles/RecommendedSpot.css'
+import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
+import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
 
 type SpotFromQuery = NonNullable<GetSpotQuery['spot']>;
 
@@ -21,16 +23,16 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
       <div className="spot-detail">
         <div className="spot-header">
           <h1 className="spot-name">{spot.spotName}</h1>
-          <div className="spot-type-badge">{spot.spotType}</div>
+          <div className="spot-type-badge">{getSpotTypeLabel(spot.spotType)}</div>
           {spot.isClosed && <div className="closed-badge">閉店</div>}
         </div>
 
         <div className="spot-info">
           <div className="spot-image">
             {/* 画像があれば表示、なければプレースホルダー */}
-            {spot.imageUrl ? (
+            {spot.imageUrls ? (
               <Image
-                src={spot.imageUrl.url}
+                src={spot.imageUrls[0].url}
                 alt={spot.spotName}
                 className="spot-detail-image"
               />
@@ -82,7 +84,7 @@ export default function SpotPresenter({ spot }: SpotPresenterProps) {
                   ))}
                   {spot.parkingAvailable && <li>駐車場あり</li>}
                   {spot.isRainyOk && <li>雨天OK</li>}
-                  {spot.budgetRange && <li>予算: {spot.budgetRange}</li>}
+                  {spot.budgetRange && <li>予算: {getBudgetRangeLabel(spot.budgetRange)}</li>}
                   {spot.theme && <li>テーマ: {spot.theme}</li>}
                 </ul>
               </div>

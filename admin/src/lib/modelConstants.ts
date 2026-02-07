@@ -199,7 +199,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'menus', type: 'multiSelect', required: true, relationModel: 'menus' },
       { name: 'areas', type: 'multiSelect', required: true, relationModel: 'areas' },
       { name: 'isRainyOk', type: 'boolean', required: true },
-      { name: 'isClosed', type: 'boolean', required: true },
+      { name: 'isClosed', type: 'boolean', required: false },
       { name: 'parkingAvailable', type: 'boolean' },
       // Google Places API関連フィールド
       { name: 'googlePlaceId', type: 'text' },
@@ -572,7 +572,7 @@ export const fieldDisplayNames: Record<string, string> = {
   catchphrase: 'キャッチフレーズ',
   isRainyOk: '雨天可',
   budgetRange: '予算感',
-  isClosed: '営業中',
+  isClosed: '閉店フラグ',
   nearestStation: '最寄り駅',
   imageUrl: '画像URL',
   minPeople: '最小人数',
