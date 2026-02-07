@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[hook pre-app-boot] running migrations for version=${KAMAL_VERSION}"
+
+# デプロイ対象のイメージ(=KAMAL_VERSION)で、primary 1台だけ migration
+KAMAL_VERSION="${KAMAL_VERSION}" \
+  kamal app exec --primary --version "${KAMAL_VERSION}" "bin/rails db:migrate"
