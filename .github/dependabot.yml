@@ -1,9 +1,11 @@
 version: 2
 updates:
+  # Bundler (Ruby/Rails backend)
   - package-ecosystem: bundler
-    directory: "/"
+    directory: "/backend"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     open-pull-requests-limit: 10
 
     pull-request-branch-name:
@@ -17,15 +19,73 @@ updates:
     labels:
       - "dependencies"
       - "bot"
-    reviewers:
-      - "your-github-id"
-    assignees:
-      - "your-github-id"
 
+  # npm (root workspace)
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+    pull-request-branch-name:
+      prefix: "deps/npm"
+      separator: "/"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "bot"
+
+  # npm (frontend workspace)
+  - package-ecosystem: npm
+    directory: "/frontend"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+    pull-request-branch-name:
+      prefix: "deps/npm-frontend"
+      separator: "/"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "bot"
+
+  # npm (admin workspace)
+  - package-ecosystem: npm
+    directory: "/admin"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+
+    pull-request-branch-name:
+      prefix: "deps/npm-admin"
+      separator: "/"
+
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "bot"
+
+  # GitHub Actions
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     open-pull-requests-limit: 10
 
     pull-request-branch-name:
