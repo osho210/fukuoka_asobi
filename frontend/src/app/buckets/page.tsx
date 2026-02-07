@@ -74,27 +74,27 @@ function BucketsPageContent() {
                 <div className='buckets-page-kv-content'>
                     <Image
                         src="/bucket_kv1.png"
-                        alt="福岡でやりたいこと"
-                        width={140}
-                        height={210}
+                        alt="福岡でやりたいこと1"
+                        width={120}
+                        height={180}
                         className="buckets-page-kv-image"
                         onClick={() => handleKvImageClick('8')}
                         style={{ cursor: 'pointer' }}
                     />
                     <Image
                         src="/bucket_kv2.png"
-                        alt="福岡でやりたいこと"
-                        width={140}
-                        height={210}
+                        alt="福岡でやりたいこと2"
+                        width={120}
+                        height={180}
                         className="buckets-page-kv-image"
                         onClick={() => handleKvImageClick('2')}
                         style={{ cursor: 'pointer' }}
                     />
                     <Image
                         src="/bucket_kv3.png"
-                        alt="福岡でやりたいこと"
-                        width={140}
-                        height={210}
+                        alt="福岡でやりたいこと3"
+                        width={120}
+                        height={180}
                         className="buckets-page-kv-image"
                         onClick={() => handleKvImageClick('1')}
                         style={{ cursor: 'pointer' }}
