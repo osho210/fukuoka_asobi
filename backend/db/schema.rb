@@ -604,7 +604,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_104827) do
     t.datetime "last_api_sync_at"
     t.string "api_sync_status", limit: 50, default: "pending"
     t.text "description"
-    t.boolean "is_public", default: true, null: false
+    t.boolean "is_public", default: false, null: false
     t.index ["api_sync_status"], name: "index_spots_on_api_sync_status"
     t.index ["budget_range"], name: "index_spots_on_budget_range"
     t.index ["business_status"], name: "index_spots_on_business_status"

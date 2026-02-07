@@ -2,7 +2,7 @@
 
 class AddIsPublicToSpots < ActiveRecord::Migration[8.0]
   def up
-    add_column :spots, :is_public, :boolean, null: false, default: true
+    add_column :spots, :is_public, :boolean, null: false, default: false
   end
 
   def down

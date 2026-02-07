@@ -568,6 +568,7 @@ export const fieldDisplayNames: Record<string, string> = {
   spotName: 'スポット名',
   description: '説明',
   address: '住所',
+  isPublic: '公開フラグ',
   phoneNumber: '電話番号',
   instagramUrl: 'Instagram URL',
   website: 'ウェブサイト',
