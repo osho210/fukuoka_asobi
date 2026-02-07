@@ -28,6 +28,9 @@ module Types
     field :add_favorite, mutation: Mutations::AddFavorite
     field :remove_favorite, mutation: Mutations::RemoveFavorite
 
+    # 閲覧履歴関連
+    field :record_user_history, mutation: Mutations::RecordUserHistory
+
     # エリア関連
     field :create_area, mutation: Mutations::CreateArea
     field :update_area, mutation: Mutations::UpdateArea

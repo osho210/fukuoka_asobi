@@ -1,6 +1,7 @@
 class News < ApplicationRecord
   belongs_to :author, class_name: 'User', optional: true
   belongs_to :category, optional: true
+  has_many :user_histories, as: :viewable, dependent: :destroy
 
   validates :title, presence: true
   validates :body, presence: true

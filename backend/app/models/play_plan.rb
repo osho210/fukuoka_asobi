@@ -6,6 +6,7 @@ class PlayPlan < ApplicationRecord
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorited_by_users, through: :favorites, source: :user
+  has_many :user_histories, as: :viewable, dependent: :destroy
 
   # Active Storage関連付け
   has_many_attached :images
