@@ -27,6 +27,7 @@ class UserHistory < ApplicationRecord
       viewable: viewable
     )
     history.viewed_at = Time.current
-    history.save
+    history.save!
+    history
   end
 end

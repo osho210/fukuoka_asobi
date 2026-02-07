@@ -17,16 +17,8 @@ module Types
     field :viewable, Types::ViewableUnion, null: true
 
     def viewable
-      case object.viewable_type
-      when "News"
-        News.find_by(id: object.viewable_id)
-      when "Magazine"
-        Magazine.find_by(id: object.viewable_id)
-      when "PlayPlan"
-        PlayPlan.find_by(id: object.viewable_id)
-      else
-        nil
-      end
+      # ActiveRecordのポリモーフィック関連を使用してN+1クエリを回避
+      object.viewable
     end
   end
 end
