@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useBucketListItems } from './useBuckets';
 import { BucketListItem } from '@/__generated__/graphql';
 import Image from 'next/image';
@@ -20,14 +20,20 @@ interface BucketsListProps {
  * - バケットリストアイテムの一覧表示
  * - URL パラメータに対応するバケットを検索して親に通知
  */
-export const BucketsList: React.FC<BucketsListProps> = ({
+const BucketsListContent: React.FC<BucketsListProps> = ({
     bucketIdFromUrl,
     onSelectItem,
     onBucketFound,
 }) => {
     const { bucketListItems, loading, error } = useBucketListItems();
 
-    // URL パラメータに対応するバケットを検索（バケットリスト読み込み後）
+    // バケットアイテムをクリック時の処理
+    const handleBucketClick = useCallback((item: BucketListItem) => {
+        // 親コンポーネントに選択を通知（ページ側で URL を更新）
+        onSelectItem?.(item);
+    }, [onSelectItem]);
+
+    // URL パラメータに対応するバケットを検索（バケットリスト読み込み後のみ）
     useEffect(() => {
         if (bucketIdFromUrl && bucketListItems && bucketListItems.length > 0) {
             const found = bucketListItems.find((item) => item.id === bucketIdFromUrl);
@@ -36,13 +42,7 @@ export const BucketsList: React.FC<BucketsListProps> = ({
                 onBucketFound?.(found as BucketListItem);
             }
         }
-    }, [bucketIdFromUrl, bucketListItems, onBucketFound]);
-
-    // バケットアイテムをクリック時の処理
-    const handleBucketClick = (item: BucketListItem) => {
-        // 親コンポーネントに選択を通知（ページ側で URL を更新）
-        onSelectItem?.(item);
-    };
+    }, [bucketIdFromUrl, bucketListItems, bucketListItems.length, onBucketFound]);
 
     // ローディング中の表示
     if (loading) {
@@ -138,5 +138,9 @@ export const BucketsList: React.FC<BucketsListProps> = ({
         </div>
     );
 };
+
+// React.memo でコンポーネント全体をメモ化
+// コールバック関数の参照が変わらない限り、再レンダリングされない
+export const BucketsList = React.memo(BucketsListContent);
 
 export default BucketsList;
