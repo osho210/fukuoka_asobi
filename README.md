@@ -219,12 +219,13 @@ export const Default: Story = {
 
 - PR 作成・更新時に自動で Chromatic が実行されます
 - UI に変更があった場合、Chromatic 上で差分が表示されます
+- **重要**: UI差分が検出された場合、CIチェックは失敗します。マージする前に必ず差分を確認・承認してください
 
 #### Chromatic の利用方法
 
 1. PR を作成すると、GitHub Actions で Chromatic が自動実行
 2. Chromatic ダッシュボードで UI の差分を確認
-3. 意図した変更であれば Chromatic 上で承認（Accept）
+3. 意図した変更であれば Chromatic 上で承認（Accept）すると、CIチェックが通ります
 4. 意図しない変更であれば、コードを修正して再度 PR を更新
 
 #### ローカルでの Chromatic 実行

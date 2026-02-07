@@ -10,7 +10,7 @@
     "generate": "graphql-codegen",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_ADMIN --exit-zero-on-changes"
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_ADMIN"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",

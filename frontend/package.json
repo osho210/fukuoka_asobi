@@ -12,7 +12,7 @@
     "build-storybook": "storybook build",
     "build:cf": "opennextjs-cloudflare build",
     "deploy:cf": "npm run build:cf && wrangler deploy --config wrangler.toml",
-    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND --exit-zero-on-changes"
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN_FRONTEND"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",

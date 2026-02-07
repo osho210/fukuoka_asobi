@@ -35,6 +35,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_FRONTEND }}
           token: ${{ secrets.GITHUB_TOKEN }}
           workingDir: frontend
+          exitZeroOnChanges: false
 
   chromatic-admin:
     name: Chromatic - Admin
@@ -62,3 +63,4 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN_ADMIN }}
           token: ${{ secrets.GITHUB_TOKEN }}
           workingDir: admin
+          exitZeroOnChanges: false
