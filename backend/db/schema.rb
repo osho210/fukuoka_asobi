@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_02_081515) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_07_104827) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -604,6 +604,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_02_081515) do
     t.datetime "last_api_sync_at"
     t.string "api_sync_status", limit: 50, default: "pending"
     t.text "description"
+    t.boolean "is_public", default: true, null: false
     t.index ["api_sync_status"], name: "index_spots_on_api_sync_status"
     t.index ["budget_range"], name: "index_spots_on_budget_range"
     t.index ["business_status"], name: "index_spots_on_business_status"
