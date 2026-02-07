@@ -85,12 +85,6 @@ const HamburgerMenu = () => {
                                 <Link href='/search'>遊びを計画する</Link>
                             </li>
                             <li className='modal-content__link'>
-                                <Link href='/group-experience'>友達と遊びを決める</Link>
-                            </li>
-                            <li className='modal-content__link'>
-                                <Link href='/about'>福岡遊び日記とは</Link>
-                            </li>
-                            <li className='modal-content__link'>
                                 <Link href='/contact'>お問い合わせ</Link>
                             </li>
                         </ul>

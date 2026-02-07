@@ -142,38 +142,55 @@ module Mutations
       opening_hours_attributes = update_attrs.delete(:opening_hours_attributes)
 
       ActiveRecord::Base.transaction do
-        # 基本情報とネストした属性（営業時間）を更新
-      # 中間テーブルの更新 (引数が渡された場合のみ)
-      # `args.key?` を使って、引数が明示的に渡されたかを確認する
-      spot.hashtags       = Hashtag.where(id: hashtags) if args.key?(:hashtags)
-      spot.purposes       = Purpose.where(id: purposes) if args.key?(:purposes)
-      spot.spot_ambiances = SpotAmbiance.where(id: spot_ambiances) if args.key?(:spot_ambiances)
-      spot.categories     = Category.where(id: categories) if args.key?(:categories)
-      spot.menus          = Menu.where(id: menus) if args.key?(:menus)
-      spot.areas          = Area.where(id: areas) if args.key?(:areas)
+        # 中間テーブルの更新 (引数が渡された場合のみ)
+        # `args.key?` を使って、引数が明示的に渡されたかを確認する
+        spot.hashtags       = Hashtag.where(id: hashtags) if args.key?(:hashtags)
+        spot.purposes       = Purpose.where(id: purposes) if args.key?(:purposes)
+        spot.spot_ambiances = SpotAmbiance.where(id: spot_ambiances) if args.key?(:spot_ambiances)
+        spot.categories     = Category.where(id: categories) if args.key?(:categories)
+        spot.menus          = Menu.where(id: menus) if args.key?(:menus)
+        spot.areas          = Area.where(id: areas) if args.key?(:areas)
 
-      # spot_magazines_attributes をハッシュの配列に変換
-      if update_attrs[:spot_magazines_attributes]
-        update_attrs[:spot_magazines_attributes] = update_attrs[:spot_magazines_attributes].map(&:to_h)
-      end
+        # spot_magazines_attributes をハッシュの配列に変換
+        if update_attrs[:spot_magazines_attributes]
+          update_attrs[:spot_magazines_attributes] = update_attrs[:spot_magazines_attributes].map(&:to_h)
+        end
 
-      # opening_hours_attributes をハッシュの配列に変換
-      if update_attrs[:opening_hours_attributes]
-        update_attrs[:opening_hours_attributes] = update_attrs[:opening_hours_attributes].map(&:to_h)
-      end
+        # opening_hours_attributes をハッシュの配列に変換して update_attrs に戻す
+        if opening_hours_attributes
+          # 曜日名を英語から日本語に変換するマッピング
+          day_mapping = {
+            'Sunday' => '日',
+            'Monday' => '月',
+            'Tuesday' => '火',
+            'Wednesday' => '水',
+            'Thursday' => '木',
+            'Friday' => '金',
+            'Saturday' => '土'
+          }
 
-      # ネストした属性を含む更新
-      spot.update!(update_attrs)
+          update_attrs[:opening_hours_attributes] = opening_hours_attributes.map do |hour_attrs|
+            hour_hash = hour_attrs.to_h
+            # 英語の曜日名を日本語に変換
+            if hour_hash[:day_of_week] && day_mapping.key?(hour_hash[:day_of_week])
+              hour_hash[:day_of_week] = day_mapping[hour_hash[:day_of_week]]
+            end
+            hour_hash
+          end
+        end
 
-      # 画像の削除処理
-      if delete_image_ids.present?
-        ImageUploadService.delete_images(spot, delete_image_ids, attachment_name: :images)
-      end
+        # ネストした属性を含む更新
+        spot.update!(update_attrs)
 
-      # 画像の追加処理
-      if images.present?
-        ImageUploadService.attach_base64_images(spot, images, prefix: 'spot', attachment_name: :images)
-      end
+        # 画像の削除処理
+        if delete_image_ids.present?
+          ImageUploadService.delete_images(spot, delete_image_ids, attachment_name: :images)
+        end
+
+        # 画像の追加処理
+        if images.present?
+          ImageUploadService.attach_base64_images(spot, images, prefix: 'spot', attachment_name: :images)
+        end
       end
 
       { spot: spot.reload, errors: [] }
