@@ -29,6 +29,21 @@ RSpec.describe Spot, type: :model do
     it { should validate_inclusion_of(:spot_type).in_array(%w(STORE TOURIST_SPOT ACTIVITY)) }
   end
 
+  describe 'scopes' do
+    describe '.publicly_visible' do
+      let(:district) { create(:district) }
+      let!(:public_spot1) { create(:spot, district: district, spot_name: '公開スポット1', spot_type: 'STORE', is_public: true) }
+      let!(:public_spot2) { create(:spot, district: district, spot_name: '公開スポット2', spot_type: 'STORE', is_public: true) }
+      let!(:private_spot) { create(:spot, district: district, spot_name: '非公開スポット', spot_type: 'STORE', is_public: false) }
+
+      it '公開されているスポットのみを返すこと' do
+        result = Spot.publicly_visible
+        expect(result).to include(public_spot1, public_spot2)
+        expect(result).not_to include(private_spot)
+      end
+    end
+  end
+
   describe '#opening_hour_list' do
     let(:district) { create(:district) }
     let(:spot) { create(:spot, district: district, spot_name: 'テストスポット', spot_type: 'STORE') }
