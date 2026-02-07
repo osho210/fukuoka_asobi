@@ -20,7 +20,7 @@ module Mutations
       unless current_user
         return {
           user_history: nil,
-          errors: ["認証されていません。ログインしてください。"]
+          errors: ["認証が必要です"]
         }
       end
 

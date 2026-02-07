@@ -16,8 +16,8 @@ module Resolvers
       # ユーザーが認証されていない場合は空配列を返す
       return [] unless current_user
 
-      # ユーザーの閲覧履歴を取得
-      histories = current_user.user_histories.latest
+      # ユーザーの閲覧履歴を取得（N+1クエリを防ぐためにviewableをプリロード）
+      histories = current_user.user_histories.includes(:viewable).latest
 
       # タイプでフィルタリング
       histories = histories.by_type(viewable_type) if viewable_type.present?

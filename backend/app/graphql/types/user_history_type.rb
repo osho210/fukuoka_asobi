@@ -14,10 +14,10 @@ module Types
     field :user, Types::UserType, null: false
 
     # 閲覧対象のオブジェクトを取得するフィールド
+    # Note: N+1クエリを回避するには、親クエリで includes(:viewable) を使用する必要があります
     field :viewable, Types::ViewableUnion, null: true
 
     def viewable
-      # ActiveRecordのポリモーフィック関連を使用してN+1クエリを回避
       object.viewable
     end
   end
