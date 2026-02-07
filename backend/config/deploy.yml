@@ -63,6 +63,22 @@ volumes:
 # Bridge fingerprinted assets (JS/CSS) between versions
 asset_path: /rails/public/assets
 
+# デプロイ後の自動マイグレーション設定
+hooks:
+  post-deploy:
+    remote: |
+      set -e
+
+      echo "🔄 データベースマイグレーション開始..."
+
+      if docker exec fukuoka-asobi-backend bin/rails db:migrate RAILS_ENV=production; then
+        echo "✅ マイグレーション完了"
+      else
+        echo "❌ エラー: マイグレーションに失敗しました"
+        echo "詳細はログを確認してください: docker logs fukuoka-asobi-backend"
+        exit 1
+      fi
+
 # Configure the image builder.
 builder:
   arch: amd64
