@@ -40,6 +40,9 @@ class Spot < ApplicationRecord
   # スポットタイプのバリデーション
   validates :spot_type, inclusion: { in: %w(STORE TOURIST_SPOT ACTIVITY) }
 
+  # 公開済みスポットのみを取得するスコープ
+  scope :publicly_visible, -> { where(is_public: true) }
+
   # Google Places API関連のENUM定義
   enum :business_status, {
     unspecified:         0,  # BUSINESS_STATUS_UNSPECIFIED
