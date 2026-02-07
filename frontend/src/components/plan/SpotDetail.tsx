@@ -177,8 +177,8 @@ function OpeningHoursTab({ openingHours }: { openingHours?: OpeningHour[] }) {
   return (
     <div className="plan-step-spot-details">
       <div className="spot-hours">
-        {openingHoursRows.map((hour) => (
-          <div key={hour.id} className="spot-hours-row">
+        {openingHoursRows.map((hour, index) => (
+          <div key={`${hour.dayOfWeek}-${index}`} className="spot-hours-row">
             <span className="spot-hours-day">{hour.dayOfWeek}</span>
             <span className="spot-hours-time">
               {formatTimeFromIso(hour.openTime)} – {formatTimeFromIso(hour.closeTime)}
@@ -308,6 +308,7 @@ export default function SpotInfoTabs({ detail }: { detail: PlanDetail }) {
               alt={'ashirai'}
               width={30}
               height={30}
+              style={{ width: 'auto', height: 'auto' }}
             />
             <div className="plan-step-number">step<br />{detail.stepNumber}</div>
           </div>

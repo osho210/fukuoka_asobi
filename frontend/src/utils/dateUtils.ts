@@ -6,18 +6,34 @@ export const formatDate = (dateString?: string) => {
   if (!dateString) return '';
   try {
     const date = new Date(dateString);
+    // 無効な日付チェック
+    if (isNaN(date.getTime())) {
+      console.error('無効な日付形式:', dateString);
+      return '';
+    }
     return format(date, 'yyyy年MM月dd日', { locale: ja });
   } catch (error) {
     console.error('日付のフォーマットエラー:', error);
-    return dateString;
+    return '';
   }
 };
 
 // 時間のみをフォーマットする関数
 export const formatTime = (dateString?: string) => {
   if (!dateString) return '';
+
+  // 時刻のみの文字列（"HH:MM"または"HH:MM:SS"形式）の場合は直接返す
+  if (/^\d{2}:\d{2}(:\d{2})?$/.test(dateString)) {
+    return dateString.slice(0, 5); // "HH:MM"部分を返す
+  }
+
   try {
     const date = new Date(dateString);
+    // 無効な日付チェック
+    if (isNaN(date.getTime())) {
+      console.error('時間のフォーマットエラー: 無効な日付値', dateString);
+      return '';
+    }
     return format(date, 'HH:mm', { locale: ja });
   } catch (error) {
     console.error('時間のフォーマットエラー:', error);
