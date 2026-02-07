@@ -676,6 +676,7 @@ export type CreateSpotInput = {
   instagramUrl?: InputMaybe<Scalars['String']['input']>;
   internationalPhoneNumber?: InputMaybe<Scalars['String']['input']>;
   isClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
   isRainyOk?: InputMaybe<Scalars['Boolean']['input']>;
   latitude?: InputMaybe<Scalars['Float']['input']>;
   liveMusic?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2480,6 +2481,7 @@ export type Spot = {
   instagramUrl?: Maybe<Scalars['String']['output']>;
   internationalPhoneNumber?: Maybe<Scalars['String']['output']>;
   isClosed: Scalars['Boolean']['output'];
+  isPublic: Scalars['Boolean']['output'];
   isRainyOk: Scalars['Boolean']['output'];
   lastApiSyncAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   latitude: Scalars['Float']['output'];
@@ -3325,6 +3327,7 @@ export type UpdateSpotInput = {
   instagramUrl?: InputMaybe<Scalars['String']['input']>;
   internationalPhoneNumber?: InputMaybe<Scalars['String']['input']>;
   isClosed?: InputMaybe<Scalars['Boolean']['input']>;
+  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
   isRainyOk?: InputMaybe<Scalars['Boolean']['input']>;
   latitude?: InputMaybe<Scalars['Float']['input']>;
   liveMusic?: InputMaybe<Scalars['Boolean']['input']>;
