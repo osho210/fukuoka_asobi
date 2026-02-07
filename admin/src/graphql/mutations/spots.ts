@@ -81,6 +81,7 @@ export const CREATE_SPOT = gql`
         valetParking
         freeGarageParking
         paidGarageParking
+        isPublic
         openingHours {
           id
           dayOfWeek
@@ -197,6 +198,7 @@ export const UPDATE_SPOT = gql`
         valetParking
         freeGarageParking
         paidGarageParking
+        isPublic
         openingHours {
           id
           dayOfWeek

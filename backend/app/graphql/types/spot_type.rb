@@ -43,6 +43,7 @@ module Types
     field :last_api_sync_at, GraphQL::Types::ISO8601DateTime, null: true
     field :api_sync_status, String, null: true
     field :spot_type, Types::SpotTypeEnumType, null: false
+    field :is_public, Boolean, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :image_urls, [Types::ImageType], null: true, description: "スポットに紐づく画像のURLリスト"

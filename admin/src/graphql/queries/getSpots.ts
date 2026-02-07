@@ -76,6 +76,7 @@ export const GET_SPOTS = gql`
         valetParking
         freeGarageParking
         paidGarageParking
+        isPublic
         googleTypes,
         adrFormatAddress,
         generativeSummary,
@@ -175,6 +176,7 @@ export const GET_SPOT = gql`
       phoneNumber
       website
       catchphrase
+      isPublic
       isRainyOk
       budgetRange
       areas {

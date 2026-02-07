@@ -171,6 +171,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
     columns: [
       { header: 'ID', accessorKey: 'id', sortable: true },
       { header: '名前', accessorKey: 'spotName', sortable: true },
+      { header: '公開', accessorKey: 'isPublic', sortable: true, cell: (item: ModelData) => item.isPublic ? '公開' : '非公開' },
       { header: '住所', accessorKey: 'address', sortable: false },
       { header: '地区', accessorKey: 'district.districtName', sortable: false },
     ],
@@ -198,6 +199,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'purposes', type: 'multiSelect', required: true, relationModel: 'purposes' },
       { name: 'menus', type: 'multiSelect', required: true, relationModel: 'menus' },
       { name: 'areas', type: 'multiSelect', required: true, relationModel: 'areas' },
+      { name: 'isPublic', type: 'boolean', required: true },
       { name: 'isRainyOk', type: 'boolean', required: true },
       { name: 'isClosed', type: 'boolean', required: false },
       { name: 'parkingAvailable', type: 'boolean' },
@@ -566,6 +568,7 @@ export const fieldDisplayNames: Record<string, string> = {
   spotName: 'スポット名',
   description: '説明',
   address: '住所',
+  isPublic: '公開フラグ',
   phoneNumber: '電話番号',
   instagramUrl: 'Instagram URL',
   website: 'ウェブサイト',

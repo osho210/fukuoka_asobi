@@ -16,6 +16,7 @@ FactoryBot.define do
     max_people { 10 }
     min_people { 1 }
     is_rainy_ok { true }
+    is_public { true }
     theme { "グルメ" }
     image_url { "https://example.com/image.jpg" }
     spot_type { "STORE" }

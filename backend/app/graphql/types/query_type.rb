@@ -93,7 +93,8 @@ module Types
     # スポット
     field :spots, [Types::SpotType], null: false
     def spots
-      Spot.all
+      # admin からのリクエストなら全件、frontend からなら公開済みのみ
+      context[:is_admin_request] ? Spot.all : Spot.publicly_visible
     end
 
     field :spot, Types::SpotType, null: true do

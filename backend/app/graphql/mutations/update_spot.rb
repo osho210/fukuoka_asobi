@@ -90,6 +90,9 @@ module Mutations
     argument :free_garage_parking,      Boolean, required: false
     argument :paid_garage_parking,      Boolean, required: false
 
+    # 公開可否フラグ
+    argument :is_public,                Boolean, required: false
+
     # 関連項目の引数を追加
     argument :hashtags,                 [ID], required: false
     argument :purposes,                 [ID], required: false

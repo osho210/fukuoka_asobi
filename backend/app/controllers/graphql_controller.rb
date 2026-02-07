@@ -22,7 +22,8 @@ class GraphqlController < ApplicationController
     context = {
       # Query context goes here, for example:
       current_user: current_user,
-      controller: self
+      controller: self,
+      is_admin_request: admin_request?
     }
     result = BackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -51,6 +52,13 @@ class GraphqlController < ApplicationController
     else
       raise ArgumentError, "Unexpected parameter: #{variables_param}"
     end
+  end
+
+  # admin リクエストかどうかを判定
+  def admin_request?
+    # リクエスト元のホスト名で判定（例: admin.example.com）
+    # または Authorization ヘッダーの admin トークンで判定
+    request.host.start_with?('admin') || request.headers['X-Admin-Request'] == 'true'
   end
 
   def handle_error_in_development(e)
