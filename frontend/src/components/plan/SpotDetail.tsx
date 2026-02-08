@@ -206,8 +206,8 @@ function ShopDetailTab({ detail }: { detail: PlanDetail }) {
         <div className="plan-step-spot-detail">
           <Image src="/menu-icon.png" alt="メニューアイコン" width={24} height={24} />
           <ul className="spot-item-lists">
-            {detail.spot.menus.map((menu) => (
-              <li className='spot-item-list' key={menu.id}>{menu.menuName}</li>
+            {detail.spot.menus.map((menu, index) => (
+              <li className='spot-item-list' key={menu.id + '-' + index}>{menu.menuName}</li>
             ))}
           </ul>
         </div>
@@ -218,8 +218,8 @@ function ShopDetailTab({ detail }: { detail: PlanDetail }) {
         <div className="plan-step-spot-detail">
           <Image src="/atmosphere-icon.png" alt="雰囲気アイコン" width={24} height={24} />
           <ul className="spot-item-lists">
-            {detail.spot.spotAmbiances.map((ambiance) => (
-              <li className='spot-item-list' key={ambiance.id}>{ambiance.ambianceName}</li>
+            {detail.spot.spotAmbiances.map((ambiance, index) => (
+              <li className='spot-item-list' key={ambiance.id + "-" + index}>{ambiance.ambianceName}</li>
             ))}
           </ul>
         </div>
@@ -230,8 +230,8 @@ function ShopDetailTab({ detail }: { detail: PlanDetail }) {
         <div className="plan-step-spot-detail">
           <Image src="/magazine-icon.png" alt="カテゴリアイコン" width={24} height={24} />
           <ul className="spot-item-lists">
-            {detail.spot.categories.map((category) => (
-              <li className='spot-item-list' key={category.id}>{category.name}</li>
+            {detail.spot.categories.map((category, index) => (
+              <li className='spot-item-list' key={category.id + "-" + index}>{category.name}</li>
             ))}
           </ul>
         </div>
@@ -242,8 +242,8 @@ function ShopDetailTab({ detail }: { detail: PlanDetail }) {
         <div className="plan-step-spot-detail">
           <Image src="/hashtag-icon.png" alt="ハッシュタグアイコン" width={24} height={24} />
           <ul className="spot-item-lists">
-            {detail.spot.hashtags.map((hashtag) => (
-              <li className='spot-item-list' key={hashtag.id}>#{hashtag.hashtagName}</li>
+            {detail.spot.hashtags.map((hashtag, index) => (
+              <li className='spot-item-list' key={hashtag.id + "-" + index}>#{hashtag.hashtagName}</li>
             ))}
           </ul>
         </div>
