@@ -20,13 +20,13 @@ export const PlanTags = (plan: PlayPlanDetailProps) => {
     return (
         <div className="plan-tags-container">
             <h2 className="plan-tags-title">こんな方に見ていただきたい</h2>
-            <div className="plan-tags">
+            <ul className="plan-tags">
                 {tagsArray.map((tag, index) => (
-                    <div key={index} className="plan-tag-item">
+                    <li key={index} className="plan-tag-item">
                         <span className="plan-tag">{tag}</span>
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
     );
 };

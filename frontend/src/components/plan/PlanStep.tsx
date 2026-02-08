@@ -92,7 +92,7 @@ const PlanStep: React.FC<PlanStepProps> = ({ detail, isLastStep }) => {
       <div className="spotInfo">
         {detail.travelDetails && detail.travelDetails.length > 0 && !isLastStep && (
           <div className="travelInfo">
-            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={50} />
+            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={20} />
             <span className="travelMethod">
               {travelMethodInfo?.icon && (
                 <>
@@ -107,7 +107,7 @@ const PlanStep: React.FC<PlanStepProps> = ({ detail, isLastStep }) => {
               )}
             </span>
             <span className="travelTime">
-              {travelMethodInfo?.name}で{ formatTravelTime(detail.travelDetails[0].travelTime)}
+              {travelMethodInfo?.name}で{formatTravelTime(detail.travelDetails[0].travelTime)}
             </span>
           </div>
         )}
