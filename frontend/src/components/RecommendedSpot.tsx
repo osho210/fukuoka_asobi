@@ -8,7 +8,7 @@ const RecommendedSpot = () => {
 
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました: {error.message}</p>;
-  if (!data || !data.spots || data.spots.length === 0) return <p>おすすめスポットが見つかりません</p>;
+  if (!data || !data.spots || data.spots.length === 0) return <p className='noContentFound'>おすすめスポットが見つかりません</p>;
 
   return (
     <div className="recommended-spots">
