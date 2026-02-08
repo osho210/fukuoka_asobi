@@ -34,7 +34,7 @@ const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
           </p>
         </div>
         <div className='plan-departure-departure-time'>
-          <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={50} />
+          <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={20} />
           <p>{plan.travelMethodToFirstSpot} で{plan.travelTimeToFirstSpot}分</p>
         </div>
       </div>

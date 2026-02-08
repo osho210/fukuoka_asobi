@@ -68,7 +68,7 @@ const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onE
         </div>
         {firstTravelDetail && (
           <div className='plan-departure-departure-time'>
-            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={50} />
+            <Image src="/dashed-line.svg" alt="矢印アイコン" width={20} height={20} />
             <p>{travelMethodToFirstSpot}で{travelTimeToFirstSpot}分</p>
           </div>
         )}
