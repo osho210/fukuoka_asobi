@@ -212,6 +212,13 @@ li {
     color: #fff;
     text-decoration: none;
     transition: opacity 0.3s;
+    display: inline-block;
+}
+
+.footer-nav-link.instagram {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .footer-nav-link:hover {

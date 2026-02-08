@@ -31,8 +31,9 @@ export const Footer = () => {
             <Image className="footer-logo" src={'/logo_inversion.png'} width={190} height={45} alt="福岡あそびロゴ" />
             <ul className="footer-account-nav">
                 <li className="footer-nav-item">
-                    <a href="https://www.instagram.com/fukuoka___cafe/" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.instagram.com/fukuoka___cafe/" className="footer-nav-link instagram" target="_blank" rel="noopener noreferrer">
                         <Image src={'/Instagram-logo.svg'} alt='インスタグラムアイコン' width={30} height={30} />
+                        <p>Instagram</p>
                     </a>
                 </li>
                 <li className="footer-nav-item">
