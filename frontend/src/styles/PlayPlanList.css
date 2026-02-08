@@ -18,6 +18,7 @@
 
 .mag-card {
   display: block;
+  width: 330px;
   text-decoration: none;
   color: inherit;
 }

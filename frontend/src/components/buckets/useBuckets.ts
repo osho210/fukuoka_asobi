@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
+import { useMemo } from 'react';
 import { GET_BUCKET_LIST_ITEMS, GET_BUCKET_LIST_ITEM } from '@/graphql/queries/bucketListItems';
 import { GetBucketListItemsQuery, GetBucketListItemQuery, GetBucketListItemQueryVariables } from '@/__generated__/types';
 
@@ -15,13 +16,15 @@ export const useBucketListItems = (
 ) => {
     const { loading, error, data, refetch } = useQuery<GetBucketListItemsQuery>(GET_BUCKET_LIST_ITEMS, {
         variables: { limit, offset, status, weather },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'cache-first',
     });
 
     // topDisplayFlagがfalseのアイテムのみをフィルタリング
-    const bucketListItems = data?.bucketListItems.filter(
-        (bucketListItem) => bucketListItem.topDisplayFlag === false
-    ) || [];
+    const bucketListItems = useMemo(() => {
+        return data?.bucketListItems.filter(
+            (bucketListItem) => bucketListItem.topDisplayFlag === false
+        ) || [];
+    }, [data]);
 
     return {
         bucketListItems,
@@ -37,7 +40,7 @@ export const useBucketListItems = (
 export const useBucketListItem = (id: string) => {
     const { loading, error, data, refetch } = useQuery<GetBucketListItemQuery, GetBucketListItemQueryVariables>(GET_BUCKET_LIST_ITEM, {
         variables: { id },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'cache-first',
     });
 
     return {
