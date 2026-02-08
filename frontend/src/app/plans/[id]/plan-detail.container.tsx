@@ -22,14 +22,11 @@ export default function PlanDetailContainer({ planId }: PlanDetailContainerProps
 
   // ログインが必要な場合は動的にリダイレクト
   useEffect(() => {
-    if (error) {
-      const errorMessage = error.message || '';
-      if (errorMessage.includes('ログインが必要です')) {
-      }
+    if (error?.message?.includes('ログインが必要です')) {
       const callbackUrl = `/plans/${planId}`;
       router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
     }
-  }, [error, error?.message, planId, router]);
+  }, [error?.message, planId, router]);
 
   // エラーメッセージに応じた表示内容を決定
   const getErrorContent = () => {

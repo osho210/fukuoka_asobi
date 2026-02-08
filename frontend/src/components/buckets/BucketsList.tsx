@@ -35,14 +35,14 @@ const BucketsListContent: React.FC<BucketsListProps> = ({
 
     // URL パラメータに対応するバケットを検索（バケットリスト読み込み後のみ）
     useEffect(() => {
-        if (bucketIdFromUrl && bucketListItems && bucketListItems.length > 0) {
+        if (bucketIdFromUrl && bucketListItems?.length) {
             const found = bucketListItems.find((item) => item.id === bucketIdFromUrl);
             if (found) {
                 // 親コンポーネントに対応するバケットを通知
                 onBucketFound?.(found as BucketListItem);
             }
         }
-    }, [bucketIdFromUrl, bucketListItems, bucketListItems.length, onBucketFound]);
+    }, [bucketIdFromUrl, bucketListItems, onBucketFound]);
 
     // ローディング中の表示
     if (loading) {
@@ -140,7 +140,7 @@ const BucketsListContent: React.FC<BucketsListProps> = ({
 };
 
 // React.memo でコンポーネント全体をメモ化
-// コールバック関数の参照が変わらない限り、再レンダリングされない
+// props が浅い比較で前回と同じ場合は再レンダリングをスキップする
 export const BucketsList = React.memo(BucketsListContent);
 
 export default BucketsList;

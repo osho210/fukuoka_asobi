@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { validateRedirectUrl } from '@/lib/redirectUtils';
 import '@/styles/Auth.css';
 
 type CredentialResponse = {
@@ -15,7 +16,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams?.get('callbackUrl') || '/mypage';
+  // validateRedirectUrl で安全なURLのみを許可
+  const callbackUrl = validateRedirectUrl(searchParams?.get('callbackUrl'));
 
   // Googleログイン処理
   const handleGoogleLogin = useCallback(async (credentialResponse: CredentialResponse) => {
@@ -65,7 +67,7 @@ const Login = () => {
 
       const payload = googleLoginResult.data?.userGoogleAuth;
 
-      // ログインに成功した場合、callbackUrl または マイページ画面に遷移する
+      // ログインに成功した場合、callbackUrl にリダイレクト（検証済みのURL）
       if (payload?.user) {
         window.location.href = callbackUrl;
         return;
@@ -145,7 +147,6 @@ const Login = () => {
   return (
     <div className="auth-container">
       <h2 className="auth-title">ログイン・新規登録</h2>
-
 
       {error && <div className="form-error" style={{ marginBottom: '1rem' }}>{error}</div>}
 
