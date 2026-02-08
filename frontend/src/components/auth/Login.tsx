@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import '@/styles/Auth.css';
 
 type CredentialResponse = {
@@ -13,6 +14,8 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams?.get('callbackUrl') || '/mypage';
 
   // Googleログイン処理
   const handleGoogleLogin = useCallback(async (credentialResponse: CredentialResponse) => {
@@ -62,9 +65,9 @@ const Login = () => {
 
       const payload = googleLoginResult.data?.userGoogleAuth;
 
-      // ログインに成功した場合、マイページ画面に遷移する
+      // ログインに成功した場合、callbackUrl または マイページ画面に遷移する
       if (payload?.user) {
-        window.location.href = '/mypage';
+        window.location.href = callbackUrl;
         return;
       }
 
@@ -74,7 +77,7 @@ const Login = () => {
       console.error('Google login error:', error);
       setError('ログイン中にエラーが発生しました。もう一度お試しください。');
     }
-  }, []);
+  }, [callbackUrl]);
 
   useEffect(() => {
     // Google OAuth scriptの読み込み

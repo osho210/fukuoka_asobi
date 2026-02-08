@@ -806,3 +806,90 @@
     padding: 10px;
   }
 }
+
+/* ───────── エラーコンテナ ───────── */
+.error-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #fff8f6;
+  border: 2px solid #cb6b52;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.error-container h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cb6b52;
+  margin-bottom: 15px;
+  font-family: "source-han-sans-japanese", sans-serif;
+}
+
+.error-container p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.error-container p:last-of-type {
+  margin-bottom: 30px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.primary-button {
+  background-color: #cb6b52;
+  color: #fff;
+  border: 2px solid #cb6b52;
+}
+
+.primary-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(203, 107, 82, 0.25);
+}
+
+.secondary-button {
+  background-color: #fff;
+  color: #cb6b52;
+  border: 2px solid #cb6b52;
+}
+
+.secondary-button:hover {
+  background-color: #fff5f1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(203, 107, 82, 0.15);
+}
+
+@media (max-width: 600px) {
+  .error-container {
+    margin: 40px 20px;
+    padding: 30px 20px;
+  }
+
+  .error-container h2 {
+    font-size: 20px;
+  }
+
+  .error-container p {
+    font-size: 13px;
+  }
+}

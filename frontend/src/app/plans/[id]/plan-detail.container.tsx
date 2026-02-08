@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
 import '@/styles/PlayPlanDetail.css';
@@ -12,10 +14,22 @@ interface PlanDetailContainerProps {
 
 export default function PlanDetailContainer({ planId }: PlanDetailContainerProps) {
   const id = parseInt(planId, 10);
+  const router = useRouter();
 
   const { loading, error, data } = useQuery(GET_PLAY_PLAN, {
     variables: { id },
   });
+
+  // ログインが必要な場合は動的にリダイレクト
+  useEffect(() => {
+    if (error) {
+      const errorMessage = error.message || '';
+      if (errorMessage.includes('ログインが必要です')) {
+      }
+      const callbackUrl = `/plans/${planId}`;
+      router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    }
+  }, [error, error?.message, planId, router]);
 
   // エラーメッセージに応じた表示内容を決定
   const getErrorContent = () => {
@@ -24,16 +38,8 @@ export default function PlanDetailContainer({ planId }: PlanDetailContainerProps
     const errorMessage = error.message;
 
     if (errorMessage.includes('ログインが必要です')) {
-      return (
-        <div className={'error-container'}>
-          <h2>ログインが必要です</h2>
-          <p>このプランを閲覧するにはログインが必要です。</p>
-          <div className={'action-buttons'}>
-            <Link href="/login" className={'primary-button'}>ログインする</Link>
-            <Link href="/register" className={'secondary-button'}>新規登録する</Link>
-          </div>
-        </div>
-      );
+      // リダイレクト中のため、ここには到達しない（useEffect で処理）
+      return null;
     } else if (errorMessage.includes('こちらのページは課金しないと見れません')) {
       return (
         <div className={'error-container'}>
