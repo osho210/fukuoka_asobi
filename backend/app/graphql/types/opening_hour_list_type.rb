@@ -14,8 +14,8 @@ module Types
 
   class OpeningHourPeriodType < Types::BaseObject
     description "営業時間の期間"
-    field :open, Types::OpeningHourPeriodDetailType, null: false, description: "開始時間"
-    field :close, Types::OpeningHourPeriodDetailType, null: false, description: "終了時間"
+    field :open, Types::OpeningHourPeriodDetailType, null: true, description: "開始時間"
+    field :close, Types::OpeningHourPeriodDetailType, null: true, description: "終了時間"
   end
 
   class OpeningHourListType < Types::BaseObject
