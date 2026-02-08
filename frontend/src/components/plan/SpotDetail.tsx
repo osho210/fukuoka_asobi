@@ -149,7 +149,7 @@ function BasicInfoTab({
 
       {showInstagramUrl && (
         <div className="plan-step-spot-detail">
-          <Image src="/Instagram-logo.svg" alt="インスタグラムアイコン" width={24} height={24} />
+          <Image src="/Instagram-logo-page.svg" alt="インスタグラムアイコン" width={22} height={22} />
           <a href={showInstagramUrl} target="_blank" rel="noopener noreferrer">
             {showInstagramUrl}
           </a>
