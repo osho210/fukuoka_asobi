@@ -12,6 +12,10 @@
     margin-top: 50px;
 }
 
+.buckets-list-container {
+    margin-bottom: 50px;
+}
+
 .buckets-grid {
     display: flex;
     flex-wrap: wrap;
