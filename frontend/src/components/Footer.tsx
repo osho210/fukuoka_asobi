@@ -5,7 +5,8 @@ export const Footer = () => {
         <footer className="footer">
             <p className="footer-title">福岡遊び日記について</p>
             <p className="footer-text">
-                福岡遊び日記は、地元住民しか知らない隠れ家スポットやディープな体験を提案する、福岡の遊び場探しサービスです。天気や予定に合わせた柔軟なプラン提案で、いつもと違う特別な週末をお過ごしいただけます。
+                福岡遊び日記は、福岡での遊びや日常のひとコマを彩るような体験を集めたサービスです。
+                日記をめくるように気になる場所や体験に出会えます。
             </p>
             <ul className="footer-nav">
                 <li className="footer-nav-item">
