@@ -100,7 +100,7 @@ export default function ContentDetail({
                           src={imageUrl.url}
                           alt={`${title} ${idx + 1}`}
                           width={400}
-                          height={500}
+                          height={200}
                           className="content-detail-image-content"
                           priority={idx === 0}
                         />
