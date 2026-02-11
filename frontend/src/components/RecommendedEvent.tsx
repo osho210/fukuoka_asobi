@@ -45,7 +45,7 @@ const RecommendedEvent = () => {
                   <i className="event-icon">📅</i> {formatDate(new Date(event.startDatetime))}
                 </span>
                 <span className="event-location">
-                  <i className="event-icon">📍</i> {event.location}
+                  <i className="event-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></i> {event.location}
                 </span>
               </div>
             </div>

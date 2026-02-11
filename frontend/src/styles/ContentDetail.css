@@ -163,6 +163,7 @@
 /* アイコン */
 .content-detail-icon {
   margin-right: 8px;
+  vertical-align: middle;
 }
 
 /* リスト */

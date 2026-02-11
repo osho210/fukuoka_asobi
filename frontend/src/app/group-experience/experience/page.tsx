@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import { GET_EXPERIENCE_CARDS } from '@/graphql/queries/getExperienceCards';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
+import Image from 'next/image';
 
 interface ExperienceCard {
   id: string;
@@ -73,7 +74,7 @@ ${selectedCard.body}
       navigator.share({
         title: '福岡遊び日記 - グループ体験',
         text: shareText,
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       // フォールバック: クリップボードにコピー
       navigator.clipboard.writeText(shareText);
@@ -132,7 +133,7 @@ ${selectedCard.body}
           <div className="selected-card">
             <h2>{selectedCard.title}</h2>
             <div className="card-meta">
-              {selectedCard.area && <span className="meta-item">📍 {selectedCard.area}</span>}
+              {selectedCard.area && <span className="meta-item"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /> {selectedCard.area}</span>}
               {selectedCard.duration && (
                 <span className="meta-item">⏱️ 約{selectedCard.duration}分</span>
               )}
@@ -171,7 +172,7 @@ ${selectedCard.body}
             <div key={card.id} className="experience-card">
               <h3 className="card-title">{card.title}</h3>
               <div className="card-meta">
-                {card.area && <span className="meta-item">📍 {card.area}</span>}
+                {card.area && <span className="meta-item"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /> {card.area}</span>}
                 {card.duration && (
                   <span className="meta-item">⏱️ 約{card.duration}分</span>
                 )}

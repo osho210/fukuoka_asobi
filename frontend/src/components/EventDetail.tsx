@@ -122,7 +122,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
             <div className="event-detail-section">
               <h2 className="event-detail-section-title">開催場所</h2>
               <p className="event-detail-location">
-                <span className="event-detail-icon">📍</span>
+                <span className="event-detail-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></span>
                 {event.location}
               </p>
               {(event.latitude && event.longitude) && (

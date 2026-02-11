@@ -74,7 +74,7 @@ export default function EventDetailAdapter({ event }: EventDetailAdapterProps) {
       content: (
         <>
           <p className="content-detail-location">
-            <span className="content-detail-icon">📍</span>
+            <span className="content-detail-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></span>
             {event.location}
           </p>
           {(event.latitude && event.longitude) && (
