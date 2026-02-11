@@ -159,29 +159,6 @@ module Mutations
       spot = Spot.new(input)
 
       ActiveRecord::Base.transaction do
-        # 画像をアタッチ
-        if images.present?
-          images.each_with_index do |image_data, i|
-            # Base64データをデコード
-            data_url     = image_data.to_s
-            content_type = data_url[/\Adata:(.*?);base64,/, 1].to_s
-            base64_data  = data_url.sub(/\Adata:.*?;base64,/, '')
-            decoded_data = Base64.decode64(base64_data)
-
-            # ファイル名と拡張子を生成
-            timestamp = Time.now.to_i
-            extension = case content_type
-                        when 'image/jpeg' then '.jpg'
-                        when 'image/png'  then '.png'
-                        when 'image/gif'  then '.gif'
-                        else '.jpg'
-                        end
-            filename = "spot_#{timestamp}_#{i}#{extension}"
-
-            # ActiveStorageにアタッチ
-            spot.images.attach(io: StringIO.new(decoded_data), filename: filename, content_type: content_type)
-          end
-        end
         # 関連オブジェクトを割り当て
         spot.hashtags       = Hashtag.where(id: hashtags) if hashtags
         spot.purposes       = Purpose.where(id: purposes) if purposes
@@ -192,6 +169,11 @@ module Mutations
 
         # 全ての情報を一度に保存
         spot.save!
+
+        # 画像をアタッチ（spotを保存後）
+        if images.present?
+          ImageUploadService.attach_base64_images(spot, images, prefix: 'spot', attachment_name: :images)
+        end
       end
 
       { spot: spot.reload, errors: [] }
