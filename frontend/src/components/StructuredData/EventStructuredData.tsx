@@ -1,4 +1,5 @@
 import { Event, StatusEnum } from '@/__generated__/graphql';
+import { removeUndefinedValues } from '@/lib/structuredDataUtils';
 
 interface EventStructuredDataProps {
   event: Event;
@@ -63,15 +64,7 @@ export default function EventStructuredData({ event }: EventStructuredDataProps)
       : undefined,
   };
 
-  // undefined 値を除去
-  const cleanedData = JSON.parse(
-    JSON.stringify(structuredData, (_, value) => (value === undefined ? null : value))
-  );
-  Object.keys(cleanedData).forEach(key => {
-    if (cleanedData[key] === null) {
-      delete cleanedData[key];
-    }
-  });
+  const cleanedData = removeUndefinedValues(structuredData);
 
   return (
     <script

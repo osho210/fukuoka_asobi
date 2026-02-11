@@ -1,4 +1,5 @@
 import { PlayPlan } from '@/__generated__/graphql';
+import { removeUndefinedValues } from '@/lib/structuredDataUtils';
 
 interface ArticleStructuredDataProps {
   plan: PlayPlan;
@@ -34,15 +35,7 @@ export default function ArticleStructuredData({ plan }: ArticleStructuredDataPro
     },
   };
 
-  // undefined 値を除去
-  const cleanedData = JSON.parse(
-    JSON.stringify(structuredData, (_, value) => (value === undefined ? null : value))
-  );
-  Object.keys(cleanedData).forEach(key => {
-    if (cleanedData[key] === null) {
-      delete cleanedData[key];
-    }
-  });
+  const cleanedData = removeUndefinedValues(structuredData);
 
   return (
     <script

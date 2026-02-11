@@ -89,7 +89,7 @@ const articleExample = {
   }
 };
 
-function validateJsonLd(jsonLd: any, schemaType: string): boolean {
+function validateJsonLd(jsonLd: Record<string, unknown>, schemaType: string): boolean {
   try {
     // JSON として正しいか確認
     const jsonString = JSON.stringify(jsonLd);

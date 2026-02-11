@@ -1,4 +1,5 @@
 import { Spot } from '@/__generated__/graphql';
+import { removeUndefinedValues } from '@/lib/structuredDataUtils';
 
 interface LocalBusinessStructuredDataProps {
   spot: Spot;
@@ -36,7 +37,7 @@ export default function LocalBusinessStructuredData({ spot }: LocalBusinessStruc
     address: {
       '@type': 'PostalAddress',
       streetAddress: spot.address || spot.shortFormattedAddress || undefined,
-      addressLocality: '福岡市',
+      addressLocality: spot.district?.districtName || '福岡市',
       addressRegion: '福岡県',
       addressCountry: 'JP',
     },
@@ -71,7 +72,7 @@ export default function LocalBusinessStructuredData({ spot }: LocalBusinessStruc
         }
       : undefined,
     servesCuisine: spot.categories?.map(cat => cat.name).join(', ') || undefined,
-    acceptsReservations: spot.reservable ? 'True' : undefined,
+    acceptsReservations: spot.reservable ? true : undefined,
     paymentAccepted: spot.acceptsCreditCards || spot.acceptsDebitCards || spot.acceptsNfc
       ? [
           spot.acceptsCreditCards && 'Credit Card',
@@ -82,15 +83,7 @@ export default function LocalBusinessStructuredData({ spot }: LocalBusinessStruc
       : undefined,
   };
 
-  // undefined 値を除去
-  const cleanedData = JSON.parse(
-    JSON.stringify(structuredData, (_, value) => (value === undefined ? null : value))
-  );
-  Object.keys(cleanedData).forEach(key => {
-    if (cleanedData[key] === null) {
-      delete cleanedData[key];
-    }
-  });
+  const cleanedData = removeUndefinedValues(structuredData);
 
   return (
     <script
