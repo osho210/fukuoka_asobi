@@ -157,6 +157,7 @@ export const GET_PLAY_PLAN = gql`
           }
         }
       }
+      isIndexable
     }
   }
 `;

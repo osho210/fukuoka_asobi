@@ -158,6 +158,8 @@ export const GET_SPOT = gql`
         id
         url
       }
+      isPublic
+      isIndexable
     }
   }
 `;
