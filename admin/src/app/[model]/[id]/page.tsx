@@ -857,16 +857,13 @@ export default function ModelDetailPage() {
                   if (place.regularOpeningHours?.periods) {
                     const dayMapping: { [key: number]: string } = { 0: '日', 1: '月', 2: '火', 3: '水', 4: '木', 5: '金', 6: '土' };
                     const formattedHours = place.regularOpeningHours.periods.map(period => {
-                      const formatTime = (time: { hour?: number; minute?: number } | undefined) => {
-                        if (!time || time.hour === undefined || time.minute === undefined) {
-                          return null;
-                        }
+                      const formatTime = (time: { hour: number; minute: number; }) => {
                         const hour = String(time.hour).padStart(2, '0');
                         const minute = String(time.minute).padStart(2, '0');
                         return `${hour}:${minute}`;
                       };
                       return {
-                        dayOfWeek: dayMapping[period.open?.day ?? 0],
+                        dayOfWeek: dayMapping[period.open.day],
                         openTime: formatTime(period.open),
                         closeTime: formatTime(period.close),
                         isClosedDay: false,

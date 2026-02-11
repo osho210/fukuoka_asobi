@@ -20,9 +20,7 @@ export default function BusinessHours({ spot }: BusinessHoursProps) {
 
   if (!openingHours || openingHours.length === 0) {
     return (
-      <div className="business-hours">
-        <p>営業時間の情報がありません。</p>
-      </div>
+      <p>営業時間の情報がありません。</p>
     );
   }
 

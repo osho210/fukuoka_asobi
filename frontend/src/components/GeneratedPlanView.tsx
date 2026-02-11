@@ -50,7 +50,7 @@ const GeneratedPlanView: React.FC<GeneratedPlanViewProps> = ({ plan, onSave, onE
           )}
           {plan.travelRoute.totalDistance && (
             <div className="plan-meta-item">
-              <span className="plan-meta-icon">📍</span>
+              <span className="plan-meta-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></span>
               <span>総移動距離: {plan.travelRoute.totalDistance.toFixed(1)}km</span>
             </div>
           )}

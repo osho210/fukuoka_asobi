@@ -168,7 +168,7 @@ export default function EventList({ categoryId, limit = 4, upcoming = true, show
                   {formatDate(new Date(event.startDatetime))}
                 </p>
                 <p className="event-card-location">
-                  <span className="event-card-icon">📍</span>
+                  <span className="event-card-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></span>
                   {event.location}
                 </p>
                 {event.price && (

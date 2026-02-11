@@ -242,7 +242,7 @@ li {
     }
 
     .footer {
-        margin: 0 calc(50% - 50vw);
+        margin: 50px calc(50% - 50vw) 0px;
         padding: 20px 15px;
     }
 

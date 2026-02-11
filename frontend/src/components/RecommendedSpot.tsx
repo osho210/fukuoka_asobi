@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GET_RECOMMENDED_SPOTS, GetRecommendedSpotsQuery } from '@/graphql/getRecommendedSpots';
+import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
 
 const RecommendedSpot = () => {
   const { loading, error, data } = useQuery<GetRecommendedSpotsQuery>(GET_RECOMMENDED_SPOTS);
@@ -21,8 +22,8 @@ const RecommendedSpot = () => {
                 <Image
                   src={spot.imageUrl ? spot.imageUrl.url : '/no-image.png'}
                   alt={spot.spotName}
-                  width={300}
-                  height={200}
+                  width={200}
+                  height={100}
                   className="spot-thumbnail"
                 />
               ) : (
@@ -32,7 +33,7 @@ const RecommendedSpot = () => {
               )}
             </div>
             <div className="spot-content">
-              <div className="spot-type-badge">{spot.spotType}</div>
+              <div className="spot-type-badge">{getSpotTypeLabel(spot.spotType)}</div>
               <h3 className="spot-name">{spot.spotName}</h3>
               <div className="spot-meta">
                 <span className="spot-location">{spot.district?.districtName}</span>

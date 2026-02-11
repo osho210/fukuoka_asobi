@@ -69,7 +69,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
     content: (
       <>
         <p className="content-detail-location">
-          <span className="content-detail-icon">📍</span>
+          <span className="content-detail-icon"><Image src="/pin-icon.png" alt="Departure Icon" width={20} height={20} /></span>
           {spot.district.districtName} / {spot.areas.map(area => area.areaName).join(', ')}
         </p>
         <p>{spot.address}</p>
@@ -109,8 +109,8 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
               <Image
                 src={menu.imageUrl ? menu.imageUrl.url : '/no-image.png'}
                 alt={menu.menuName}
-                width={30}
-                height={30}
+                width={20}
+                height={15.6}
                 className="content-detail-menu-image"
               />
               <strong>{menu.menuName}</strong>
@@ -201,7 +201,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
           )}
           {spot.website && (
             <p className="content-detail-contact">
-              <span className="content-detail-icon">🌐</span>
+              <span className="content-detail-icon"><Image src="/website-icon.png" alt="ウェブサイトアイコン" width={24} height={24} /></span>
               <a href={spot.website} target="_blank" rel="noopener noreferrer" className="content-detail-link">
                 ウェブサイト
               </a>
@@ -209,7 +209,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
           )}
           {spot.instagramUrl && (
             <p className="content-detail-contact">
-              <span className="content-detail-icon">📷</span>
+              <span className="content-detail-icon"><Image src={'/Instagram-logo-page.svg'} alt='インスタグラムアイコン' width={20} height={20} /></span>
               <a href={spot.instagramUrl} target="_blank" rel="noopener noreferrer" className="content-detail-link">
                 Instagram
               </a>
