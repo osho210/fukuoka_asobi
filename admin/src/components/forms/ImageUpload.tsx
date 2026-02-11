@@ -39,6 +39,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
     }, [onImagesChange]);
 
     // newPreviewsが更新されたら親コンポーネントに通知
+    // 注: 画像の追加・削除のたびに親に通知する必要があるため、
+    // newPreviewsの変更ごとにコールバックを実行することは意図的な動作です
     useEffect(() => {
         notifyImagesChange(newPreviews);
     }, [newPreviews, notifyImagesChange]);

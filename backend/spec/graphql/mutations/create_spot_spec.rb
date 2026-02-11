@@ -60,9 +60,10 @@ RSpec.describe Mutations::CreateSpot, type: :request do
     end
 
     it 'Base64エンコードされた画像を含めてSpotを作成できること' do
-      # テスト用のBase64エンコードされた画像データ
-      dummy_image_data = 'dummy image content'
-      base64_image = 'data:image/jpeg;base64,' + Base64.strict_encode64(dummy_image_data)
+      # テスト用のBase64エンコードされた画像データ（1x1 pixel PNG）
+      # 実際のPNG画像のバイナリデータを使用
+      png_data = "\x89PNG\r\n\x1A\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\nIDATx\x9Cc\x00\x01\x00\x00\x05\x00\x01\r\n-\xB4\x00\x00\x00\x00IEND\xAEB`\x82".force_encoding('BINARY')
+      base64_image = 'data:image/png;base64,' + Base64.strict_encode64(png_data)
 
       variables = {
         spotName: 'テスト画像付きスポット',
