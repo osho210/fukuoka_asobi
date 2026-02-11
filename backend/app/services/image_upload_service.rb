@@ -11,12 +11,18 @@ class ImageUploadService
 
     images.each_with_index do |base64_image, index|
       begin
+        # 画像データを文字列に変換
+        image_string = base64_image.to_s
+        
         # Base64データからファイル形式を判別
-        content_type = base64_image.match(/data:(.*?);/)[1]
+        match_data = image_string.match(/data:(.*?);/)
+        raise "画像フォーマットが不正です（data:image/xxx;base64,... の形式である必要があります）" if match_data.nil?
+        
+        content_type = match_data[1]
         raise "画像のContent-Typeが不正です" if content_type.blank?
 
         # Base64データ部分のみを抽出
-        encoded_image = base64_image.split(",")[1]
+        encoded_image = image_string.split(",")[1]
         raise "画像データが空です" if encoded_image.blank?
 
         # デコード
