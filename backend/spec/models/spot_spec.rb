@@ -29,6 +29,19 @@ RSpec.describe Spot, type: :model do
     it { should validate_inclusion_of(:spot_type).in_array(%w(STORE TOURIST_SPOT ACTIVITY)) }
   end
 
+  describe 'default values' do
+    let(:district) { create(:district) }
+    let(:spot) { Spot.create!(district: district, spot_name: 'テストスポット', spot_type: 'STORE', address: 'テスト住所') }
+
+    it 'is_indexable のデフォルト値が false であること' do
+      expect(spot.is_indexable).to eq(false)
+    end
+
+    it 'is_public のデフォルト値が false であること' do
+      expect(spot.is_public).to eq(false)
+    end
+  end
+
   describe 'scopes' do
     describe '.publicly_visible' do
       let(:district) { create(:district) }
