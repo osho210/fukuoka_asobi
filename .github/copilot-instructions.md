@@ -99,6 +99,8 @@ npm run storybook:frontend       # Frontend Storybook (port 6006)
 npm run storybook:admin          # Admin Storybook (port 6007)
 npm run build-storybook:frontend # Build frontend Storybook
 npm run build-storybook:admin    # Build admin Storybook
+npm run chromatic:frontend       # Run Chromatic visual tests for frontend
+npm run chromatic:admin          # Run Chromatic visual tests for admin
 ```
 
 ## CI/CD Workflows
@@ -114,6 +116,12 @@ npm run build-storybook:admin    # Build admin Storybook
    - `scan_js`: JavaScript dependency audit with importmap
    - `lint`: RuboCop linting
    - `test`: Rails tests with SQLite (`bin/rails db:test:prepare test test:system`)
+
+3. **Backend Deploy (`.github/workflows/deploy-backend.yml`)**: Manual deployment workflow
+   - Triggered via `workflow_dispatch` with version input
+   - Deploys backend to VPS using Kamal
+   - Requires secrets for DB, MinIO, Cloudflare R2, SSH access
+   - Sets up Docker, GHCR authentication, and Kamal deployment
 
 ### Pre-commit Validation
 
@@ -349,6 +357,8 @@ npm run storybook:frontend    # Port 6006
 npm run storybook:admin       # Port 6007
 npm run build-storybook:frontend
 npm run build-storybook:admin
+npm run chromatic:frontend    # Visual regression tests
+npm run chromatic:admin       # Visual regression tests
 ```
 
 ### Docker Operations
