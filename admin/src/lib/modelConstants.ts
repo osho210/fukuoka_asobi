@@ -199,8 +199,8 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'purposes', type: 'multiSelect', required: true, relationModel: 'purposes' },
       { name: 'menus', type: 'multiSelect', required: true, relationModel: 'menus' },
       { name: 'areas', type: 'multiSelect', required: true, relationModel: 'areas' },
-      { name: 'isPublic', type: 'boolean', required: true },
-      { name: 'isRainyOk', type: 'boolean', required: true },
+      { name: 'isPublic', type: 'boolean', required: false },
+      { name: 'isRainyOk', type: 'boolean', required: false },
       { name: 'isClosed', type: 'boolean', required: false },
       { name: 'parkingAvailable', type: 'boolean' },
       // Google Places API関連フィールド
