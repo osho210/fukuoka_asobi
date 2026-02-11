@@ -22,8 +22,8 @@ const RecommendedSpot = () => {
                 <Image
                   src={spot.imageUrl ? spot.imageUrl.url : '/no-image.png'}
                   alt={spot.spotName}
-                  width={300}
-                  height={200}
+                  width={200}
+                  height={100}
                   className="spot-thumbnail"
                 />
               ) : (
