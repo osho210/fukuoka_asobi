@@ -12,6 +12,7 @@ FactoryBot.define do
     review_count { 10 }
     favorite_count { 5 }
     status { 'published' }
+    is_indexable { true }
     tags { 'カフェ,ランチ,散歩' }
     association :user
   end
