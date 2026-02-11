@@ -10,6 +10,7 @@ import PlanActions from './plan/PlanActions';
 import { PlanImages } from './plan/PlanImages'
 import { PlanTags } from './plan/PlanTag';
 import Image from 'next/image';
+import { ArticleStructuredData } from '@/components/StructuredData';
 
 interface PlayPlanDetailProps {
   plan: PlayPlan;
@@ -18,6 +19,7 @@ interface PlayPlanDetailProps {
 const PlayPlanDetail: React.FC<PlayPlanDetailProps> = ({ plan }) => {
   return (
     <div className="play-plan-detail">
+      <ArticleStructuredData plan={plan} />
       <PlanHeader plan={plan} />
       <PlanRecommendation plan={plan} />
       <PlanStats plan={plan} />
