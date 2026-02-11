@@ -47,7 +47,7 @@ export default function NewPlayPlanPage() {
             plannerTitle: formData.plannerTitle || '',
             plannerDescription: formData.plannerDescription || '',
             isRecommended: formData.isRecommended || false,
-            isPublic: formData.isPublic !== false,
+            isPublic: formData.isPublic ?? true,
             planDetails: formData.planDetails.map((detail) => ({
               stepNumber: detail.stepNumber,
               stepName: detail.stepName || '',

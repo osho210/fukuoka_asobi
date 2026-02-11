@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           `,
           variables: { id: parseInt(id, 10) },
         }),
-        next: { revalidate: 60 }, // 60秒ごとに再検証
+        next: { revalidate: 60 }, // ISR: 60秒後に stale-while-revalidate
       }
     );
 

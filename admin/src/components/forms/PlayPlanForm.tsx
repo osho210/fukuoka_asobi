@@ -449,7 +449,7 @@ export default function PlayPlanForm({
               <input
                 type="checkbox"
                 id="isPublic"
-                checked={formData.isPublic !== false}
+                checked={formData.isPublic ?? true}
                 onChange={(e) => {
                   setFormData(prev => ({
                     ...prev,
