@@ -8,6 +8,7 @@
   font-family: Arial, sans-serif;
   color: #333333;
   padding: 0 20px;
+  margin-bottom: 50px;
 }
 
 /* メインの見出し */
@@ -31,6 +32,109 @@
   padding-bottom: 8px;
 }
 
+/* モバイル用ドロップダウン */
+.news-category-dropdown-wrapper {
+  position: relative;
+  display: block;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .news-category-dropdown-wrapper {
+    display: none;
+  }
+}
+
+.news-category-dropdown-button {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.news-category-dropdown-button:hover {
+  border-color: #cb6b52;
+  background-color: #fafafa;
+}
+
+.news-category-dropdown-label {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.news-category-dropdown-arrow {
+  font-size: 12px;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.news-category-dropdown-button[aria-expanded="true"] .news-category-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.news-category-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.news-category-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.news-category-dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #cb6b52;
+}
+
+.news-category-dropdown-item-active {
+  background-color: #cb6b52;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* デスクトップ用ボタングループ */
+.news-category-buttons-desktop {
+  display: none;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .news-category-buttons-desktop {
+    display: flex;
+  }
+}
+
 .news-category-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -48,6 +152,12 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.news-category-button:hover {
+  background-color: #f5f5f5;
+  color: #333;
 }
 
 .news-category-button-active {
