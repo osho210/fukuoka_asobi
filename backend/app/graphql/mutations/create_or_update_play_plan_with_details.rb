@@ -27,6 +27,7 @@ module Mutations
     argument :planner_title, String, required: true, description: "プランナータイトル"
     argument :planner_description, String, required: true, description: "プランナー説明"
     argument :is_recommended, Boolean, required: false, description: "編集部おすすめフラグ"
+    argument :is_public, Boolean, required: false, description: "検索エンジンインデックス公開フラグ"
     argument :plan_details, [Types::PlanDetailInputType], required: true, description: "プラン詳細リスト"
     argument :image_properties, [Mutations::Inputs::ImagePropertyInputType], required: false, description: "画像プロパティリスト"
 
