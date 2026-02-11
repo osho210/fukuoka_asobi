@@ -102,10 +102,12 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
     <button
       className={`favorite-button flex items-center ${className}`}
       style={{
-        background: 'transparent',
-        border: 'none',
-        padding: 0,
-        cursor: isLoading ? 'not-allowed' : 'pointer'
+        background: favorite ? '#cb6b52' : 'transparent',
+        border: favorite ? '1px solid #cb6b52' : '1px solid #e5e7eb',
+        padding: '0.5rem',
+        cursor: isLoading ? 'not-allowed' : 'pointer',
+        borderRadius: '0.375rem',
+        transition: 'all 0.2s ease-in-out'
       }}
       onClick={toggleFavorite}
       disabled={isLoading}
@@ -114,11 +116,20 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
     >
       <span
         className={`heart-icon ${favorite ? 'heart-active' : ''}`}
+        style={{
+          color: favorite ? '#ffffff' : '#cb6b52',
+          fontSize: '1.25rem'
+        }}
       >
         {favorite ? '❤︎' : '♡'}
       </span>
       {showText && (
-        <span className="ml-1 text-sm text-gray-600">
+        <span
+          className="ml-2 text-sm font-medium"
+          style={{
+            color: favorite ? '#ffffff' : '#666666'
+          }}
+        >
           {favorite ? 'お気に入り済み' : 'お気に入りに追加'}
         </span>
       )}
