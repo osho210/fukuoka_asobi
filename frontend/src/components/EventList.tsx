@@ -9,18 +9,19 @@ import { GET_RECOMMENDED_EVENTS } from '@/graphql/getRecommendedEvents';
 
 type EventListProps = {
   selectedCategoryId?: string | null;
+  limit?: number;
+  showAll?: boolean;
 };
 
-export default function EventList({ selectedCategoryId }: EventListProps) {
+export default function EventList({ selectedCategoryId, limit, showAll = true }: EventListProps) {
   const { data, loading, error } = useQuery<{ events: Event[] }>(GET_RECOMMENDED_EVENTS);
 
   const events = data?.events ?? [];
 
-  // カテゴリでフィルタリング
-  const filteredEvents = events.filter(event => {
-    if (!selectedCategoryId) return true;
-    return event.eventCategory?.id === selectedCategoryId;
-  });
+  // カテゴリとlimitでフィルタリング・制限する関数型処理
+  const filteredEvents = events
+    .filter(event => !selectedCategoryId || event.eventCategory?.id === selectedCategoryId)
+    .slice(0, !showAll && limit && limit > 0 ? limit : events.length);
 
   if (loading) return <div className="event-loading-message">読み込み中...</div>;
   if (error) return <div className="event-error-message">イベントの取得に失敗しました</div>;
