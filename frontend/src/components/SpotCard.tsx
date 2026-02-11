@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
 
 type SpotCardProps = {
   id: string;
@@ -57,7 +58,7 @@ export default function SpotCard({
                 {reviewCount && <span className="spot-card-review-count">({reviewCount})</span>}
               </div>
             )}
-            {budgetRange && <span className="spot-card-budget">{budgetRange}</span>}
+            {budgetRange && <span className="spot-card-budget">{getBudgetRangeLabel(budgetRange)}</span>}
           </div>
         </div>
       </div>
