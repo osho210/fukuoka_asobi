@@ -24,8 +24,6 @@ export default function SpotsPage() {
 
     return (
         <div className="spots-container">
-            <h1 className="spots-heading">スポット</h1>
-
             {/* カテゴリーリスト */}
             <section className="spots-category-section">
                 <SpotCategoryList
