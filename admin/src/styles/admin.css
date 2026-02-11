@@ -859,3 +859,45 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+/* バッジ（ステータス表示用） */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.badge-primary {
+  background-color: var(--admin-primary);
+  color: white;
+}
+
+.badge-secondary {
+  background-color: var(--admin-secondary);
+  color: white;
+}
+
+.badge-success {
+  background-color: var(--admin-success);
+  color: white;
+}
+
+.badge-danger {
+  background-color: var(--admin-danger);
+  color: white;
+}
+
+.badge-warning {
+  background-color: var(--admin-warning);
+  color: #212529;
+}
+
+.badge-info {
+  background-color: var(--admin-info);
+  color: white;
+}
