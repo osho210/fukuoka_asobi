@@ -58,7 +58,7 @@ export default function SpotCard({
                 {reviewCount && <span className="spot-card-review-count">({reviewCount})</span>}
               </div>
             )}
-            {budgetRange && <span className="spot-card-budget">{getBudgetRangeLabel(budgetRange)}</span>}
+            {budgetRange && <span className="spot-card-budget">予算:{getBudgetRangeLabel(budgetRange)}</span>}
           </div>
         </div>
       </div>

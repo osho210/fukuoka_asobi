@@ -18,7 +18,7 @@ export function getBudgetRangeLabel(budgetRange: string | null | undefined): str
     if (!budgetRange) return '不明';
 
     const budgetRangeMap: Record<string, string> = {
-        CHEAP: '安い',
+        CHEAP: '安め',
         AVERAGE: '普通',
         EXPENSIVE: '高い',
     };
