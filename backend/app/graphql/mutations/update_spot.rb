@@ -92,6 +92,7 @@ module Mutations
 
     # 公開可否フラグ
     argument :is_public,                Boolean, required: false
+    argument :is_indexable,             Boolean, required: false
 
     # 関連項目の引数を追加
     argument :hashtags,                 [ID], required: false
