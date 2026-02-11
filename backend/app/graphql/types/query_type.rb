@@ -476,5 +476,10 @@ module Types
     def bucket_list_item(id:)
       BucketListItem.includes(:layout_bucket, :bucket_list_item_belongings, :bucket_list_item_references).find_by(id: id)
     end
+
+    # --------------------------------------------
+    # SEOインデックス管理
+    # --------------------------------------------
+    field :seo_index_list, resolver: Resolvers::SeoIndexListResolver
   end
 end
