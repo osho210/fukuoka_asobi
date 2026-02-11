@@ -11,11 +11,14 @@ class ImageUploadService
 
     images.each_with_index do |base64_image, index|
       begin
+        # 画像データのnil チェック
+        raise "画像データがnilです" if base64_image.nil?
+        
         # 画像データを文字列に変換
         image_string = base64_image.to_s
         
         # Base64データからファイル形式を判別
-        match_data = image_string.match(/data:(.*?);/)
+        match_data = image_string.match(/data:(.*?);base64,/)
         raise "画像フォーマットが不正です（data:image/xxx;base64,... の形式である必要があります）" if match_data.nil?
         
         content_type = match_data[1]
