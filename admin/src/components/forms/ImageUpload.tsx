@@ -30,13 +30,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
     }, [existingImages]);
 
     /**
-     * 新規画像の追加時にすべてのBase64画像をコールバックに渡す
-     * @param images - 新規画像プレビューの配列
+     * 新規画像プレビューが変更された時に親コンポーネントに通知
      */
-    const notifyImagesChange = useCallback((images: NewImagePreview[]) => {
-        const base64Images = images.map(img => img.base64);
+    useEffect(() => {
+        const base64Images = newPreviews.map(img => img.base64);
         onImagesChange(base64Images);
-    }, [onImagesChange]);
+    }, [newPreviews, onImagesChange]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const newBase64Promises: Promise<NewImagePreview>[] = [];
@@ -60,14 +59,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
         });
 
         Promise.all(newBase64Promises).then((newImages) => {
-            setNewPreviews(prev => {
-                const updated = [...prev, ...newImages];
-                // 状態更新後にコールバックを呼び出す
-                notifyImagesChange(updated);
-                return updated;
-            });
+            setNewPreviews(prev => [...prev, ...newImages]);
         });
-    }, [notifyImagesChange]);
+    }, []);
 
     /**
      * 既存画像を削除する
@@ -83,11 +77,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesChange, onDeleteImage
      * @param id - 新規画像ID
      */
     const handleRemoveNewImage = (id: string) => {
-        setNewPreviews(prev => {
-            const updated = prev.filter(img => img.id !== id);
-            notifyImagesChange(updated);
-            return updated;
-        });
+        setNewPreviews(prev => prev.filter(img => img.id !== id));
     };
 
     const { getRootProps, getInputProps } = useDropzone({
