@@ -1,72 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
 import Image from 'next/image';
 import { formatDateRange } from '../lib/dateUtils';
 import '@/styles/EventsPage.css';
 import { Event } from '@/__generated__/graphql';
+import { GET_EVENT } from '@/graphql/queries/getEvent';
 
 type EventDetailProps = {
   eventId: string;
 };
 
 export default function EventDetail({ eventId }: EventDetailProps) {
-  const [event, setEvent] = useState<Event | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, loading, error } = useQuery<{ event: Event }>(GET_EVENT, {
+    variables: { id: eventId },
+    skip: !eventId,
+  });
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        setLoading(true);
-        // 実際のGraphQLクエリを実行する処理
-        // ここではダミーデータを使用
-        const dummyEvent: Event = {
-          id: '1',
-          title: '福岡クラフトビアフェスティバル',
-          description: '福岡市内外のクラフトビールブルワリーが集結する九州最大級のビールイベント。様々な種類のクラフトビールを楽しめるほか、フードブースも充実。地元のブルワリーとの交流や、ビールに合う料理の提案など、ビール好きにはたまらないイベントです。',
-          location: '福岡市中央区天神 天神中央公園',
-          latitude: 33.5917,
-          longitude: 130.3971,
-          startDatetime: '2025-04-01T10:00:00Z',
-          endDatetime: '2025-04-03T18:00:00Z',
-          recurringRule: null,
-          price: '入場無料（飲食は有料）',
-          organizer: '福岡クラフトビール協会',
-          contactEmail: 'info@fukuoka-beer.jp',
-          contactPhone: '092-123-4567',
-          capacity: 5000,
-          isOnline: false,
-          sourceUrl: 'itoshima.png',
-          bannerImage: '',
-          eventCategory: {
-            id: '1',
-            name: 'フェス・マーケット',
-            createdAt: undefined,
-            updatedAt: undefined
-          },
-          createdAt: undefined,
-          eventCategoryId: 0,
-          updatedAt: undefined
-        };
-
-        // 実際のAPIでは、eventIdを使用して特定のイベントを取得
-        setEvent(dummyEvent);
-        setLoading(false);
-      } catch (err) {
-        setError('イベント情報の取得に失敗しました');
-        setLoading(false);
-        console.error('イベント取得エラー:', err);
-      }
-    };
-
-    if (eventId) {
-      fetchEvent();
-    }
-  }, [eventId]);
+  const event = data?.event;
 
   if (loading) return <div className="event-detail-loading">読み込み中...</div>;
-  if (error) return <div className="event-detail-error">{error}</div>;
+  if (error) return <div className="event-detail-error">イベント情報の取得に失敗しました</div>;
   if (!event) return <div className="event-detail-not-found">イベントが見つかりませんでした</div>;
 
   return (
@@ -84,7 +38,7 @@ export default function EventDetail({ eventId }: EventDetailProps) {
         </div>
         <div className="event-detail-badges">
           <span className="event-detail-category-badge">
-            {event.eventCategory.name}
+            {event.eventCategory?.name}
           </span>
           {event.isOnline && (
             <span className="event-detail-online-badge">

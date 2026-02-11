@@ -176,7 +176,9 @@ export enum BudgetTypeRangeEnum {
   /** 安い */
   Cheap = 'CHEAP',
   /** 高い */
-  Expensive = 'EXPENSIVE'
+  Expensive = 'EXPENSIVE',
+  /** 無料 */
+  Free = 'FREE'
 }
 
 /** ビジネスステータス */
@@ -1967,9 +1969,9 @@ export type OpeningHourList = {
 export type OpeningHourPeriod = {
   __typename?: 'OpeningHourPeriod';
   /** 終了時間 */
-  close: OpeningHourPeriodDetail;
+  close?: Maybe<OpeningHourPeriodDetail>;
   /** 開始時間 */
-  open: OpeningHourPeriodDetail;
+  open?: Maybe<OpeningHourPeriodDetail>;
 };
 
 /** 営業時間の開始または終了の詳細 */
@@ -1985,13 +1987,13 @@ export type OpeningHourPeriodDetail = {
 
 export type ParkingOptions = {
   __typename?: 'ParkingOptions';
-  freeGarageParking: Scalars['Boolean']['output'];
-  freeParkingLot: Scalars['Boolean']['output'];
-  freeStreetParking: Scalars['Boolean']['output'];
-  paidGarageParking: Scalars['Boolean']['output'];
-  paidParkingLot: Scalars['Boolean']['output'];
-  paidStreetParking: Scalars['Boolean']['output'];
-  valetParking: Scalars['Boolean']['output'];
+  freeGarageParking?: Maybe<Scalars['Boolean']['output']>;
+  freeParkingLot?: Maybe<Scalars['Boolean']['output']>;
+  freeStreetParking?: Maybe<Scalars['Boolean']['output']>;
+  paidGarageParking?: Maybe<Scalars['Boolean']['output']>;
+  paidParkingLot?: Maybe<Scalars['Boolean']['output']>;
+  paidStreetParking?: Maybe<Scalars['Boolean']['output']>;
+  valetParking?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type PaymentOptions = {
