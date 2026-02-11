@@ -18,14 +18,15 @@ class ImageUploadService
         image_string = base64_image.to_s
         
         # Base64データからファイル形式を判別
-        match_data = image_string.match(/data:(.*?);base64,/)
+        # ReDoS対策: より具体的で安全な正規表現を使用
+        match_data = image_string.match(%r{\Adata:([a-zA-Z0-9]+/[a-zA-Z0-9\-\+\.]+);base64,})
         raise "画像フォーマットが不正です（data:image/xxx;base64,... の形式である必要があります）" if match_data.nil?
         
         content_type = match_data[1]
         raise "画像のContent-Typeが不正です" if content_type.blank?
 
         # Base64データ部分のみを抽出
-        encoded_image = image_string.split(",")[1]
+        encoded_image = image_string.split(",", 2)[1]
         raise "画像データが空です" if encoded_image.blank?
 
         # デコード
