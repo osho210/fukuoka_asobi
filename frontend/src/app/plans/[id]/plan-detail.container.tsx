@@ -5,7 +5,6 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { GET_PLAY_PLAN } from '@/graphql/playPlans';
 import PlayPlanDetail from '@/components/PlayPlanDetail';
-import RobotsMetaTag from '@/components/RobotsMetaTag';
 import '@/styles/PlayPlanDetail.css';
 import Link from 'next/link';
 
@@ -80,7 +79,6 @@ export default function PlanDetailContainer({ planId }: PlanDetailContainerProps
 
   return (
     <>
-      <RobotsMetaTag isPublic={data.playPlan.isPublic ?? true} />
       <PlayPlanDetail plan={data.playPlan} />
     </>
   );

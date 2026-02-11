@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/client';
 import { GET_SPOT } from '@/graphql/queries/getSpot';
 import { Spot } from '@/__generated__/graphql';
 import SpotDetailAdapter from '@/components/adapters/SpotDetailAdapter';
-import RobotsMetaTag from '@/components/RobotsMetaTag';
 
 interface SpotDetailContainerProps {
   spotId: string;
@@ -23,10 +22,5 @@ export default function SpotDetailContainer({ spotId }: SpotDetailContainerProps
   if (error) return <div className="content-detail-error">エラーが発生しました: {error.message}</div>;
   if (!data || !data.spot) return <div className="content-detail-not-found">スポットが見つかりません</div>;
 
-  return (
-    <>
-      <RobotsMetaTag isPublic={data.spot.isPublic ?? true} />
-      <SpotDetailAdapter spot={data.spot} />
-    </>
-  );
+  return <SpotDetailAdapter spot={data.spot} />;
 }
