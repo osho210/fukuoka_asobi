@@ -24,6 +24,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "福岡遊び日記",
   description: "福岡の遊び場所を探すアプリ",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
