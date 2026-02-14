@@ -8,28 +8,33 @@ require 'googleauth'
 # URL Inspection APIを使用して、指定されたURLのインデックス状態を取得します。
 # Service Account認証を使用してGoogle Search Console APIにアクセスします。
 class GoogleSearchConsoleService
+  # カスタム例外クラス
+  class MissingCredentialsError < StandardError; end
+
   # Google Search Console APIのクライアント
   #
   # Returns:
   #   Google::Apis::SearchconsoleV1::SearchConsoleService: APIクライアント
   def self.client
-    @client ||= begin
-      service = Google::Apis::SearchconsoleV1::SearchConsoleService.new
-      service.authorization = authorize
-      service
-    end
+    service = Google::Apis::SearchconsoleV1::SearchConsoleService.new
+    service.authorization = authorize
+    service
   end
 
   # Service Account認証を実行
   #
   # Returns:
   #   Google::Auth::ServiceAccountCredentials: 認証情報
+  #
+  # Raises:
+  #   MissingCredentialsError: 認証情報が見つからない場合
   def self.authorize
     # Service Accountの認証情報を取得
     credentials_json = Rails.application.credentials.google&.dig(:search_console_service_account)
     
     unless credentials_json
-      raise 'Google Search Console Service Account credentials not found. ' \
+      raise MissingCredentialsError,
+            'Google Search Console Service Account credentials not found. ' \
             'Please configure it in Rails.application.credentials under ' \
             ':google -> :search_console_service_account. ' \
             'Refer to https://guides.rubyonrails.org/security.html#custom-credentials for setup instructions.'

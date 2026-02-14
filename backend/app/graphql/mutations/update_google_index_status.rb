@@ -55,6 +55,12 @@ module Mutations
           google_index_status: google_status,
           errors: []
         }
+      rescue GoogleSearchConsoleService::MissingCredentialsError => e
+        Rails.logger.error "Google Search Console Credentials Error: #{e.message}"
+        {
+          google_index_status: nil,
+          errors: ["認証情報が設定されていません。管理者にお問い合わせください。"]
+        }
       rescue Google::Apis::Error => e
         Rails.logger.error "Google Search Console API Error: #{e.message}"
         {
