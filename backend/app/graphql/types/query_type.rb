@@ -481,5 +481,40 @@ module Types
     # SEOインデックス管理
     # --------------------------------------------
     field :seo_index_list, resolver: Resolvers::SeoIndexListResolver
+
+    # --------------------------------------------
+    # 画像利用承諾管理
+    # --------------------------------------------
+    field :consent_requests, [Types::ConsentRequestType], null: false, description: "承諾依頼一覧を取得" do
+      argument :spot_id, ID, required: false, description: "店舗IDでフィルタ"
+      argument :status, Types::ConsentRequestStatusEnum, required: false, description: "ステータスでフィルタ"
+    end
+    def consent_requests(spot_id: nil, status: nil)
+      query = ConsentRequest.includes(:spot, :consent_agreement)
+      query = query.where(spot_id: spot_id) if spot_id
+      query = query.where(status: status) if status
+      query.order(created_at: :desc)
+    end
+
+    field :consent_request, Types::ConsentRequestType, null: true, description: "承諾依頼を取得" do
+      argument :id, ID, required: false, description: "承諾依頼ID"
+      argument :token, String, required: false, description: "承諾トークン"
+    end
+    def consent_request(id: nil, token: nil)
+      return ConsentRequest.find_by(id: id) if id
+      return ConsentRequest.find_by(token: token) if token
+      nil
+    end
+
+    field :licensed_assets, [Types::LicensedAssetType], null: false, description: "承諾済み画像一覧を取得" do
+      argument :spot_id, ID, required: false, description: "店舗IDでフィルタ"
+      argument :usable, Boolean, required: false, description: "使用可否でフィルタ"
+    end
+    def licensed_assets(spot_id: nil, usable: nil)
+      query = LicensedAsset.includes(:spot, :consent_agreement)
+      query = query.where(spot_id: spot_id) if spot_id
+      query = query.where(usable: usable) unless usable.nil?
+      query.order(created_at: :desc)
+    end
   end
 end
