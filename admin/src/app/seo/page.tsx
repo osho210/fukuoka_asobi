@@ -8,24 +8,24 @@ import { GET_SEO_INDEX_LIST } from '@/graphql/queries/getSeoIndexList';
 import { GetSeoIndexListQuery, StatusEnum } from '@/__generated__/graphql';
 
 // レコード種別の型定義
-type RecordType = 'spot' | 'plan' | 'event' | 'news' | '';
+type RecordType = 'spot' | 'plan' | 'event' | 'news';
 
 // フィルタ状態の型定義
-type IndexableFilter = 'true' | 'false' | '';
+type IndexableFilter = 'true' | 'false';
 
 // SeoIndexRow型を生成された型から取得
 type SeoIndexRow = GetSeoIndexListQuery['seoIndexList'][number];
 
 export default function SeoIndexPage() {
-  const [typeFilter, setTypeFilter] = useState<RecordType>('');
-  const [isIndexableFilter, setIsIndexableFilter] = useState<IndexableFilter>('');
-  const [statusFilter, setStatusFilter] = useState<StatusEnum | ''>('');
+  const [typeFilter, setTypeFilter] = useState<RecordType | null>(null);
+  const [isIndexableFilter, setIsIndexableFilter] = useState<IndexableFilter | null>(null);
+  const [statusFilter, setStatusFilter] = useState<StatusEnum | null>(null);
 
   const { data, loading, error } = useQuery<GetSeoIndexListQuery>(GET_SEO_INDEX_LIST, {
     variables: {
-      type: typeFilter || null,
+      type: typeFilter,
       isIndexable: isIndexableFilter ? isIndexableFilter === 'true' : null,
-      status: statusFilter || null,
+      status: statusFilter,
     },
   });
 
@@ -96,8 +96,7 @@ export default function SeoIndexPage() {
     return classMap[type] || 'badge-secondary';
   };
 
-  // 日時フォーマット関数
-  // 2024/02/14: 日本のロケールで年/月/日 時:分 の形式で表示
+  // 日時を日本のロケールで「年/月/日 時:分」形式に変換
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleString('ja-JP', {
@@ -113,7 +112,7 @@ export default function SeoIndexPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold mb-2">SEO インデックス管理</h1>
-        <p className="text-gray-600">スポット・プラン・イベント・ニュースのインデックス状態を管理します</p>
+        <p className="text-gray-600">コンテンツのインデックス状態を管理します</p>
       </div>
 
       {/* フィルタ */}
@@ -124,8 +123,8 @@ export default function SeoIndexPage() {
               コンテンツ種別
             </label>
             <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as RecordType)}
+              value={typeFilter ?? ''}
+              onChange={(e) => setTypeFilter(e.target.value || null as RecordType | null)}
               className="admin-input"
             >
               <option value="">すべて</option>
@@ -141,13 +140,13 @@ export default function SeoIndexPage() {
               検索エンジン登録
             </label>
             <select
-              value={isIndexableFilter}
-              onChange={(e) => setIsIndexableFilter(e.target.value as IndexableFilter)}
+              value={isIndexableFilter ?? ''}
+              onChange={(e) => setIsIndexableFilter(e.target.value || null as IndexableFilter | null)}
               className="admin-input"
             >
               <option value="">すべて</option>
-              <option value="true">登録可</option>
-              <option value="false">登録不可</option>
+              <option value="true">許可</option>
+              <option value="false">禁止</option>
             </select>
           </div>
 
@@ -156,8 +155,8 @@ export default function SeoIndexPage() {
               公開ステータス
             </label>
             <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as StatusEnum | '')}
+              value={statusFilter ?? ''}
+              onChange={(e) => setStatusFilter(e.target.value || null as StatusEnum | null)}
               className="admin-input"
             >
               <option value="">すべて</option>
@@ -218,7 +217,7 @@ export default function SeoIndexPage() {
                       <td>{getStatusBadge(row.status)}</td>
                       <td>
                         <span className={`badge ${row.isIndexable ? 'badge-success' : 'badge-secondary'}`}>
-                          {row.isIndexable ? '登録可' : '登録不可'}
+                          {row.isIndexable ? '許可' : '禁止'}
                         </span>
                       </td>
                       <td>{getIndexBadge(row.isIndexable, row.status)}</td>
