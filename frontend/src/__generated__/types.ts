@@ -2073,6 +2073,8 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
   isRecommended: Scalars['Boolean']['output'];
   leadText: Scalars['String']['output'];
@@ -2203,6 +2205,7 @@ export type Query = {
   searchGooglePlaces: Array<GooglePlace>;
   /** 検索条件に基づいてプランを検索 */
   searchPlans: Array<PlayPlan>;
+  seoIndexList: Array<SeoIndexRow>;
   spot?: Maybe<Spot>;
   spotAmbiance?: Maybe<SpotAmbiance>;
   spotAmbiances: Array<SpotAmbiance>;
@@ -2378,6 +2381,13 @@ export type QuerySearchPlansArgs = {
 };
 
 
+export type QuerySeoIndexListArgs = {
+  isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QuerySpotArgs = {
   id: Scalars['ID']['input'];
 };
@@ -2432,6 +2442,25 @@ export type ReviewSummary = {
   text?: Maybe<Scalars['String']['output']>;
 };
 
+/** SEOインデックス管理用のレコード情報 */
+export type SeoIndexRow = {
+  __typename?: 'SeoIndexRow';
+  /** レコードID */
+  id: Scalars['ID']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
+  /** 公開ステータス */
+  status: Scalars['String']['output'];
+  /** タイトル (spot_name / plan_name) */
+  title: Scalars['String']['output'];
+  /** レコード種別 (spot | plan) */
+  type: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  /** 詳細ページURL */
+  url: Scalars['String']['output'];
+};
+
 export type Spot = {
   __typename?: 'Spot';
   acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
@@ -2479,6 +2508,7 @@ export type Spot = {
   instagramUrl?: Maybe<Scalars['String']['output']>;
   internationalPhoneNumber?: Maybe<Scalars['String']['output']>;
   isClosed: Scalars['Boolean']['output'];
+  isIndexable: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
   isRainyOk: Scalars['Boolean']['output'];
   lastApiSyncAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3519,6 +3549,18 @@ export enum WeatherEnum {
   /** 晴れ */
   Sunny = 'sunny'
 }
+
+export type GetEventCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEventCategoriesQuery = { __typename?: 'Query', eventCategories: Array<{ __typename?: 'EventCategory', id: string, name: string, description?: string | null }> };
+
+export type GetEventCategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetEventCategoryQuery = { __typename?: 'Query', eventCategory?: { __typename?: 'EventCategory', id: string, name: string, description?: string | null } | null };
 
 export type SearchGooglePlacesQueryVariables = Exact<{
   query: Scalars['String']['input'];

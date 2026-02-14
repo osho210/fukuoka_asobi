@@ -2077,6 +2077,8 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
   isRecommended: Scalars['Boolean']['output'];
   leadText: Scalars['String']['output'];
@@ -2207,6 +2209,7 @@ export type Query = {
   searchGooglePlaces: Array<GooglePlace>;
   /** 検索条件に基づいてプランを検索 */
   searchPlans: Array<PlayPlan>;
+  seoIndexList: Array<SeoIndexRow>;
   spot?: Maybe<Spot>;
   spotAmbiance?: Maybe<SpotAmbiance>;
   spotAmbiances: Array<SpotAmbiance>;
@@ -2382,6 +2385,13 @@ export type QuerySearchPlansArgs = {
 };
 
 
+export type QuerySeoIndexListArgs = {
+  isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QuerySpotArgs = {
   id: Scalars['ID']['input'];
 };
@@ -2436,6 +2446,25 @@ export type ReviewSummary = {
   text?: Maybe<Scalars['String']['output']>;
 };
 
+/** SEOインデックス管理用のレコード情報 */
+export type SeoIndexRow = {
+  __typename?: 'SeoIndexRow';
+  /** レコードID */
+  id: Scalars['ID']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
+  /** 公開ステータス */
+  status: Scalars['String']['output'];
+  /** タイトル (spot_name / plan_name) */
+  title: Scalars['String']['output'];
+  /** レコード種別 (spot | plan) */
+  type: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  /** 詳細ページURL */
+  url: Scalars['String']['output'];
+};
+
 export type Spot = {
   __typename?: 'Spot';
   acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
@@ -2483,6 +2512,7 @@ export type Spot = {
   instagramUrl?: Maybe<Scalars['String']['output']>;
   internationalPhoneNumber?: Maybe<Scalars['String']['output']>;
   isClosed: Scalars['Boolean']['output'];
+  isIndexable: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
   isRainyOk: Scalars['Boolean']['output'];
   lastApiSyncAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3524,6 +3554,18 @@ export enum WeatherEnum {
   Sunny = 'sunny'
 }
 
+export type GetEventCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEventCategoriesQuery = { __typename?: 'Query', eventCategories: Array<{ __typename?: 'EventCategory', id: string, name: string, description?: string | null }> };
+
+export type GetEventCategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetEventCategoryQuery = { __typename?: 'Query', eventCategory?: { __typename?: 'EventCategory', id: string, name: string, description?: string | null } | null };
+
 export type SearchGooglePlacesQueryVariables = Exact<{
   query: Scalars['String']['input'];
   latitude?: InputMaybe<Scalars['Float']['input']>;
@@ -3800,6 +3842,8 @@ export type SearchPlansQueryVariables = Exact<{
 export type SearchPlansQuery = { __typename?: 'Query', searchPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, totalBudget: number, rating: number, reviewCount: number, tripType: TripTypeEnum, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepName: string, stepDescription: string, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null } | null }> | null }> };
 
 
+export const GetEventCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eventCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<GetEventCategoriesQuery, GetEventCategoriesQueryVariables>;
+export const GetEventCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"eventCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<GetEventCategoryQuery, GetEventCategoryQueryVariables>;
 export const SearchGooglePlacesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchGooglePlaces"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"latitude"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"longitude"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"radius"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchGooglePlaces"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"latitude"},"value":{"kind":"Variable","name":{"kind":"Name","value":"latitude"}}},{"kind":"Argument","name":{"kind":"Name","value":"longitude"},"value":{"kind":"Variable","name":{"kind":"Name","value":"longitude"}}},{"kind":"Argument","name":{"kind":"Name","value":"radius"},"value":{"kind":"Variable","name":{"kind":"Name","value":"radius"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"placeId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"formattedAddress"}},{"kind":"Field","name":{"kind":"Name","value":"shortFormattedAddress"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"userRatingCount"}},{"kind":"Field","name":{"kind":"Name","value":"types"}},{"kind":"Field","name":{"kind":"Name","value":"primaryType"}},{"kind":"Field","name":{"kind":"Name","value":"primaryTypeDisplayName"}},{"kind":"Field","name":{"kind":"Name","value":"businessStatus"}},{"kind":"Field","name":{"kind":"Name","value":"priceLevel"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}},{"kind":"Field","name":{"kind":"Name","value":"googleMapsUri"}},{"kind":"Field","name":{"kind":"Name","value":"websiteUri"}},{"kind":"Field","name":{"kind":"Name","value":"nationalPhoneNumber"}},{"kind":"Field","name":{"kind":"Name","value":"internationalPhoneNumber"}}]}}]}}]} as unknown as DocumentNode<SearchGooglePlacesQuery, SearchGooglePlacesQueryVariables>;
 export const GetUserBookmarksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserBookmarks"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"category"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userBookmarks"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"bookmarkableType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableType"}}},{"kind":"Argument","name":{"kind":"Name","value":"category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"category"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarkableType"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarkableId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarkable"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PlayPlan"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"planName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUserBookmarksQuery, GetUserBookmarksQueryVariables>;
 export const CreateBookmarkDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBookmark"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"title"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"note"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"category"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBookmark"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"bookmarkableType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableType"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"bookmarkableId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookmarkableId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"title"},"value":{"kind":"Variable","name":{"kind":"Name","value":"title"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"note"},"value":{"kind":"Variable","name":{"kind":"Name","value":"note"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"category"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookmark"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarkableType"}},{"kind":"Field","name":{"kind":"Name","value":"bookmarkableId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"note"}},{"kind":"Field","name":{"kind":"Name","value":"category"}}]}},{"kind":"Field","name":{"kind":"Name","value":"errors"}}]}}]}}]} as unknown as DocumentNode<CreateBookmarkMutation, CreateBookmarkMutationVariables>;
