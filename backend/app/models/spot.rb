@@ -26,6 +26,9 @@ class Spot < ApplicationRecord
   has_many :spot_accessibility_options, dependent: :destroy
   has_many :accessibility_options, through: :spot_accessibility_options
 
+  # Google Search Console API関連の関連付け
+  has_one :google_index_status, as: :indexable, dependent: :destroy
+
   validates :spot_name, presence: true
 
   # 予算感のバリデーション

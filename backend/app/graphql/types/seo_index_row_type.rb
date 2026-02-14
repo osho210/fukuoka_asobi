@@ -6,10 +6,11 @@ module Types
 
     field :id, ID, null: false, description: "レコードID"
     field :title, String, null: false, description: "タイトル (spot_name / plan_name)"
-    field :type, String, null: false, description: "レコード種別 (spot | plan)"
+    field :type, String, null: false, description: "レコード種別 (spot | plan | event | news)"
     field :status, String, null: false, description: "公開ステータス"
     field :is_indexable, Boolean, null: false, description: "検索エンジンにインデックスさせるか"
     field :url, String, null: false, description: "詳細ページURL"
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false, description: "更新日時"
+    field :google_index_status, Types::GoogleIndexStatusType, null: true, description: "Googleインデックス状態"
   end
 end

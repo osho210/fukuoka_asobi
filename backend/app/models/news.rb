@@ -2,6 +2,9 @@ class News < ApplicationRecord
   belongs_to :author, class_name: 'User', optional: true
   belongs_to :category, optional: true
 
+  # Google Search Console API関連の関連付け
+  has_one :google_index_status, as: :indexable, dependent: :destroy
+
   validates :title, presence: true
   validates :body, presence: true
   validates :status, presence: true

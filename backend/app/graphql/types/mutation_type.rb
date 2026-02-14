@@ -95,6 +95,9 @@ module Types
     # Google Places API関連
     field :sync_spot_with_google_places, mutation: Mutations::SyncSpotWithGooglePlaces
 
+    # Google Search Console API関連
+    field :update_google_index_status, mutation: Mutations::UpdateGoogleIndexStatus
+
     # グループ体験機能 - 方向性カード関連
     field :create_direction_card, mutation: Mutations::CreateDirectionCard
     field :update_direction_card, mutation: Mutations::UpdateDirectionCard
