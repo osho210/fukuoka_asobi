@@ -1,15 +1,25 @@
-'use client';
-
-import { useParams } from 'next/navigation';
+import { Metadata } from 'next';
 import PlanDetailContainer from './plan-detail.container';
+import { generatePlayPlanMetadata } from '@/lib/metadata';
 
-export default function PlanDetailPage() {
-  const params = useParams();
-  const planId = params?.id as string;
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  return generatePlayPlanMetadata(id);
+}
+
+async function PlanDetailPage({ params }: Props) {
+  const { id } = await params;
 
   return (
     <>
-      <PlanDetailContainer planId={planId} />
+      <PlanDetailContainer planId={id} />
     </>
   );
 }
+
+export { generateMetadata };
+export default PlanDetailPage;

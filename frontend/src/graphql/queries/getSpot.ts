@@ -60,6 +60,7 @@ export const GET_SPOT = gql`
       restroom
       goodForGroups
       goodForWatchingSports
+      isPublic
       acceptsCreditCards
       acceptsDebitCards
       acceptsCashOnly

@@ -58,6 +58,7 @@ export interface PlayPlanFormData {
   tags?: string;
   recommendUsers: string[];
   isRecommended?: boolean;
+  isPublic?: boolean;
   planDetails: PlanDetailFormData[];
   plannerTitle?: string;
   plannerDescription?: string;
@@ -441,6 +442,23 @@ export default function PlayPlanForm({
                 className="play-plan-form__checkbox"
               />
               <span className="play-plan-form__checkbox-label">編集部おすすめに設定</span>
+            </label>
+          </div>
+          <div className="play-plan-form__field">
+            <label className="play-plan-form__checkbox-item">
+              <input
+                type="checkbox"
+                id="isPublic"
+                checked={formData.isPublic ?? false}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    isPublic: e.target.checked,
+                  }));
+                }}
+                className="play-plan-form__checkbox"
+              />
+              <span className="play-plan-form__checkbox-label">公開する（チェックすると検索結果に表示されます）</span>
             </label>
           </div>
         </div>
