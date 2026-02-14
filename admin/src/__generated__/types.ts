@@ -515,6 +515,8 @@ export type CreateOrUpdatePlayPlanWithDetailsInput = {
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   /** 新規画像のBase64エンコード文字列配列 */
   images?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** 検索エンジンインデックス公開フラグ */
+  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
   /** 編集部おすすめフラグ */
   isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
   /** リードテキスト */
@@ -2073,6 +2075,8 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
+  /** 検索エンジンインデックス公開フラグ */
+  isPublic: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
   isRecommended: Scalars['Boolean']['output'];
   leadText: Scalars['String']['output'];
@@ -4228,7 +4232,7 @@ export type GetPlayPlansQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, imageUrl?: string | null, departure: string, departureTime: string, travelMethodToFirstSpot: string, travelTimeToFirstSpot: number, userId?: number | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, status: StatusEnum, startTime: string, endTime: string, tags: string, recommendUsers?: Array<string> | null, plannerTitle: string, plannerDescription: string, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, comment: string, startTime: string, endTime: string, durationMinutes: number, plannerTitle: string, budget: number, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, budgetRange: BudgetTypeRangeEnum, isRainyOk: boolean, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', url: string } | null, categories: Array<{ __typename?: 'Category', name: string }>, district: { __typename?: 'District', districtName: string } } | null, travelDetails: Array<{ __typename?: 'TravelDetail', id: string, sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }> }> | null }> };
+export type GetPlayPlansQuery = { __typename?: 'Query', playPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, catchCopy: string, subtitle: string, leadText: string, description: string, imageUrl?: string | null, departure: string, departureTime: string, travelMethodToFirstSpot: string, travelTimeToFirstSpot: number, userId?: number | null, location: string, tripType: TripTypeEnum, totalBudget: number, rating: number, reviewCount: number, favoriteCount: number, isFavorite: boolean, isRecommended: boolean, isPublic: boolean, status: StatusEnum, startTime: string, endTime: string, tags: string, recommendUsers?: Array<string> | null, plannerTitle: string, plannerDescription: string, imageUrls: Array<{ __typename?: 'Image', id: string, url: string }>, imageProperties: Array<{ __typename?: 'ImageProperty', attachmentId: string, url: string, isSelected: boolean, position: number, comment?: string | null }>, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepNumber: number, stepName: string, stepDescription: string, comment: string, startTime: string, endTime: string, durationMinutes: number, plannerTitle: string, budget: number, notes?: string | null, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, phoneNumber?: string | null, budgetRange: BudgetTypeRangeEnum, isRainyOk: boolean, catchphrase?: string | null, imageUrl?: { __typename?: 'Image', url: string } | null, categories: Array<{ __typename?: 'Category', name: string }>, district: { __typename?: 'District', districtName: string } } | null, travelDetails: Array<{ __typename?: 'TravelDetail', id: string, sequenceNumber: number, travelMethod: string, travelTime: number, notes?: string | null }> }> | null }> };
 
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
