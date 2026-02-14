@@ -14,6 +14,9 @@ class PlayPlan < ApplicationRecord
   has_many :image_properties, -> { order(position: :asc) },
            class_name: 'PlayPlanImageProperty', dependent: :destroy
 
+  # Google Search Console API関連の関連付け
+  has_one :google_index_status, as: :indexable, dependent: :destroy
+
   # 定数
   MAX_SELECTED_IMAGES = 3
 

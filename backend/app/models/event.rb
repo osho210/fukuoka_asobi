@@ -1,6 +1,9 @@
 class Event < ApplicationRecord
   belongs_to :event_category
 
+  # Google Search Console API関連の関連付け
+  has_one :google_index_status, as: :indexable, dependent: :destroy
+
   validates :title, presence: true
   validates :description, presence: true
   validates :location, presence: true
