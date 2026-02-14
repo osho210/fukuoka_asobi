@@ -1109,6 +1109,7 @@ export type Event = {
   eventCategory: EventCategory;
   eventCategoryId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
+  isIndexable: Scalars['Boolean']['output'];
   isOnline: Scalars['Boolean']['output'];
   latitude?: Maybe<Scalars['Float']['output']>;
   location: Scalars['String']['output'];
@@ -1922,6 +1923,7 @@ export type News = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  isIndexable: Scalars['Boolean']['output'];
   publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   status?: Maybe<StatusEnum>;
   title: Scalars['String']['output'];
@@ -2075,6 +2077,8 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
   /** 公開フラグ */
   isPublic: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
@@ -2207,6 +2211,7 @@ export type Query = {
   searchGooglePlaces: Array<GooglePlace>;
   /** 検索条件に基づいてプランを検索 */
   searchPlans: Array<PlayPlan>;
+  seoIndexList: Array<SeoIndexRow>;
   spot?: Maybe<Spot>;
   spotAmbiance?: Maybe<SpotAmbiance>;
   spotAmbiances: Array<SpotAmbiance>;
@@ -2382,6 +2387,13 @@ export type QuerySearchPlansArgs = {
 };
 
 
+export type QuerySeoIndexListArgs = {
+  isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<StatusEnum>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QuerySpotArgs = {
   id: Scalars['ID']['input'];
 };
@@ -2436,6 +2448,25 @@ export type ReviewSummary = {
   text?: Maybe<Scalars['String']['output']>;
 };
 
+/** SEOインデックス管理用のレコード情報 */
+export type SeoIndexRow = {
+  __typename?: 'SeoIndexRow';
+  /** レコードID */
+  id: Scalars['ID']['output'];
+  /** 検索エンジンにインデックスさせるか */
+  isIndexable: Scalars['Boolean']['output'];
+  /** 公開ステータス */
+  status: Scalars['String']['output'];
+  /** タイトル (spot_name / plan_name) */
+  title: Scalars['String']['output'];
+  /** レコード種別 (spot | plan) */
+  type: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+  /** 詳細ページURL */
+  url: Scalars['String']['output'];
+};
+
 export type Spot = {
   __typename?: 'Spot';
   acceptsCashOnly?: Maybe<Scalars['Boolean']['output']>;
@@ -2483,6 +2514,7 @@ export type Spot = {
   instagramUrl?: Maybe<Scalars['String']['output']>;
   internationalPhoneNumber?: Maybe<Scalars['String']['output']>;
   isClosed: Scalars['Boolean']['output'];
+  isIndexable: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
   isRainyOk: Scalars['Boolean']['output'];
   lastApiSyncAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -4243,6 +4275,15 @@ export type GetRecommendedForsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetRecommendedForsQuery = { __typename?: 'Query', recommendedFors: Array<{ __typename?: 'RecommendedFor', id: string, name: string, createdAt: any, updatedAt: any }> };
+
+export type GetSeoIndexListQueryVariables = Exact<{
+  type?: InputMaybe<Scalars['String']['input']>;
+  isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<StatusEnum>;
+}>;
+
+
+export type GetSeoIndexListQuery = { __typename?: 'Query', seoIndexList: Array<{ __typename?: 'SeoIndexRow', id: string, title: string, type: string, status: string, isIndexable: boolean, url: string, updatedAt: any }> };
 
 export type GetSpotAmbiancesQueryVariables = Exact<{ [key: string]: never; }>;
 

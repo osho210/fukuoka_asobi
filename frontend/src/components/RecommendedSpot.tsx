@@ -15,8 +15,8 @@ const RecommendedSpot = () => {
     <div className="recommended-spots">
       <div className="spots-grid">
         {/* TODO: 暫定的に2~5を表示、リリース時は変更すること */}
-        {data.spots.slice(2, 5).map((spot) => (
-          <Link href={`/spots/${spot.id}`} key={spot.id} className="spot-card">
+        {data.spots.slice(2, 5).map((spot, index) => (
+          <Link href={`/spots/${spot.id}`} key={`recommended-spot-${spot.id}-${index}`} className="spot-card">
             <div className="spot-image">
               {spot.imageUrl ? (
                 <Image

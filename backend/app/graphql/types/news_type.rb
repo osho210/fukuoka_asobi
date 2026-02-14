@@ -5,6 +5,7 @@ module Types
     field :body, String, null: false
     field :published_at, GraphQL::Types::ISO8601DateTime, null: true
     field :status, Types::StatusEnumType, null: true
+    field :is_indexable, Boolean, null: false
     field :image_url, String, null: true
     field :author, Types::UserType, null: true
     field :category, Types::CategoryType, null: false
