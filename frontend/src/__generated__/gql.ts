@@ -60,6 +60,8 @@ type Documents = {
     "query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $budget: BudgetInput!, $customOptions: CustomOptionsInput) {\n  searchPlans(\n    areas: $areas\n    date: $date\n    genderInfo: $genderInfo\n    budget: $budget\n    customOptions: $customOptions\n  ) {\n    id\n    planName\n    description\n    imageUrl\n    location\n    totalBudget\n    rating\n    reviewCount\n    tripType\n    planDetails {\n      id\n      stepName\n      stepDescription\n      spot {\n        id\n        spotName\n        address\n        catchphrase\n      }\n    }\n  }\n}": typeof types.SearchPlansDocument,
     "\n  query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $budget: BudgetInput!, $customOptions: CustomOptionsInput) {\n    searchPlans(\n      areas: $areas\n      date: $date\n      genderInfo: $genderInfo\n      budget: $budget\n      customOptions: $customOptions\n    ) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      totalBudget\n      rating\n      reviewCount\n      tripType\n      planDetails {\n        id\n        stepName\n        stepDescription\n        spot {\n          id\n          spotName\n          address\n          catchphrase\n        }\n      }\n    }\n  }\n": typeof types.SearchPlansDocument,
     "\n  query GetOptions {\n    themeOptions {\n      id\n      label\n    }\n    transportationOptions {\n      id\n      label\n    }\n    categoryOptions {\n      id\n      label\n    }\n  }\n": typeof types.GetOptionsDocument,
+    "\n  query GetPlayPlanMetadata($id: Int!) {\n    playPlan(id: $id) {\n      id\n      planName\n      isPublic\n    }\n  }\n": typeof types.GetPlayPlanMetadataDocument,
+    "\n  query GetSpotMetadata($id: ID!) {\n    spot(id: $id) {\n      id\n      spotName\n      isPublic\n    }\n  }\n": typeof types.GetSpotMetadataDocument,
 };
 const documents: Documents = {
     "\n  query GetEventCategories {\n    eventCategories {\n      id\n      name\n      description\n    }\n  }\n": types.GetEventCategoriesDocument,
@@ -108,6 +110,8 @@ const documents: Documents = {
     "query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $budget: BudgetInput!, $customOptions: CustomOptionsInput) {\n  searchPlans(\n    areas: $areas\n    date: $date\n    genderInfo: $genderInfo\n    budget: $budget\n    customOptions: $customOptions\n  ) {\n    id\n    planName\n    description\n    imageUrl\n    location\n    totalBudget\n    rating\n    reviewCount\n    tripType\n    planDetails {\n      id\n      stepName\n      stepDescription\n      spot {\n        id\n        spotName\n        address\n        catchphrase\n      }\n    }\n  }\n}": types.SearchPlansDocument,
     "\n  query searchPlans($areas: [ID!], $date: String!, $genderInfo: GenderInput!, $budget: BudgetInput!, $customOptions: CustomOptionsInput) {\n    searchPlans(\n      areas: $areas\n      date: $date\n      genderInfo: $genderInfo\n      budget: $budget\n      customOptions: $customOptions\n    ) {\n      id\n      planName\n      description\n      imageUrl\n      location\n      totalBudget\n      rating\n      reviewCount\n      tripType\n      planDetails {\n        id\n        stepName\n        stepDescription\n        spot {\n          id\n          spotName\n          address\n          catchphrase\n        }\n      }\n    }\n  }\n": types.SearchPlansDocument,
     "\n  query GetOptions {\n    themeOptions {\n      id\n      label\n    }\n    transportationOptions {\n      id\n      label\n    }\n    categoryOptions {\n      id\n      label\n    }\n  }\n": types.GetOptionsDocument,
+    "\n  query GetPlayPlanMetadata($id: Int!) {\n    playPlan(id: $id) {\n      id\n      planName\n      isPublic\n    }\n  }\n": types.GetPlayPlanMetadataDocument,
+    "\n  query GetSpotMetadata($id: ID!) {\n    spot(id: $id) {\n      id\n      spotName\n      isPublic\n    }\n  }\n": types.GetSpotMetadataDocument,
 };
 
 /**
@@ -308,6 +312,14 @@ export function gql(source: "\n  query searchPlans($areas: [ID!], $date: String!
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetOptions {\n    themeOptions {\n      id\n      label\n    }\n    transportationOptions {\n      id\n      label\n    }\n    categoryOptions {\n      id\n      label\n    }\n  }\n"): (typeof documents)["\n  query GetOptions {\n    themeOptions {\n      id\n      label\n    }\n    transportationOptions {\n      id\n      label\n    }\n    categoryOptions {\n      id\n      label\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPlayPlanMetadata($id: Int!) {\n    playPlan(id: $id) {\n      id\n      planName\n      isPublic\n    }\n  }\n"): (typeof documents)["\n  query GetPlayPlanMetadata($id: Int!) {\n    playPlan(id: $id) {\n      id\n      planName\n      isPublic\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetSpotMetadata($id: ID!) {\n    spot(id: $id) {\n      id\n      spotName\n      isPublic\n    }\n  }\n"): (typeof documents)["\n  query GetSpotMetadata($id: ID!) {\n    spot(id: $id) {\n      id\n      spotName\n      isPublic\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

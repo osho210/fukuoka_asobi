@@ -519,7 +519,7 @@ export type CreateOrUpdatePlayPlanWithDetailsInput = {
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   /** 新規画像のBase64エンコード文字列配列 */
   images?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** 検索エンジンインデックス公開フラグ */
+  /** 公開フラグ */
   isPublic?: InputMaybe<Scalars['Boolean']['input']>;
   /** 編集部おすすめフラグ */
   isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2079,7 +2079,7 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
-  /** 検索エンジンインデックス公開フラグ */
+  /** 公開フラグ */
   isPublic: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
   isRecommended: Scalars['Boolean']['output'];

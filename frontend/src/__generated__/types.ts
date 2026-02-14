@@ -515,7 +515,7 @@ export type CreateOrUpdatePlayPlanWithDetailsInput = {
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   /** 新規画像のBase64エンコード文字列配列 */
   images?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** 検索エンジンインデックス公開フラグ */
+  /** 公開フラグ */
   isPublic?: InputMaybe<Scalars['Boolean']['input']>;
   /** 編集部おすすめフラグ */
   isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2075,7 +2075,7 @@ export type PlayPlan = {
   /** プランに紐づく画像のURLリスト */
   imageUrls: Array<Image>;
   isFavorite: Scalars['Boolean']['output'];
-  /** 検索エンジンインデックス公開フラグ */
+  /** 公開フラグ */
   isPublic: Scalars['Boolean']['output'];
   /** 編集部おすすめフラグ */
   isRecommended: Scalars['Boolean']['output'];
@@ -3810,3 +3810,17 @@ export type SearchPlansQueryVariables = Exact<{
 
 
 export type SearchPlansQuery = { __typename?: 'Query', searchPlans: Array<{ __typename?: 'PlayPlan', id: number, planName: string, description: string, imageUrl?: string | null, location: string, totalBudget: number, rating: number, reviewCount: number, tripType: TripTypeEnum, planDetails?: Array<{ __typename?: 'PlanDetail', id: string, stepName: string, stepDescription: string, spot?: { __typename?: 'Spot', id: string, spotName: string, address?: string | null, catchphrase?: string | null } | null }> | null }> };
+
+export type GetPlayPlanMetadataQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetPlayPlanMetadataQuery = { __typename?: 'Query', playPlan?: { __typename?: 'PlayPlan', id: number, planName: string, isPublic: boolean } | null };
+
+export type GetSpotMetadataQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetSpotMetadataQuery = { __typename?: 'Query', spot?: { __typename?: 'Spot', id: string, spotName: string, isPublic: boolean } | null };
