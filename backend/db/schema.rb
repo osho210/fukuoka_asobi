@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -180,6 +180,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
     t.string "banner_image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_indexable", default: true, null: false
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
   end
 
@@ -280,6 +281,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
     t.bigint "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_indexable", default: true, null: false
     t.index ["author_id"], name: "index_news_on_author_id"
     t.index ["category_id"], name: "index_news_on_category_id"
   end
@@ -385,8 +387,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
     t.string "travel_method_to_first_spot"
     t.integer "travel_time_to_first_spot"
     t.boolean "is_recommended", default: false, null: false, comment: "編集部おすすめフラグ"
+    t.boolean "is_public", default: false, null: false, comment: "公開フラグ"
     t.boolean "is_indexable", default: true, null: false
-    t.boolean "is_public", default: true, null: false, comment: "検索エンジンインデックス公開フラグ"
     t.index ["is_public"], name: "index_play_plans_on_is_public"
     t.index ["is_recommended"], name: "index_play_plans_on_is_recommended"
   end
