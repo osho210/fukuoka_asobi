@@ -1109,6 +1109,7 @@ export type Event = {
   eventCategory: EventCategory;
   eventCategoryId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
+  isIndexable: Scalars['Boolean']['output'];
   isOnline: Scalars['Boolean']['output'];
   latitude?: Maybe<Scalars['Float']['output']>;
   location: Scalars['String']['output'];
@@ -1922,6 +1923,7 @@ export type News = {
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  isIndexable: Scalars['Boolean']['output'];
   publishedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   status?: Maybe<StatusEnum>;
   title: Scalars['String']['output'];
@@ -2387,7 +2389,7 @@ export type QuerySearchPlansArgs = {
 
 export type QuerySeoIndexListArgs = {
   isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<StatusEnum>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -4277,7 +4279,7 @@ export type GetRecommendedForsQuery = { __typename?: 'Query', recommendedFors: A
 export type GetSeoIndexListQueryVariables = Exact<{
   type?: InputMaybe<Scalars['String']['input']>;
   isIndexable?: InputMaybe<Scalars['Boolean']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<StatusEnum>;
 }>;
 
 
