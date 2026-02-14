@@ -3803,7 +3803,7 @@ export type GetNewsListQueryVariables = Exact<{
 }>;
 
 
-export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, imageUrl?: string | null, createdAt: any, updatedAt: any, category: { __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, email: string, createdAt: any, updatedAt: any } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
+export type GetNewsListQuery = { __typename?: 'Query', news: Array<{ __typename?: 'News', id: string, title: string, body: string, publishedAt?: any | null, status?: StatusEnum | null, isIndexable: boolean, imageUrl?: string | null, createdAt: any, updatedAt: any, category: { __typename?: 'Category', id: string, name: string, createdAt: any, updatedAt: any }, author?: { __typename?: 'User', id: string, username: string, profileImageUrl?: string | null, email: string, createdAt: any, updatedAt: any } | null }>, categories: Array<{ __typename?: 'Category', id: string, name: string }> };
 
 export type GetPurposesQueryVariables = Exact<{ [key: string]: never; }>;
 
