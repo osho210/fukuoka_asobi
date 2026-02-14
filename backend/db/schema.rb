@@ -386,6 +386,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
     t.integer "travel_time_to_first_spot"
     t.boolean "is_recommended", default: false, null: false, comment: "編集部おすすめフラグ"
     t.boolean "is_indexable", default: true, null: false
+    t.boolean "is_public", default: true, null: false, comment: "検索エンジンインデックス公開フラグ"
+    t.index ["is_public"], name: "index_play_plans_on_is_public"
     t.index ["is_recommended"], name: "index_play_plans_on_is_recommended"
   end
 
