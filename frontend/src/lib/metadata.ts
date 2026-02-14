@@ -1,34 +1,33 @@
 import { Metadata } from 'next';
-import { GET_PLAY_PLAN_METADATA, GET_SPOT_METADATA } from '@/graphql/metadata';
+import { gql } from '@apollo/client';
 
 const GRAPHQL_ENDPOINT = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000'}/graphql`;
 
-interface PlayPlanMetadataResponse {
-  data?: {
-    playPlan?: {
-      id: number;
-      planName: string;
-      isPublic: boolean;
-    };
-  };
-  errors?: Array<{ message: string }>;
-}
+// メタデータ取得用のGraphQLクエリ
+const GET_PLAY_PLAN_METADATA = gql`
+  query GetPlayPlanMetadata($id: Int!) {
+    playPlan(id: $id) {
+      id
+      planName
+      isPublic
+    }
+  }
+`;
 
-interface SpotMetadataResponse {
-  data?: {
-    spot?: {
-      id: string;
-      spotName: string;
-      isPublic: boolean;
-    };
-  };
-  errors?: Array<{ message: string }>;
-}
+const GET_SPOT_METADATA = gql`
+  query GetSpotMetadata($id: ID!) {
+    spot(id: $id) {
+      id
+      spotName
+      isPublic
+    }
+  }
+`;
 
 /**
  * プラン詳細ページのメタデータを生成
  */
-export async function generatePlayPlanMetadata(id: string): Promise<Metadata> {
+async function generatePlayPlanMetadata(id: string): Promise<Metadata> {
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
@@ -36,7 +35,7 @@ export async function generatePlayPlanMetadata(id: string): Promise<Metadata> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: GET_PLAY_PLAN_METADATA,
+        query: GET_PLAY_PLAN_METADATA.loc?.source.body,
         variables: { id: parseInt(id, 10) },
       }),
       next: { revalidate: 60 }, // ISR: 60秒後に stale-while-revalidate
@@ -46,7 +45,7 @@ export async function generatePlayPlanMetadata(id: string): Promise<Metadata> {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result: PlayPlanMetadataResponse = await response.json();
+    const result = await response.json();
 
     if (result.errors) {
       throw new Error(result.errors[0]?.message || 'GraphQL error');
@@ -84,7 +83,7 @@ export async function generatePlayPlanMetadata(id: string): Promise<Metadata> {
 /**
  * スポット詳細ページのメタデータを生成
  */
-export async function generateSpotMetadata(id: string): Promise<Metadata> {
+async function generateSpotMetadata(id: string): Promise<Metadata> {
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
@@ -92,7 +91,7 @@ export async function generateSpotMetadata(id: string): Promise<Metadata> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: GET_SPOT_METADATA,
+        query: GET_SPOT_METADATA.loc?.source.body,
         variables: { id },
       }),
       next: { revalidate: 60 }, // ISR: 60秒後に stale-while-revalidate
@@ -102,7 +101,7 @@ export async function generateSpotMetadata(id: string): Promise<Metadata> {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result: SpotMetadataResponse = await response.json();
+    const result = await response.json();
 
     if (result.errors) {
       throw new Error(result.errors[0]?.message || 'GraphQL error');
@@ -136,3 +135,5 @@ export async function generateSpotMetadata(id: string): Promise<Metadata> {
     };
   }
 }
+
+export { generatePlayPlanMetadata, generateSpotMetadata };

@@ -6,12 +6,12 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   return generateSpotMetadata(id);
 }
 
-export default async function SpotPage({ params }: Props) {
+async function SpotPage({ params }: Props) {
   const { id } = await params;
 
   return (
@@ -21,3 +21,6 @@ export default async function SpotPage({ params }: Props) {
     </>
   );
 }
+
+export { generateMetadata };
+export default SpotPage;
