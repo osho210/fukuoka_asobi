@@ -5,23 +5,23 @@ import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import '@/styles/admin.css';
 import { GET_SEO_INDEX_LIST } from '@/graphql/queries/getSeoIndexList';
+import { GetSeoIndexListQuery, StatusEnum } from '@/__generated__/graphql';
 
-type SeoIndexRow = {
-  id: string;
-  title: string;
-  type: string;
-  status: string;
-  isIndexable: boolean;
-  url: string;
-  updatedAt: string;
-};
+// レコード種別の型定義
+type RecordType = 'spot' | 'plan' | 'event' | 'news' | '';
+
+// フィルタ状態の型定義
+type IndexableFilter = 'true' | 'false' | '';
+
+// SeoIndexRow型を生成された型から取得
+type SeoIndexRow = GetSeoIndexListQuery['seoIndexList'][number];
 
 export default function SeoIndexPage() {
-  const [typeFilter, setTypeFilter] = useState<string>('');
-  const [isIndexableFilter, setIsIndexableFilter] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [typeFilter, setTypeFilter] = useState<RecordType>('');
+  const [isIndexableFilter, setIsIndexableFilter] = useState<IndexableFilter>('');
+  const [statusFilter, setStatusFilter] = useState<StatusEnum | ''>('');
 
-  const { data, loading, error } = useQuery(GET_SEO_INDEX_LIST, {
+  const { data, loading, error } = useQuery<GetSeoIndexListQuery>(GET_SEO_INDEX_LIST, {
     variables: {
       type: typeFilter || null,
       isIndexable: isIndexableFilter ? isIndexableFilter === 'true' : null,
@@ -31,22 +31,42 @@ export default function SeoIndexPage() {
 
   const indexList: SeoIndexRow[] = data?.seoIndexList || [];
 
-  const getStatusBadge = (status: string) => {
-    const statusMap: Record<string, { label: string; className: string }> = {
-      published: { label: '公開', className: 'badge-success' },
-      draft: { label: '下書き', className: 'badge-warning' },
-      archived: { label: 'アーカイブ', className: 'badge-secondary' },
+  // ステータスラベルを返却する関数
+  // 2024/02/14: 公開状態をユーザーにわかりやすく表示するため
+  const getStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      published: '公開',
+      draft: '下書き',
+      archived: 'アーカイブ',
+      deleted: '削除済み',
     };
-    const statusInfo = statusMap[status] || { label: status, className: '' };
+    return statusMap[status.toLowerCase()] || status;
+  };
+
+  // ステータスバッジのCSSクラスを返却する関数
+  const getStatusBadgeClass = (status: string): string => {
+    const classMap: Record<string, string> = {
+      published: 'badge-success',
+      draft: 'badge-warning',
+      archived: 'badge-secondary',
+      deleted: 'badge-danger',
+    };
+    return classMap[status.toLowerCase()] || '';
+  };
+
+  // ステータスバッジを返却する関数
+  const getStatusBadge = (status: string): React.ReactNode => {
     return (
-      <span className={`badge ${statusInfo.className}`}>
-        {statusInfo.label}
+      <span className={`badge ${getStatusBadgeClass(status)}`}>
+        {getStatusLabel(status)}
       </span>
     );
   };
 
-  const getIndexBadge = (isIndexable: boolean, status: string) => {
-    const shouldIndex = isIndexable && status === 'published';
+  // インデックス想定バッジを返却する関数
+  // 2024/02/14: is_indexable=true かつ status=published の場合のみ検索エンジンにインデックスされる
+  const getIndexBadge = (isIndexable: boolean, status: string): React.ReactNode => {
+    const shouldIndex = isIndexable && status.toLowerCase() === 'published';
     return (
       <span className={`badge ${shouldIndex ? 'badge-success' : 'badge-secondary'}`}>
         {shouldIndex ? 'index' : 'noindex'}
@@ -54,7 +74,31 @@ export default function SeoIndexPage() {
     );
   };
 
-  const formatDate = (dateString: string) => {
+  // レコード種別のラベルを返却する関数
+  const getTypeLabel = (type: string): string => {
+    const typeMap: Record<string, string> = {
+      spot: 'スポット',
+      plan: 'プラン',
+      event: 'イベント',
+      news: 'ニュース',
+    };
+    return typeMap[type] || type;
+  };
+
+  // レコード種別のバッジCSSクラスを返却する関数
+  const getTypeBadgeClass = (type: string): string => {
+    const classMap: Record<string, string> = {
+      spot: 'badge-primary',
+      plan: 'badge-info',
+      event: 'badge-warning',
+      news: 'badge-success',
+    };
+    return classMap[type] || 'badge-secondary';
+  };
+
+  // 日時フォーマット関数
+  // 2024/02/14: 日本のロケールで年/月/日 時:分 の形式で表示
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleString('ja-JP', {
       year: 'numeric',
@@ -69,7 +113,7 @@ export default function SeoIndexPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold mb-2">SEO インデックス管理</h1>
-        <p className="text-gray-600">スポット・プランのインデックス状態を管理します</p>
+        <p className="text-gray-600">スポット・プラン・イベント・ニュースのインデックス状態を管理します</p>
       </div>
 
       {/* フィルタ */}
@@ -77,47 +121,49 @@ export default function SeoIndexPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              種別
+              コンテンツ種別
             </label>
             <select
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
+              onChange={(e) => setTypeFilter(e.target.value as RecordType)}
               className="admin-input"
             >
               <option value="">すべて</option>
               <option value="spot">スポット</option>
               <option value="plan">プラン</option>
+              <option value="event">イベント</option>
+              <option value="news">ニュース</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              インデックス可否
+              検索エンジン登録
             </label>
             <select
               value={isIndexableFilter}
-              onChange={(e) => setIsIndexableFilter(e.target.value)}
+              onChange={(e) => setIsIndexableFilter(e.target.value as IndexableFilter)}
               className="admin-input"
             >
               <option value="">すべて</option>
-              <option value="true">インデックス可</option>
-              <option value="false">インデックス不可</option>
+              <option value="true">登録可</option>
+              <option value="false">登録不可</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              ステータス
+              公開ステータス
             </label>
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => setStatusFilter(e.target.value as StatusEnum | '')}
               className="admin-input"
             >
               <option value="">すべて</option>
-              <option value="published">公開</option>
-              <option value="draft">下書き</option>
-              <option value="archived">アーカイブ</option>
+              <option value={StatusEnum.Published}>公開</option>
+              <option value={StatusEnum.Draft}>下書き</option>
+              <option value={StatusEnum.Archived}>アーカイブ</option>
             </select>
           </div>
         </div>
@@ -143,13 +189,13 @@ export default function SeoIndexPage() {
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>種別</th>
+                  <th>コンテンツ種別</th>
                   <th>タイトル</th>
-                  <th>ステータス</th>
-                  <th>is_indexable</th>
-                  <th>インデックス想定</th>
-                  <th>更新日時</th>
-                  <th>アクション</th>
+                  <th>公開ステータス</th>
+                  <th>検索エンジン登録</th>
+                  <th>インデックス状態</th>
+                  <th>最終更新日時</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -164,15 +210,15 @@ export default function SeoIndexPage() {
                     <tr key={`${row.type}-${row.id}`}>
                       <td>{row.id}</td>
                       <td>
-                        <span className={`badge ${row.type === 'spot' ? 'badge-primary' : 'badge-info'}`}>
-                          {row.type === 'spot' ? 'スポット' : 'プラン'}
+                        <span className={`badge ${getTypeBadgeClass(row.type)}`}>
+                          {getTypeLabel(row.type)}
                         </span>
                       </td>
                       <td>{row.title}</td>
                       <td>{getStatusBadge(row.status)}</td>
                       <td>
                         <span className={`badge ${row.isIndexable ? 'badge-success' : 'badge-secondary'}`}>
-                          {row.isIndexable ? 'true' : 'false'}
+                          {row.isIndexable ? '登録可' : '登録不可'}
                         </span>
                       </td>
                       <td>{getIndexBadge(row.isIndexable, row.status)}</td>
