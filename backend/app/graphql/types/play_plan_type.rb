@@ -35,10 +35,7 @@ module Types
     field :planner_description, String, null: false
     field :is_recommended, Boolean, null: false, description: "編集部おすすめフラグ"
     field :is_public, Boolean, null: false, description: "公開フラグ"
-<<<<<<< HEAD
     field :is_indexable, Boolean, null: false, description: "検索エンジンにインデックスさせるか"
-=======
->>>>>>> main
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
