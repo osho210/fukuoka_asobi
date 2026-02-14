@@ -449,7 +449,7 @@ export default function PlayPlanForm({
               <input
                 type="checkbox"
                 id="isPublic"
-                checked={formData.isPublic ?? true}
+                checked={formData.isPublic ?? false}
                 onChange={(e) => {
                   setFormData(prev => ({
                     ...prev,
@@ -458,7 +458,7 @@ export default function PlayPlanForm({
                 }}
                 className="play-plan-form__checkbox"
               />
-              <span className="play-plan-form__checkbox-label">検索エンジンに公開（チェックを外すと検索結果に表示されません）</span>
+              <span className="play-plan-form__checkbox-label">公開する（チェックすると検索結果に表示されます）</span>
             </label>
           </div>
         </div>

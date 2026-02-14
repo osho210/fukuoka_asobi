@@ -11,8 +11,8 @@ spots と play_plans に検索エンジンへの公開制御機能を追加し�
 
 #### play_plans テーブル
 新しいカラム `is_public` を追加:
-- デフォルト値: `true`
-- 説明: 検索エンジンインデックス公開フラグ
+- デフォルト値: `false` （意図せず公開されるのを防ぐ）
+- 説明: 公開フラグ
 
 **マイグレーションファイル**: `backend/db/migrate/20260211154600_add_is_public_to_play_plans.rb`
 
@@ -30,6 +30,15 @@ spots と play_plans に検索エンジンへの公開制御機能を追加し�
 
 ### 3. フロントエンド (Next.js)
 
+#### 新規ファイル:
+- **`frontend/src/lib/metadata.ts`**
+  - メタデータ生成の共通関数（`generatePlayPlanMetadata` / `generateSpotMetadata`）
+  - サーバーサイドでのエラーハンドリング
+
+- **`frontend/src/graphql/metadata.ts`**
+  - メタデータ取得専用のGraphQLクエリ定義
+  - 最小限のフィールドのみを取得（`id`, `name`, `isPublic`）
+
 #### 変更ファイル:
 1. **GraphQL クエリ**
    - `frontend/src/graphql/queries/getSpot.ts`: `isPublic` フィールド追加
@@ -37,17 +46,20 @@ spots と play_plans に検索エンジンへの公開制御機能を追加し�
 
 2. **詳細ページ（Server Components + generateMetadata）**
    - `frontend/src/app/spots/[id]/page.tsx`: 
-     - Server Component に変更
-     - `generateMetadata` で is_public に基づいて robots メタタグを設定
+     - Server Component
+     - 共通関数 `generateSpotMetadata` を呼び出し
+     - インラインクエリを削除
    - `frontend/src/app/plans/[id]/page.tsx`: 
-     - Server Component に変更
-     - `generateMetadata` で is_public に基づいて robots メタタグを設定
+     - Server Component
+     - 共通関数 `generatePlayPlanMetadata` を呼び出し
+     - インラインクエリを削除
 
 **技術的詳細:**
 - Next.js 15 App Router の `generateMetadata` を使用
-- サーバー側で GraphQL API を fetch し、is_public を確認
+- 環境変数 `NEXT_PUBLIC_BACKEND_URL` でエンドポイントを指定（環境分岐なし）
 - is_public が false の場合、`robots: { index: false, follow: false }` を設定
-- これにより、サーバーレンダリング時に robots メタタグが HTML に含まれる
+- サーバーレンダリング時に robots メタタグが HTML に含まれる
+- エラーハンドリングはサーバー側でのみ実行（`typeof window === 'undefined'`）
 
 ### 4. 管理画面 (Admin)
 
@@ -139,10 +151,13 @@ curl -s http://localhost:8200/plans/[id] | grep -i "robots"
 
 ## 注意事項
 
-- **デフォルト値**: 新規作成時は `is_public = true` (公開)
-- **既存データ**: マイグレーション実行時、既存の play_plans は `is_public = true` に設定される
+- **デフォルト値**: 新規作成時は `is_public = false` (非公開)
+  - 意図せず公開されるのを防ぐため
+- **既存データ**: マイグレーション実行時、既存の play_plans も `is_public = false` に設定される
+  - 必要に応じて手動で `true` に変更する必要がある
 - **SSR対応**: robots メタタグはサーバーサイドで生成されるため、検索エンジンが正しく認識できる
 - **キャッシュ**: メタデータは60秒ごとに再検証される（Next.js の revalidate 設定）
+- **エラーハンドリング**: サーバー側でのみエラーログを出力
 
 ## テスト
 
