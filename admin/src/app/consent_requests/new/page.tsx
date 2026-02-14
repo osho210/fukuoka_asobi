@@ -39,7 +39,7 @@ export default function NewConsentRequestPage() {
     await createConsentRequest({
       variables: {
         input: {
-          spotId: parseInt(formData.spotId),
+          spotId: formData.spotId,
           consenterType: formData.consenterType,
           consenterDisplayName: formData.consenterDisplayName,
           contactHint: formData.contactHint || null,
@@ -91,7 +91,7 @@ export default function NewConsentRequestPage() {
             label="承諾者表示名"
             value={formData.consenterDisplayName}
             onChange={(e) => setFormData({ ...formData, consenterDisplayName: e.target.value })}
-            placeholder={formData.consenterType === 'STORE' ? '例: 店長 田中' : '例: @username'}
+            placeholder={formData.consenterType === 'STORE' ? '例: 店長 田中' : '例: @fukuoka_cafe_lover'}
             required
           />
 

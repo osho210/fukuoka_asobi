@@ -438,3 +438,148 @@ const fukuokaSpots = spots.filter(spot => spot.district.id === 1);
 ### Q: ワークスペース間で依存関係を共有したい場合は？
 
 **A**: ルートレベルの `package.json` に追加します。特定のワークスペースだけで使用する場合は、そのワークスペースの `package.json` に追加してください。
+
+---
+
+## 💡 重要な実装パターン
+
+### GraphQL Mutation の引数定義
+
+GraphQL の mutation では、input オブジェクトではなく個別の引数として定義してください。
+
+```ruby
+# ✅ DO: 個別の引数として定義
+class CreateConsentAgreement < BaseMutation
+  argument :token, String, required: true
+  argument :signer_name, String, required: true
+  argument :rights_confirmed, Boolean, required: true
+  argument :signer_instagram, String, required: false
+  
+  def resolve(token:, signer_name:, rights_confirmed:, signer_instagram: nil)
+    # 実装
+  end
+end
+
+# ❌ DON'T: input オブジェクトを使用
+class CreateConsentAgreement < BaseMutation
+  argument :input, Types::Input::ConsentAgreementInput, required: true
+  
+  def resolve(input:)
+    # 実装
+  end
+end
+```
+
+### RSpec テストの記述
+
+テストケースは日本語で記述し、全体条件がある場合は describe/context で分割してください。
+
+```ruby
+# ✅ DO: 日本語でcontext/describeを使用
+describe '#expired?' do
+  context '有効期限が過去の場合' do
+    it 'trueを返すこと' do
+      # テスト実装
+    end
+  end
+  
+  context '有効期限が未来の場合' do
+    it 'falseを返すこと' do
+      # テスト実装
+    end
+  end
+end
+
+# ❌ DON'T: 英語のテスト説明
+describe '#expired?' do
+  it 'returns true if expires_at is in the past' do
+    # テスト実装
+  end
+end
+```
+
+### 共通ユーティリティ関数の配置
+
+複数のコンポーネントで使用する関数は、`src/lib/` 配下に共通ユーティリティとして切り出してください。
+
+```typescript
+// ✅ DO: 共通関数として切り出し
+// src/lib/consentUtils.ts
+export const renderConsentRequestStatusIcon = (status: string) => {
+  // 実装
+};
+
+// src/app/consent_requests/page.tsx
+import { renderConsentRequestStatusIcon } from '@/lib/consentUtils';
+
+// ❌ DON'T: コンポーネント内で直接定義
+export default function ConsentRequestsPage() {
+  const getStatusIcon = (status: string) => {
+    // 実装
+  };
+}
+```
+
+### 数値型の扱い
+
+GraphQL の ID 型は文字列として扱われるため、parseInt は不要です。
+
+```typescript
+// ✅ DO: そのまま渡す
+await createConsentRequest({
+  variables: {
+    spotId: formData.spotId,  // すでに適切な型
+  },
+});
+
+// ❌ DON'T: 不要な parseInt
+await createConsentRequest({
+  variables: {
+    spotId: parseInt(formData.spotId),
+  },
+});
+```
+
+### プレースホルダーの具体性
+
+ユーザーが入力すべき内容を具体的に示すプレースホルダーを使用してください。
+
+```typescript
+// ✅ DO: 具体的な例を示す
+placeholder={formData.consenterType === 'INSTAGRAM_USER' 
+  ? '例: @fukuoka_cafe_lover' 
+  : '例: 店長 田中'}
+
+// ❌ DON'T: 一般的すぎる例
+placeholder="例: @username"
+```
+
+---
+
+## 📋 機能追加時のチェックリスト
+
+新機能を追加する際は、以下を確認してください：
+
+- [ ] GraphQL mutation は個別引数で定義されているか
+- [ ] RSpec テストは日本語で記述されているか
+- [ ] 共通関数は適切に切り出されているか
+- [ ] プレースホルダーは具体的で分かりやすいか
+- [ ] 型の自動生成を活用しているか（手動定義していないか）
+
+---
+
+## 📝 将来の改善項目（別 Issue として管理）
+
+以下の項目は、本プロジェクトの継続的改善として別 Issue で管理します：
+
+1. **コンポーネントのエクスポート統一**
+   - 各コンポーネントを個別 import するのではなく、統一されたエクスポートファイルから import する
+
+2. **成功/エラー通知のデザインパターン統一**
+   - 成功時: トースト通知
+   - エラー時: モーダル（ダイアログ）
+   - 既存実装の調査とドキュメント化が必要
+
+3. **DM テンプレートのバージョン管理**
+   - テンプレート文をデータベースで管理
+   - バージョン管理機能の実装

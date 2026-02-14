@@ -5,39 +5,13 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
-import { Plus, ExternalLink, Copy, CheckCircle2, XCircle, Clock, Ban } from 'lucide-react';
+import { Plus, ExternalLink, Copy, CheckCircle2 } from 'lucide-react';
+import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
 
 export default function ConsentRequestsPage() {
   const router = useRouter();
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const { data, loading, error, refetch } = useQuery(GET_CONSENT_REQUESTS);
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'APPROVED':
-        return <CheckCircle2 className="w-5 h-5 text-green-600" />;
-      case 'REJECTED':
-        return <XCircle className="w-5 h-5 text-red-600" />;
-      case 'REVOKED':
-        return <Ban className="w-5 h-5 text-gray-600" />;
-      case 'SENT':
-        return <Clock className="w-5 h-5 text-blue-600" />;
-      default:
-        return <Clock className="w-5 h-5 text-gray-400" />;
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    const statusMap: Record<string, string> = {
-      'DRAFT': '下書き',
-      'SENT': '送信済み',
-      'APPROVED': '承諾済み',
-      'REJECTED': '否認',
-      'REVOKED': '撤回',
-      'EXPIRED': '期限切れ',
-    };
-    return statusMap[status] || status;
-  };
 
   const copyToClipboard = (text: string, token: string) => {
     navigator.clipboard.writeText(text);
@@ -106,9 +80,9 @@ ${request.formUrl}
               <tr key={request.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    {getStatusIcon(request.status)}
+                    {renderConsentRequestStatusIcon(request.status)}
                     <span className="text-sm font-medium">
-                      {getStatusText(request.status)}
+                      {getConsentRequestStatusLabel(request.status)}
                     </span>
                   </div>
                 </td>

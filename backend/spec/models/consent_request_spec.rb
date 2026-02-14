@@ -15,8 +15,8 @@ RSpec.describe ConsentRequest, type: :model do
     it { should validate_presence_of(:token) }
   end
 
-  describe 'token generation' do
-    it 'generates a token on create' do
+  describe 'トークン生成' do
+    it '作成時にトークンが生成されること' do
       spot = create(:spot)
       consent_request = ConsentRequest.new(
         spot: spot,
@@ -30,7 +30,7 @@ RSpec.describe ConsentRequest, type: :model do
       expect(consent_request.token.length).to be > 20
     end
 
-    it 'ensures token uniqueness' do
+    it 'トークンがユニークであること' do
       spot = create(:spot)
       consent1 = create(:consent_request, spot: spot)
       consent2 = create(:consent_request, spot: spot)
@@ -39,8 +39,8 @@ RSpec.describe ConsentRequest, type: :model do
     end
   end
 
-  describe 'default values' do
-    it 'sets default status to DRAFT' do
+  describe 'デフォルト値' do
+    it 'デフォルトステータスがDRAFTであること' do
       spot = create(:spot)
       consent_request = ConsentRequest.create!(
         spot: spot,
@@ -51,7 +51,7 @@ RSpec.describe ConsentRequest, type: :model do
       expect(consent_request.status).to eq('DRAFT')
     end
 
-    it 'sets default expires_at to 30 days from now' do
+    it 'デフォルトの有効期限が30日後であること' do
       spot = create(:spot)
       consent_request = ConsentRequest.create!(
         spot: spot,
@@ -64,53 +64,65 @@ RSpec.describe ConsentRequest, type: :model do
   end
 
   describe '#expired?' do
-    it 'returns true if expires_at is in the past' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, expires_at: 1.day.ago)
-      
-      expect(consent_request.expired?).to be true
+    context '有効期限が過去の場合' do
+      it 'trueを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, expires_at: 1.day.ago)
+        
+        expect(consent_request.expired?).to be true
+      end
     end
 
-    it 'returns false if expires_at is in the future' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, expires_at: 1.day.from_now)
-      
-      expect(consent_request.expired?).to be false
+    context '有効期限が未来の場合' do
+      it 'falseを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, expires_at: 1.day.from_now)
+        
+        expect(consent_request.expired?).to be false
+      end
     end
 
-    it 'returns false if expires_at is nil' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, expires_at: nil)
-      
-      expect(consent_request.expired?).to be false
+    context '有効期限がnilの場合' do
+      it 'falseを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, expires_at: nil)
+        
+        expect(consent_request.expired?).to be false
+      end
     end
   end
 
   describe '#can_be_approved?' do
-    it 'returns true for SENT status and not expired' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, status: 'SENT', expires_at: 1.day.from_now)
-      
-      expect(consent_request.can_be_approved?).to be true
+    context 'ステータスがSENTで有効期限内の場合' do
+      it 'trueを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, status: 'SENT', expires_at: 1.day.from_now)
+        
+        expect(consent_request.can_be_approved?).to be true
+      end
     end
 
-    it 'returns false for APPROVED status' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, status: 'APPROVED')
-      
-      expect(consent_request.can_be_approved?).to be false
+    context 'ステータスがAPPROVEDの場合' do
+      it 'falseを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, status: 'APPROVED')
+        
+        expect(consent_request.can_be_approved?).to be false
+      end
     end
 
-    it 'returns false if expired' do
-      spot = create(:spot)
-      consent_request = create(:consent_request, spot: spot, status: 'SENT', expires_at: 1.day.ago)
-      
-      expect(consent_request.can_be_approved?).to be false
+    context '有効期限が切れている場合' do
+      it 'falseを返すこと' do
+        spot = create(:spot)
+        consent_request = create(:consent_request, spot: spot, status: 'SENT', expires_at: 1.day.ago)
+        
+        expect(consent_request.can_be_approved?).to be false
+      end
     end
   end
 
   describe '#approve!' do
-    it 'changes status to APPROVED' do
+    it 'ステータスがAPPROVEDに変更されること' do
       spot = create(:spot)
       consent_request = create(:consent_request, spot: spot, status: 'SENT')
       
@@ -120,7 +132,7 @@ RSpec.describe ConsentRequest, type: :model do
   end
 
   describe '#revoke!' do
-    it 'changes status to REVOKED' do
+    it 'ステータスがREVOKEDに変更されること' do
       spot = create(:spot)
       consent_request = create(:consent_request, spot: spot, status: 'APPROVED')
       
@@ -129,11 +141,11 @@ RSpec.describe ConsentRequest, type: :model do
     end
   end
 
-  describe 'scopes' do
+  describe 'スコープ' do
     let(:spot) { create(:spot) }
 
     describe '.active' do
-      it 'returns only DRAFT and SENT requests' do
+      it 'DRAFTとSENTのみを返すこと' do
         draft = create(:consent_request, spot: spot, status: 'DRAFT')
         sent = create(:consent_request, spot: spot, status: 'SENT')
         approved = create(:consent_request, spot: spot, status: 'APPROVED')
@@ -143,7 +155,7 @@ RSpec.describe ConsentRequest, type: :model do
     end
 
     describe '.approved' do
-      it 'returns only APPROVED requests' do
+      it 'APPROVEDのみを返すこと' do
         draft = create(:consent_request, spot: spot, status: 'DRAFT')
         approved1 = create(:consent_request, spot: spot, status: 'APPROVED')
         approved2 = create(:consent_request, spot: spot, status: 'APPROVED')
@@ -153,7 +165,7 @@ RSpec.describe ConsentRequest, type: :model do
     end
 
     describe '.for_spot' do
-      it 'returns requests for specified spot' do
+      it '指定された店舗の依頼のみを返すこと' do
         spot2 = create(:spot)
         request1 = create(:consent_request, spot: spot)
         request2 = create(:consent_request, spot: spot2)

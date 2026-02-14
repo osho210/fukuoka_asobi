@@ -24,8 +24,30 @@ const GET_CONSENT_REQUEST_BY_TOKEN = gql`
 `;
 
 const CREATE_CONSENT_AGREEMENT = gql`
-  mutation CreateConsentAgreement($input: ConsentAgreementInput!) {
-    createConsentAgreement(input: $input) {
+  mutation CreateConsentAgreement(
+    $token: String!
+    $signerName: String!
+    $rightsConfirmed: Boolean!
+    $signerInstagram: String
+    $photographerName: String
+    $tagStoreRequested: Boolean
+    $tagPhotographerRequested: Boolean
+    $tagAccountsText: String
+    $ipAddress: String
+    $userAgent: String
+  ) {
+    createConsentAgreement(
+      token: $token
+      signerName: $signerName
+      rightsConfirmed: $rightsConfirmed
+      signerInstagram: $signerInstagram
+      photographerName: $photographerName
+      tagStoreRequested: $tagStoreRequested
+      tagPhotographerRequested: $tagPhotographerRequested
+      tagAccountsText: $tagAccountsText
+      ipAddress: $ipAddress
+      userAgent: $userAgent
+    ) {
       consentAgreement {
         id
         agreedAt
@@ -84,18 +106,16 @@ export default function ConsentFormPage() {
 
     await createAgreement({
       variables: {
-        input: {
-          token,
-          signerName: formData.signerName,
-          signerInstagram: formData.signerInstagram || null,
-          photographerName: formData.photographerName || null,
-          tagStoreRequested: formData.tagStoreRequested,
-          tagPhotographerRequested: formData.tagPhotographerRequested,
-          tagAccountsText: formData.tagAccountsText || null,
-          rightsConfirmed: formData.rightsConfirmed,
-          ipAddress: null,
-          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
-        },
+        token,
+        signerName: formData.signerName,
+        rightsConfirmed: formData.rightsConfirmed,
+        signerInstagram: formData.signerInstagram || null,
+        photographerName: formData.photographerName || null,
+        tagStoreRequested: formData.tagStoreRequested,
+        tagPhotographerRequested: formData.tagPhotographerRequested,
+        tagAccountsText: formData.tagAccountsText || null,
+        ipAddress: null,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
       },
     });
   };
