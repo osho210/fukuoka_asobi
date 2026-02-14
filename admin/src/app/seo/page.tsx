@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import '@/styles/admin.css';
 import { GET_SEO_INDEX_LIST } from '@/graphql/queries/getSeoIndexList';
+import { UPDATE_GOOGLE_INDEX_STATUS } from '@/graphql/mutations/updateGoogleIndexStatus';
 import { GetSeoIndexListQuery, StatusEnum } from '@/__generated__/graphql';
 
 // レコード種別の型定義
@@ -20,14 +21,17 @@ export default function SeoIndexPage() {
   const [typeFilter, setTypeFilter] = useState<RecordType | null>(null);
   const [isIndexableFilter, setIsIndexableFilter] = useState<IndexableFilter | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusEnum | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const { data, loading, error } = useQuery<GetSeoIndexListQuery>(GET_SEO_INDEX_LIST, {
+  const { data, loading, error, refetch } = useQuery<GetSeoIndexListQuery>(GET_SEO_INDEX_LIST, {
     variables: {
       type: typeFilter,
       isIndexable: isIndexableFilter ? isIndexableFilter === 'true' : null,
       status: statusFilter,
     },
   });
+
+  const [updateGoogleIndexStatus] = useMutation(UPDATE_GOOGLE_INDEX_STATUS);
 
   const indexList: SeoIndexRow[] = data?.seoIndexList || [];
 
@@ -115,6 +119,91 @@ export default function SeoIndexPage() {
     setStatusFilter(null);
   };
 
+  // Google Index Statusを更新
+  const handleUpdateGoogleIndexStatus = async (row: SeoIndexRow) => {
+    const key = `${row.type}-${row.id}`;
+    setUpdatingId(key);
+
+    try {
+      // レコード種別をGraphQL mutation用に変換（先頭大文字）
+      const indexableTypeMap: Record<string, string> = {
+        spot: 'Spot',
+        plan: 'PlayPlan',
+        event: 'Event',
+        news: 'News',
+      };
+      const indexableType = indexableTypeMap[row.type];
+
+      await updateGoogleIndexStatus({
+        variables: {
+          indexableType,
+          indexableId: row.id,
+        },
+      });
+
+      // データを再取得
+      await refetch();
+      
+      alert('Google インデックス状態を更新しました');
+    } catch (err: unknown) {
+      console.error('Failed to update Google Index Status:', err);
+      const errorMessage = err instanceof Error ? err.message : '不明なエラー';
+      alert(`更新に失敗しました: ${errorMessage}`);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  // Googleインデックスステータスバッジを返却
+  const getGoogleIndexBadge = (row: SeoIndexRow): React.ReactNode => {
+    const googleStatus = row.googleIndexStatus;
+    
+    if (!googleStatus) {
+      return (
+        <span className="badge badge-secondary text-xs">
+          未取得
+        </span>
+      );
+    }
+
+    // statusColorに基づいてバッジの色を決定
+    const colorClassMap: Record<string, string> = {
+      green: 'badge-success',
+      yellow: 'badge-warning',
+      red: 'badge-danger',
+      gray: 'badge-secondary',
+    };
+    const badgeClass = colorClassMap[googleStatus.statusColor] || 'badge-secondary';
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span className={`badge ${badgeClass} text-xs`}>
+          {googleStatus.indexed ? 'Indexed' : 'Not Indexed'}
+        </span>
+        {googleStatus.notIndexedReason && !googleStatus.indexed && (
+          <span className="text-xs text-gray-500 truncate max-w-[150px]" title={googleStatus.notIndexedReason}>
+            {googleStatus.notIndexedReason}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  // 最終クロール日時を表示
+  const getLastCrawlTime = (row: SeoIndexRow): React.ReactNode => {
+    const googleStatus = row.googleIndexStatus;
+    
+    if (!googleStatus || !googleStatus.lastCrawlTime) {
+      return <span className="text-gray-400 text-xs">—</span>;
+    }
+
+    return (
+      <span className="text-gray-600 text-xs whitespace-nowrap">
+        {formatDate(googleStatus.lastCrawlTime)}
+      </span>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ページヘッダー */}
@@ -126,6 +215,24 @@ export default function SeoIndexPage() {
               <p className="mt-2 text-base text-gray-600 max-w-2xl">
                 コンテンツのインデックス状態を管理し、検索エンジンへの公開設定を制御します。
               </p>
+              <div className="mt-4 flex flex-wrap gap-2 text-sm">
+                <div className="flex items-center gap-1">
+                  <span className="badge badge-success text-xs">緑</span>
+                  <span className="text-gray-600">設定OK & Indexed</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="badge badge-warning text-xs">黄</span>
+                  <span className="text-gray-600">設定OK & Not Indexed</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="badge badge-danger text-xs">赤</span>
+                  <span className="text-gray-600">設定NG & Indexed</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="badge badge-secondary text-xs">灰</span>
+                  <span className="text-gray-600">設定NG & Not Indexed（正常）</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -278,42 +385,68 @@ export default function SeoIndexPage() {
                           <th>タイトル</th>
                           <th>公開ステータス</th>
                           <th>検索エンジン登録</th>
-                          <th>インデックス状態</th>
+                          <th>インデックス想定</th>
+                          <th>Google実状態</th>
+                          <th>最終クロール</th>
                           <th>最終更新日時</th>
                           <th>操作</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {indexList.map((row, index) => (
-                          <tr key={`${row.type}-${row.id}-${row.updatedAt}-${index}`}>
-                            <td className="text-gray-900 font-medium text-sm">{row.id}</td>
-                            <td>
-                              <span className={`badge ${getTypeBadgeClass(row.type)}`}>
-                                {getTypeLabel(row.type)}
-                              </span>
-                            </td>
-                            <td className="text-gray-900 max-w-xs truncate">{row.title}</td>
-                            <td>{getStatusBadge(row.status)}</td>
-                            <td>
-                              <span className={`badge ${row.isIndexable ? 'badge-success' : 'badge-secondary'}`}>
-                                {row.isIndexable ? '許可' : '禁止'}
-                              </span>
-                            </td>
-                            <td>{getIndexBadge(row.isIndexable, row.status)}</td>
-                            <td className="text-gray-600 text-sm whitespace-nowrap">{formatDate(row.updatedAt)}</td>
-                            <td>
-                              <Link
-                                href={row.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium"
-                              >
-                                表示
-                                <span>↗</span>
-                              </Link>
-                            </td>
-                          </tr>
-                        ))}
+                        {indexList.map((row, index) => {
+                          const key = `${row.type}-${row.id}`;
+                          const isUpdating = updatingId === key;
+                          
+                          return (
+                            <tr key={`${row.type}-${row.id}-${row.updatedAt}-${index}`}>
+                              <td className="text-gray-900 font-medium text-sm">{row.id}</td>
+                              <td>
+                                <span className={`badge ${getTypeBadgeClass(row.type)}`}>
+                                  {getTypeLabel(row.type)}
+                                </span>
+                              </td>
+                              <td className="text-gray-900 max-w-xs truncate">{row.title}</td>
+                              <td>{getStatusBadge(row.status)}</td>
+                              <td>
+                                <span className={`badge ${row.isIndexable ? 'badge-success' : 'badge-secondary'}`}>
+                                  {row.isIndexable ? '許可' : '禁止'}
+                                </span>
+                              </td>
+                              <td>{getIndexBadge(row.isIndexable, row.status)}</td>
+                              <td>{getGoogleIndexBadge(row)}</td>
+                              <td>{getLastCrawlTime(row)}</td>
+                              <td className="text-gray-600 text-sm whitespace-nowrap">{formatDate(row.updatedAt)}</td>
+                              <td>
+                                <div className="flex gap-2">
+                                  <Link
+                                    href={row.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium"
+                                  >
+                                    表示
+                                    <span>↗</span>
+                                  </Link>
+                                  <button
+                                    onClick={() => handleUpdateGoogleIndexStatus(row)}
+                                    disabled={isUpdating}
+                                    className="admin-btn admin-btn-sm admin-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title="Googleインデックス状態を更新"
+                                  >
+                                    {isUpdating ? (
+                                      <span className="flex items-center gap-1">
+                                        <span className="h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+                                        更新中
+                                      </span>
+                                    ) : (
+                                      '更新'
+                                    )}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

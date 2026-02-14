@@ -10,6 +10,24 @@ export const GET_SEO_INDEX_LIST = gql`
       isIndexable
       url
       updatedAt
+      googleIndexStatus {
+        id
+        inspectedUrl
+        coverageState
+        crawledAs
+        indexingAllowed
+        lastCrawlTime
+        verdict
+        googleCanonical
+        userCanonical
+        indexed
+        crawled
+        indexable
+        notIndexedReason
+        hasMismatch
+        statusColor
+        updatedAt
+      }
     }
   }
 `;
