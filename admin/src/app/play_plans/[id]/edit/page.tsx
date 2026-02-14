@@ -53,7 +53,7 @@ export default function EditPlayPlanPage() {
       tags: plan.tags || '',
       recommendUsers: plan.recommendUsers || [],
       isRecommended: plan.isRecommended || false,
-      isPublic: plan.isPublic ?? true,
+      isPublic: plan.isPublic ?? false,
       plannerTitle: plan.plannerTitle || '',
       plannerDescription: plan.plannerDescription || '',
       planDetails: plan.planDetails?.map((detail, index: number) => ({
@@ -123,7 +123,7 @@ export default function EditPlayPlanPage() {
             tags: formData.tags || '',
             recommendUsers: formData.recommendUsers || [],
             isRecommended: formData.isRecommended || false,
-            isPublic: formData.isPublic ?? true,
+            isPublic: formData.isPublic ?? false,
             plannerTitle: formData.plannerTitle || '',
             plannerDescription: formData.plannerDescription || '',
             planDetails: (formData.planDetails || []).map((detail) => ({
