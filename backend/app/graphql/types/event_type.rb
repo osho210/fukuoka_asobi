@@ -18,6 +18,7 @@ module Types
     field :capacity, Integer, null: true
     field :status, Types::StatusEnumType, null: true
     field :is_online, Boolean, null: false
+    field :is_indexable, Boolean, null: false
     field :source_url, String, null: true
     field :banner_image, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false

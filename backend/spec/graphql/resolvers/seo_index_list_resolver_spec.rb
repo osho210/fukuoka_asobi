@@ -9,9 +9,9 @@ RSpec.describe Resolvers::SeoIndexListResolver do
     let!(:published_spot) { create(:spot, spot_name: 'Published Spot', is_public: true, is_indexable: true) }
     let!(:draft_spot) { create(:spot, spot_name: 'Draft Spot', is_public: false, is_indexable: true) }
     let!(:noindex_spot) { create(:spot, spot_name: 'NoIndex Spot', is_public: true, is_indexable: false) }
-    let!(:published_plan) { create(:play_plan, plan_name: 'Published Plan', status: :published, is_indexable: true) }
-    let!(:draft_plan) { create(:play_plan, plan_name: 'Draft Plan', status: :draft, is_indexable: true) }
-    let!(:noindex_plan) { create(:play_plan, plan_name: 'NoIndex Plan', status: :published, is_indexable: false) }
+    let!(:published_plan) { create(:play_plan, plan_name: 'Published Plan', is_public: true, is_indexable: true) }
+    let!(:draft_plan) { create(:play_plan, plan_name: 'Draft Plan', is_public: false, is_indexable: true) }
+    let!(:noindex_plan) { create(:play_plan, plan_name: 'NoIndex Plan', is_public: true, is_indexable: false) }
 
     context 'フィルタなしの場合' do
       it 'すべてのスポットとプランを返すこと' do
@@ -111,6 +111,11 @@ RSpec.describe Resolvers::SeoIndexListResolver do
         expect(first_record).to have_key(:is_indexable)
         expect(first_record).to have_key(:url)
         expect(first_record).to have_key(:updated_at)
+      end
+
+      it 'statusは常に値が入っていること' do
+        result = resolver.resolve(type: nil, is_indexable: nil, status: nil)
+        expect(result.all? { |r| r[:status].present? }).to be true
       end
     end
   end
