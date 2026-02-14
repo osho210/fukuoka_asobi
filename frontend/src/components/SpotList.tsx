@@ -19,8 +19,8 @@ export default function SpotList() {
     <div className="spot-list-container">
       <h1 className="spot-list-heading">店舗一覧</h1>
       <div className="spot-list-grid">
-        {data.spots.map((spot) => (
-          <div key={spot.id} className="spot-card">
+        {data.spots.map((spot, index) => (
+          <div key={`spot-list-${spot.id}-${index}`} className="spot-card">
             <div className="spot-card-content">
               <h2 className="spot-card-title">{spot.spotName}</h2>
               <p className="spot-card-catchphrase">{spot.catchphrase}</p>
