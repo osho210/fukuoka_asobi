@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_07_104827) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_11_154841) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -385,6 +385,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_104827) do
     t.string "travel_method_to_first_spot"
     t.integer "travel_time_to_first_spot"
     t.boolean "is_recommended", default: false, null: false, comment: "編集部おすすめフラグ"
+    t.boolean "is_indexable", default: true, null: false
     t.index ["is_recommended"], name: "index_play_plans_on_is_recommended"
   end
 
@@ -605,6 +606,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_07_104827) do
     t.string "api_sync_status", limit: 50, default: "pending"
     t.text "description"
     t.boolean "is_public", default: false, null: false
+    t.boolean "is_indexable", default: true, null: false
     t.index ["api_sync_status"], name: "index_spots_on_api_sync_status"
     t.index ["budget_range"], name: "index_spots_on_budget_range"
     t.index ["business_status"], name: "index_spots_on_business_status"
