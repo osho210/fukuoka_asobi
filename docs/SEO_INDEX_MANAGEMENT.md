@@ -4,12 +4,16 @@
 
 スポット、プラン、イベント、ニュースのSEOインデックス状態を一覧で管理できる機能です。
 
+**✨ 新機能:** Google Search Console API と連携し、実際のインデックス状態を取得・表示できるようになりました。詳細は [GOOGLE_SEARCH_CONSOLE_INTEGRATION.md](./GOOGLE_SEARCH_CONSOLE_INTEGRATION.md) を参照してください。
+
 ## 機能
 
 - スポット・プラン・イベント・ニュースのインデックス状態を一覧表示
+- **Google Search Console API 連携**（実際のインデックス状態を取得）
 - フィルタ機能（コンテンツ種別、検索エンジン登録、公開ステータス）
 - URL クリックで対象ページへ遷移
 - 更新日時の降順でソート
+- **手動更新ボタン**（各コンテンツのGoogle インデックス状態を更新）
 
 ## セットアップ
 
@@ -63,6 +67,15 @@ query GetSeoIndexList($type: String, $isIndexable: Boolean, $status: StatusEnum)
     isIndexable
     url
     updatedAt
+    googleIndexStatus {
+      id
+      inspectedUrl
+      coverageState
+      indexed
+      crawled
+      lastCrawlTime
+      statusColor
+    }
   }
 }
 ```
@@ -72,6 +85,35 @@ query GetSeoIndexList($type: String, $isIndexable: Boolean, $status: StatusEnum)
 - `type`: フィルタ対象のレコード種別 (`spot` | `plan` | `event` | `news`)
 - `isIndexable`: is_indexableでフィルタ (`true` | `false`)
 - `status`: ステータスでフィルタ (`PUBLISHED` | `DRAFT` | `ARCHIVED` | `DELETED`)
+
+### Mutation: updateGoogleIndexStatus
+
+**Google Search Console API 連携機能**
+
+詳細は [GOOGLE_SEARCH_CONSOLE_INTEGRATION.md](./GOOGLE_SEARCH_CONSOLE_INTEGRATION.md) を参照してください。
+
+```graphql
+mutation UpdateGoogleIndexStatus(
+  $indexableType: String!
+  $indexableId: ID!
+  $siteUrl: String
+) {
+  updateGoogleIndexStatus(
+    indexableType: $indexableType
+    indexableId: $indexableId
+    siteUrl: $siteUrl
+  ) {
+    googleIndexStatus {
+      id
+      indexed
+      coverageState
+      lastCrawlTime
+      statusColor
+    }
+    errors
+  }
+}
+```
 
 ## テスト
 
