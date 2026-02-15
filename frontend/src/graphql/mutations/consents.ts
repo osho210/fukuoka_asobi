@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_CONSENT_AGREEMENT = gql`
-  mutation CreateConsentAgreement($input: ConsentAgreementInput!) {
+  mutation CreateConsentAgreement($input: CreateConsentAgreementInput!) {
     createConsentAgreement(input: $input) {
       consentAgreement {
         id
