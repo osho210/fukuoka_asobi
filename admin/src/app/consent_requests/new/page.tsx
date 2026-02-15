@@ -23,10 +23,10 @@ export default function NewConsentRequestPage() {
   const { data: spotsData } = useQuery(GET_SPOTS);
   const [createConsentRequest, { loading }] = useMutation(CREATE_CONSENT_REQUEST, {
     onCompleted: (data) => {
-      if (data.createConsentRequest.errors.length === 0) {
+      if (data?.createConsentRequest?.consentRequest) {
         alert('承諾依頼を作成しました');
         router.push('/consent_requests');
-      } else {
+      } else if (data?.createConsentRequest?.errors) {
         alert('エラー: ' + data.createConsentRequest.errors.join(', '));
       }
     },

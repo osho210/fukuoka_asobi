@@ -5,8 +5,9 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
-import { Plus, ExternalLink, Copy, CheckCircle2 } from 'lucide-react';
+import { Plus, ExternalLink, Copy, CheckCircle2 as CheckCircleIcon } from 'lucide-react';
 import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
+import { copyToClipboard } from '@/lib/clipboardUtils';
 import { gql } from '@apollo/client';
 
 const GET_DM_TEMPLATE = gql`
@@ -29,10 +30,12 @@ export default function ConsentRequestsPage() {
     variables: { name: '画像利用承諾依頼' },
   });
 
-  const copyToClipboard = (text: string, token: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedToken(token);
-    setTimeout(() => setCopiedToken(null), 2000);
+  const handleCopyToClipboard = async (text: string, token: string) => {
+    const success = await copyToClipboard(text);
+    if (success) {
+      setCopiedToken(token);
+      setTimeout(() => setCopiedToken(null), 2000);
+    }
   };
 
   const generateDMTemplate = (request: any) => {
@@ -140,12 +143,12 @@ ${request.formUrl}
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => copyToClipboard(request.formUrl, request.token)}
+                      onClick={() => handleCopyToClipboard(request.formUrl, request.token)}
                       className="w-full justify-center"
                     >
                       {copiedToken === request.token ? (
                         <>
-                          <CheckCircle2 className="w-4 h-4 mr-1" />
+                          <CheckCircleIcon className="w-4 h-4 mr-1" />
                           コピー済み
                         </>
                       ) : (
@@ -158,12 +161,12 @@ ${request.formUrl}
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => copyToClipboard(generateDMTemplate(request), `dm-${request.token}`)}
+                      onClick={() => handleCopyToClipboard(generateDMTemplate(request), `dm-${request.token}`)}
                       className="w-full justify-center"
                     >
                       {copiedToken === `dm-${request.token}` ? (
                         <>
-                          <CheckCircle2 className="w-4 h-4 mr-1" />
+                          <CheckCircleIcon className="w-4 h-4 mr-1" />
                           コピー済み
                         </>
                       ) : (

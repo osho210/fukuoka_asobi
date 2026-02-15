@@ -11,6 +11,48 @@ import { CREATE_LICENSED_ASSET } from '@/graphql/mutations/consents';
 import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
 import { ArrowLeft, Save, Upload } from 'lucide-react';
 
+// GraphQL レスポンスの型定義
+interface ConsentAgreement {
+  id: string;
+  signerName: string;
+  agreedAt: string;
+}
+
+interface Spot {
+  id: string;
+  spotName: string;
+}
+
+interface ConsentRequest {
+  id: string;
+  spotId: string;
+  consentAgreement: ConsentAgreement | null;
+  spot: Spot;
+}
+
+interface GetConsentRequestsData {
+  consentRequests: ConsentRequest[];
+}
+
+interface CreateLicensedAssetInput {
+  spotId: number;
+  consentAgreementId: number;
+  assetType: string;
+  assetUrl: string | null;
+  assetFile: string | null;
+  sourceUrl: string | null;
+  captionNote: string | null;
+}
+
+interface CreateLicensedAssetData {
+  createLicensedAsset: {
+    licensedAsset: {
+      id: string;
+    } | null;
+    errors: string[];
+  };
+}
+
 export default function NewLicensedAssetPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -23,16 +65,16 @@ export default function NewLicensedAssetPage() {
     captionNote: '',
   });
 
-  const { data: consentData } = useQuery(GET_CONSENT_REQUESTS, {
+  const { data: consentData } = useQuery<GetConsentRequestsData>(GET_CONSENT_REQUESTS, {
     variables: { status: 'APPROVED' },
   });
 
-  const [createLicensedAsset, { loading }] = useMutation(CREATE_LICENSED_ASSET, {
+  const [createLicensedAsset, { loading }] = useMutation<CreateLicensedAssetData>(CREATE_LICENSED_ASSET, {
     onCompleted: (data) => {
-      if (data.createLicensedAsset.errors.length === 0) {
+      if (data?.createLicensedAsset?.licensedAsset) {
         alert('画像を登録しました');
         router.push('/licensed_assets');
-      } else {
+      } else if (data?.createLicensedAsset?.errors) {
         alert('エラー: ' + data.createLicensedAsset.errors.join(', '));
       }
     },
@@ -58,7 +100,7 @@ export default function NewLicensedAssetPage() {
     e.preventDefault();
 
     const selectedConsent = consentData?.consentRequests?.find(
-      (req: any) => req.consentAgreement?.id === formData.consentAgreementId
+      (req) => req.consentAgreement?.id === formData.consentAgreementId
     );
 
     if (!selectedConsent) {
@@ -82,10 +124,10 @@ export default function NewLicensedAssetPage() {
   };
 
   const consentOptions = consentData?.consentRequests
-    ?.filter((req: any) => req.consentAgreement)
-    ?.map((req: any) => ({
-      value: req.consentAgreement.id,
-      label: `${req.spot.spotName} - ${req.consentAgreement.signerName}`,
+    ?.filter((req) => req.consentAgreement)
+    ?.map((req) => ({
+      value: req.consentAgreement!.id,
+      label: `${req.spot.spotName} - ${req.consentAgreement!.signerName}`,
     })) || [];
 
   const assetTypeOptions = [
