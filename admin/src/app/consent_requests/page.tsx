@@ -7,11 +7,27 @@ import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
 import { Plus, ExternalLink, Copy, CheckCircle2 } from 'lucide-react';
 import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
+import { gql } from '@apollo/client';
+
+const GET_DM_TEMPLATE = gql`
+  query GetDmTemplate($name: String!) {
+    dmTemplate(name: $name) {
+      id
+      name
+      version
+      content
+      availableVariables
+    }
+  }
+`;
 
 export default function ConsentRequestsPage() {
   const router = useRouter();
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const { data, loading, error, refetch } = useQuery(GET_CONSENT_REQUESTS);
+  const { data: templateData } = useQuery(GET_DM_TEMPLATE, {
+    variables: { name: '画像利用承諾依頼' },
+  });
 
   const copyToClipboard = (text: string, token: string) => {
     navigator.clipboard.writeText(text);
@@ -20,8 +36,11 @@ export default function ConsentRequestsPage() {
   };
 
   const generateDMTemplate = (request: any) => {
-    const storeName = request.spot?.spotName || '店舗名';
-    return `${storeName}様
+    const template = templateData?.dmTemplate;
+    if (!template) {
+      // フォールバック: テンプレートがない場合は従来の方法
+      const storeName = request.spot?.spotName || '店舗名';
+      return `${storeName}様
 
 いつもありがとうございます。
 福岡遊び日記（Webメディア / Instagram）での画像掲載について、利用許諾のお願いです。
@@ -33,6 +52,13 @@ ${request.formUrl}
 
 ご不明点がございましたら、お気軽にお問い合わせください。
 よろしくお願いいたします。`;
+    }
+
+    // テンプレートから生成
+    let message = template.content;
+    message = message.replace(/\{\{store_name\}\}/g, request.spot?.spotName || '店舗名');
+    message = message.replace(/\{\{form_url\}\}/g, request.formUrl);
+    return message;
   };
 
   if (loading) return <div className="p-8">読み込み中...</div>;

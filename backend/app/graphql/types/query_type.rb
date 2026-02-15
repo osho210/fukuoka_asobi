@@ -483,6 +483,35 @@ module Types
     field :seo_index_list, resolver: Resolvers::SeoIndexListResolver
 
     # --------------------------------------------
+    # DM テンプレート関連
+    # --------------------------------------------
+    field :dm_templates, [Types::DmTemplateType], null: false, description: "DMテンプレート一覧を取得" do
+      argument :is_active, Boolean, required: false, description: "アクティブなテンプレートのみ取得"
+    end
+
+    def dm_templates(is_active: nil)
+      templates = DmTemplate.all
+      templates = templates.where(is_active: is_active) unless is_active.nil?
+      templates.order(created_at: :desc)
+    end
+
+    field :dm_template, Types::DmTemplateType, null: true, description: "指定されたDMテンプレートを取得" do
+      argument :id, ID, required: false, description: "テンプレートID"
+      argument :name, String, required: false, description: "テンプレート名"
+      argument :version, String, required: false, description: "バージョン"
+    end
+
+    def dm_template(id: nil, name: nil, version: nil)
+      if id
+        DmTemplate.find_by(id: id)
+      elsif name && version
+        DmTemplate.find_by(name: name, version: version)
+      elsif name
+        DmTemplate.active.where(name: name).order(version: :desc).first
+      end
+    end
+
+    # --------------------------------------------
     # 画像利用承諾管理
     # --------------------------------------------
     field :consent_requests, [Types::ConsentRequestType], null: false, description: "承諾依頼一覧を取得" do
