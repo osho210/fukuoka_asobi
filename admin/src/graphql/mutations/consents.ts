@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_CONSENT_REQUEST = gql`
-  mutation CreateConsentRequest($input: ConsentRequestInput!) {
+  mutation CreateConsentRequest($input: CreateConsentRequestInput!) {
     createConsentRequest(input: $input) {
       consentRequest {
         id
@@ -28,8 +28,8 @@ export const CREATE_CONSENT_REQUEST = gql`
 `;
 
 export const UPDATE_CONSENT_REQUEST_STATUS = gql`
-  mutation UpdateConsentRequestStatus($id: ID!, $status: ConsentRequestStatusEnum!) {
-    updateConsentRequestStatus(id: $id, status: $status) {
+  mutation UpdateConsentRequestStatus($input: UpdateConsentRequestStatusInput!) {
+    updateConsentRequestStatus(input: $input) {
       consentRequest {
         id
         status
@@ -40,7 +40,7 @@ export const UPDATE_CONSENT_REQUEST_STATUS = gql`
 `;
 
 export const CREATE_CONSENT_AGREEMENT = gql`
-  mutation CreateConsentAgreement($input: ConsentAgreementInput!) {
+  mutation CreateConsentAgreement($input: CreateConsentAgreementInput!) {
     createConsentAgreement(input: $input) {
       consentAgreement {
         id
@@ -65,7 +65,7 @@ export const CREATE_CONSENT_AGREEMENT = gql`
 `;
 
 export const CREATE_LICENSED_ASSET = gql`
-  mutation CreateLicensedAsset($input: LicensedAssetInput!) {
+  mutation CreateLicensedAsset($input: CreateLicensedAssetInput!) {
     createLicensedAsset(input: $input) {
       licensedAsset {
         id
@@ -94,8 +94,8 @@ export const CREATE_LICENSED_ASSET = gql`
 `;
 
 export const UPDATE_LICENSED_ASSET = gql`
-  mutation UpdateLicensedAsset($id: ID!, $usable: Boolean, $captionNote: String) {
-    updateLicensedAsset(id: $id, usable: $usable, captionNote: $captionNote) {
+  mutation UpdateLicensedAsset($input: UpdateLicensedAssetInput!) {
+    updateLicensedAsset(input: $input) {
       licensedAsset {
         id
         usable
