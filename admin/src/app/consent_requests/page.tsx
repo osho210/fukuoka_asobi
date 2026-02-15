@@ -48,29 +48,29 @@ ${request.formUrl}
         </Button>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
+      <div className="bg-white rounded-lg shadow overflow-x-auto">
+        <table className="w-full border-collapse divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 ステータス
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 店舗
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 承諾者
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 承諾者タイプ
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 承諾日時
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 作成日
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 操作
               </th>
             </tr>
@@ -78,7 +78,7 @@ ${request.formUrl}
           <tbody className="bg-white divide-y divide-gray-200">
             {data?.consentRequests?.map((request: any) => (
               <tr key={request.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
                     {renderConsentRequestStatusIcon(request.status)}
                     <span className="text-sm font-medium">
@@ -86,35 +86,36 @@ ${request.formUrl}
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <div className="text-sm font-medium text-gray-900">
                     {request.spot?.spotName}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <div className="text-sm text-gray-900">
                     {request.consentAgreement?.signerName || request.consenterDisplayName}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                     {request.consenterType === 'STORE' ? '店舗' : 'Instagram利用者'}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 text-sm text-gray-500">
                   {request.consentAgreement?.agreedAt
                     ? new Date(request.consentAgreement.agreedAt).toLocaleDateString('ja-JP')
                     : '-'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-4 py-4 text-sm text-gray-500">
                   {new Date(request.createdAt).toLocaleDateString('ja-JP')}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex gap-2">
+                <td className="px-4 py-4 text-sm font-medium">
+                  <div className="flex flex-col gap-1">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => copyToClipboard(request.formUrl, request.token)}
+                      className="w-full justify-center"
                     >
                       {copiedToken === request.token ? (
                         <>
@@ -132,6 +133,7 @@ ${request.formUrl}
                       size="sm"
                       variant="outline"
                       onClick={() => copyToClipboard(generateDMTemplate(request), `dm-${request.token}`)}
+                      className="w-full justify-center"
                     >
                       {copiedToken === `dm-${request.token}` ? (
                         <>
@@ -148,8 +150,10 @@ ${request.formUrl}
                     <Button
                       size="sm"
                       onClick={() => window.open(request.formUrl, '_blank')}
+                      className="w-full justify-center"
                     >
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-4 h-4 mr-1" />
+                      開く
                     </Button>
                   </div>
                 </td>
