@@ -8,6 +8,7 @@ export const GET_CONSENT_REQUESTS = gql`
       consenterType
       consenterDisplayName
       contactHint
+      instagramPostUrl
       status
       token
       expiresAt

@@ -3,59 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { gql } from '@apollo/client';
-
-const GET_CONSENT_REQUEST_BY_TOKEN = gql`
-  query GetConsentRequestByToken($token: String!) {
-    consentRequest(token: $token) {
-      id
-      spotId
-      consenterType
-      consenterDisplayName
-      status
-      expiresAt
-      spot {
-        id
-        spotName
-        address
-      }
-    }
-  }
-`;
-
-const CREATE_CONSENT_AGREEMENT = gql`
-  mutation CreateConsentAgreement(
-    $token: String!
-    $signerName: String!
-    $rightsConfirmed: Boolean!
-    $signerInstagram: String
-    $photographerName: String
-    $tagStoreRequested: Boolean
-    $tagPhotographerRequested: Boolean
-    $tagAccountsText: String
-    $ipAddress: String
-    $userAgent: String
-  ) {
-    createConsentAgreement(
-      token: $token
-      signerName: $signerName
-      rightsConfirmed: $rightsConfirmed
-      signerInstagram: $signerInstagram
-      photographerName: $photographerName
-      tagStoreRequested: $tagStoreRequested
-      tagPhotographerRequested: $tagPhotographerRequested
-      tagAccountsText: $tagAccountsText
-      ipAddress: $ipAddress
-      userAgent: $userAgent
-    ) {
-      consentAgreement {
-        id
-        agreedAt
-      }
-      errors
-    }
-  }
-`;
+import { GET_CONSENT_REQUEST_BY_TOKEN } from '@/graphql/queries/consents';
+import { CREATE_CONSENT_AGREEMENT } from '@/graphql/mutations/consents';
 
 export default function ConsentFormPage() {
   const params = useParams();

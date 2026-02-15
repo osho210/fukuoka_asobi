@@ -12,6 +12,7 @@ module Types
     field :token, String, null: false
     field :expires_at, GraphQL::Types::ISO8601DateTime, null: true
     field :message_template, String, null: true
+    field :instagram_post_url, String, null: true
     field :created_by, Integer, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false

@@ -17,6 +17,7 @@ export default function NewConsentRequestPage() {
     consenterType: 'STORE',
     consenterDisplayName: '',
     contactHint: '',
+    instagramPostUrl: '',
   });
 
   const { data: spotsData } = useQuery(GET_SPOTS);
@@ -43,6 +44,7 @@ export default function NewConsentRequestPage() {
           consenterType: formData.consenterType,
           consenterDisplayName: formData.consenterDisplayName,
           contactHint: formData.contactHint || null,
+          instagramPostUrl: formData.instagramPostUrl || null,
         },
       },
     });
@@ -100,6 +102,13 @@ export default function NewConsentRequestPage() {
             value={formData.contactHint}
             onChange={(e) => setFormData({ ...formData, contactHint: e.target.value })}
             placeholder="Instagram DM、メール、電話など"
+          />
+
+          <TextField
+            label="Instagram投稿URL（任意）"
+            value={formData.instagramPostUrl}
+            onChange={(e) => setFormData({ ...formData, instagramPostUrl: e.target.value })}
+            placeholder="https://www.instagram.com/p/..."
           />
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

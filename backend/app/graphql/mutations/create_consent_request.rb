@@ -13,6 +13,7 @@ module Mutations
         consenter_type: input[:consenter_type],
         consenter_display_name: input[:consenter_display_name],
         contact_hint: input[:contact_hint],
+        instagram_post_url: input[:instagram_post_url],
         message_template: input[:message_template],
         created_by: input[:created_by] || context[:current_user]&.id,
         status: 'SENT'
