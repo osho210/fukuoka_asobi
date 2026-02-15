@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_14_113002) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_15_013000) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -155,6 +155,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_113002) do
     t.integer "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "instagram_post_url"
     t.index ["spot_id"], name: "index_consent_requests_on_spot_id"
     t.index ["status"], name: "index_consent_requests_on_status"
     t.index ["token"], name: "index_consent_requests_on_token", unique: true
@@ -187,6 +188,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_113002) do
     t.string "slug"
     t.index ["district_name"], name: "index_districts_on_district_name", unique: true
     t.index ["slug"], name: "index_districts_on_slug", unique: true
+  end
+
+  create_table "dm_templates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "version", default: "v1.0", null: false
+    t.text "content", null: false
+    t.text "description"
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_active"], name: "index_dm_templates_on_is_active"
+    t.index ["name", "version"], name: "index_dm_templates_on_name_and_version", unique: true
   end
 
   create_table "event_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
