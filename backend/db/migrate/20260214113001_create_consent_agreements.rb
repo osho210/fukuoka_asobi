@@ -1,10 +1,12 @@
 class CreateConsentAgreements < ActiveRecord::Migration[8.0]
   def change
+    drop_table :consent_agreements, if_exists: true
+
     create_table :consent_agreements do |t|
       t.references :consent_request, null: false, foreign_key: true
       t.datetime :agreed_at, null: false
-      t.string :agreement_version, null: false # e.g., "v1.0"
-      t.text :agreement_snapshot_json, null: false # JSON snapshot of terms
+      t.string :agreement_version, null: false
+      t.text :agreement_snapshot_json, null: false
       t.string :signer_name, null: false
       t.string :signer_instagram
       t.string :photographer_name
@@ -17,7 +19,6 @@ class CreateConsentAgreements < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :consent_agreements, :consent_request_id
     add_index :consent_agreements, :agreed_at
   end
 end
