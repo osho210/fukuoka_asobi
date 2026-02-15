@@ -1,3 +1,4 @@
+import React from 'react';
 import { CheckCircle2, XCircle, Clock, Ban } from 'lucide-react';
 
 /**
