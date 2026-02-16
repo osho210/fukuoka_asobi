@@ -2,7 +2,7 @@
 
 class LicensedAsset < ApplicationRecord
   belongs_to :spot
-  belongs_to :consent_agreement
+  belongs_to :consent_agreement, optional: true
   has_one_attached :asset_file
 
   validates :asset_type, presence: true, inclusion: { in: %w[UPLOAD URL] }

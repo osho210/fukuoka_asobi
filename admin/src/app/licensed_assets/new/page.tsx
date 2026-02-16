@@ -13,19 +13,20 @@ import { ArrowLeft, Save, Upload } from 'lucide-react';
 
 // GraphQL レスポンスの型定義
 interface ConsentAgreement {
-  id: string;
+  id: number;
   signerName: string;
   agreedAt: string;
 }
 
 interface Spot {
-  id: string;
+  id: number;
   spotName: string;
 }
 
 interface ConsentRequest {
-  id: string;
+  id: number;
   spotId: string;
+  consenterDisplayName: string;
   consentAgreement: ConsentAgreement | null;
   spot: Spot;
 }
@@ -33,17 +34,6 @@ interface ConsentRequest {
 interface GetConsentRequestsData {
   consentRequests: ConsentRequest[];
 }
-
-interface CreateLicensedAssetInput {
-  spotId: number;
-  consentAgreementId: number;
-  assetType: string;
-  assetUrl: string | null;
-  assetFile: string | null;
-  sourceUrl: string | null;
-  captionNote: string | null;
-}
-
 interface CreateLicensedAssetData {
   createLicensedAsset: {
     licensedAsset: {
@@ -56,8 +46,7 @@ interface CreateLicensedAssetData {
 export default function NewLicensedAssetPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    consentAgreementId: '',
-    spotId: '',
+    consentRequestId: '',
     assetType: 'URL',
     assetUrl: '',
     assetFile: '',
@@ -89,8 +78,8 @@ export default function NewLicensedAssetPage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64 = reader.result as string;
-        const base64Data = base64.split(',')[1];
-        setFormData({ ...formData, assetFile: base64Data });
+        // フルフォーマット（data:image/...;base64,xxx）で保存
+        setFormData({ ...formData, assetFile: base64 });
       };
       reader.readAsDataURL(file);
     }
@@ -99,11 +88,12 @@ export default function NewLicensedAssetPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const selectedConsent = consentData?.consentRequests?.find(
-      (req) => req.consentAgreement?.id === formData.consentAgreementId
+    // 選択されたconsent requestを取得
+    const selectedConsentRequest = consentData?.consentRequests.find(
+      (req) => req.id.toString() === formData.consentRequestId
     );
 
-    if (!selectedConsent) {
+    if (!selectedConsentRequest) {
       alert('承諾情報が見つかりません');
       return;
     }
@@ -111,8 +101,10 @@ export default function NewLicensedAssetPage() {
     await createLicensedAsset({
       variables: {
         input: {
-          spotId: parseInt(selectedConsent.spotId),
-          consentAgreementId: parseInt(formData.consentAgreementId),
+          spotId: parseInt(selectedConsentRequest.spotId),
+          consentAgreementId: selectedConsentRequest.consentAgreement
+            ? parseInt(selectedConsentRequest.consentAgreement.id.toString())
+            : null,
           assetType: formData.assetType,
           assetUrl: formData.assetType === 'URL' ? formData.assetUrl : null,
           assetFile: formData.assetType === 'UPLOAD' ? formData.assetFile : null,
@@ -124,10 +116,9 @@ export default function NewLicensedAssetPage() {
   };
 
   const consentOptions = consentData?.consentRequests
-    ?.filter((req) => req.consentAgreement)
     ?.map((req) => ({
-      value: req.consentAgreement!.id,
-      label: `${req.spot.spotName} - ${req.consentAgreement!.signerName}`,
+      value: req.id.toString(),
+      label: `${req.spot.spotName} - ${req.consenterDisplayName}${req.consentAgreement ? '' : ' (同意書未作成)'}`,
     })) || [];
 
   const assetTypeOptions = [
@@ -150,8 +141,8 @@ export default function NewLicensedAssetPage() {
         <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-lg shadow p-6">
           <Select
             label="承諾情報"
-            value={formData.consentAgreementId}
-            onChange={(value) => setFormData({ ...formData, consentAgreementId: value })}
+            value={formData.consentRequestId}
+            onChange={(value) => setFormData({ ...formData, consentRequestId: value })}
             options={consentOptions}
             required
           />

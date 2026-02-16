@@ -5,8 +5,8 @@ module Types
     field :id, ID, null: false
     field :spot_id, Integer, null: false
     field :spot, Types::SpotType, null: false
-    field :consent_agreement_id, Integer, null: false
-    field :consent_agreement, Types::ConsentAgreementType, null: false
+    field :consent_agreement_id, Integer, null: true
+    field :consent_agreement, Types::ConsentAgreementType, null: true
     field :asset_type, Types::AssetTypeEnum, null: false
     field :asset_url, String, null: true
     field :source_url, String, null: true
