@@ -6,9 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS, GET_DM_TEMPLATE } from '@/graphql/queries/consents';
 import { UPDATE_CONSENT_REQUEST_STATUS } from '@/graphql/mutations/consents';
-import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X } from 'lucide-react';
+import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X, XCircle, Clock, Ban } from 'lucide-react';
 import { getConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
-import { CheckCircle2 as CheckCircleIcon, XCircle, Clock, Ban } from 'lucide-react';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 
 export default function ConsentRequestsPage() {
@@ -62,7 +61,7 @@ export default function ConsentRequestsPage() {
   };
 
   type ConsentRequestForTemplate = {
-    spot?: { spotName: string };
+    consenterDisplayName: string;
     formUrl: string;
   };
 
@@ -104,7 +103,7 @@ ${request.formUrl}
 
     // テンプレートから生成
     let message = template.content;
-    message = message.replace(/\{\{store_name\}\}/g, request.spot?.spotName || '店舗名');
+    message = message.replace(/\{\{consenter_display_name\}\}/g, request?.consenterDisplayName || '店舗名');
     message = message.replace(/\{\{form_url\}\}/g, request.formUrl);
     return message;
   };

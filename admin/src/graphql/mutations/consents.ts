@@ -106,3 +106,36 @@ export const UPDATE_LICENSED_ASSET = gql`
     }
   }
 `;
+
+export const UPDATE_DM_TEMPLATE = gql`
+  mutation UpdateDmTemplate($input: UpdateDmTemplateInput!) {
+    updateDmTemplate(input: $input) {
+      dmTemplate {
+        id
+        name
+        version
+        content
+        isActive
+        createdAt
+      }
+      errors
+    }
+  }
+`;
+
+export const CREATE_DM_TEMPLATE = gql`
+  mutation CreateDmTemplate($input: CreateDmTemplateInput!) {
+    createDmTemplate(input: $input) {
+      dmTemplate {
+        id
+        name
+        version
+        content
+        isActive
+        createdAt
+      }
+      errors
+    }
+  }
+`;
+

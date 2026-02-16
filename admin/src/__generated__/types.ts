@@ -3996,13 +3996,6 @@ export enum __TypeKind {
   NonNull = 'NON_NULL'
 }
 
-export type GetDmTemplateQueryVariables = Exact<{
-  name: Scalars['String']['input'];
-}>;
-
-
-export type GetDmTemplateQuery = { __typename?: 'Query', dmTemplate?: { __typename?: 'DmTemplate', id: string, name: string, version: string, content: string, availableVariables: Array<string> } | null };
-
 export type GetDashboardStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4115,6 +4108,20 @@ export type UpdateLicensedAssetMutationVariables = Exact<{
 
 
 export type UpdateLicensedAssetMutation = { __typename?: 'Mutation', updateLicensedAsset?: { __typename?: 'UpdateLicensedAssetPayload', errors: Array<string>, licensedAsset?: { __typename?: 'LicensedAsset', id: string, usable: boolean, captionNote?: string | null } | null } | null };
+
+export type UpdateDmTemplateMutationVariables = Exact<{
+  input: UpdateDmTemplateInput;
+}>;
+
+
+export type UpdateDmTemplateMutation = { __typename?: 'Mutation', updateDmTemplate?: { __typename?: 'UpdateDmTemplatePayload', errors: Array<string>, dmTemplate?: { __typename?: 'DmTemplate', id: string, name: string, version: string, content: string, isActive: boolean, createdAt: any } | null } | null };
+
+export type CreateDmTemplateMutationVariables = Exact<{
+  input: CreateDmTemplateInput;
+}>;
+
+
+export type CreateDmTemplateMutation = { __typename?: 'Mutation', createDmTemplate?: { __typename?: 'CreateDmTemplatePayload', errors: Array<string>, dmTemplate?: { __typename?: 'DmTemplate', id: string, name: string, version: string, content: string, isActive: boolean, createdAt: any } | null } | null };
 
 export type CreateDirectionCardMutationVariables = Exact<{
   input: CreateDirectionCardInput;
@@ -4529,6 +4536,18 @@ export type GetLicensedAssetsQueryVariables = Exact<{
 
 
 export type GetLicensedAssetsQuery = { __typename?: 'Query', licensedAssets: Array<{ __typename?: 'LicensedAsset', id: string, spotId: number, consentAgreementId?: number | null, assetType: AssetTypeEnum, assetUrl?: string | null, sourceUrl?: string | null, captionNote?: string | null, usable: boolean, createdAt: any, updatedAt: any, imageUrl?: string | null, spot: { __typename?: 'Spot', id: string, spotName: string }, consentAgreement?: { __typename?: 'ConsentAgreement', id: string, signerName: string, photographerName?: string | null, tagStoreRequested: boolean, tagPhotographerRequested: boolean, tagAccountsText?: string | null, agreedAt: any } | null }> };
+
+export type GetDmTemplateQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+
+export type GetDmTemplateQuery = { __typename?: 'Query', dmTemplate?: { __typename?: 'DmTemplate', id: string, name: string, version: string, content: string, availableVariables: Array<string> } | null };
+
+export type GetDmTemplatesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDmTemplatesQuery = { __typename?: 'Query', dmTemplates: Array<{ __typename?: 'DmTemplate', id: string, name: string, version: string, content: string, isActive: boolean, availableVariables: Array<string>, createdAt: any, updatedAt: any }> };
 
 export type GetAreasQueryVariables = Exact<{ [key: string]: never; }>;
 

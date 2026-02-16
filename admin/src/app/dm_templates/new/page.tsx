@@ -5,9 +5,8 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/Button';
+import { TextField } from '@/components/forms/TextField';
 import { CREATE_DM_TEMPLATE } from '@/graphql/mutations/consents';
 
 export default function NewDmTemplatePage() {
@@ -50,30 +49,28 @@ export default function NewDmTemplatePage() {
 
       <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 max-w-3xl">
         <div className="space-y-6">
-          <div>
-            <Label htmlFor="name">テンプレート名</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="例: デフォルト承諾依頼テンプレート"
-              required
-            />
-          </div>
+          <TextField
+            id="name"
+            label="テンプレート名"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="例: デフォルト承諾依頼テンプレート"
+            required
+          />
+
+          <TextField
+            id="version"
+            label="バージョン"
+            value={formData.version}
+            onChange={(e) => setFormData({ ...formData, version: e.target.value })}
+            placeholder="例: v1.0"
+            required
+          />
 
           <div>
-            <Label htmlFor="version">バージョン</Label>
-            <Input
-              id="version"
-              value={formData.version}
-              onChange={(e) => setFormData({ ...formData, version: e.target.value })}
-              placeholder="例: v1.0"
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="content">テンプレート内容</Label>
+            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+              テンプレート内容
+            </label>
             <div className="mb-2 text-sm text-gray-600">
               <p>利用可能なプレースホルダー:</p>
               <ul className="list-disc list-inside ml-2">
@@ -85,7 +82,7 @@ export default function NewDmTemplatePage() {
               id="content"
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              className="w-full p-4 border rounded-lg font-mono text-sm min-h-[300px]"
+              className="admin-form-control admin-form-textarea w-full"
               placeholder="例:&#10;{{store_name}}様&#10;&#10;いつもありがとうございます。&#10;福岡遊び日記（Webメディア / Instagram）での画像掲載について、利用許諾のお願いです。&#10;&#10;📝 承諾フォーム：&#10;{{form_url}}&#10;&#10;よろしくお願いいたします。"
               required
             />
@@ -99,7 +96,9 @@ export default function NewDmTemplatePage() {
               onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               className="rounded"
             />
-            <Label htmlFor="isActive">アクティブにする</Label>
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+              アクティブにする
+            </label>
           </div>
 
           <div className="flex gap-4 pt-4">

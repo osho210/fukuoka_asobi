@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Plus, Edit, Save } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { GET_DM_TEMPLATES } from '@/graphql/queries/consents';
 import { UPDATE_DM_TEMPLATE } from '@/graphql/mutations/consents';
 
@@ -23,7 +22,6 @@ type GetDmTemplatesData = {
 };
 
 export default function DmTemplatesPage() {
-  const router = useRouter();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
 
