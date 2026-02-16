@@ -99,3 +99,15 @@ export const GET_LICENSED_ASSETS = gql`
     }
   }
 `;
+
+export const GET_DM_TEMPLATE = gql`
+  query GetDmTemplate($name: String!) {
+    dmTemplate(name: $name) {
+      id
+      name
+      version
+      content
+      availableVariables
+    }
+  }
+`;

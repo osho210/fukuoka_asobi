@@ -4,24 +4,11 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
+import { GET_CONSENT_REQUESTS, GET_DM_TEMPLATE } from '@/graphql/queries/consents';
 import { UPDATE_CONSENT_REQUEST_STATUS } from '@/graphql/mutations/consents';
 import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X } from 'lucide-react';
 import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
 import { copyToClipboard } from '@/lib/clipboardUtils';
-import { gql } from '@apollo/client';
-
-const GET_DM_TEMPLATE = gql`
-  query GetDmTemplate($name: String!) {
-    dmTemplate(name: $name) {
-      id
-      name
-      version
-      content
-      availableVariables
-    }
-  }
-`;
 
 export default function ConsentRequestsPage() {
   const router = useRouter();
@@ -47,7 +34,7 @@ export default function ConsentRequestsPage() {
     }
   };
 
-  const handleApprove = async (requestId: string) => {
+  const handleApprove = (requestId: string) => async () => {
     if (confirm('この依頼を承諾済みにしますか？')) {
       await updateStatus({
         variables: {
@@ -60,7 +47,7 @@ export default function ConsentRequestsPage() {
     }
   };
 
-  const handleReject = async (requestId: string) => {
+  const handleReject = (requestId: string) => async () => {
     if (confirm('この依頼を拒否しますか？')) {
       await updateStatus({
         variables: {
@@ -180,7 +167,7 @@ ${request.formUrl}
                         <Button
                           size="sm"
                           variant="default"
-                          onClick={() => handleApprove(request.id)}
+                          onClick={handleApprove(request.id)}
                           className="w-full justify-center bg-green-600 hover:bg-green-700"
                         >
                           <Check className="w-4 h-4 mr-1" />
@@ -189,7 +176,7 @@ ${request.formUrl}
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleReject(request.id)}
+                          onClick={handleReject(request.id)}
                           className="w-full justify-center"
                         >
                           <X className="w-4 h-4 mr-1" />
