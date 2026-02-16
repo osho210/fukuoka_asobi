@@ -438,3 +438,335 @@ const fukuokaSpots = spots.filter(spot => spot.district.id === 1);
 ### Q: ワークスペース間で依存関係を共有したい場合は？
 
 **A**: ルートレベルの `package.json` に追加します。特定のワークスペースだけで使用する場合は、そのワークスペースの `package.json` に追加してください。
+
+---
+
+## 💡 重要な実装パターン
+
+### GraphQL Mutation の引数定義
+
+GraphQL の mutation では、input オブジェクトではなく個別の引数として定義してください。
+
+```ruby
+# ✅ DO: 個別の引数として定義
+class CreateConsentAgreement < BaseMutation
+  argument :token, String, required: true
+  argument :signer_name, String, required: true
+  argument :rights_confirmed, Boolean, required: true
+  argument :signer_instagram, String, required: false
+  
+  def resolve(token:, signer_name:, rights_confirmed:, signer_instagram: nil)
+    # 実装
+  end
+end
+
+# ❌ DON'T: input オブジェクトを使用
+class CreateConsentAgreement < BaseMutation
+  argument :input, Types::Input::ConsentAgreementInput, required: true
+  
+  def resolve(input:)
+    # 実装
+  end
+end
+```
+
+### RSpec テストの記述
+
+テストケースは日本語で記述し、全体条件がある場合は describe/context で分割してください。
+
+```ruby
+# ✅ DO: 日本語でcontext/describeを使用
+describe '#expired?' do
+  context '有効期限が過去の場合' do
+    it 'trueを返すこと' do
+      # テスト実装
+    end
+  end
+  
+  context '有効期限が未来の場合' do
+    it 'falseを返すこと' do
+      # テスト実装
+    end
+  end
+end
+
+# ❌ DON'T: 英語のテスト説明
+describe '#expired?' do
+  it 'returns true if expires_at is in the past' do
+    # テスト実装
+  end
+end
+```
+
+### 共通ユーティリティ関数の配置
+
+複数のコンポーネントで使用する関数は、`src/lib/` 配下に共通ユーティリティとして切り出してください。
+
+```typescript
+// ✅ DO: 共通関数として切り出し
+// src/lib/consentUtils.ts
+export const renderConsentRequestStatusIcon = (status: string) => {
+  // 実装
+};
+
+// src/app/consent_requests/page.tsx
+import { renderConsentRequestStatusIcon } from '@/lib/consentUtils';
+
+// ❌ DON'T: コンポーネント内で直接定義
+export default function ConsentRequestsPage() {
+  const getStatusIcon = (status: string) => {
+    // 実装
+  };
+}
+```
+
+### 数値型の扱い
+
+GraphQL の ID 型は文字列として扱われるため、parseInt は不要です。
+
+```typescript
+// ✅ DO: そのまま渡す
+await createConsentRequest({
+  variables: {
+    spotId: formData.spotId,  // すでに適切な型
+  },
+});
+
+// ❌ DON'T: 不要な parseInt
+await createConsentRequest({
+  variables: {
+    spotId: parseInt(formData.spotId),
+  },
+});
+```
+
+### プレースホルダーの具体性
+
+ユーザーが入力すべき内容を具体的に示すプレースホルダーを使用してください。
+
+```typescript
+// ✅ DO: 具体的な例を示す
+placeholder={formData.consenterType === 'INSTAGRAM_USER' 
+  ? '例: @fukuoka_cafe_lover' 
+  : '例: 店長 田中'}
+
+// ❌ DON'T: 一般的すぎる例
+placeholder="例: @username"
+```
+
+---
+
+## 📋 機能追加時のチェックリスト
+
+新機能を追加する際は、以下を確認してください：
+
+- [ ] GraphQL mutation は個別引数で定義されているか
+- [ ] RSpec テストは日本語で記述されているか
+- [ ] 共通関数は適切に切り出されているか
+- [ ] プレースホルダーは具体的で分かりやすいか
+- [ ] 型の自動生成を活用しているか（手動定義していないか）
+
+---
+
+## 📝 将来の改善項目（別 Issue として管理）
+
+以下の項目は、本プロジェクトの継続的改善として別 Issue で管理します：
+
+1. **コンポーネントのエクスポート統一**
+   - 各コンポーネントを個別 import するのではなく、統一されたエクスポートファイルから import する
+
+2. **成功/エラー通知のデザインパターン統一**
+   - 成功時: トースト通知
+   - エラー時: モーダル（ダイアログ）
+   - 既存実装の調査とドキュメント化が必要
+
+3. **DM テンプレートのバージョン管理**
+   - テンプレート文をデータベースで管理
+   - バージョン管理機能の実装
+
+---
+
+## 🔒 コードレビュー時の共通パターン（重要）
+
+### GraphQL Mutation の引数定義
+
+**DO**: Input オブジェクトを使用する
+
+```ruby
+# backend/app/graphql/mutations/create_example.rb
+argument :input, Types::Input::ExampleInput, required: true
+
+def resolve(input:)
+  # 実装
+end
+```
+
+**DON'T**: 個別引数を列挙しない
+
+```ruby
+# ❌ 避けるべき
+argument :field1, String, required: true
+argument :field2, String, required: true
+# ...
+```
+
+### RSpec テストの記述パターン
+
+**DO**: 日本語で記述し、context/describe で条件を構造化する
+
+```ruby
+describe '#expired?' do
+  context '有効期限が過去の場合' do
+    it 'trueを返すこと' do
+      # テスト実装
+    end
+  end
+
+  context '有効期限が未来の場合' do
+    it 'falseを返すこと' do
+      # テスト実装
+    end
+  end
+end
+```
+
+### 共通ユーティリティ関数の配置
+
+**DO**: 機能ごとに lib ディレクトリに配置する
+
+```
+admin/src/lib/
+├── clipboardUtils.ts    # クリップボード操作
+├── consentUtils.ts      # 承諾管理関連
+└── formatUtils.ts       # フォーマット関数
+```
+
+**使用例**:
+```typescript
+import { copyToClipboard } from '@/lib/clipboardUtils';
+
+const handleCopy = async () => {
+  const success = await copyToClipboard(text);
+  if (success) {
+    // 成功時の処理
+  }
+};
+```
+
+### TypeScript の型定義
+
+**DO**: any 型を使用せず、明示的に型定義する
+
+```typescript
+// GraphQL レスポンスの型定義
+interface ConsentRequest {
+  id: string;
+  spotId: string;
+  consentAgreement: ConsentAgreement | null;
+}
+
+const { data } = useQuery<GetConsentRequestsData>(GET_CONSENT_REQUESTS);
+```
+
+**DON'T**: any 型を使用しない（禁止）
+
+```typescript
+// ❌ 絶対に避けるべき
+const selectedConsent = data?.items?.find((req: any) => req.id === id);
+```
+
+### GraphQL 定義の配置
+
+**DO**: ページから分離し、graphql ディレクトリに配置する
+
+```
+admin/src/graphql/
+├── queries/
+│   └── consents.ts
+└── mutations/
+    └── consents.ts
+```
+
+**DON'T**: ページファイル内でクエリを直接定義しない
+
+```typescript
+// ❌ 避けるべき
+// page.tsx 内で直接定義
+const GET_DATA = gql`
+  query GetData { ... }
+`;
+```
+
+### HTTP レスポンスの成功判定
+
+**DO**: レスポンスオブジェクトの存在で判定する
+
+```typescript
+const [mutation] = useMutation(MUTATION, {
+  onCompleted: (data) => {
+    if (data?.createItem?.item) {
+      // 成功時の処理
+    } else if (data?.createItem?.errors) {
+      // エラー時の処理
+    }
+  },
+});
+```
+
+**DON'T**: エラー配列の長さだけで判定しない
+
+```typescript
+// ❌ 避けるべき
+if (data.createItem.errors.length === 0) {
+  // 成功
+}
+```
+
+### アイコンのインポート命名
+
+**DO**: 明確でわかりやすい名前を使用する
+
+```typescript
+import { CheckCircle2 as CheckCircleIcon } from 'lucide-react';
+```
+
+**DON'T**: 数値が含まれる名前をそのまま使わない
+
+```typescript
+// ❌ 避けるべき
+import { CheckCircle2 } from 'lucide-react';
+```
+
+## 📋 画像利用承諾管理機能のスコープ
+
+### MVP スコープ（実装済み）
+
+**承諾フローは完全に DM ベース** - 公開 Web フォームは使用しません
+
+1. **管理画面での承諾依頼作成**
+   - 店舗選択
+   - 承諾者情報入力
+   - DM テンプレート自動生成
+
+2. **DM での承諾取得**
+   - 管理画面から DM 文をコピー
+   - Instagram DM で手動送信
+   - DM 上でのやり取りで承諾を取得
+
+3. **管理画面での承諾記録**
+   - 承諾/拒否ボタンでステータス更新
+   - 承諾内容の証跡管理
+   - 承諾済み画像の登録
+
+### スコープ外（実装していない）
+
+- ❌ 公開 Web フォーム (`/consent/[token]`)
+- ❌ フォーム経由の自動承諾記録
+- ❌ トークンベースの承諾 URL 発行
+
+### 実装の背景
+
+要件の見直しにより、全ての承諾取得プロセスを DM ベースで運用することになりました。
+これにより、より柔軟で人間的なコミュニケーションを通じた承諾取得が可能になります。
+
+

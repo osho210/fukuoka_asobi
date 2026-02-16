@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_16_125100) do
   create_table "accessibility_options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -123,6 +123,44 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
     t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
+  create_table "consent_agreements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "consent_request_id", null: false
+    t.datetime "agreed_at", null: false
+    t.string "agreement_version", null: false
+    t.text "agreement_snapshot_json", null: false
+    t.string "signer_name", null: false
+    t.string "signer_instagram"
+    t.string "photographer_name"
+    t.boolean "tag_store_requested", default: false
+    t.boolean "tag_photographer_requested", default: false
+    t.string "tag_accounts_text"
+    t.boolean "rights_confirmed", default: true, null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreed_at"], name: "index_consent_agreements_on_agreed_at"
+    t.index ["consent_request_id"], name: "index_consent_agreements_on_consent_request_id"
+  end
+
+  create_table "consent_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.string "consenter_type", null: false
+    t.string "consenter_display_name", null: false
+    t.string "contact_hint"
+    t.string "status", default: "DRAFT", null: false
+    t.string "token", null: false
+    t.datetime "expires_at"
+    t.text "message_template"
+    t.integer "created_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "instagram_post_url"
+    t.index ["spot_id"], name: "index_consent_requests_on_spot_id"
+    t.index ["status"], name: "index_consent_requests_on_status"
+    t.index ["token"], name: "index_consent_requests_on_token", unique: true
+  end
+
   create_table "contacts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "subject", null: false
@@ -150,6 +188,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
     t.string "slug"
     t.index ["district_name"], name: "index_districts_on_district_name", unique: true
     t.index ["slug"], name: "index_districts_on_slug", unique: true
+  end
+
+  create_table "dm_templates", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "version", default: "v1.0", null: false
+    t.text "content", null: false
+    t.text "description"
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_active"], name: "index_dm_templates_on_is_active"
+    t.index ["name", "version"], name: "index_dm_templates_on_name_and_version", unique: true
   end
 
   create_table "event_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -237,6 +287,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_layout_buckets_on_key", unique: true
+  end
+
+  create_table "licensed_assets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "spot_id", null: false
+    t.bigint "consent_agreement_id"
+    t.string "asset_type", null: false
+    t.string "asset_url"
+    t.string "source_url"
+    t.text "caption_note"
+    t.boolean "usable", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["consent_agreement_id"], name: "index_licensed_assets_on_consent_agreement_id"
+    t.index ["spot_id"], name: "index_licensed_assets_on_spot_id"
+    t.index ["usable"], name: "index_licensed_assets_on_usable"
   end
 
   create_table "magazines", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -687,9 +752,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_14_020002) do
   add_foreign_key "bucket_list_item_belongings", "bucket_list_items", on_delete: :cascade
   add_foreign_key "bucket_list_item_references", "bucket_list_items", on_delete: :cascade
   add_foreign_key "bucket_list_items", "layout_buckets"
+  add_foreign_key "consent_agreements", "consent_requests"
+  add_foreign_key "consent_requests", "spots"
   add_foreign_key "events", "event_categories"
   add_foreign_key "favorites", "play_plans", on_delete: :cascade
   add_foreign_key "favorites", "users", on_delete: :cascade
+  add_foreign_key "licensed_assets", "consent_agreements"
+  add_foreign_key "licensed_assets", "spots"
   add_foreign_key "news", "categories"
   add_foreign_key "news", "users", column: "author_id"
   add_foreign_key "opening_hours", "spots"
