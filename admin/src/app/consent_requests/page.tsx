@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS, GET_DM_TEMPLATE } from '@/graphql/queries/consents';
 import { UPDATE_CONSENT_REQUEST_STATUS } from '@/graphql/mutations/consents';
 import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X } from 'lucide-react';
-import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
+import { getConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
+import { CheckCircle2 as CheckCircleIcon, XCircle, Clock, Ban } from 'lucide-react';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 
 export default function ConsentRequestsPage() {
@@ -60,7 +61,29 @@ export default function ConsentRequestsPage() {
     }
   };
 
-  const generateDMTemplate = (request: any) => {
+  type ConsentRequestForTemplate = {
+    spot?: { spotName: string };
+    formUrl: string;
+  };
+
+  // ステータスアイコンをレンダリングするヘルパー関数
+  const renderStatusIcon = (status: string) => {
+    const iconType = getConsentRequestStatusIcon(status);
+    switch (iconType) {
+      case 'approved':
+        return <CheckCircleIcon className="w-5 h-5 text-green-600" />;
+      case 'rejected':
+        return <XCircle className="w-5 h-5 text-red-600" />;
+      case 'revoked':
+        return <Ban className="w-5 h-5 text-gray-600" />;
+      case 'sent':
+        return <Clock className="w-5 h-5 text-blue-600" />;
+      default:
+        return <Clock className="w-5 h-5 text-gray-400" />;
+    }
+  };
+
+  const generateDMTemplate = (request: ConsentRequestForTemplate): string => {
     const template = templateData?.dmTemplate;
     if (!template) {
       // フォールバック: テンプレートがない場合は従来の方法
@@ -93,10 +116,18 @@ ${request.formUrl}
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">画像利用承諾管理</h1>
-        <Button onClick={() => router.push('/consent_requests/new')}>
-          <Plus className="w-4 h-4 mr-2" />
-          新規依頼作成
-        </Button>
+        <div className="flex gap-4">
+          <Button variant="outline" onClick={() => router.push('/dm_templates')}>
+            DMテンプレート管理
+          </Button>
+          <Button variant="outline" onClick={() => router.push('/licensed_assets')}>
+            承諾済み画像一覧
+          </Button>
+          <Button onClick={() => router.push('/consent_requests/new')}>
+            <Plus className="w-4 h-4 mr-2" />
+            新規依頼作成
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-x-auto">
@@ -131,7 +162,7 @@ ${request.formUrl}
               <tr key={request.id} className="hover:bg-gray-50">
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
-                    {renderConsentRequestStatusIcon(request.status)}
+                    {renderStatusIcon(request.status)}
                     <span className="text-sm font-medium">
                       {getConsentRequestStatusLabel(request.status)}
                     </span>

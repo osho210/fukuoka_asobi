@@ -111,3 +111,19 @@ export const GET_DM_TEMPLATE = gql`
     }
   }
 `;
+
+export const GET_DM_TEMPLATES = gql`
+  query GetDmTemplates {
+    dmTemplates {
+      id
+      name
+      version
+      content
+      isActive
+      availableVariables
+      createdAt
+      updatedAt
+    }
+  }
+`;
+

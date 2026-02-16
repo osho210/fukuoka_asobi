@@ -12,36 +12,37 @@ import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
 import { ArrowLeft, Save, Upload } from 'lucide-react';
 
 // GraphQL レスポンスの型定義
-interface ConsentAgreement {
+type ConsentAgreement = {
   id: number;
   signerName: string;
   agreedAt: string;
-}
+};
 
-interface Spot {
+type Spot = {
   id: number;
   spotName: string;
-}
+};
 
-interface ConsentRequest {
+type ConsentRequest = {
   id: number;
   spotId: string;
   consenterDisplayName: string;
   consentAgreement: ConsentAgreement | null;
   spot: Spot;
-}
+};
 
-interface GetConsentRequestsData {
+type GetConsentRequestsData = {
   consentRequests: ConsentRequest[];
-}
-interface CreateLicensedAssetData {
+};
+
+type CreateLicensedAssetData = {
   createLicensedAsset: {
     licensedAsset: {
       id: string;
     } | null;
     errors: string[];
   };
-}
+};
 
 export default function NewLicensedAssetPage() {
   const router = useRouter();

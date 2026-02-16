@@ -50,7 +50,12 @@ export default function NewConsentRequestPage() {
     });
   };
 
-  const spotOptions = spotsData?.spots?.map((spot: any) => ({
+  type SpotOption = {
+    id: string;
+    spotName: string;
+  };
+
+  const spotOptions = spotsData?.spots?.map((spot: SpotOption) => ({
     value: spot.id,
     label: spot.spotName,
   })) || [];

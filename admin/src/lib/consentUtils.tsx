@@ -1,23 +1,20 @@
-import React from 'react';
-import { CheckCircle2, XCircle, Clock, Ban } from 'lucide-react';
-
 /**
- * 承諾依頼のステータスに応じたアイコンコンポーネントを返す
+ * 承諾依頼のステータスに応じたアイコン種別を返す
  * @param status - 承諾依頼のステータス
- * @returns アイコンコンポーネント
+ * @returns アイコン種別を示す文字列
  */
-export const renderConsentRequestStatusIcon = (status: string) => {
+export const getConsentRequestStatusIcon = (status: string): 'approved' | 'rejected' | 'revoked' | 'sent' | 'default' => {
   switch (status) {
     case 'APPROVED':
-      return <CheckCircle2 className="w-5 h-5 text-green-600" />;
+      return 'approved';
     case 'REJECTED':
-      return <XCircle className="w-5 h-5 text-red-600" />;
+      return 'rejected';
     case 'REVOKED':
-      return <Ban className="w-5 h-5 text-gray-600" />;
+      return 'revoked';
     case 'SENT':
-      return <Clock className="w-5 h-5 text-blue-600" />;
+      return 'sent';
     default:
-      return <Clock className="w-5 h-5 text-gray-400" />;
+      return 'default';
   }
 };
 
