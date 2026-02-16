@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { GET_CONSENT_REQUESTS } from '@/graphql/queries/consents';
-import { Plus, ExternalLink, Copy, CheckCircle2 as CheckCircleIcon } from 'lucide-react';
+import { UPDATE_CONSENT_REQUEST_STATUS } from '@/graphql/mutations/consents';
+import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X } from 'lucide-react';
 import { renderConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 import { gql } from '@apollo/client';
@@ -30,11 +31,45 @@ export default function ConsentRequestsPage() {
     variables: { name: '画像利用承諾依頼' },
   });
 
+  const [updateStatus] = useMutation(UPDATE_CONSENT_REQUEST_STATUS, {
+    onCompleted: (data) => {
+      if (data?.updateConsentRequestStatus?.consentRequest) {
+        refetch();
+      }
+    },
+  });
+
   const handleCopyToClipboard = async (text: string, token: string) => {
     const success = await copyToClipboard(text);
     if (success) {
       setCopiedToken(token);
       setTimeout(() => setCopiedToken(null), 2000);
+    }
+  };
+
+  const handleApprove = async (requestId: string) => {
+    if (confirm('この依頼を承諾済みにしますか？')) {
+      await updateStatus({
+        variables: {
+          input: {
+            id: requestId,
+            status: 'APPROVED',
+          },
+        },
+      });
+    }
+  };
+
+  const handleReject = async (requestId: string) => {
+    if (confirm('この依頼を拒否しますか？')) {
+      await updateStatus({
+        variables: {
+          input: {
+            id: requestId,
+            status: 'REJECTED',
+          },
+        },
+      });
     }
   };
 
@@ -140,24 +175,28 @@ ${request.formUrl}
                 </td>
                 <td className="px-4 py-4 text-sm font-medium">
                   <div className="flex flex-col gap-1">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleCopyToClipboard(request.formUrl, request.token)}
-                      className="w-full justify-center"
-                    >
-                      {copiedToken === request.token ? (
-                        <>
-                          <CheckCircleIcon className="w-4 h-4 mr-1" />
-                          コピー済み
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 mr-1" />
-                          URL
-                        </>
-                      )}
-                    </Button>
+                    {request.status === 'SENT' || request.status === 'DRAFT' ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="default"
+                          onClick={() => handleApprove(request.id)}
+                          className="w-full justify-center bg-green-600 hover:bg-green-700"
+                        >
+                          <Check className="w-4 h-4 mr-1" />
+                          承諾
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleReject(request.id)}
+                          className="w-full justify-center"
+                        >
+                          <X className="w-4 h-4 mr-1" />
+                          拒否
+                        </Button>
+                      </>
+                    ) : null}
                     <Button
                       size="sm"
                       variant="outline"
@@ -175,14 +214,6 @@ ${request.formUrl}
                           DM文
                         </>
                       )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => window.open(request.formUrl, '_blank')}
-                      className="w-full justify-center"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      開く
                     </Button>
                   </div>
                 </td>
