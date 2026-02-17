@@ -341,7 +341,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100px;
+  height: 300px;
 }
 
 .spot-card:hover {
@@ -387,7 +387,7 @@
 }
 
 .spot-card-content {
-  padding: 16px;
+  padding: 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -403,7 +403,6 @@
 .spot-card-catchphrase {
   font-size: 14px;
   color: #555;
-  margin-bottom: 16px;
   line-height: 1.5;
   flex-grow: 1;
 }
