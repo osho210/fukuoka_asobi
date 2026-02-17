@@ -56,6 +56,7 @@
   font-size: 16px;
   color: #333;
   transition: border-color 0.3s;
+  background: #fff;
 }
 
 .contact-form-input:focus,
@@ -77,6 +78,7 @@
 
 .contact-form-checkbox {
   margin-right: 10px;
+  background: #fff;
 }
 
 .contact-form-checkbox-label {

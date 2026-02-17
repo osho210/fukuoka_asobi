@@ -81,9 +81,9 @@ const HamburgerMenu = () => {
                                     <Link href='/login'>ログイン</Link>
                                 </li>
                             )}
-                            <li className='modal-content__link'>
+                            {/* <li className='modal-content__link'>
                                 <Link href='/search'>遊びを計画する</Link>
-                            </li>
+                            </li> */}
                             <li className='modal-content__link'>
                                 <Link href='/contact'>お問い合わせ</Link>
                             </li>
