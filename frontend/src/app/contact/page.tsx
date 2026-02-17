@@ -6,7 +6,8 @@ export default function ContactPage() {
         <>
             <div className="contact-page">
                 <h1 className="contact-title">お問い合わせ</h1>
-                <p className="contact-description">
+                {/* TODO: 一旦はインスタグラムDMにて対応、将来的にはSESの導入を検討 */}
+                {/* <p className="contact-description">
                     福岡遊び日記に関するご質問、ご意見、お問い合わせは以下のフォームからお願いいたします。
                     通常、営業日3日以内にご返信いたします。
                 </p>
@@ -56,10 +57,10 @@ export default function ContactPage() {
                     <div className="contact-form-actions">
                         <button type="submit" className="contact-form-submit">送信する</button>
                     </div>
-                </form>
+                </form> */}
 
                 <div className="contact-info">
-                    <h2 className="contact-info-title">その他のお問い合わせ方法</h2>
+                    {/* <h2 className="contact-info-title">その他のお問い合わせ方法</h2> */}
                     <div className="contact-info-item">
                         <h3 className="contact-info-subtitle">メールでのお問い合わせ</h3>
                         <p className="contact-info-text">fukuoka.asobi.nikki@gmail.com</p>
