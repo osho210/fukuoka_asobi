@@ -1,15 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { GET_LICENSED_ASSETS } from '@/graphql/queries/consents';
 import { Plus, ExternalLink, CheckCircle2, XCircle } from 'lucide-react';
+import { useQuery } from '@apollo/client';
+
+type LicensedAsset = {
+  id: string;
+  imageUrl?: string;
+  captionNote?: string;
+  sourceUrl?: string;
+  usable: boolean;
+  spot?: {
+    spotName: string;
+  };
+  consentAgreement?: {
+    signerName: string;
+    photographerName?: string;
+    tagStoreRequested?: boolean;
+    tagPhotographerRequested?: boolean;
+    tagAccountsText?: string;
+  };
+};
 
 export default function LicensedAssetsPage() {
   const router = useRouter();
-  const { data, loading, error, refetch } = useQuery(GET_LICENSED_ASSETS);
+  const { data, loading, error } = useQuery(GET_LICENSED_ASSETS);
 
   if (loading) return <div className="p-8">読み込み中...</div>;
   if (error) return <div className="p-8 text-red-600">エラー: {error.message}</div>;
@@ -25,14 +43,15 @@ export default function LicensedAssetsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {data?.licensedAssets?.map((asset: any) => (
+        {data?.licensedAssets?.map((asset: LicensedAsset) => (
           <div key={asset.id} className="bg-white rounded-lg shadow overflow-hidden">
             <div className="aspect-square bg-gray-100 relative">
               {asset.imageUrl ? (
-                <img
+                <Image
                   src={asset.imageUrl}
                   alt={asset.captionNote || '承諾済み画像'}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">

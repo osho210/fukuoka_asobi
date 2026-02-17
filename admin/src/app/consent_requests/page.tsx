@@ -10,6 +10,34 @@ import { Plus, Copy, CheckCircle2 as CheckCircleIcon, Check, X, XCircle, Clock, 
 import { getConsentRequestStatusIcon, getConsentRequestStatusLabel } from '@/lib/consentUtils';
 import { copyToClipboard } from '@/lib/clipboardUtils';
 
+type ConsentRequest = {
+  id: string;
+  status: string;
+  token: string;
+  consenterDisplayName: string;
+  consenterType: string;
+  createdAt: string;
+  spot?: {
+    spotName: string;
+  };
+  consentAgreement?: {
+    signerName: string;
+    agreedAt?: string;
+  };
+};
+
+type ConsentRequestForTemplate = {
+  consenterDisplayName: string;
+  formUrl?: string;
+  spot?: {
+    spotName: string;
+  };
+};
+
+type DMTemplate = {
+  content: string;
+};
+
 export default function ConsentRequestsPage() {
   const router = useRouter();
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
@@ -60,11 +88,6 @@ export default function ConsentRequestsPage() {
     }
   };
 
-  type ConsentRequestForTemplate = {
-    consenterDisplayName: string;
-    formUrl: string;
-  };
-
   // ステータスアイコンをレンダリングするヘルパー関数
   const renderStatusIcon = (status: string) => {
     const iconType = getConsentRequestStatusIcon(status);
@@ -83,7 +106,7 @@ export default function ConsentRequestsPage() {
   };
 
   const generateDMTemplate = (request: ConsentRequestForTemplate): string => {
-    const template = templateData?.dmTemplate;
+    const template = templateData?.dmTemplate as DMTemplate | undefined;
     if (!template) {
       // フォールバック: テンプレートがない場合は従来の方法
       const storeName = request.spot?.spotName || '店舗名';
@@ -95,7 +118,7 @@ export default function ConsentRequestsPage() {
 以下のフォームから、投稿・ストーリーズへの掲載許諾をご確認いただけますと幸いです。
 
 📝 承諾フォーム：
-${request.formUrl}
+${request.formUrl || '(未設定)'}
 
 ご不明点がございましたら、お気軽にお問い合わせください。
 よろしくお願いいたします。`;
@@ -104,7 +127,7 @@ ${request.formUrl}
     // テンプレートから生成
     let message = template.content;
     message = message.replace(/\{\{consenter_display_name\}\}/g, request?.consenterDisplayName || '店舗名');
-    message = message.replace(/\{\{form_url\}\}/g, request.formUrl);
+    message = message.replace(/\{\{form_url\}\}/g, request.formUrl || '(未設定)');
     return message;
   };
 
@@ -157,7 +180,7 @@ ${request.formUrl}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data?.consentRequests?.map((request: any) => (
+            {data?.consentRequests?.map((request: ConsentRequest) => (
               <tr key={request.id} className="hover:bg-gray-50">
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
@@ -217,7 +240,7 @@ ${request.formUrl}
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleCopyToClipboard(generateDMTemplate(request), `dm-${request.token}`)}
+                      onClick={() => handleCopyToClipboard(generateDMTemplate(request as ConsentRequestForTemplate), `dm-${request.token}`)}
                       className="w-full justify-center"
                     >
                       {copiedToken === `dm-${request.token}` ? (
