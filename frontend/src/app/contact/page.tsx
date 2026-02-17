@@ -103,7 +103,7 @@ export default function ContactPage() {
                     privacyAccepted: formData.privacyAccepted,
                 },
             });
-        } catch (err) {
+        } catch {
             // エラーは onError で処理される
         }
     };
