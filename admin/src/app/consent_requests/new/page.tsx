@@ -13,7 +13,7 @@ import { ArrowLeft, Save } from 'lucide-react';
 export default function NewConsentRequestPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    spotId: undefined,
+    spotId: "",
     consenterType: 'STORE',
     consenterDisplayName: '',
     contactHint: '',
