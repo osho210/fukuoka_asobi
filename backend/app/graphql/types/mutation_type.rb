@@ -124,5 +124,8 @@ module Types
     field :create_consent_agreement, mutation: Mutations::CreateConsentAgreement
     field :create_licensed_asset, mutation: Mutations::CreateLicensedAsset
     field :update_licensed_asset, mutation: Mutations::UpdateLicensedAsset
+
+    # お問い合わせ関連
+    field :send_contact_message, mutation: Mutations::SendContactMessage
   end
 end

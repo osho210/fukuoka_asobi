@@ -1,0 +1,24 @@
+# お問い合わせメール送信
+
+mutation SendContactMessage(
+  $name: String!
+  $email: String!
+  $subject: String!
+  $category: String!
+  $message: String!
+  $privacyAccepted: Boolean!
+) {
+  sendContactMessage(
+    input: {
+      name: $name
+      email: $email
+      subject: $subject
+      category: $category
+      message: $message
+      privacyAccepted: $privacyAccepted
+    }
+  ) {
+    success
+    errors
+  }
+}

@@ -255,6 +255,82 @@ CHROMATIC_PROJECT_TOKEN_ADMIN=<your-token> npm run chromatic:admin
 
 詳しくは [GraphQL Types Usage Guide](./docs/GRAPHQL_TYPES_GUIDE.md) を参照してください。
 
+## ⚙️ 環境変数設定
+
+### バックエンド（Rails）
+
+#### メール送信設定
+
+お問い合わせフォームからのメール送信機能で使用します。詳細は [docs/contact_mail_design.md](./docs/contact_mail_design.md) を参照してください。
+
+**必須の環境変数:**
+
+```bash
+# メール送信元アドレス
+DEFAULT_FROM_EMAIL=noreply@fukuoka-asobi.com
+
+# お問い合わせ受信先（管理者メールアドレス）
+CONTACT_RECEIVER_EMAIL=fukuoka.asobi.nikki@gmail.com
+```
+
+**オプションの環境変数:**
+
+```bash
+# 自動返信メール有効化（デフォルト: true）
+CONTACT_AUTO_REPLY_ENABLED=true
+```
+
+**本番環境のSMTP設定:**
+
+```bash
+# Gmail SMTP（MVP・低コスト運用）
+SMTP_ADDRESS=smtp.gmail.com
+SMTP_PORT=587
+SMTP_DOMAIN=fukuoka-asobi.com
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password  # Googleアプリパスワード
+SMTP_AUTHENTICATION=plain
+SMTP_ENABLE_STARTTLS_AUTO=true
+
+# または AWS SES（将来推奨・スケーラブル）
+# SMTP_ADDRESS=email-smtp.ap-northeast-1.amazonaws.com
+# SMTP_USERNAME=your-ses-smtp-username
+# SMTP_PASSWORD=your-ses-smtp-password
+```
+
+**開発環境:**
+- 開発環境では `letter_opener_web` を使用してメールをブラウザで確認できます
+- `http://localhost:3000/letter_opener` でメールプレビュー
+
+#### その他の環境変数
+
+```bash
+# アプリケーション設定
+APP_HOST=fukuoka-asobi.com
+
+# データベース設定
+DATABASE_URL=mysql2://user:password@localhost/fukuoka_asobi_production
+
+# ストレージ設定（本番環境）
+ACTIVE_STORAGE_SERVICE=cloudflare_r2
+```
+
+### フロントエンド（Next.js）
+
+```bash
+# バックエンド API の URL
+NEXT_PUBLIC_BACKEND_URL=https://api.fukuoka-asobi.com
+
+# GraphQL エンドポイント
+NEXT_PUBLIC_GRAPHQL_ENDPOINT=/graphql
+
+# Google OAuth クライアント ID
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id
+
+# 環境設定
+NODE_ENV=production
+```
+
 ### メリット
 
 - ✅ **バージョンの統一**: 共通ライブラリのバージョンが一元管理され、不整合がない

@@ -20,6 +20,36 @@
   color: #555;
 }
 
+/* 成功メッセージ */
+.contact-success-message {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* エラーメッセージ */
+.contact-error-messages {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.contact-error-message {
+  margin-bottom: 5px;
+}
+
+.contact-error-message:last-child {
+  margin-bottom: 0;
+}
+
 .contact-form {
   background-color: #f9f9f9;
   border-radius: 10px;
@@ -106,8 +136,13 @@
   transition: background-color 0.3s;
 }
 
-.contact-form-submit:hover {
+.contact-form-submit:hover:not(:disabled) {
   background-color: #b85a43;
+}
+
+.contact-form-submit:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .contact-info {
