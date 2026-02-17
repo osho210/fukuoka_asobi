@@ -856,19 +856,22 @@ export default function ModelDetailPage() {
                   // 営業時間を変換して更新
                   if (place.regularOpeningHours?.periods) {
                     const dayMapping: { [key: number]: string } = { 0: '日', 1: '月', 2: '火', 3: '水', 4: '木', 5: '金', 6: '土' };
-                    const formattedHours = place.regularOpeningHours.periods.map(period => {
-                      const formatTime = (time: { hour: number; minute: number; }) => {
-                        const hour = String(time.hour).padStart(2, '0');
-                        const minute = String(time.minute).padStart(2, '0');
-                        return `${hour}:${minute}`;
-                      };
-                      return {
-                        dayOfWeek: dayMapping[period.open.day],
-                        openTime: formatTime(period.open),
-                        closeTime: formatTime(period.close),
-                        isClosedDay: false,
-                      };
-                    });
+                    const formattedHours = place.regularOpeningHours.periods
+                      .filter(period => period.open && period.close) // null/undefined をフィルタリング
+                      .map(period => {
+                        const formatTime = (time: { hour: number; minute: number; }) => {
+                          const hour = String(time.hour).padStart(2, '0');
+                          const minute = String(time.minute).padStart(2, '0');
+                          return `${hour}:${minute}`;
+                        };
+                        // filter済みなので、period.open と period.close は確実に存在
+                        return {
+                          dayOfWeek: dayMapping[period.open!.day],
+                          openTime: formatTime(period.open!),
+                          closeTime: formatTime(period.close!),
+                          isClosedDay: false,
+                        };
+                      });
                     updateField('openingHours', formattedHours);
                   } else {
                     // データがない場合は空にする

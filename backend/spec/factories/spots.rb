@@ -17,6 +17,7 @@ FactoryBot.define do
     min_people { 1 }
     is_rainy_ok { true }
     is_public { true }
+    is_indexable { true }
     theme { "グルメ" }
     image_url { "https://example.com/image.jpg" }
     spot_type { "STORE" }

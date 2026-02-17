@@ -113,5 +113,16 @@ module Types
     field :create_bucket_list_item, mutation: Mutations::CreateBucketListItem
     field :update_bucket_list_item, mutation: Mutations::UpdateBucketListItem
     field :delete_bucket_list_item, mutation: Mutations::DeleteBucketListItem
+
+    # DM テンプレート関連
+    field :create_dm_template, mutation: Mutations::CreateDmTemplate
+    field :update_dm_template, mutation: Mutations::UpdateDmTemplate
+
+    # 画像利用承諾関連
+    field :create_consent_request, mutation: Mutations::CreateConsentRequest
+    field :update_consent_request_status, mutation: Mutations::UpdateConsentRequestStatus
+    field :create_consent_agreement, mutation: Mutations::CreateConsentAgreement
+    field :create_licensed_asset, mutation: Mutations::CreateLicensedAsset
+    field :update_licensed_asset, mutation: Mutations::UpdateLicensedAsset
   end
 end

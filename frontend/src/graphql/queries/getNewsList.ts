@@ -11,6 +11,7 @@ export const GET_NEWS_LIST = gql`
       body
       publishedAt
       status
+      isIndexable
       imageUrl
       category {
         id

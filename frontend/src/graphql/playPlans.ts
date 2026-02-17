@@ -20,6 +20,7 @@ export const GET_PLAY_PLANS = gql`
       favoriteCount
       isFavorite
       isRecommended
+      isPublic
       status
       leadText
       createdAt
@@ -71,6 +72,7 @@ export const GET_PLAY_PLAN = gql`
       favoriteCount
       isFavorite
       isRecommended
+      isPublic
       status
       startTime
       endTime

@@ -26,6 +26,10 @@ class Spot < ApplicationRecord
   has_many :spot_accessibility_options, dependent: :destroy
   has_many :accessibility_options, through: :spot_accessibility_options
 
+  # 画像利用承諾関連の関連付け
+  has_many :consent_requests, dependent: :destroy
+  has_many :licensed_assets, dependent: :destroy
+
   validates :spot_name, presence: true
 
   # 予算感のバリデーション

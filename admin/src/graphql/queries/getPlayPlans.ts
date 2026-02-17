@@ -35,6 +35,8 @@ export const GET_PLAY_PLANS = gql`
       reviewCount
       favoriteCount
       isFavorite
+      isRecommended
+      isPublic
       status
       startTime
       endTime

@@ -27,6 +27,10 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
                 <Link href="/" className="admin-sidebar-nav-link">ダッシュボード</Link>
               </li>
               <li className="admin-sidebar-nav-item">
+                <Link href="/seo" className="admin-sidebar-nav-link">SEO インデックス管理
+                </Link>
+              </li>
+              <li className="admin-sidebar-nav-item">
                 <Link href="/spots" className="admin-sidebar-nav-link">スポット</Link>
               </li>
               <li className="admin-sidebar-nav-item">
@@ -79,6 +83,9 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
               </li>
               <li className="admin-sidebar-nav-item">
                 <Link href="/bucket_list_items" className="admin-sidebar-nav-link">福岡でやりたいこと</Link>
+              </li>
+              <li className="admin-sidebar-nav-item">
+                <Link href="/consent_requests" className="admin-sidebar-nav-link">画像利用承諾管理</Link>
               </li>
             </ul>
           </nav>

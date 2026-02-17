@@ -298,6 +298,7 @@ export const modelConfigs: Record<string, ModelConfig> = {
       { name: 'reviewCount', type: 'number', required: false },
       { name: 'favoriteCount', type: 'number', required: false },
       { name: 'plannerDescription', type: 'textarea', required: false },
+      { name: 'isPublic', type: 'boolean', required: false },
       { name: 'status', type: 'select', required: true, enumKey: 'StatusEnum' },
       { name: 'publishedAt', type: 'datetime', required: false },
       { name: 'startDatetime', type: 'datetime', required: false },

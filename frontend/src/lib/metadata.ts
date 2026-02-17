@@ -24,14 +24,14 @@ function getServerApolloClient() {
  */
 export async function fetchSpotForMetadata(id: string) {
   const client = getServerApolloClient();
-  
+
   try {
     const { data } = await client.query({
       query: GET_SPOT,
       variables: { id },
       fetchPolicy: 'no-cache',
     });
-    
+
     return data?.spot;
   } catch (error) {
     console.error('Failed to fetch spot for metadata:', error);
@@ -44,14 +44,14 @@ export async function fetchSpotForMetadata(id: string) {
  */
 export async function fetchPlayPlanForMetadata(id: number) {
   const client = getServerApolloClient();
-  
+
   try {
     const { data } = await client.query({
       query: GET_PLAY_PLAN,
       variables: { id },
       fetchPolicy: 'no-cache',
     });
-    
+
     return data?.playPlan;
   } catch (error) {
     console.error('Failed to fetch play plan for metadata:', error);

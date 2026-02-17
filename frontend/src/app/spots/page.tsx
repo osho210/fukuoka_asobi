@@ -40,9 +40,9 @@ export default function SpotsPage() {
                 </div>
             ) : (
                 <div className="spots-grid">
-                    {filteredSpots.map((spot) => (
+                    {filteredSpots.map((spot, index) => (
                         <SpotCard
-                            key={spot.id}
+                            key={`spots-page-${spot.id}-${index}`}
                             id={spot.id}
                             spotName={spot.spotName}
                             address={spot.address}

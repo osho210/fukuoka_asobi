@@ -43,3 +43,4 @@ export default async function SpotPage({ params }: SpotPageProps) {
     </>
   );
 }
+

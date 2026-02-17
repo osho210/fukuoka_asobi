@@ -47,6 +47,7 @@ export default function NewPlayPlanPage() {
             plannerTitle: formData.plannerTitle || '',
             plannerDescription: formData.plannerDescription || '',
             isRecommended: formData.isRecommended || false,
+            isPublic: formData.isPublic ?? false,
             planDetails: formData.planDetails.map((detail) => ({
               stepNumber: detail.stepNumber,
               stepName: detail.stepName || '',
@@ -121,6 +122,7 @@ export default function NewPlayPlanPage() {
           recommendUsers: [],
           plannerTitle: '',
           plannerDescription: '',
+          isPublic: false,
           planDetails: [
             {
               stepNumber: 1,
