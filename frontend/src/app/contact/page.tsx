@@ -48,22 +48,32 @@ export default function ContactPage() {
         const { id, value, type } = e.target;
         const checked = (e.target as HTMLInputElement).checked;
 
+        // フィールド ID からステートのキーへのマッピング
+        let fieldName = id;
+        if (id === 'inquiry-type') {
+            fieldName = 'category';
+        } else if (id === 'privacy-agreement') {
+            fieldName = 'privacyAccepted';
+        }
+
         setFormData((prev) => ({
             ...prev,
-            [id === 'inquiry-type' ? 'category' : id === 'privacy-agreement' ? 'privacyAccepted' : id]:
-                type === 'checkbox' ? checked : value,
+            [fieldName]: type === 'checkbox' ? checked : value,
         }));
     };
 
     const validateForm = () => {
         const newErrors: string[] = [];
 
+        // メールアドレス形式の正規表現（バックエンドと一致）
+        const emailRegex = /^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/i;
+
         if (!formData.name.trim()) {
             newErrors.push('お名前を入力してください。');
         }
         if (!formData.email.trim()) {
             newErrors.push('メールアドレスを入力してください。');
-        } else if (!/^[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+$/i.test(formData.email)) {
+        } else if (!emailRegex.test(formData.email)) {
             newErrors.push('メールアドレスの形式が正しくありません。');
         }
         if (!formData.subject.trim()) {

@@ -38,9 +38,15 @@ module Mutations
       end
 
       # 文字数制限
-      errors << "お名前は100文字以内で入力してください。" if name.length > 100
-      errors << "件名は200文字以内で入力してください。" if subject.length > 200
-      errors << "お問い合わせ内容は5000文字以内で入力してください。" if message.length > 5000
+      if name.present? && name.length > 100
+        errors << "お名前は100文字以内で入力してください。"
+      end
+      if subject.present? && subject.length > 200
+        errors << "件名は200文字以内で入力してください。"
+      end
+      if message.present? && message.length > 5000
+        errors << "お問い合わせ内容は5000文字以内で入力してください。"
+      end
 
       # カテゴリーの妥当性チェック
       valid_categories = %w[general business media error other]
