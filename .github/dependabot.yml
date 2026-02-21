@@ -20,7 +20,7 @@ updates:
       - "dependencies"
       - "bot"
 
-  # npm (root workspace)
+  # npm (manages root + all workspaces: frontend, admin)
   - package-ecosystem: npm
     directory: "/"
     schedule:
@@ -29,47 +29,6 @@ updates:
     open-pull-requests-limit: 10
 
     pull-request-branch-name:
-      prefix: "deps/npm"
-      separator: "/"
-
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-
-    labels:
-      - "dependencies"
-      - "bot"
-
-  # npm (frontend workspace)
-  - package-ecosystem: npm
-    directory: "/frontend"
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 10
-
-    pull-request-branch-name:
-      prefix: "deps/npm-frontend"
-      separator: "/"
-
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-
-    labels:
-      - "dependencies"
-      - "bot"
-
-  # npm (admin workspace)
-  - package-ecosystem: npm
-    directory: "/admin"
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 10
-
-    pull-request-branch-name:
-      prefix: "deps/npm-admin"
       separator: "/"
 
     commit-message:
