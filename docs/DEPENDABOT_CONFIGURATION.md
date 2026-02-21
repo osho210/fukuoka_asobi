@@ -8,28 +8,10 @@
 
 ### 修正前の問題点
 
-1. **npmエコシステムの設定が完全に欠落**
-   - プロジェクトはnpm workspaces（frontend/admin）を使用しているが、Dependabotの設定がなかった
-   - これにより、JavaScriptライブラリの54件のセキュリティアラートに対するPRが作成されなかった
-
-2. **Bundlerのディレクトリパスが間違っていた**
-   - 設定: `directory: "/"`
-   - 実際: `directory: "/backend"`
-   - Gemfileは `/backend/Gemfile` に存在するため、Dependabotがファイルを見つけられなかった
-
-3. **重複した設定ファイル**
-   - `.github/dependabot.yml`
-   - `backend/.github/dependabot.yml`
-   - 重複により、設定の優先順位が不明確だった
-
-4. **スケジュール設定が要件と異なる**
-   - 設定: `interval: daily`
-   - 要件: 毎週月曜日にまとめて実行
-
-5. **プレースホルダーが残っていた**
-   - `reviewers: ["your-github-id"]`
-   - `assignees: ["your-github-id"]`
-   - これらは無効な設定
+1. **npm workspacesの設定重複**
+   - プロジェクトはnpm workspaces（frontend/admin）を使用しているが、root、frontend、adminを個別に設定していた
+   - 個別設定により、Dependabotジョブが競合し、「Waiting for a runner to pick up this job...」のまま処理されなかった
+   - GitHubの公式ドキュメントでは、npm workspacesを使用している場合、**ルートディレクトリのみを管理する**ことが推奨されている
 
 ### 修正後の設定
 
@@ -43,28 +25,14 @@ updates:
       interval: weekly
       day: monday
 
-  # 2. npm (root workspace) - /
+  # 2. npm (manages root + all workspaces: frontend, admin) - /
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
       day: monday
 
-  # 3. npm (frontend workspace) - /frontend
-  - package-ecosystem: npm
-    directory: "/frontend"
-    schedule:
-      interval: weekly
-      day: monday
-
-  # 4. npm (admin workspace) - /admin
-  - package-ecosystem: npm
-    directory: "/admin"
-    schedule:
-      interval: weekly
-      day: monday
-
-  # 5. GitHub Actions - /
+  # 3. GitHub Actions - /
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -72,17 +40,20 @@ updates:
       day: monday
 ```
 
+**重要な変更点**：
+- npm workspacesを使用しているため、**ルートディレクトリ（`/`）のみ**を管理
+- `/frontend`と`/admin`の個別設定を削除
+- ルートの`package.json`を管理することで、すべてのworkspace（frontend, admin）の依存関係が自動的に更新される
+
 ## 設定の詳細
 
 ### サポートされているエコシステム
 
-| エコシステム | ディレクトリ | 管理対象ファイル | PRプレフィックス |
-|------------|------------|----------------|-----------------|
-| Bundler | `/backend` | `Gemfile`, `Gemfile.lock` | `deps/bundler/` |
-| npm (root) | `/` | `package.json`, `package-lock.json` | `deps/npm/` |
-| npm (frontend) | `/frontend` | `package.json` | `deps/npm-frontend/` |
-| npm (admin) | `/admin` | `package.json` | `deps/npm-admin/` |
-| GitHub Actions | `/` | `.github/workflows/*.yml` | `deps/gh-actions/` |
+| エコシステム | ディレクトリ | 管理対象ファイル | 管理範囲 |
+|------------|------------|-----------------|---------|
+| Bundler | `/backend` | `Gemfile`, `Gemfile.lock` | Rubyの依存関係 |
+| npm | `/` | `package.json`, `package-lock.json` | ルート + 全workspaces（frontend, admin） |
+| GitHub Actions | `/` | `.github/workflows/*.yml` | GitHub Actionsのバージョン |
 
 ### スケジュール設定
 
@@ -95,6 +66,26 @@ updates:
 - **最大同時オープンPR数**: 各エコシステムあたり10件
 - **ラベル**: `dependencies`, `bot`
 - **コミットメッセージ**: `chore(scope): description`
+
+### npm workspacesに関する重要な注意事項
+
+このプロジェクトはnpm workspacesを使用しています：
+- ルートの`package.json`に`"workspaces": ["frontend", "admin"]`が定義されている
+- Dependabotでルートディレクトリ（`/`）を管理すると、**すべてのworkspaceの依存関係が自動的に更新される**
+- 個別のworkspaceディレクトリ（`/frontend`, `/admin`）を設定すると、ジョブが競合してPRが作成されなくなる
+
+**推奨設定**：
+```yaml
+# ✅ 正しい設定（ルートのみ）
+- package-ecosystem: npm
+  directory: "/"
+
+# ❌ 誤った設定（個別workspace）
+- package-ecosystem: npm
+  directory: "/frontend"  # 削除すべき
+- package-ecosystem: npm
+  directory: "/admin"     # 削除すべき
+```
 
 ## Dependabotの動作確認
 
@@ -259,4 +250,5 @@ groups:
 
 | 日付 | 変更内容 | 担当者 |
 |------|---------|--------|
+| 2026-02-21 | npm workspaces対応の最適化（個別workspace設定を削除） | Copilot Agent |
 | 2026-02-07 | 初回作成、設定の全面的な見直し | Copilot Agent |
