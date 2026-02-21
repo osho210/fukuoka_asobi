@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import PlanDetailContainer from './plan-detail.container';
 import { planDetailMocks } from '@/stories/mocks/plans';
 

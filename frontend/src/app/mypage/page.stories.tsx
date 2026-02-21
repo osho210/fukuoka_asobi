@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import MyPage from './page';
 import { myPageMocks, myPagePaidMocks } from '@/stories/mocks/mypage';
 

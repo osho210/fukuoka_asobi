@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Dashboard from './page';
 import { GET_DASHBOARD_STATS, mockDashboardStats } from '@/stories/mocks/dashboard';
 

@@ -1,5 +1,8 @@
-import type { StorybookConfig } from '@storybook/experimental-nextjs-vite';
-import path from 'path';
+import { createRequire } from "node:module";
+import type { StorybookConfig } from '@storybook/nextjs-vite';
+import path, { dirname, join } from 'path';
+
+const require = createRequire(import.meta.url);
 
 const config: StorybookConfig = {
   stories: [
@@ -7,17 +10,14 @@ const config: StorybookConfig = {
     '../src/app/**/*.stories.@(ts|tsx)',
     '../src/stories/**/*.stories.@(ts|tsx)',
   ],
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-  ],
+
+  addons: [getAbsolutePath("@storybook/addon-docs")],
+
   framework: {
-    name: '@storybook/experimental-nextjs-vite',
+    name: getAbsolutePath("@storybook/nextjs-vite"),
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
-  },
+
   viteFinal: async (config) => {
     if (config.resolve) {
       config.resolve.alias = {
@@ -26,7 +26,11 @@ const config: StorybookConfig = {
       };
     }
     return config;
-  },
+  }
 };
 
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, "package.json")));
+}
