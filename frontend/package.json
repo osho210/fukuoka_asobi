@@ -18,7 +18,7 @@
     "@apollo/client": "^3.13.8",
     "@stripe/stripe-js": "^8.5.3",
     "@types/react-slick": "^0.23.13",
-    "axios": "^1.6.7",
+    "axios": "^1.13.5",
     "date-fns": "^4.1.0",
     "graphql": "^16.11.0",
     "next": "15.3.8",
@@ -26,7 +26,7 @@
     "react-dom": "^19.0.0",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.2.5"
+    "swiper": "^12.1.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.5",
