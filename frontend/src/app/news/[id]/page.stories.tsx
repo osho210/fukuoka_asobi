@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import NewsDetailContainer from './news-detail.container';
 import { newsDetailMocks } from '@/stories/mocks/news';
 

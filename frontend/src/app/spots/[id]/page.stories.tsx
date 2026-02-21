@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import SpotDetailContainer from './spot-detail.container';
 import { spotDetailMocks } from '@/stories/mocks/spots';
 
