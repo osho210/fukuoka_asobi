@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/useToast';
 import { ToastContainer } from '@/components/Toast/ToastContainer';
 import '@/styles/ContentDetail.css';
 import Image from 'next/image';
+import { EventStructuredData } from '@/components/StructuredData';
 
 type EventDetailAdapterProps = {
   event: Event;
@@ -185,6 +186,7 @@ export default function EventDetailAdapter({ event }: EventDetailAdapterProps) {
 
   return (
     <>
+      <EventStructuredData event={event} />
       <ContentDetail
         title={event.title}
         imageUrls={[]}

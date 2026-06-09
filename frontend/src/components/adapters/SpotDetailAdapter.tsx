@@ -11,6 +11,7 @@ import '@/styles/ContentDetail.css';
 import Image from 'next/image';
 import { getSpotTypeLabel } from '@/utils/spotTypeUtils';
 import { getBudgetRangeLabel } from '@/utils/budgetRangeUtils';
+import { LocalBusinessStructuredData } from '@/components/StructuredData';
 
 
 type SpotDetailAdapterProps = {
@@ -327,6 +328,7 @@ export default function SpotDetailAdapter({ spot }: SpotDetailAdapterProps) {
 
   return (
     <>
+      <LocalBusinessStructuredData spot={spot} />
       <ContentDetail
         title={spot.spotName}
         imageUrls={spot.imageUrls}
