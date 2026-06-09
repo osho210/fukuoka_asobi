@@ -209,6 +209,9 @@ module Types
     # ユーザーのお気に入り
     field :user_favorites, resolver: Resolvers::UserFavoritesResolver
 
+    # ユーザーの閲覧履歴
+    field :user_histories, resolver: Resolvers::UserHistoriesResolver
+
     # プランがお気に入りに登録されているか
     field :is_favorite, resolver: Resolvers::IsFavoriteResolver
 
