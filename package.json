@@ -54,6 +54,9 @@
     "@storybook/nextjs-vite": "9.1.19",
     "@storybook/addon-docs": "9.1.19"
   },
+  "overrides": {
+    "cookie": "0.7.2"
+  },
   "config": {
     "commitizen": {
       "path": "cz-git"
